@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<guns>
+  <gun name="gun1" velocity="1"/>
+  <gun name="gun2" velocity="2"/>
+</guns>
