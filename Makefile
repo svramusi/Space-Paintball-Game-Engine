@@ -12,8 +12,8 @@ setup:
 deps:
 	cd utils; $(MAKE)
 
-debug:
-	$(CC) $(CFLAGS) $(DBG_CFLAGS) *.cpp -o $(PROGRAM_NAME)_dbg
+debug: setup deps
+	$(CC) $(INCLUDES) $(CFLAGS) $(DBG_CFLAGS) *.cpp -o $(PROGRAM_NAME)_dbg -Llibs -lUtils
 
 default: setup deps
 	$(CC) $(INCLUDES) -o $(PROGRAM_NAME) *.cpp -Llibs -lUtils
