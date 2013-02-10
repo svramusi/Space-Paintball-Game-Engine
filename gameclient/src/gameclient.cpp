@@ -1,8 +1,8 @@
 //============================================================================
-// Name        : Space-Paintball-Game-Engine.cpp
-// Author      : 
+// Name        : gameclient.cpp
+// Author      : Ramusivich, Taylor, Patel
 // Version     :
-// Copyright   : Your copyright notice
+// Copyright   : 2013 Drexel University
 // Description : Hello World in C++, Ansi-style
 //============================================================================
 
