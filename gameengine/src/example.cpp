@@ -10,4 +10,6 @@ int main2(void)
     delete guns;
 
     cout << "!!!Hello World!!!" << endl; // prints !!!Hello World!!!
+
+    return 1;
 }
