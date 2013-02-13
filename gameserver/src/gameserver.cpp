@@ -6,6 +6,8 @@
 #include "net/Net.h"
 #include "net/Connection.h"
 #include "net/NetUtils.h"
+#include "physicsengine.h"
+#include "utils/gun_utils.h"
 
 using namespace std;
 using namespace net;
@@ -19,6 +21,15 @@ const float TimeOut = 10.0f;
 
 int main( int argc, char * argv[] )
 {
+/*
+	GunUtils *guns = new GunUtils("example.xml");
+	guns->print_guns();
+	delete guns;
+
+	PhysicsEngine *physics_engine = new PhysicsEngine();
+	physics_engine->updateWorld();
+	delete physics_engine;
+*/
 	Connection connection( ProtocolId, TimeOut );
 
 	if ( !connection.Start( ServerPort ) )

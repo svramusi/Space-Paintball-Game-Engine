@@ -29,7 +29,7 @@
 									<listOptionValue builtIn="false" value="/usr/include/c++/4.7"/>
 									<listOptionValue builtIn="false" value="/usr/include/c++/4.7/backward"/>
 									<listOptionValue builtIn="false" value="/usr/local/include"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/utils/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/gameengine/src}&quot;"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.1854126926" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 							</tool>
@@ -41,10 +41,10 @@
 							<tool id="cdt.managedbuild.tool.gnu.c.linker.exe.debug.1325032469" name="GCC C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.exe.debug"/>
 							<tool id="cdt.managedbuild.tool.gnu.cpp.linker.exe.debug.164737132" name="GCC C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.exe.debug">
 								<option id="gnu.cpp.link.option.paths.1400410636" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths" valueType="libPaths">
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/utils/Debug}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/gameengine/Debug}&quot;"/>
 								</option>
 								<option id="gnu.cpp.link.option.libs.836090957" name="Libraries (-l)" superClass="gnu.cpp.link.option.libs" valueType="libs">
-									<listOptionValue builtIn="false" value="utils"/>
+									<listOptionValue builtIn="false" value="gameengine"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.linker.input.2027510973" superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
@@ -94,6 +94,7 @@
 									<listOptionValue builtIn="false" value="/usr/include/i386-linux-gnu"/>
 									<listOptionValue builtIn="false" value="/usr/lib/gcc/i686-linux-gnu/4.7/include"/>
 									<listOptionValue builtIn="false" value="/usr/lib/gcc/i686-linux-gnu/4.7/include-fixed"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/gameengine/src}&quot;"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.1956048198" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 							</tool>
