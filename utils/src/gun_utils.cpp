@@ -3,6 +3,8 @@
 #include <vector>
 #include <iostream>
 
+#include <stdlib.h>
+
 #include "gun_utils.h"
 
 GunUtils::GunUtils(const char* gun_info_xml)
@@ -27,7 +29,7 @@ GunUtils::GunUtils(const char* gun_info_xml)
 GunUtils::~GunUtils()
 {
     if(guns)
-        delete guns;
+        free(guns);
 }
 
 void
