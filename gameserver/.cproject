@@ -27,9 +27,8 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/utils/src}&quot;"/>
 									<listOptionValue builtIn="false" value="/usr/include"/>
 									<listOptionValue builtIn="false" value="/usr/include/c++/4.7"/>
-									<listOptionValue builtIn="false" value="/usr/include/c++/4.7/i686-linux-gnu"/>
-									<listOptionValue builtIn="false" value="/usr/local/include"/>
 									<listOptionValue builtIn="false" value="/usr/include/c++/4.7/backward"/>
+									<listOptionValue builtIn="false" value="/usr/local/include"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.861982033" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 							</tool>
