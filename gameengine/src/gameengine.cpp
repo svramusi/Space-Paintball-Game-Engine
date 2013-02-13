@@ -9,6 +9,7 @@
 #include <iostream>
 #include <stdio.h>
 #include "gun_utils.h"
+#include "physicsengine.h"
 
 using namespace std;
 
@@ -18,6 +19,10 @@ int main() {
 	GunUtils *guns = new GunUtils("example.xml");
 	guns->print_guns();
 	delete guns;
+
+	PhysicsEngine *physics_engine = new PhysicsEngine();
+	physics_engine->updateWorld();
+	delete physics_engine;
 
     return 0;
 }
