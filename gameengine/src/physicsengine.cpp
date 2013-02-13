@@ -32,23 +32,15 @@ PhysicsEngine::updateWorld()
 void
 PhysicsEngine::freeCollisions(collisionDetection* collisions)
 {
-	collisionDetection* prev;
 	collisionDetection* current;
+	collisionDetection* next;
 
 	current = collisions;
 
-	//Go to the end of the list of collisions
-	while(current->next != NULL)
+	while(current != NULL)
 	{
-		current = current->next;
-	}
-
-	//Need to delete from the bottom up
-	do
-	{
-		prev = current->prev;
+		next = current->next;
 		free(current);
-		current = prev;
-	} while(current != NULL);
-	//My first ever do while loop!!
+		current = next;
+	}
 }
