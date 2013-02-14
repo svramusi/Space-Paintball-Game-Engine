@@ -31,11 +31,11 @@ void FPSControl();
 
 int main( int argc, char * argv[] )
 {
-/*
+
 	GunUtils *guns = new GunUtils("example.xml");
 	guns->print_guns();
 	delete guns;
-*/
+
 //	PhysicsEngine *physics_engine = new PhysicsEngine();
 //	physics_engine->updateWorld();
 //	delete physics_engine;
