@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?fileVersion 4.0.0?><cproject storage_type_id="org.eclipse.cdt.core.XmlProjectDescriptionStorage">
+<?fileVersion 4.0.0?>
+
+<cproject storage_type_id="org.eclipse.cdt.core.XmlProjectDescriptionStorage">
 	<storageModule moduleId="org.eclipse.cdt.core.settings">
 		<cconfiguration id="cdt.managedbuild.config.gnu.exe.debug.638229186">
 			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="cdt.managedbuild.config.gnu.exe.debug.638229186" moduleId="org.eclipse.cdt.core.settings" name="Debug">
@@ -24,13 +26,13 @@
 								<option id="gnu.cpp.compiler.exe.debug.option.optimization.level.1743628402" name="Optimization Level" superClass="gnu.cpp.compiler.exe.debug.option.optimization.level" value="gnu.cpp.compiler.optimization.level.none" valueType="enumerated"/>
 								<option id="gnu.cpp.compiler.exe.debug.option.debugging.level.1971266507" name="Debug Level" superClass="gnu.cpp.compiler.exe.debug.option.debugging.level" value="gnu.cpp.compiler.debugging.level.max" valueType="enumerated"/>
 								<option id="gnu.cpp.compiler.option.include.paths.756472612" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/gameengine/includes}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/thirdparty}&quot;"/>
 									<listOptionValue builtIn="false" value="/usr/include"/>
 									<listOptionValue builtIn="false" value="/usr/include/c++/4.7"/>
 									<listOptionValue builtIn="false" value="/usr/include/c++/4.7/backward"/>
 									<listOptionValue builtIn="false" value="/usr/local/include"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/gameengine/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/gameengine/includes}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/gameengine/thirdparty}&quot;"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.861982033" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 							</tool>
@@ -95,6 +97,7 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/gameengine/src}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/gameengine/includes}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/gameengine/thirdparty}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/thirdparty}&quot;"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.371594743" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 							</tool>
