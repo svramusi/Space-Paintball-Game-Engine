@@ -2,6 +2,7 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include <SDL/SDL.h>
 
 #include "net/Net.h"
 #include "net/Connection.h"
@@ -44,6 +45,7 @@ int main( int argc, char * argv[] )
 
 	GameEngine gameEngine;
 	bool quit = false;
+	int time = SDL_GetTicks();
 
 	// Game Loop
 	while(!quit)
@@ -53,21 +55,41 @@ int main( int argc, char * argv[] )
 
 		int i = GetInput();
 
+		///////////////////////////////////////////////////////////
+		//Update Game State
 		if(TimeForUpdatingAI())
 		{
-			// AI will be implemented using an Open Source library.
+			/*
+			 * AI will be implemented using an Open Source library.
+			 * Update the AI of any NPC in the game.
+			 */
 			gameEngine.UpdateAI();
 		}
 
 		if(TimeForUpdatingPhysics())
 		{
+			/*
+			 * With the given player inputs, run one
+			 * frame of the physics simulation to move
+			 * the characters and objects in the game.
+			 */
 			gameEngine.UpdatePhysics();
 		}
 
+		/*
+		 * Get information from the game engine to update
+		 * the player score, health, etc. (since typically
+		 * the HUD is not rendered by the game engine, but
+		 * separately).
+		 */
 		UpdateStatistics();
+		///////////////////////////////////////////////////////////
 
 		if(TimeForRendering())
 		{
+			/*
+			 * Redraw the game.
+			 */
 			gameEngine.Render();
 		}
 
@@ -87,17 +109,26 @@ void UpdateStatistics()
 
 }
 
+/*
+ * Keep rendering time at 30 or 50 fps.
+ */
 bool TimeForRendering()
 {
 	return true;
 }
 
+/*
+ * Updating physics should be done as often as
+ * possible.
+ */
 bool TimeForUpdatingPhysics()
 {
 	return true;
 }
 
-
+/*
+ * Updating AI should be done once or twice per second.
+ */
 bool TimeForUpdatingAI()
 {
 	return true;
@@ -108,6 +139,11 @@ int PollForOSMessages()
 	return 0;
 }
 
+/*
+ * Check the keyboard/mouse state and identify any user
+ * input. Also, if there are players over the network,
+ * get their inputs.
+ */
 int GetInput()
 {
 	return 0;
