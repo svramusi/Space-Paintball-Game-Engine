@@ -3,7 +3,7 @@
 #include <string>
 #include <vector>
 
-#include <SDL/SDL.h>
+#include "SDL-1.2.15/include/SDL.h"
 
 #include "net/Net.h"
 #include "net/Connection.h"
