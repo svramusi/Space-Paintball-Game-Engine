@@ -17,8 +17,11 @@ public:
 	GameEngine();
 	virtual ~GameEngine();
 
-	void UpdateAI();
-	void UpdatePhysics();
+	bool TimeForUpdatingAI();
+	bool TimeForUpdatingPhysics();
+	void UpdateAI(int imput);
+	void UpdatePhysics(int input);
+	void UpdateGameState(int input);
 	void Render();
 };
 

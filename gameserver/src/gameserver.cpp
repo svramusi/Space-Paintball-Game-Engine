@@ -22,10 +22,8 @@ const float SendRate = 0.25f;
 const float TimeOut = 10.0f;
 
 int StartGameMasterServer();
-int PollForOSMessages();
-int GetInput();
-bool TimeForUpdatingAI();
-bool TimeForUpdatingPhysics();
+int PollForOSMessages(bool* quit);
+int GetInputFromClient(bool* quit);
 bool TimeForRendering();
 void UpdateStatistics();
 void FPSControl();
@@ -46,35 +44,23 @@ int main( int argc, char * argv[] )
 	GameEngine gameEngine;
 	bool quit = false;
 	int time = SDL_GetTicks();
+	bool needToRedraw = true;
 
-	// Game Loop
+	// Server Game Loop
 	while(!quit)
 	{
-		// Poll for OS Messages.
-		PollForOSMessages();
+		/*
+		 * Poll for OS Events/Messages; this is
+		 * the event pump.
+		 */
+		PollForOSMessages(&quit);
 
-		int i = GetInput();
+		int input = GetInputFromClient(&quit);
 
 		///////////////////////////////////////////////////////////
 		//Update Game State
-		if(TimeForUpdatingAI())
-		{
-			/*
-			 * AI will be implemented using an Open Source library.
-			 * Update the AI of any NPC in the game.
-			 */
-			gameEngine.UpdateAI();
-		}
-
-		if(TimeForUpdatingPhysics())
-		{
-			/*
-			 * With the given player inputs, run one
-			 * frame of the physics simulation to move
-			 * the characters and objects in the game.
-			 */
-			gameEngine.UpdatePhysics();
-		}
+		gameEngine.UpdateGameState(input);
+		///////////////////////////////////////////////////////////
 
 		/*
 		 * Get information from the game engine to update
@@ -83,18 +69,15 @@ int main( int argc, char * argv[] )
 		 * separately).
 		 */
 		UpdateStatistics();
-		///////////////////////////////////////////////////////////
-
-		if(TimeForRendering())
-		{
-			/*
-			 * Redraw the game.
-			 */
-			gameEngine.Render();
-		}
 
 		FPSControl();
-	} // End Game Loop
+
+		/*
+		 * Play nice with the OS, and give
+		 * some CPU for another process.
+		 */
+		SDL_Delay(1);
+	} // End Server Game Loop
 
 	return 0;
 }
@@ -118,24 +101,34 @@ bool TimeForRendering()
 }
 
 /*
- * Updating physics should be done as often as
- * possible.
+ * Event pump method; polling method for
+ * OS messages.
  */
-bool TimeForUpdatingPhysics()
+int PollForOSMessages(bool* quit)
 {
-	return true;
-}
-
 /*
- * Updating AI should be done once or twice per second.
- */
-bool TimeForUpdatingAI()
-{
-	return true;
-}
+	while(SDL_PollEvent(&event))
+	{
+		switch(eventType)
+		{
+			case SDL_KEYDOWN:
+				if(event.key.keysym.sym == SDLK_F12)
+				{
+					quit = true;
+				}
+				break;
 
-int PollForOSMessages()
-{
+			case SDL_MOUSEBUTTONDOWN:
+				gameEngine->MouseClick(event.button.x, event.button.y);
+				break;
+
+			case SDL_QUIT:
+				quit = true;
+				break;
+		} // End Switch
+	}
+	*/
+
 	return 0;
 }
 
@@ -144,7 +137,7 @@ int PollForOSMessages()
  * input. Also, if there are players over the network,
  * get their inputs.
  */
-int GetInput()
+int GetInputFromClient(bool* quit)
 {
 	return 0;
 }
