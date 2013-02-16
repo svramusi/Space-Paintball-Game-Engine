@@ -44,7 +44,7 @@ int main( int argc, char * argv[] )
 
 	GameEngine gameEngine;
 	bool quit = false;
-	int time = SDL_GetTicks();
+	Uint32 time = SDL_GetTicks();
 	bool needToRedraw = true;
 
 	// Server Game Loop

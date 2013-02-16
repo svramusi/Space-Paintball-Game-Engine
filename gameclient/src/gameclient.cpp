@@ -20,7 +20,7 @@ const float DeltaTime = 0.25f;
 const float SendRate = 0.25f;
 const float TimeOut = 10.0f;
 // One frame each 20 milliseconds (i.e. 50 frames per second)
-const int RedrawingPeriod = 20;
+const Uint32 RedrawingPeriod = 20;
 const int MaxFrameSkip = 10;
 
 int PollForOSMessages(bool* quit);
@@ -36,7 +36,7 @@ int main( int argc, char * argv[] )
 {
 	bool quit = false;
 	GameEngine gameEngine;
-	int time = SDL_GetTicks();
+	Uint32 time = SDL_GetTicks();
 	bool needToRedraw = true;
 
 	// Client Game Loop
@@ -48,7 +48,7 @@ int main( int argc, char * argv[] )
 		 */
 		PollForOSMessages(&quit);
 
-		int actualTime = SDL_GetTicks();
+		Uint32 actualTime = SDL_GetTicks();
 		int frames = 0;
 
 		while(actualTime >= RedrawingPeriod && frames < MaxFrameSkip)
@@ -142,6 +142,8 @@ int GetUpdateFromServer()
 	// TODO: Fix this
 	//int input = getUpdateFromServer();
 	int input = 0;
+
+	return input;
 }
 
 void FPSControl()
