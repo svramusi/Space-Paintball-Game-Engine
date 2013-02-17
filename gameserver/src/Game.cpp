@@ -8,8 +8,6 @@
 #include "Game.h"
 
 Game::Game() {
-	// TODO Auto-generated constructor stub
-
 }
 
 Game::~Game() {
@@ -18,4 +16,12 @@ Game::~Game() {
 
 void Game::AcceptVisitor(GameVisitor &visitor) {
 	visitor.Visit(this);
+}
+
+void Game::AddPlace(Place& place) {
+	places.push_back(place);
+}
+
+vector<Place>& Game::GetPlaces() {
+	return places;
 }
