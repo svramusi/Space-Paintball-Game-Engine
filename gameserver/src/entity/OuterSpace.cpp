@@ -5,7 +5,7 @@
  *      Author: amarppatel
  */
 
-#include "OuterSpace.h"
+#include "entity/OuterSpace.h"
 
 OuterSpace::OuterSpace() {
 	// TODO Auto-generated constructor stub
