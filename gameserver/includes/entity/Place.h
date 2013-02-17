@@ -22,12 +22,12 @@ public:
 	virtual ~Place();
 
 	void AddCharacter(Character& character);
-	//void AddProp(Prop& prop);
-	//vector<Character>& GetCharacters();
-	//vector<Prop>& GetProps();
+	void AddProp(Prop& prop);
+	vector<Character*>& GetCharacters();
+	vector<Prop*>& GetProps();
 private:
-	vector<Character> characters;
-	vector<Prop> props;
+	vector<Character*> characters;
+	vector<Prop*> props;
 };
 
 #endif /* PLACE_H_ */

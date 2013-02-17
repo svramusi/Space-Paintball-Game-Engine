@@ -10,7 +10,7 @@
 
 #include "entity/Entity.h"
 
-class Prop {
+class Prop : public Entity {
 public:
 	Prop();
 	virtual ~Prop();

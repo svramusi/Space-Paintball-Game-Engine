@@ -10,7 +10,7 @@
 
 #include "entity/Entity.h"
 
-class Character {
+class Character : public Entity {
 public:
 	Character();
 	virtual ~Character();

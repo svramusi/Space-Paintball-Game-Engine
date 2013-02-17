@@ -25,8 +25,6 @@ public:
 	void AddPlace(Place& place);
 	vector<Place *>& GetPlaces();
 private:
-	// Game has a few places.
-	//ArrayList<Place> places;
 	vector<Place *> places;
 };
 
