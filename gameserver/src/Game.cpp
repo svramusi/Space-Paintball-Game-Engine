@@ -16,6 +16,6 @@ Game::~Game() {
 	// TODO Auto-generated destructor stub
 }
 
-void Game::AcceptVisitor(GameVisitor& visitor) {
-	visitor.Visit(*this);
+void Game::AcceptVisitor(GameVisitor &visitor) {
+	visitor.Visit(this);
 }

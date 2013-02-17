@@ -15,7 +15,7 @@ public:
 	Visitable();
 	virtual ~Visitable();
 
-	virtual void AcceptVisitor(GameVisitor& visitor) = 0;
+	virtual void AcceptVisitor(class GameVisitor &visitor) = 0;
 };
 
 #endif /* VISITABLE_H_ */

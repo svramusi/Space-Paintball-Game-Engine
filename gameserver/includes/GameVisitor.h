@@ -8,14 +8,14 @@
 #ifndef GAMEVISITOR_H_
 #define GAMEVISITOR_H_
 
-#include "Game.h"
+class Game;
 
 class GameVisitor {
 public:
 	GameVisitor();
 	virtual ~GameVisitor();
 
-	virtual void Visit(Game& game) = 0;
+	virtual void Visit(Game* game) = 0;
 };
 
 #endif /* GAMEVISITOR_H_ */

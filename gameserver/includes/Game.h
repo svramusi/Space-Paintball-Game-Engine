@@ -16,7 +16,7 @@ public:
 	Game();
 	virtual ~Game();
 
-	void AcceptVisitor(GameVisitor& visitor);
+	void AcceptVisitor(GameVisitor &visitor);
 };
 
 #endif /* GAME_H_ */
