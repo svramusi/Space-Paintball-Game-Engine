@@ -12,18 +12,19 @@
 
 #include "Character.h"
 #include "Prop.h"
+#include "entity/Entity.h"
 
 using namespace std;
 
-class Place {
+class Place : public Entity {
 public:
 	Place();
 	virtual ~Place();
 
 	void AddCharacter(Character& character);
-	void AddProp(Prop& prop);
-	vector<Character>& GetCharacters();
-	vector<Prop>& GetProps();
+	//void AddProp(Prop& prop);
+	//vector<Character>& GetCharacters();
+	//vector<Prop>& GetProps();
 private:
 	vector<Character> characters;
 	vector<Prop> props;

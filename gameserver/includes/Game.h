@@ -23,11 +23,11 @@ public:
 
 	void AcceptVisitor(GameVisitor &visitor);
 	void AddPlace(Place& place);
-	vector<Place>& GetPlaces();
+	vector<Place *>& GetPlaces();
 private:
 	// Game has a few places.
 	//ArrayList<Place> places;
-	vector<Place> places;
+	vector<Place *> places;
 };
 
 #endif /* GAME_H_ */

@@ -8,6 +8,8 @@
 #ifndef PROP_H_
 #define PROP_H_
 
+#include "entity/Entity.h"
+
 class Prop {
 public:
 	Prop();
