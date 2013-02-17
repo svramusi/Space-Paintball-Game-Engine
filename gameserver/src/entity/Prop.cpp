@@ -1,18 +1,18 @@
 /*
- * Place.cpp
+ * Prop.cpp
  *
  *  Created on: Feb 17, 2013
  *      Author: amarppatel
  */
 
-#include "Place.h"
+#include "entity/Prop.h"
 
-Place::Place() {
+Prop::Prop() {
 	// TODO Auto-generated constructor stub
 
 }
 
-Place::~Place() {
+Prop::~Prop() {
 	// TODO Auto-generated destructor stub
 }
 

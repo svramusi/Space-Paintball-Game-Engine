@@ -12,7 +12,7 @@
 
 #include "Visitable.h"
 #include "GameVisitor.h"
-#include "Place.h"
+#include "entity/Place.h"
 
 using namespace std;
 
