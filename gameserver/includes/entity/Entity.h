@@ -10,6 +10,7 @@
 
 #include <string>
 #include "Visitable.h"
+#include "GameState.h"
 
 using namespace std;
 
@@ -20,6 +21,7 @@ public:
 
 	string ToString();
 	virtual void AcceptVisitor(GameVisitor& visitor) = 0;
+	virtual GameState GetGameState() = 0;
 };
 
 #endif /* ENTITY_H_ */
