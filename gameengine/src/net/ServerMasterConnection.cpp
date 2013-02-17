@@ -5,7 +5,7 @@
  *      Author: amarppatel
  */
 
-#include "ServerMasterConnection.h"
+#include "net/ServerMasterConnection.h"
 
 namespace net
 {

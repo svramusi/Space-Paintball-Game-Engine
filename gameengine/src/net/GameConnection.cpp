@@ -5,7 +5,7 @@
  *      Author: amarppatel
  */
 
-#include "GameConnection.h"
+#include "net/GameConnection.h"
 
 namespace net
 {

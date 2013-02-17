@@ -5,7 +5,7 @@
  *      Author: amarppatel
  */
 
-#include "GamePacket.h"
+#include "net/GamePacket.h"
 
 namespace net
 {

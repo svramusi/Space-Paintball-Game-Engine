@@ -5,7 +5,7 @@
  *      Author: amarppatel
  */
 
-#include "Connection.h"
+#include "net/Connection.h"
 
 namespace net
 {
