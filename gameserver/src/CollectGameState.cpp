@@ -6,7 +6,6 @@
  */
 
 #include "CollectGameState.h"
-#include "NavigationVisitor.h"
 
 CollectGameState::CollectGameState() {
 	// TODO Auto-generated constructor stub
@@ -15,6 +14,10 @@ CollectGameState::CollectGameState() {
 
 CollectGameState::~CollectGameState() {
 	// TODO Auto-generated destructor stub
+}
+
+void CollectGameState::Visit(OuterSpace* outerSpace) {
+	placesGameStateMap.insert(make_pair(outerSpace, outerSpace->GetGameState()));
 }
 
 map<Entity*, GameState*>& CollectGameState::GetGameState() {
@@ -39,8 +42,12 @@ map<Place*, GameState*>& CollectGameState::GetPlacesGameState() {
 	return placesGameStateMap;
 }
 
-//map<Entity*, GameState*>& CollectGameState::Collect(Game& game) {
-	//CollectGameState collectGameState = NavigationVisitor::ExecuteVisitor(new CollectGameState(), game);
-	//return collectGameState.GetGameState();
-//	return NULL;
-//}
+map<Entity*, GameState*>& CollectGameState::Collect(Game& game) {
+	//CollectGameState* collectGameState = NavigationVisitor::ExecuteVisitor<CollectGameState>(new CollectGameState(), game);
+	CollectGameState* collectGameState = NavigationVisitor::ExecuteVisitor(new CollectGameState(), game);
+	return collectGameState->GetGameState();
+
+
+	//map<Entity*, GameState*> gameStateMap;
+	//return gameStateMap;
+}

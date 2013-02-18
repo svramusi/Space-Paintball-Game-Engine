@@ -6,6 +6,7 @@
  */
 
 #include "entity/OuterSpace.h"
+#include "GameState.h"
 
 OuterSpace::OuterSpace() {
 	// TODO Auto-generated constructor stub
@@ -14,6 +15,10 @@ OuterSpace::OuterSpace() {
 
 OuterSpace::~OuterSpace() {
 	// TODO Auto-generated destructor stub
+}
+
+GameState* OuterSpace::GetGameState() {
+	return new GameState("OuterSpace!");
 }
 
 void OuterSpace::AcceptVisitor(GameVisitor& visitor) {

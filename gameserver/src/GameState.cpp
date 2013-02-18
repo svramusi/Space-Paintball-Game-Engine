@@ -7,9 +7,8 @@
 
 #include "GameState.h"
 
-GameState::GameState() {
-	// TODO Auto-generated constructor stub
-
+GameState::GameState(string gameState) {
+	this->gameState = gameState;
 }
 
 GameState::~GameState() {

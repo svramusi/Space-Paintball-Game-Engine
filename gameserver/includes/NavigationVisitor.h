@@ -10,15 +10,22 @@
 
 #include "BaseVisitor.h"
 #include "GameVisitor.h"
+#include "Visitable.h"
+#include "GameVisitor.h"
+#include "CollectGameState.h"
+
+class CollectGameState;
 
 class NavigationVisitor : public BaseVisitor {
 public:
-	NavigationVisitor();
+	NavigationVisitor(GameVisitor* gameVisitor);
 	virtual ~NavigationVisitor();
 
-	//static <T : GameVisitor> T ExecVisitor(T visitor, Visitable visitable);
+	//template <typename T>
+	//static T* ExecuteVisitor(T* visitor, Visitable& visitable);
+	static CollectGameState* ExecuteVisitor(CollectGameState* visitor, Visitable& visitable);
 private:
-	//GameVisitor gameVisitor;
+	GameVisitor* gameVisitor;
 };
 
 #endif /* NAVIGATIONVISITOR_H_ */

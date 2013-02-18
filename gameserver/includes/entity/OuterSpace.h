@@ -17,6 +17,7 @@ public:
 	virtual ~OuterSpace();
 
 	void AcceptVisitor(GameVisitor& visitor);
+	GameState* GetGameState();
 };
 
 #endif /* OUTERSPACE_H_ */

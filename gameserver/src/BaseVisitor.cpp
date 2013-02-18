@@ -16,10 +16,10 @@ BaseVisitor::~BaseVisitor() {
 	// TODO Auto-generated destructor stub
 }
 
-void BaseVisitor::Visit(Game& game) {
+void BaseVisitor::Visit(Game* game) {
 
 }
 
-void BaseVisitor::Visit(OuterSpace& outerSpace) {
+void BaseVisitor::Visit(OuterSpace* outerSpace) {
 
 }

@@ -21,7 +21,7 @@ public:
 
 	string ToString();
 	virtual void AcceptVisitor(GameVisitor& visitor) = 0;
-	virtual GameState GetGameState() = 0;
+	virtual GameState* GetGameState() = 0;
 };
 
 #endif /* ENTITY_H_ */

@@ -15,8 +15,8 @@ public:
 	BaseVisitor();
 	virtual ~BaseVisitor();
 
-	void Visit(Game& game);
-	void Visit(OuterSpace& outerSpace);
+	void Visit(Game* game);
+	void Visit(OuterSpace* outerSpace);
 };
 
 #endif /* BASEVISITOR_H_ */

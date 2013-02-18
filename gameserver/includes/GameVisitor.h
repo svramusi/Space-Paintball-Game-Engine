@@ -8,8 +8,6 @@
 #ifndef GAMEVISITOR_H_
 #define GAMEVISITOR_H_
 
-//#include "entity/OuterSpace.h"
-
 class Game;
 class OuterSpace;
 

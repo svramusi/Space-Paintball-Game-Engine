@@ -7,12 +7,23 @@
 
 #include "NavigationVisitor.h"
 
-NavigationVisitor::NavigationVisitor() {
-	// TODO Auto-generated constructor stub
-
+NavigationVisitor::NavigationVisitor(GameVisitor* gameVisitor) {
+	this->gameVisitor = gameVisitor;
 }
 
 NavigationVisitor::~NavigationVisitor() {
 	// TODO Auto-generated destructor stub
 }
 
+//template <typename T>
+//T* NavigationVisitor::ExecuteVisitor(T* visitor, Visitable& visitable) {
+//	NavigationVisitor navigation = new NavigationVisitor(visitor);
+//	visitable.AcceptVisitor(navigation);
+//	return visitor;
+//}
+
+CollectGameState * NavigationVisitor::ExecuteVisitor(CollectGameState* visitor, Visitable& visitable) {
+	NavigationVisitor navigation = new NavigationVisitor(visitor);
+	visitable.AcceptVisitor(navigation);
+	return visitor;
+}

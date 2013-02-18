@@ -16,6 +16,9 @@
 #include "entity/Character.h"
 #include "entity/Prop.h"
 #include "entity/Place.h"
+#include "entity/OuterSpace.h"
+
+#include "NavigationVisitor.h"
 
 using namespace std;
 
@@ -32,7 +35,8 @@ public:
 	//TODO: Probably should return copy of data not actual reference.
 	map<Place*, GameState*>& GetPlacesGameState();
 
-	void visit(OuterSpace& outerSpace);
+	void Visit(OuterSpace* outerSpace);
+
 	static map<Entity*, GameState*>& Collect(Game& game);
 private:
 	map<Character*, GameState*> charactersGameStateMap;
