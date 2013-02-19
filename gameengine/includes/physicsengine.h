@@ -5,8 +5,11 @@
 #include "collisiondetection.h"
 
 class PhysicsEngine {
+	float gravity, airfriction;
 public:
 	PhysicsEngine();
+	PhysicsEngine(float grav, float air);
+	SetWorldParams(float grav, float air)
     ~PhysicsEngine();
     void updateWorld();
 
