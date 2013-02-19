@@ -33,6 +33,7 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/gameengine/includes}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/gameengineTests/includes}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/thirdparty/cppunit-1.12.1/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/thirdparty/armadillo-3.6.2/include}&quot;"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.113023168" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 							</tool>
@@ -91,6 +92,7 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/thirdparty}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/gameengine/includes}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/gameengineTests/includes}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/thirdparty/armadillo-3.6.2/include}&quot;"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.645686839" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 							</tool>

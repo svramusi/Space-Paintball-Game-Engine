@@ -1,8 +1,10 @@
 
 #include "TestRunner.h"
 #include "AABBTests.h"
+#include "SphereTests.h"
 
 CPPUNIT_TEST_SUITE_REGISTRATION( AABBTest );
+CPPUNIT_TEST_SUITE_REGISTRATION( SphereTest );
 
 int main(int argc, char* argv[])
 {
