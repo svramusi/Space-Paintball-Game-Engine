@@ -39,14 +39,36 @@ void NavigationVisitor::VisitNext() {
 }
 
 void NavigationVisitor::Visit(Game* game) {
-		gameVisitor->Visit(game);
+	gameVisitor->Visit(game);
 
-		vector<Place*> places = game->GetPlaces();
+	vector<Place*> places = game->GetPlaces();
 
-		for(int i = 0; i < places.size(); i++)
-		{
-			itemQueue.push_back(places[i]);
-		}
-
-		VisitNext();
+	// Add all Places in Game to queue.
+	for(int i = 0; i < places.size(); i++)
+	{
+		itemQueue.push_back(places[i]);
 	}
+
+	VisitNext();
+}
+
+void NavigationVisitor::Visit(OuterSpace* outerSpace) {
+	gameVisitor->Visit(outerSpace);
+
+	vector<Character*> characters = outerSpace->GetCharacters();
+	vector<Prop*> props = outerSpace->GetProps();
+
+	// Add all Characters in Place to queue.
+	for(int i = 0; i < characters.size(); i++)
+	{
+		itemQueue.push_back(characters[i]);
+	}
+
+	// Add all Props in Place to queue.
+	for(int i = 0; i < props.size(); i++)
+	{
+		itemQueue.push_back(props[i]);
+	}
+
+	VisitNext();
+}

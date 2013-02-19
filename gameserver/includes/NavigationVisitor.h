@@ -27,6 +27,7 @@ public:
 	virtual ~NavigationVisitor();
 
 	void Visit(Game* game);
+	void Visit(OuterSpace* outerSpace);
 
 	//template <typename T>
 	//static T* ExecuteVisitor(T* visitor, Visitable& visitable);
