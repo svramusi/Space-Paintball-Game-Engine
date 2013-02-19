@@ -21,6 +21,6 @@ GameState* OuterSpace::GetGameState() {
 	return new GameState("OuterSpace!");
 }
 
-void OuterSpace::AcceptVisitor(GameVisitor& visitor) {
-	visitor.Visit(this);
+void OuterSpace::AcceptVisitor(GameVisitor* visitor) {
+	visitor->Visit(this);
 }

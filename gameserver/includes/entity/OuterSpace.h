@@ -16,7 +16,7 @@ public:
 	OuterSpace();
 	virtual ~OuterSpace();
 
-	void AcceptVisitor(GameVisitor& visitor);
+	void AcceptVisitor(GameVisitor* visitor);
 	GameState* GetGameState();
 };
 

@@ -21,7 +21,7 @@ public:
 	Game();
 	virtual ~Game();
 
-	void AcceptVisitor(GameVisitor &visitor);
+	void AcceptVisitor(GameVisitor *visitor);
 	void AddPlace(Place& place);
 	vector<Place *>& GetPlaces();
 private:

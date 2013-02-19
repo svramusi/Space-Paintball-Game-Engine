@@ -20,7 +20,7 @@ public:
 	virtual ~Entity();
 
 	string ToString();
-	virtual void AcceptVisitor(GameVisitor& visitor) = 0;
+	virtual void AcceptVisitor(GameVisitor* visitor) = 0;
 	virtual GameState* GetGameState() = 0;
 };
 

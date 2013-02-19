@@ -44,7 +44,7 @@ map<Place*, GameState*>& CollectGameState::GetPlacesGameState() {
 
 map<Entity*, GameState*>& CollectGameState::Collect(Game& game) {
 	//CollectGameState* collectGameState = NavigationVisitor::ExecuteVisitor<CollectGameState>(new CollectGameState(), game);
-	CollectGameState* collectGameState = NavigationVisitor::ExecuteVisitor(new CollectGameState(), game);
+	CollectGameState* collectGameState = NavigationVisitor::ExecuteVisitor(new CollectGameState(), &game);
 	return collectGameState->GetGameState();
 
 

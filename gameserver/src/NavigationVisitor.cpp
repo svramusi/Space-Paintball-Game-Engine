@@ -22,8 +22,15 @@ NavigationVisitor::~NavigationVisitor() {
 //	return visitor;
 //}
 
-CollectGameState * NavigationVisitor::ExecuteVisitor(CollectGameState* visitor, Visitable& visitable) {
-	NavigationVisitor navigation = new NavigationVisitor(visitor);
-	visitable.AcceptVisitor(navigation);
+CollectGameState * NavigationVisitor::ExecuteVisitor(CollectGameState* visitor, Visitable* visitable) {
+	NavigationVisitor * navigation = new NavigationVisitor(visitor);
+	visitable->AcceptVisitor(navigation);
 	return visitor;
+}
+
+void NavigationVisitor::VisitNext() {
+	if(!itemQueue.empty()) {
+		Visitable* first = itemQueue.front();
+		first->AcceptVisitor(this);
+	}
 }
