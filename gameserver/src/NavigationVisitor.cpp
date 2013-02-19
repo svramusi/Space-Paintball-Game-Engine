@@ -30,7 +30,10 @@ CollectGameState * NavigationVisitor::ExecuteVisitor(CollectGameState* visitor, 
 
 void NavigationVisitor::VisitNext() {
 	if(!itemQueue.empty()) {
+		// Get the first element of the list.
 		Visitable* first = itemQueue.front();
+		// Remove the first element of the list.
+		itemQueue.pop_front();
 		first->AcceptVisitor(this);
 	}
 }
