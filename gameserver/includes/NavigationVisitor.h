@@ -9,6 +9,7 @@
 #define NAVIGATIONVISITOR_H_
 
 #include <list>
+#include <vector>
 
 #include "BaseVisitor.h"
 #include "GameVisitor.h"
@@ -24,6 +25,8 @@ class NavigationVisitor : public BaseVisitor {
 public:
 	NavigationVisitor(GameVisitor* gameVisitor);
 	virtual ~NavigationVisitor();
+
+	void Visit(Game* game);
 
 	//template <typename T>
 	//static T* ExecuteVisitor(T* visitor, Visitable& visitable);

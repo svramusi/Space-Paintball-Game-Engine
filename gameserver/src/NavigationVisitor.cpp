@@ -37,3 +37,16 @@ void NavigationVisitor::VisitNext() {
 		first->AcceptVisitor(this);
 	}
 }
+
+void NavigationVisitor::Visit(Game* game) {
+		gameVisitor->Visit(game);
+
+		vector<Place*> places = game->GetPlaces();
+
+		for(int i = 0; i < places.size(); i++)
+		{
+			itemQueue.push_back(places[i]);
+		}
+
+		VisitNext();
+	}
