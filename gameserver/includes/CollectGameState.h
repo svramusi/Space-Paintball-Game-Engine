@@ -17,6 +17,10 @@
 #include "entity/Prop.h"
 #include "entity/Place.h"
 #include "entity/OuterSpace.h"
+#include "entity/Planet.h"
+#include "entity/SpaceShip.h"
+#include "entity/SuperHero.h"
+#include "entity/Astronaut.h"
 
 #include "NavigationVisitor.h"
 
@@ -35,7 +39,16 @@ public:
 	//TODO: Probably should return copy of data not actual reference.
 	map<Place*, GameState*>& GetPlacesGameState();
 
+	// Places
 	void Visit(OuterSpace* outerSpace);
+
+	// Characters
+	void Visit(SuperHero* superHero);
+	void Visit(Astronaut* astronaut);
+
+	// Props
+	void Visit(Planet* planet);
+	void Visit(SpaceShip* spaceShip);
 
 	static map<Entity*, GameState*>& Collect(Game& game);
 private:

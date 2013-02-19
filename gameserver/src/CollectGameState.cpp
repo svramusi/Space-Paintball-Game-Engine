@@ -20,6 +20,22 @@ void CollectGameState::Visit(OuterSpace* outerSpace) {
 	placesGameStateMap.insert(make_pair(outerSpace, outerSpace->GetGameState()));
 }
 
+void CollectGameState::Visit(SuperHero* superHero) {
+	charactersGameStateMap.insert(make_pair(superHero, superHero->GetGameState()));
+}
+
+void CollectGameState::Visit(Astronaut* astronaut) {
+	charactersGameStateMap.insert(make_pair(astronaut, astronaut->GetGameState()));
+}
+
+void CollectGameState::Visit(Planet* planet) {
+	propsGameStateMap.insert(make_pair(planet, planet->GetGameState()));
+}
+
+void CollectGameState::Visit(SpaceShip* spaceShip) {
+	propsGameStateMap.insert(make_pair(spaceShip, spaceShip->GetGameState()));
+}
+
 map<Entity*, GameState*>& CollectGameState::GetGameState() {
 	map<Entity*, GameState*> gameStateMap;
 

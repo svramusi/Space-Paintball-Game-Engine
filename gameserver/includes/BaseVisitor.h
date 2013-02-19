@@ -17,6 +17,10 @@ public:
 
 	void Visit(Game* game);
 	void Visit(OuterSpace* outerSpace);
+	void Visit(SuperHero* superHero);
+	void Visit(Astronaut* astronaut);
+	void Visit(Planet* planet);
+	void Visit(SpaceShip* spaceShip);
 };
 
 #endif /* BASEVISITOR_H_ */

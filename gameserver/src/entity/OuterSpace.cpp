@@ -8,9 +8,9 @@
 #include "entity/OuterSpace.h"
 #include "GameState.h"
 
-OuterSpace::OuterSpace() {
-	// TODO Auto-generated constructor stub
-
+OuterSpace::OuterSpace(string name) {
+	this->name = name;
+	this->gameState = new GameState(name);
 }
 
 OuterSpace::~OuterSpace() {
@@ -18,7 +18,7 @@ OuterSpace::~OuterSpace() {
 }
 
 GameState* OuterSpace::GetGameState() {
-	return new GameState("OuterSpace!");
+	return gameState;
 }
 
 void OuterSpace::AcceptVisitor(GameVisitor* visitor) {

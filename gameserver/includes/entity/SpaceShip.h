@@ -1,30 +1,32 @@
 /*
- * OuterSpace.h
+ * SpaceShip.h
  *
- *  Created on: Feb 17, 2013
+ *  Created on: Feb 19, 2013
  *      Author: amarppatel
  */
 
-#ifndef OUTERSPACE_H_
-#define OUTERSPACE_H_
+#ifndef SPACESHIP_H_
+#define SPACESHIP_H_
 
 #include <string>
 
-#include "Place.h"
+#include "Prop.h"
+#include "GameState.h"
 #include "GameVisitor.h"
 
 using namespace std;
 
-class OuterSpace : public Place {
+class SpaceShip : public Prop {
 public:
-	OuterSpace(string name);
-	virtual ~OuterSpace();
+	SpaceShip(string name);
+	virtual ~SpaceShip();
 
 	void AcceptVisitor(GameVisitor* visitor);
 	GameState* GetGameState();
 private:
 	string name;
 	GameState* gameState;
+
 };
 
-#endif /* OUTERSPACE_H_ */
+#endif /* SPACESHIP_H_ */

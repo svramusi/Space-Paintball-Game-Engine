@@ -21,8 +21,8 @@ public:
 	Place();
 	virtual ~Place();
 
-	void AddCharacter(Character& character);
-	void AddProp(Prop& prop);
+	void AddCharacter(Character* character);
+	void AddProp(Prop* prop);
 	vector<Character*>& GetCharacters();
 	vector<Prop*>& GetProps();
 private:

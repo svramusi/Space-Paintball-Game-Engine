@@ -18,8 +18,8 @@ void Game::AcceptVisitor(GameVisitor *visitor) {
 	visitor->Visit(this);
 }
 
-void Game::AddPlace(Place& place) {
-	places.push_back(&place);
+void Game::AddPlace(Place* place) {
+	places.push_back(place);
 }
 
 vector<Place *>& Game::GetPlaces() {

@@ -1,30 +1,32 @@
 /*
- * OuterSpace.h
+ * Planet.h
  *
- *  Created on: Feb 17, 2013
+ *  Created on: Feb 19, 2013
  *      Author: amarppatel
  */
 
-#ifndef OUTERSPACE_H_
-#define OUTERSPACE_H_
+#ifndef PLANET_H_
+#define PLANET_H_
 
 #include <string>
 
-#include "Place.h"
+#include "Prop.h"
 #include "GameVisitor.h"
+#include "GameState.h"
 
 using namespace std;
 
-class OuterSpace : public Place {
+class Planet : public Prop {
 public:
-	OuterSpace(string name);
-	virtual ~OuterSpace();
+	Planet(string name);
+	virtual ~Planet();
 
 	void AcceptVisitor(GameVisitor* visitor);
 	GameState* GetGameState();
+
 private:
 	string name;
 	GameState* gameState;
 };
 
-#endif /* OUTERSPACE_H_ */
+#endif /* PLANET_H_ */
