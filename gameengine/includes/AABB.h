@@ -3,6 +3,8 @@
 
 #include "Point.h"
 
+#include <cmath>
+
 struct aabb_t {
 	Point center;
 	float radii[3];

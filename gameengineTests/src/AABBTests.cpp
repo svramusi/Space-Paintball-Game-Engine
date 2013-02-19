@@ -51,7 +51,7 @@ AABBTest::testCollision(void)
 	aabb1.center = point1;
 	aabb1.radii[0] = 1.0;
 	aabb1.radii[1] = 1.0;
-	aabb1.radii[1] = 1.0;
+	aabb1.radii[2] = 1.0;
 
 	Point point2;
 	point2.x = 1;
@@ -62,7 +62,7 @@ AABBTest::testCollision(void)
 	aabb2.center = point2;
 	aabb2.radii[0] = 2.0;
 	aabb2.radii[1] = 2.0;
-	aabb2.radii[1] = 2.0;
+	aabb2.radii[2] = 2.0;
 
     CPPUNIT_ASSERT(1 == aabb->isIntersection(aabb1, aabb2));
 }
