@@ -7,9 +7,7 @@
 
 #include "entity/Prop.h"
 
-Prop::Prop() {
-	// TODO Auto-generated constructor stub
-
+Prop::Prop(string name) : Entity(name) {
 }
 
 Prop::~Prop() {

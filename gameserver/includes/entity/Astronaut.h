@@ -23,9 +23,6 @@ public:
 
 	void AcceptVisitor(GameVisitor* visitor);
 	GameState* GetGameState();
-private:
-	string name;
-	GameState* gameState;
 };
 
 #endif /* ASTRONAUT_H_ */

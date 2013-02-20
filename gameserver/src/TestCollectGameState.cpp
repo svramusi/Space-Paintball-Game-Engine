@@ -52,3 +52,22 @@ TestCollectGameState::~TestCollectGameState() {
 	// TODO Auto-generated destructor stub
 }
 
+void TestCollectGameState::printState() {
+	CollectGameState* collectGameState = new CollectGameState();
+
+	NavigationVisitor* navigationVisitor = new NavigationVisitor(collectGameState);
+
+	game->AcceptVisitor(navigationVisitor);
+
+	map<Entity*,GameState*> gameState = collectGameState->GetGameState();
+	map<Entity*, GameState*>::iterator iter;
+
+	for (iter = gameState.begin(); iter != gameState.end(); ++iter) {
+		Entity* entity = iter->first;
+		GameState* gameState = iter->second;
+
+		string entityName = entity->GetName();
+		string entityState = gameState->GetState();
+		printf("Entity: %s | State: %s\n", entityName.c_str() , entityState.c_str());
+	}
+}

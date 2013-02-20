@@ -7,9 +7,7 @@
 
 #include "entity/Place.h"
 
-Place::Place() {
-	// TODO Auto-generated constructor stub
-
+Place::Place(string name) : Entity(name) {
 }
 
 Place::~Place() {

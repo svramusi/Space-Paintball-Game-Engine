@@ -8,8 +8,7 @@
 #include "entity/OuterSpace.h"
 #include "GameState.h"
 
-OuterSpace::OuterSpace(string name) {
-	this->name = name;
+OuterSpace::OuterSpace(string name) : Place(name) {
 	this->gameState = new GameState(name);
 }
 

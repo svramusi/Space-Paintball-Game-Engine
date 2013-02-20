@@ -8,10 +8,14 @@
 #include "GameState.h"
 
 GameState::GameState(string gameState) {
-	this->gameState = gameState;
+	this->gameState = gameState + " Game State";
 }
 
 GameState::~GameState() {
 	// TODO Auto-generated destructor stub
+}
+
+string GameState::GetState() {
+	return this->gameState;
 }
 

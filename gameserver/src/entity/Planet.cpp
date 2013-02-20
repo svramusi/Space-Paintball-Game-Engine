@@ -7,8 +7,7 @@
 
 #include "entity/Planet.h"
 
-Planet::Planet(string name) {
-	this->name = name;
+Planet::Planet(string name) : Prop(name) {
 	this->gameState = new GameState(name);
 }
 

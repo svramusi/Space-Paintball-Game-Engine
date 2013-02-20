@@ -7,8 +7,7 @@
 
 #include "entity/Astronaut.h"
 
-Astronaut::Astronaut(string name) {
-	this->name = name;
+Astronaut::Astronaut(string name) : Character(name) {
 	this->gameState = new GameState(name);
 }
 

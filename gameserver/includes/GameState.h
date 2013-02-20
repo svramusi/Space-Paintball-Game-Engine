@@ -17,6 +17,7 @@ public:
 	GameState(string gameState);
 	virtual ~GameState();
 
+	string GetState();
 private:
 	string gameState;
 };

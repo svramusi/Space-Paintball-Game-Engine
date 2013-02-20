@@ -7,8 +7,7 @@
 
 #include "entity/SuperHero.h"
 
-SuperHero::SuperHero(string name) {
-	this->name = name;
+SuperHero::SuperHero(string name) : Character(name) {
 	this->gameState = new GameState(name);
 }
 

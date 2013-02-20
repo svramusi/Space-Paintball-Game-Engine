@@ -7,8 +7,7 @@
 
 #include "entity/SpaceShip.h"
 
-SpaceShip::SpaceShip(string name) {
-	this->name = name;
+SpaceShip::SpaceShip(string name) : Prop(name) {
 	this->gameState = new GameState(name);
 }
 

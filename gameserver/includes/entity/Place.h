@@ -9,6 +9,7 @@
 #define PLACE_H_
 
 #include <vector>
+#include <string>
 
 #include "Character.h"
 #include "Prop.h"
@@ -18,7 +19,7 @@ using namespace std;
 
 class Place : public Entity {
 public:
-	Place();
+	Place(string name);
 	virtual ~Place();
 
 	void AddCharacter(Character* character);

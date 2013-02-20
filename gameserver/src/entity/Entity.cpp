@@ -7,9 +7,8 @@
 
 #include "entity/Entity.h"
 
-Entity::Entity() {
-	// TODO Auto-generated constructor stub
-
+Entity::Entity(string name) {
+	this->name = name;
 }
 
 Entity::~Entity() {
@@ -18,4 +17,8 @@ Entity::~Entity() {
 
 string Entity::ToString() {
 	return "Entity";
+}
+
+string Entity::GetName() {
+	return name;
 }

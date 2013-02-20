@@ -16,12 +16,17 @@ using namespace std;
 
 class Entity : public Visitable {
 public:
-	Entity();
+	Entity(string name);
 	virtual ~Entity();
 
 	string ToString();
+	string GetName();
 	virtual void AcceptVisitor(GameVisitor* visitor) = 0;
 	virtual GameState* GetGameState() = 0;
+
+protected:
+	string name;
+	GameState* gameState;
 };
 
 #endif /* ENTITY_H_ */

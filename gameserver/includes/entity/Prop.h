@@ -8,11 +8,15 @@
 #ifndef PROP_H_
 #define PROP_H_
 
+#include <string>
+
 #include "entity/Entity.h"
+
+using namespace std;
 
 class Prop : public Entity {
 public:
-	Prop();
+	Prop(string name);
 	virtual ~Prop();
 };
 

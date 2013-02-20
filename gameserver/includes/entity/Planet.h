@@ -23,10 +23,6 @@ public:
 
 	void AcceptVisitor(GameVisitor* visitor);
 	GameState* GetGameState();
-
-private:
-	string name;
-	GameState* gameState;
 };
 
 #endif /* PLANET_H_ */

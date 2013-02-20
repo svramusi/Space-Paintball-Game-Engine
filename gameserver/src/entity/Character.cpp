@@ -7,9 +7,7 @@
 
 #include "entity/Character.h"
 
-Character::Character() {
-	// TODO Auto-generated constructor stub
-
+Character::Character(string name) : Entity(name) {
 }
 
 Character::~Character() {

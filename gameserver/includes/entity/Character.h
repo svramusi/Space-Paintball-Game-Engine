@@ -8,11 +8,15 @@
 #ifndef CHARACTER_H_
 #define CHARACTER_H_
 
+#include <string>
+
 #include "entity/Entity.h"
+
+using namespace std;
 
 class Character : public Entity {
 public:
-	Character();
+	Character(string name);
 	virtual ~Character();
 };
 
