@@ -24,7 +24,7 @@ public:
 	TestCollectGameState();
 	virtual ~TestCollectGameState();
 
-	void printState();
+	void PrintGameState();
 private:
 	Game * game;
 };

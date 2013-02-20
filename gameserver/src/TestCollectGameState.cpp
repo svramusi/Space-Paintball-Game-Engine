@@ -52,17 +52,17 @@ TestCollectGameState::~TestCollectGameState() {
 	// TODO Auto-generated destructor stub
 }
 
-void TestCollectGameState::printState() {
+void TestCollectGameState::PrintGameState() {
 	CollectGameState* collectGameState = new CollectGameState();
 
 	NavigationVisitor* navigationVisitor = new NavigationVisitor(collectGameState);
 
 	game->AcceptVisitor(navigationVisitor);
 
-	map<Entity*,GameState*> gameState = collectGameState->GetGameState();
+	map<Entity*,GameState*>* gameState = collectGameState->GetGameState();
 	map<Entity*, GameState*>::iterator iter;
 
-	for (iter = gameState.begin(); iter != gameState.end(); ++iter) {
+	for (iter = gameState->begin(); iter != gameState->end(); ++iter) {
 		Entity* entity = iter->first;
 		GameState* gameState = iter->second;
 

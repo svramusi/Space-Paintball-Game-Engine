@@ -31,7 +31,7 @@ public:
 	CollectGameState();
 	virtual ~CollectGameState();
 
-	map<Entity*, GameState*>& GetGameState();
+	map<Entity*, GameState*>* GetGameState();
 	//TODO: Probably should return copy of data not actual reference.
 	map<Character*, GameState*>& GetCharactersGameState();
 	//TODO: Probably should return copy of data not actual reference.
@@ -50,7 +50,7 @@ public:
 	void Visit(Planet* planet);
 	void Visit(SpaceShip* spaceShip);
 
-	static map<Entity*, GameState*>& Collect(Game& game);
+	static map<Entity*, GameState*>* Collect(Game& game);
 private:
 	map<Character*, GameState*> charactersGameStateMap;
 	map<Prop*, GameState*> propsGameStateMap;

@@ -36,12 +36,12 @@ void CollectGameState::Visit(SpaceShip* spaceShip) {
 	propsGameStateMap.insert(make_pair(spaceShip, spaceShip->GetGameState()));
 }
 
-map<Entity*, GameState*>& CollectGameState::GetGameState() {
-	map<Entity*, GameState*> gameStateMap;
+map<Entity*, GameState*>* CollectGameState::GetGameState() {
+	map<Entity*, GameState*>* gameStateMap;
 
-	gameStateMap.insert(charactersGameStateMap.begin(), charactersGameStateMap.end());
-	gameStateMap.insert(propsGameStateMap.begin(), propsGameStateMap.end());
-	gameStateMap.insert(placesGameStateMap.begin(), placesGameStateMap.end());
+	gameStateMap->insert(placesGameStateMap.begin(), placesGameStateMap.end());
+	gameStateMap->insert(charactersGameStateMap.begin(), charactersGameStateMap.end());
+	gameStateMap->insert(propsGameStateMap.begin(), propsGameStateMap.end());
 
 	return gameStateMap;
 }
@@ -58,7 +58,7 @@ map<Place*, GameState*>& CollectGameState::GetPlacesGameState() {
 	return placesGameStateMap;
 }
 
-map<Entity*, GameState*>& CollectGameState::Collect(Game& game) {
+map<Entity*, GameState*>* CollectGameState::Collect(Game& game) {
 	//CollectGameState* collectGameState = NavigationVisitor::ExecuteVisitor<CollectGameState>(new CollectGameState(), game);
 	CollectGameState* collectGameState = NavigationVisitor::ExecuteVisitor(new CollectGameState(), &game);
 	return collectGameState->GetGameState();
