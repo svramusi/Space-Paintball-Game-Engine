@@ -12,7 +12,7 @@ Astronaut::Astronaut(string name) : Character(name) {
 }
 
 Astronaut::~Astronaut() {
-	// TODO Auto-generated destructor stub
+	delete gameState;
 }
 
 GameState* Astronaut::GetGameState() {

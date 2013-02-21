@@ -12,7 +12,7 @@ SpaceShip::SpaceShip(string name) : Prop(name) {
 }
 
 SpaceShip::~SpaceShip() {
-	// TODO Auto-generated destructor stub
+	delete gameState;
 }
 
 GameState* SpaceShip::GetGameState() {

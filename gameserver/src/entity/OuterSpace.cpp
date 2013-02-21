@@ -13,7 +13,7 @@ OuterSpace::OuterSpace(string name) : Place(name) {
 }
 
 OuterSpace::~OuterSpace() {
-	// TODO Auto-generated destructor stub
+	delete gameState;
 }
 
 GameState* OuterSpace::GetGameState() {

@@ -8,24 +8,27 @@
 #include "entity/Place.h"
 
 Place::Place(string name) : Entity(name) {
+	characters = new vector<Character*>();
+	props = new vector<Prop*>();
 }
 
 Place::~Place() {
-	// TODO Auto-generated destructor stub
+	delete characters;
+	delete props;
 }
 
 void Place::AddCharacter(Character* character) {
-	characters.push_back(character);
+	characters->push_back(character);
 }
 
 void Place::AddProp(Prop* prop) {
-	props.push_back(prop);
+	props->push_back(prop);
 }
 
-vector<Character*>& Place::GetCharacters() {
+vector<Character*>* Place::GetCharacters() {
 	return characters;
 }
 
-vector<Prop*>& Place::GetProps() {
+vector<Prop*>* Place::GetProps() {
 	return props;
 }

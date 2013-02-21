@@ -8,10 +8,11 @@
 #include "Game.h"
 
 Game::Game() {
+	places = new vector<Place *>();
 }
 
 Game::~Game() {
-	// TODO Auto-generated destructor stub
+	delete places;
 }
 
 void Game::AcceptVisitor(GameVisitor *visitor) {
@@ -19,9 +20,9 @@ void Game::AcceptVisitor(GameVisitor *visitor) {
 }
 
 void Game::AddPlace(Place* place) {
-	places.push_back(place);
+	places->push_back(place);
 }
 
-vector<Place *>& Game::GetPlaces() {
+vector<Place *>* Game::GetPlaces() {
 	return places;
 }

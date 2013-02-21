@@ -12,7 +12,7 @@ Planet::Planet(string name) : Prop(name) {
 }
 
 Planet::~Planet() {
-	// TODO Auto-generated destructor stub
+	delete gameState;
 }
 
 GameState* Planet::GetGameState() {

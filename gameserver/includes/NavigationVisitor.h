@@ -34,7 +34,7 @@ public:
 	static CollectGameState* ExecuteVisitor(CollectGameState* visitor, Visitable* visitable);
 private:
 	GameVisitor* gameVisitor;
-	list<Visitable*> itemQueue;
+	list<Visitable*>* itemQueue;
 
 	void VisitNext();
 };

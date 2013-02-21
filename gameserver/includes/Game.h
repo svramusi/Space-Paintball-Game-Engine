@@ -23,9 +23,9 @@ public:
 
 	void AcceptVisitor(GameVisitor *visitor);
 	void AddPlace(Place* place);
-	vector<Place *>& GetPlaces();
+	vector<Place *>* GetPlaces();
 private:
-	vector<Place *> places;
+	vector<Place *>* places;
 };
 
 #endif /* GAME_H_ */

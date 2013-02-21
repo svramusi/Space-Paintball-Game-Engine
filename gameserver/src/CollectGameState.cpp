@@ -14,7 +14,9 @@ CollectGameState::CollectGameState() {
 }
 
 CollectGameState::~CollectGameState() {
-	// TODO Auto-generated destructor stub
+	delete charactersGameStateMap;
+	delete propsGameStateMap;
+	delete placesGameStateMap;
 }
 
 void CollectGameState::Visit(OuterSpace* outerSpace) {

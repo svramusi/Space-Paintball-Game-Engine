@@ -49,7 +49,7 @@ TestCollectGameState::TestCollectGameState() {
 }
 
 TestCollectGameState::~TestCollectGameState() {
-	// TODO Auto-generated destructor stub
+	delete game;
 }
 
 void TestCollectGameState::PrintGameState() {
@@ -69,6 +69,12 @@ void TestCollectGameState::PrintGameState() {
 		string entityName = entity->GetName();
 		string entityState = gameState->GetState();
 		printf("Entity: %s | State: %s\n", entityName.c_str() , entityState.c_str());
-		//printf("Entity: %s\n", entityName.c_str());
+
+		//delete entity;
+		//delete gameState;
 	}
+
+	delete gameState;
+	delete navigationVisitor;
+	delete collectGameState;
 }

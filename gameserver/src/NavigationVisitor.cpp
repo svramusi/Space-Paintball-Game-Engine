@@ -9,10 +9,11 @@
 
 NavigationVisitor::NavigationVisitor(GameVisitor* gameVisitor) {
 	this->gameVisitor = gameVisitor;
+	itemQueue = new list<Visitable*>();
 }
 
 NavigationVisitor::~NavigationVisitor() {
-	// TODO Auto-generated destructor stub
+	delete itemQueue;
 }
 
 //template <typename T>
@@ -29,11 +30,11 @@ CollectGameState * NavigationVisitor::ExecuteVisitor(CollectGameState* visitor, 
 }
 
 void NavigationVisitor::VisitNext() {
-	if(!itemQueue.empty()) {
+	if(!itemQueue->empty()) {
 		// Get the first element of the list.
-		Visitable* first = itemQueue.front();
+		Visitable* first = itemQueue->front();
 		// Remove the first element of the list.
-		itemQueue.pop_front();
+		itemQueue->pop_front();
 		first->AcceptVisitor(this);
 	}
 }
@@ -41,12 +42,12 @@ void NavigationVisitor::VisitNext() {
 void NavigationVisitor::Visit(Game* game) {
 	gameVisitor->Visit(game);
 
-	vector<Place*> places = game->GetPlaces();
+	vector<Place*>* places = game->GetPlaces();
 
 	// Add all Places in Game to queue.
-	for(int i = 0; i < places.size(); i++)
+	for(int i = 0; i < places->size(); i++)
 	{
-		itemQueue.push_back(places[i]);
+		itemQueue->push_back((*places)[i]);
 	}
 
 	VisitNext();
@@ -55,19 +56,19 @@ void NavigationVisitor::Visit(Game* game) {
 void NavigationVisitor::Visit(OuterSpace* outerSpace) {
 	gameVisitor->Visit(outerSpace);
 
-	vector<Character*> characters = outerSpace->GetCharacters();
-	vector<Prop*> props = outerSpace->GetProps();
+	vector<Character*>* characters = outerSpace->GetCharacters();
+	vector<Prop*>* props = outerSpace->GetProps();
 
 	// Add all Characters in Place to queue.
-	for(int i = 0; i < characters.size(); i++)
+	for(int i = 0; i < characters->size(); i++)
 	{
-		itemQueue.push_back(characters[i]);
+		itemQueue->push_back((*characters)[i]);
 	}
 
 	// Add all Props in Place to queue.
-	for(int i = 0; i < props.size(); i++)
+	for(int i = 0; i < props->size(); i++)
 	{
-		itemQueue.push_back(props[i]);
+		itemQueue->push_back((*props)[i]);
 	}
 
 	VisitNext();

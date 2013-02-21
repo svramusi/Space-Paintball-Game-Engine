@@ -12,7 +12,7 @@ SuperHero::SuperHero(string name) : Character(name) {
 }
 
 SuperHero::~SuperHero() {
-	// TODO Auto-generated destructor stub
+	delete gameState;
 }
 
 

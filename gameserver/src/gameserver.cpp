@@ -35,6 +35,7 @@ int main( int argc, char * argv[] )
 
 	TestCollectGameState* test = new TestCollectGameState();
 	test->PrintGameState();
+	delete test;
 /*
 	GunUtils *guns = new GunUtils("example.xml");
 	guns->print_guns();
