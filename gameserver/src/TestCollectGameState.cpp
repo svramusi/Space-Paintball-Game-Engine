@@ -67,8 +67,8 @@ void TestCollectGameState::PrintGameState() {
 		GameState* gameState = iter->second;
 
 		string entityName = entity->GetName();
-		//string entityState = gameState->GetState();
-		//printf("Entity: %s | State: %s\n", entityName.c_str() , entityState.c_str());
-		printf("Entity: %s\n", entityName.c_str());
+		string entityState = gameState->GetState();
+		printf("Entity: %s | State: %s\n", entityName.c_str() , entityState.c_str());
+		//printf("Entity: %s\n", entityName.c_str());
 	}
 }

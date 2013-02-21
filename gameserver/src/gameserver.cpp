@@ -35,7 +35,7 @@ int main( int argc, char * argv[] )
 
 	TestCollectGameState* test = new TestCollectGameState();
 	test->PrintGameState();
-
+/*
 	GunUtils *guns = new GunUtils("example.xml");
 	guns->print_guns();
 	delete guns;
@@ -57,7 +57,7 @@ int main( int argc, char * argv[] )
 		/*
 		 * Poll for OS Events/Messages; this is
 		 * the event pump.
-		 */
+		 *
 		PollForOSMessages(&quit);
 
 		int input = GetInputFromClient(&quit);
@@ -72,7 +72,7 @@ int main( int argc, char * argv[] )
 		 * the player score, health, etc. (since typically
 		 * the HUD is not rendered by the game engine, but
 		 * separately).
-		 */
+		 *
 		UpdateStatistics();
 
 		FPSControl();
@@ -80,10 +80,10 @@ int main( int argc, char * argv[] )
 		/*
 		 * Play nice with the OS, and give
 		 * some CPU for another process.
-		 */
+		 *
 		SDL_Delay(1);
 	} // End Server Game Loop
-
+*/
 	return 0;
 }
 

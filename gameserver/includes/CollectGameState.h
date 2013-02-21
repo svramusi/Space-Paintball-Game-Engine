@@ -54,9 +54,9 @@ public:
 
 	static map<Entity*, GameState*, EntityComparer>* Collect(Game& game);
 private:
-	map<Character*, GameState*, EntityComparer> charactersGameStateMap;
-	map<Prop*, GameState*, EntityComparer> propsGameStateMap;
-	map<Place*, GameState*, EntityComparer> placesGameStateMap;
+	map<Character*, GameState*, EntityComparer>* charactersGameStateMap;
+	map<Prop*, GameState*, EntityComparer>* propsGameStateMap;
+	map<Place*, GameState*, EntityComparer>* placesGameStateMap;
 };
 
 #endif /* COLLECTGAMESTATE_H_ */
