@@ -59,15 +59,16 @@ void TestCollectGameState::PrintGameState() {
 
 	game->AcceptVisitor(navigationVisitor);
 
-	map<Entity*,GameState*>* gameState = collectGameState->GetGameState();
-	map<Entity*, GameState*>::iterator iter;
+	map<Entity*,GameState*, EntityComparer>* gameState = collectGameState->GetGameState();
+	map<Entity*, GameState*, EntityComparer>::iterator iter;
 
 	for (iter = gameState->begin(); iter != gameState->end(); ++iter) {
 		Entity* entity = iter->first;
 		GameState* gameState = iter->second;
 
 		string entityName = entity->GetName();
-		string entityState = gameState->GetState();
-		printf("Entity: %s | State: %s\n", entityName.c_str() , entityState.c_str());
+		//string entityState = gameState->GetState();
+		//printf("Entity: %s | State: %s\n", entityName.c_str() , entityState.c_str());
+		printf("Entity: %s\n", entityName.c_str());
 	}
 }

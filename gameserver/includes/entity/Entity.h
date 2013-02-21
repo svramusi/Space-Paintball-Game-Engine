@@ -20,13 +20,27 @@ public:
 	virtual ~Entity();
 
 	string ToString();
-	string GetName();
+	string GetName() const;
 	virtual void AcceptVisitor(GameVisitor* visitor) = 0;
 	virtual GameState* GetGameState() = 0;
-
 protected:
 	string name;
 	GameState* gameState;
+};
+
+struct EntityComparer
+{
+    bool operator()( const Entity* first , const Entity* second) const
+    {
+        //if ( first.x == second.x )
+        //{
+        //    return first.y < second.y;
+        //}
+
+    	string name1 = first->GetName();
+    	string name2 = second->GetName();
+    	return (name1.compare(name2) < 0);
+    }
 };
 
 #endif /* ENTITY_H_ */

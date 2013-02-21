@@ -19,6 +19,6 @@ string Entity::ToString() {
 	return "Entity";
 }
 
-string Entity::GetName() {
+string Entity::GetName() const {
 	return name;
 }

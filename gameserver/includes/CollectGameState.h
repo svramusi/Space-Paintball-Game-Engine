@@ -9,6 +9,8 @@
 #define COLLECTGAMESTATE_H_
 
 #include <map>
+#include <stdio.h>
+
 #include "BaseVisitor.h"
 #include "GameState.h"
 #include "Game.h"
@@ -31,13 +33,13 @@ public:
 	CollectGameState();
 	virtual ~CollectGameState();
 
-	map<Entity*, GameState*>* GetGameState();
+	map<Entity*, GameState*, EntityComparer>* GetGameState();
 	//TODO: Probably should return copy of data not actual reference.
-	map<Character*, GameState*>& GetCharactersGameState();
+	map<Character*, GameState*, EntityComparer>* GetCharactersGameState();
 	//TODO: Probably should return copy of data not actual reference.
-	map<Prop*, GameState*>& GetPropsGameState();
+	map<Prop*, GameState*, EntityComparer>* GetPropsGameState();
 	//TODO: Probably should return copy of data not actual reference.
-	map<Place*, GameState*>& GetPlacesGameState();
+	map<Place*, GameState*, EntityComparer>* GetPlacesGameState();
 
 	// Places
 	void Visit(OuterSpace* outerSpace);
@@ -50,11 +52,11 @@ public:
 	void Visit(Planet* planet);
 	void Visit(SpaceShip* spaceShip);
 
-	static map<Entity*, GameState*>* Collect(Game& game);
+	static map<Entity*, GameState*, EntityComparer>* Collect(Game& game);
 private:
-	map<Character*, GameState*> charactersGameStateMap;
-	map<Prop*, GameState*> propsGameStateMap;
-	map<Place*, GameState*> placesGameStateMap;
+	map<Character*, GameState*, EntityComparer> charactersGameStateMap;
+	map<Prop*, GameState*, EntityComparer> propsGameStateMap;
+	map<Place*, GameState*, EntityComparer> placesGameStateMap;
 };
 
 #endif /* COLLECTGAMESTATE_H_ */
