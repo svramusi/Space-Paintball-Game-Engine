@@ -69,9 +69,6 @@ void TestCollectGameState::PrintGameState() {
 		string entityName = entity->GetName();
 		string entityState = gameState->GetState();
 		printf("Entity: %s | State: %s\n", entityName.c_str() , entityState.c_str());
-
-		//delete entity;
-		//delete gameState;
 	}
 
 	delete gameState;
