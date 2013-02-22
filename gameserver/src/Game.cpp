@@ -12,6 +12,9 @@ Game::Game() {
 }
 
 Game::~Game() {
+	for(std::vector<Place*>::iterator it = places->begin(); it != places->end(); ++it)
+		delete *it;
+
 	delete places;
 }
 

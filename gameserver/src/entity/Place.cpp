@@ -13,7 +13,14 @@ Place::Place(string name) : Entity(name) {
 }
 
 Place::~Place() {
+	for(std::vector<Character*>::iterator it = characters->begin(); it != characters->end(); ++it)
+		delete *it;
+
 	delete characters;
+
+	for(std::vector<Prop*>::iterator it = props->begin(); it != props->end(); ++it)
+		delete *it;
+
 	delete props;
 }
 
