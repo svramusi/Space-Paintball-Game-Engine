@@ -14,6 +14,7 @@ class SphereTest : public CppUnit::TestFixture
 	CPPUNIT_TEST_SUITE(SphereTest);
 	CPPUNIT_TEST(testNoCollision);
 	CPPUNIT_TEST(testCollision);
+	CPPUNIT_TEST(testVeryCloseCollision);
 	CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -22,6 +23,7 @@ public:
 
     void testNoCollision(void);
     void testCollision(void);
+    void testVeryCloseCollision(void);
 
 private:
     Sphere *sphere;

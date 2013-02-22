@@ -2,13 +2,12 @@
 #define SPHERE_H
 
 
+#include "Point.h"
 #include <armadillo>
 #include <cmath>
 
-typedef std::vector<float> newPoint;
-
 struct sphere_t {
-	newPoint center;
+	Point center;
 	float radius;
 };
 
