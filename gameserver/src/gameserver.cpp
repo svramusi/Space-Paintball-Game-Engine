@@ -11,6 +11,7 @@
 #include "utils/gun_utils.h"
 #include "physicsengine.h"
 #include "GameEngine.h"
+#include "TestCollectGameState.h"
 
 using namespace std;
 using namespace net;
@@ -31,6 +32,10 @@ void FPSControl();
 
 int main( int argc, char * argv[] )
 {
+
+	TestCollectGameState* test = new TestCollectGameState();
+	test->PrintGameState();
+	delete test;
 
 	GunUtils *guns = new GunUtils("example.xml");
 	guns->print_guns();
