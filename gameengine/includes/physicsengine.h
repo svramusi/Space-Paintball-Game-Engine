@@ -9,7 +9,7 @@ class PhysicsEngine {
 public:
 	PhysicsEngine();
 	PhysicsEngine(float grav, float air);
-	SetWorldParams(float grav, float air)
+	int SetWorldParams(float grav, float air);
     ~PhysicsEngine();
     void updateWorld();
 

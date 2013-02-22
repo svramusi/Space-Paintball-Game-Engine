@@ -13,11 +13,13 @@ PhysicsEngine::PhysicsEngine(float grav, float air)
 	cd = new CollisionDetection();
 	SetWorldParams(grav,air);
 }
+int
 PhysicsEngine::SetWorldParams(float grav, float air)
 {
 	gravity =grav;
 	airfriction= air;
 
+    return 0;
 }
 PhysicsEngine::~PhysicsEngine()
 {
