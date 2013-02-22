@@ -9,6 +9,7 @@
 #include "net/Connection.h"
 #include "net/NetUtils.h"
 #include "GameEngine.h"
+#include "TestCollectGameState.h"
 
 using namespace std;
 using namespace net;
@@ -34,6 +35,10 @@ void FPSControl();
 
 int main( int argc, char * argv[] )
 {
+	TestCollectGameState* test = new TestCollectGameState();
+	test->PrintGameState();
+	delete test;
+
 	bool quit = false;
 	GameEngine gameEngine;
 	Uint32 time = SDL_GetTicks();

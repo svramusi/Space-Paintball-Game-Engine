@@ -32,7 +32,6 @@ void FPSControl();
 
 int main( int argc, char * argv[] )
 {
-
 	TestCollectGameState* test = new TestCollectGameState();
 	test->PrintGameState();
 	delete test;
