@@ -73,3 +73,23 @@ void NavigationVisitor::Visit(OuterSpace* outerSpace) {
 
 	VisitNext();
 }
+
+void NavigationVisitor::Visit(SuperHero* superHero) {
+	gameVisitor->Visit(superHero);
+	VisitNext();
+}
+
+void NavigationVisitor::Visit(Astronaut* astronaut) {
+	gameVisitor->Visit(astronaut);
+	VisitNext();
+}
+
+void NavigationVisitor::Visit(Planet* planet) {
+	gameVisitor->Visit(planet);
+	VisitNext();
+}
+
+void NavigationVisitor::Visit(SpaceShip* spaceShip) {
+	gameVisitor->Visit(spaceShip);
+	VisitNext();
+}

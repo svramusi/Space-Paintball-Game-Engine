@@ -52,7 +52,7 @@ public:
 	void Visit(Planet* planet);
 	void Visit(SpaceShip* spaceShip);
 
-	static map<Entity*, GameState*, EntityComparer>* Collect(Game& game);
+	static map<Entity*, GameState*, EntityComparer>* Collect(Game* game);
 private:
 	map<Character*, GameState*, EntityComparer>* charactersGameStateMap;
 	map<Prop*, GameState*, EntityComparer>* propsGameStateMap;

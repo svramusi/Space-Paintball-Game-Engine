@@ -59,6 +59,8 @@ void TestCollectGameState::PrintGameState() {
 
 	game->AcceptVisitor(navigationVisitor);
 
+	//map<Entity*,GameState*, EntityComparer>* gameState = CollectGameState::Collect(game);
+
 	map<Entity*,GameState*, EntityComparer>* gameState = collectGameState->GetGameState();
 	map<Entity*, GameState*, EntityComparer>::iterator iter;
 

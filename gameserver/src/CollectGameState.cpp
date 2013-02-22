@@ -61,7 +61,7 @@ map<Place*, GameState*, EntityComparer>* CollectGameState::GetPlacesGameState() 
 	return placesGameStateMap;
 }
 
-map<Entity*, GameState*, EntityComparer>* CollectGameState::Collect(Game& game) {
-	CollectGameState* collectGameState = NavigationVisitor::ExecuteVisitor(new CollectGameState(), &game);
+map<Entity*, GameState*, EntityComparer>* CollectGameState::Collect(Game* game) {
+	CollectGameState* collectGameState = NavigationVisitor::ExecuteVisitor(new CollectGameState(), game);
 	return collectGameState->GetGameState();
 }
