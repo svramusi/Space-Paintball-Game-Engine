@@ -67,6 +67,11 @@ namespace net
 		return state == Connecting;
 	}
 
+	bool Connection::HasData() const
+	{
+		return socket.HasData();
+	}
+
 	bool Connection::ConnectFailed() const
 	{
 		return state == ConnectFail;

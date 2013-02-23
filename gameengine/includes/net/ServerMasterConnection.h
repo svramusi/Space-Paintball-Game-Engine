@@ -8,9 +8,15 @@
 #ifndef SERVERMASTERCONNECTION_H_
 #define SERVERMASTERCONNECTION_H_
 
+#include <map>
+#include <string>
+
 #include "GameConnection.h"
 #include "ServerConnection.h"
 #include "Constants.hpp"
+#include "Address.h"
+
+using namespace std;
 
 namespace net
 {
@@ -22,7 +28,7 @@ namespace net
 		 * creating the socket, since we might just be setting
 		 * up the data structures.
 		 */
-		ServerMasterConnection(int port);
+		ServerMasterConnection(Address * address);
 		virtual ~ServerMasterConnection();
 		/*
 		 * This function does all the work of creating the socket:
@@ -31,21 +37,27 @@ namespace net
 		 * 3. Set the port, and
 		 * 4. Start listening
 		 */
-		void Init();
+		bool Init();
 		/*
 		 * When "hasData()" is true, the client is trying to connect.
 		 * This function accepts the connection, and returns the
 		 * ServerSocket that will be used for that connection.
 		 */
-		ServerConnection AcceptConection(int &IP);
+		ServerConnection* AcceptConection(Address* address);
 
-		virtual void Send(GamePacket data);
-		virtual GamePacket Receive();
-		virtual bool HasData();
+		bool HasData() const;
+		bool IsConnected() const;
+		void Send( GamePacket* data );
+		GamePacket* Receive();
+		void Update( float deltaTime );
+
+		map<Address*, ServerConnection*> * GetConnections();
+
+		//virtual void Send(GamePacket* data);
+		//virtual GamePacket* Receive();
 
 	private:
-		int port;
-		Connection connection;
+		map<Address*, ServerConnection*>* addressToConnectionMap;
 	};
 }
 #endif /* SERVERMASTERCONNECTION_H_ */

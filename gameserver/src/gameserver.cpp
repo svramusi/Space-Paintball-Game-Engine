@@ -8,6 +8,7 @@
 #include "net/Net.h"
 #include "net/Connection.h"
 #include "net/NetUtils.h"
+#include "net/ServerMasterConnection.h"
 #include "utils/gun_utils.h"
 #include "physicsengine.h"
 #include "GameEngine.h"
@@ -16,12 +17,14 @@
 using namespace std;
 using namespace net;
 
-const int ServerPort = 30000;
+const int ServerMasterPort = 30000;
 const int ClientPort = 30001;
 const int ProtocolId = 0x99887766;
 const float DeltaTime = 0.25f;
 const float SendRate = 0.25f;
 const float TimeOut = 10.0f;
+
+ServerMasterConnection* serverMasterConnection;
 
 int StartGameMasterServer();
 int PollForOSMessages(bool* quit);
@@ -51,6 +54,15 @@ int main( int argc, char * argv[] )
 	Uint32 time = SDL_GetTicks();
 	bool needToRedraw = true;
 
+	// Initialize the server master connection
+	Address* serverMasterAddress = new Address(127,0,0,1, ServerMasterPort);
+	serverMasterConnection = new ServerMasterConnection(serverMasterAddress);
+	if ( !serverMasterConnection->Init() )
+	{
+		printf( "could not start connection to server master on port %d\n", serverMasterAddress->GetPort() );
+		return 1;
+	}
+
 	// Server Game Loop
 	while(!quit)
 	{
@@ -64,7 +76,7 @@ int main( int argc, char * argv[] )
 
 		///////////////////////////////////////////////////////////
 		//Update Game State
-		gameEngine.UpdateGameState(input);
+		//gameEngine.UpdateGameState(input);
 		///////////////////////////////////////////////////////////
 
 		/*
@@ -73,7 +85,7 @@ int main( int argc, char * argv[] )
 		 * the HUD is not rendered by the game engine, but
 		 * separately).
 		 */
-		UpdateStatistics();
+		//UpdateStatistics();
 
 		FPSControl();
 
@@ -83,6 +95,9 @@ int main( int argc, char * argv[] )
 		 */
 		SDL_Delay(1);
 	} // End Server Game Loop
+
+	delete serverMasterConnection;
+	delete serverMasterAddress;
 
 	return 0;
 }
@@ -144,6 +159,39 @@ int PollForOSMessages(bool* quit)
  */
 int GetInputFromClient(bool* quit)
 {
+	if(!quit)
+	{
+		map<Address*, ServerConnection*>* connections = serverMasterConnection->GetConnections();
+
+		map<Address*, ServerConnection*>::iterator iter;
+
+        for (iter = connections->begin(); iter != connections->end(); iter++) {
+        	Address* address = iter->first;
+        	ServerConnection* serverConnection = iter->second;
+
+        	if ( serverConnection->IsConnected() )
+			{
+        		unsigned char packet[] = "server to client";
+        		serverConnection->Send(new GamePacket(packet));
+			}
+        	if( serverConnection->HasData() )
+        	{
+				while ( true )
+				{
+					GamePacket* gamePacket = serverConnection->Receive();
+					if ( gamePacket == NULL )
+					{
+						break;
+					}
+					printf( "received packet from client\n" );
+				}
+        	}
+
+            serverConnection->Update( DeltaTime );
+     		NetUtils::wait( DeltaTime );
+        }
+	}
+
 	return 0;
 }
 
@@ -151,35 +199,35 @@ int StartGameMasterServer()
 {
 	Connection connection( ProtocolId, TimeOut );
 
-		if ( !connection.Start( ServerPort ) )
-		{
-			printf( "could not start connection on port %d\n", ServerPort );
-			//Throw exception.
-			return 1;
-		}
+	if ( !connection.Start( ServerMasterPort ) )
+	{
+		printf( "could not start connection on port %d\n", ServerMasterPort );
+		//Throw exception.
+		return 1;
+	}
 
-		connection.Listen();
+	connection.Listen();
+
+	while ( true )
+	{
+		if ( connection.IsConnected() )
+		{
+			unsigned char packet[] = "server to client";
+			connection.SendPacket( packet, sizeof( packet ) );
+		}
 
 		while ( true )
 		{
-			if ( connection.IsConnected() )
-			{
-				unsigned char packet[] = "server to client";
-				connection.SendPacket( packet, sizeof( packet ) );
-			}
-
-			while ( true )
-			{
-				unsigned char packet[256];
-				int bytes_read = connection.ReceivePacket( packet, sizeof(packet) );
-				if ( bytes_read == 0 )
-					break;
-				printf( "received packet from client\n" );
-			}
-
-			connection.Update( DeltaTime );
-			NetUtils::wait( DeltaTime );
+			unsigned char packet[256];
+			int bytes_read = connection.ReceivePacket( packet, sizeof(packet) );
+			if ( bytes_read == 0 )
+				break;
+			printf( "received packet from client\n" );
 		}
 
-		return 0;
+		connection.Update( DeltaTime );
+		NetUtils::wait( DeltaTime );
+	}
+
+	return 0;
 }

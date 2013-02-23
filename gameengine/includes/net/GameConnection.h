@@ -10,22 +10,23 @@
 
 #include "Connection.h"
 #include "GamePacket.h"
+#include "Address.h"
+#include "Constants.hpp"
 
 namespace net
 {
 	class GameConnection {
 	public:
-		GameConnection();
-		GameConnection(Connection connection, int localIp);
+		GameConnection(Address* address);
 		virtual ~GameConnection();
 
-		virtual void Send(GamePacket data) = 0;
-		virtual GamePacket Receive() = 0;
-		virtual bool HasData() = 0;
+		virtual void Send(GamePacket* data) = 0;
+		virtual GamePacket* Receive() = 0;
+		virtual bool HasData() const = 0;
 
-	private:
-		Connection connection;
-		int localIp;
+	protected:
+		Connection* connection;
+		Address* address;
 	};
 }
 #endif /* GAMECONNECTION_H_ */

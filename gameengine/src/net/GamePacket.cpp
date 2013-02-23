@@ -9,33 +9,31 @@
 
 namespace net
 {
-	GamePacket::GamePacket() {
-		// TODO Auto-generated constructor stub
-
+	GamePacket::GamePacket(unsigned char* packet) {
+		this->packet = packet;
 	}
 
 	GamePacket::~GamePacket() {
-		// TODO Auto-generated destructor stub
+		delete packet;
 	}
 
 	int GamePacket::GetByteSize() {
-		// Needs to be implemented.
-		return 0;
+		return sizeof(packet);
 	}
 
-	char * GamePacket::GetDataPtr() {
-		// Needs to be implemented.
-		char * result;
-		return result;
+	unsigned char * GamePacket::GetDataPtr() {
+		return packet;
 	}
 
-	char * GamePacket::Encode() {
+	unsigned char * GamePacket::Encode() {
 		// Needs to be implemented.
-		char * result;
-		return result;
+		return packet;
 	}
 
-	void Decode(char *data, int size) {
+	GamePacket* GamePacket::Decode(unsigned char *data, int size) {
 		// Needs to be implemented.
+		GamePacket* gamePacket = new GamePacket(data);
+
+		return gamePacket;
 	}
 }

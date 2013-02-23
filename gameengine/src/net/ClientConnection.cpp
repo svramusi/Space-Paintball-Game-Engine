@@ -9,71 +9,39 @@
 
 namespace net
 {
-	ClientConnection::ClientConnection(int clientPort ) {
-		this-> clientPort = clientPort;
-
+	ClientConnection::ClientConnection(Address* clientAddress) {
+		this->clientAddress = clientAddress;
 	}
 
 	ClientConnection::~ClientConnection() {
-		// TODO Auto-generated destructor stub
+		delete serverConnection;
+		delete clientAddress;
 	}
 
-	void ClientConnection::connect(int IP, int port) {
-		Connection connection( PROTOCOL_ID, TIME_OUT );
+	void ClientConnection::connect(Address* serverMasterAddress) {
+		ServerMasterConnection * serverMasterConnection = new ServerMasterConnection(serverMasterAddress);
 
-		if ( !connection.Start( clientPort ) )
+		if ( !serverMasterConnection->Init() )
 		{
-			printf( "could not start connection on port %d\n", clientPort );
+			printf( "could not start connection to server master on port %d\n", serverMasterAddress->GetPort() );
 			// Throw exception.
 		}
 
-		connection.Connect( Address(127,0,0,1,SERVER_PORT ) );
-
-		bool connected = false;
-
-		while ( true )
-		{
-			if ( !connected && connection.IsConnected() )
-			{
-				printf( "client connected to server\n" );
-				connected = true;
-			}
-
-			if ( !connected && connection.ConnectFailed() )
-			{
-				printf( "connection failed\n" );
-				break;
-			}
-
-			unsigned char packet[] = "client to server";
-			connection.SendPacket( packet, sizeof( packet ) );
-
-			while ( true )
-			{
-				unsigned char packet[256];
-				int bytes_read = connection.ReceivePacket( packet, sizeof(packet) );
-				if ( bytes_read == 0 )
-					break;
-				printf( "received packet from server\n" );
-			}
-
-			connection.Update( DELTA_TIME );
-			NetUtils::wait( DELTA_TIME );
-		}
+		this->serverConnection = serverMasterConnection->AcceptConection(clientAddress);
 	}
 
-	void ClientConnection::Send(GamePacket data) {
+	void ClientConnection::Send(GamePacket* data) {
 		// Need to implement this method.
 	}
 
-	GamePacket ClientConnection::Receive() {
+	GamePacket* ClientConnection::Receive() {
 		// Need to implement this method.
-		GamePacket gamePacket;
+		unsigned char packet[] = "client to server";
+		GamePacket* gamePacket = new GamePacket(packet);
 		return gamePacket;
 	}
 
-	bool ClientConnection::HasData() {
-		// Need to implement this method.
-		return true;
+	bool ClientConnection::HasData() const {
+		return serverConnection->HasData();
 	}
 }

@@ -9,66 +9,70 @@
 
 namespace net
 {
-	ServerMasterConnection::ServerMasterConnection(int port) {
-		this->port = port;
-		// Create the connection instance.
-		Connection connection( PROTOCOL_ID, TIME_OUT );
+	ServerMasterConnection::ServerMasterConnection(Address* address) : GameConnection(address) {
+		this-> addressToConnectionMap = new map<Address*, ServerConnection*>();
 	}
 
 	ServerMasterConnection::~ServerMasterConnection() {
-		// TODO Auto-generated destructor stub
+		delete addressToConnectionMap;
 	}
 
-	void ServerMasterConnection::Init() {
-		// Need to implement this function.
+	bool ServerMasterConnection::Init() {
 		// Set the connection port and start the connection
-		if ( !connection.Start( SERVER_PORT ) )
+		if ( !connection->Start( address->GetPort() ) )
 		{
-			printf( "could not start connection on port %d\n", SERVER_PORT );
+			printf( "could not start master connection on port %d\n", address->GetPort() );
 			// Should throw exception if error occurs.
-			return;
+			return false;
 		}
 
 		// Start listening
-		connection.Listen();
+		connection->Listen();
+		return true;
 	}
 
-	ServerConnection ServerMasterConnection::AcceptConection(int &IP) {
-		// Need to implement this function.
-		if(HasData())
+	ServerConnection* ServerMasterConnection::AcceptConection(Address* address) {
+		if(connection->HasData())
 		{
-			Connection connection( PROTOCOL_ID, TIME_OUT );
+			ServerConnection* serverConnection = new ServerConnection(address);
 
-			// Set the connection port and start the connection
-			if ( !connection.Start( CLIENT_PORT ) )
-			{
-				printf( "could not start connection on port %d\n", CLIENT_PORT );
-				// Should throw exception if error occurs.
-			}
-			else
-			{
-				// Start listening
-				connection.Listen();
+			// Put server connection into map
+			addressToConnectionMap->insert(make_pair(address, serverConnection));
 
-				ServerConnection serverConnection( connection );
-
-				return serverConnection;
-			}
+			return serverConnection;
 		}
+
+		return NULL;
 	}
 
-	void ServerMasterConnection::Send(GamePacket data) {
-		// Need to implement this method.
+	bool ServerMasterConnection::IsConnected() const {
+		return connection->IsConnected();
 	}
 
-	GamePacket ServerMasterConnection::Receive() {
+	map<Address*, ServerConnection*>* ServerMasterConnection::GetConnections() {
+		return this->addressToConnectionMap;
+	}
+
+	void ServerMasterConnection::Send(GamePacket* data) {
+		//connection->SendPacket(data->Encode(), data->GetByteSize());
+		unsigned char packet[] = "master server to client";
+		connection->SendPacket( packet, sizeof( packet ) );
+	}
+
+	GamePacket* ServerMasterConnection::Receive() {
 		// Need to implement this method.
-		GamePacket gamePacket;
+		unsigned char packet[256];
+		int bytes_read = connection->ReceivePacket( packet, sizeof(packet) );
+		GamePacket* gamePacket = new GamePacket(packet);
 		return gamePacket;
 	}
 
-	bool ServerMasterConnection::HasData() {
-		// Need to implement this method.
-		return true;
+	bool ServerMasterConnection::HasData() const {
+		return connection->HasData();
+	}
+
+	void ServerMasterConnection::Update( float deltaTime )
+	{
+		connection->Update(deltaTime);
 	}
 }

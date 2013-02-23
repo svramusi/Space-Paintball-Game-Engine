@@ -11,19 +11,19 @@
 #include "Connection.h"
 #include "GameConnection.h"
 #include "GamePacket.h"
+#include "Address.h"
 
 namespace net
 {
 	class ServerConnection : public GameConnection {
 	public:
-		ServerConnection();
-		ServerConnection(Connection connection);
+		ServerConnection(Address* address);
 		virtual ~ServerConnection();
-		void Send(GamePacket data);
-		GamePacket Receive();
-		bool HasData();
-	private:
-		Connection connection;
+		void Send(GamePacket* data);
+		GamePacket* Receive();
+		bool HasData() const;
+		bool IsConnected() const;
+		void Update( float deltaTime );
 	};
 }
 #endif /* SERVERCONNECTION_H_ */

@@ -118,4 +118,29 @@ namespace net
 
 		return received_bytes;
 	}
+
+	bool Socket::HasData() const
+	{
+		// Determine if the socket has data.
+	    bool            result;
+	    fd_set          sready;
+	    struct timeval  nowait;
+
+	    FD_ZERO(&sready);
+	    FD_SET((unsigned int)this->socket,&sready);
+	    //bzero((char *)&nowait,sizeof(nowait));
+	    memset((char *)&nowait,0,sizeof(nowait));
+
+	    result = select(this->socket+1,&sready,NULL,NULL,&nowait);
+	    if( FD_ISSET(this->socket,&sready) )
+	    {
+	    	result = true;
+	    }
+	    else
+	    {
+	        result = false;
+	    }
+
+	    return result;
+	}
 }

@@ -15,18 +15,20 @@ namespace net
 	 */
 	class GamePacket {
 	public:
-		GamePacket();
+		GamePacket(unsigned char* packet);
 		virtual ~GamePacket();
 		int GetByteSize();
-		char *GetDataPtr();
+		unsigned char* GetDataPtr();
 		/*
 		 * This method encodes the packet into an array of bytes.
 		 */
-		char *Encode();
+		unsigned char* Encode();
 		/*
 		 * This method decodes the packet from an array of bytes.
 		 */
-		void Decode( char *data, int size );
+		static GamePacket* Decode( unsigned char *data, int size );
+	private:
+		unsigned char* packet;
 	};
 }
 
