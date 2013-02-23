@@ -13,6 +13,13 @@ PhysicsEngine::PhysicsEngine(float grav, float air)
 	cd = new CollisionDetection();
 	SetWorldParams(grav,air);
 }
+
+PhysicsEngine::~PhysicsEngine()
+{
+	if(cd)
+		delete cd;
+}
+
 int
 PhysicsEngine::SetWorldParams(float grav, float air)
 {
@@ -21,13 +28,6 @@ PhysicsEngine::SetWorldParams(float grav, float air)
 
     return 0;
 }
-PhysicsEngine::~PhysicsEngine()
-{
-	if(cd)
-		delete cd;
-}
-
-
 
 void
 PhysicsEngine::updateWorld()
@@ -59,30 +59,30 @@ PhysicsEngine::freeCollisions(collisionDetection* collisions)
 	}
 }
 
-
-void calculateCenterOfMass()
+physicsInfo insertPhysicsObject(aabb_t *obj, float m, Velocity linVel, Force linAcc, Velocity angVel, Force angAcc)
 {
-	//totalcm = sum(mass(part) * center(part)/sum(mass(total)))
-
+	physicsInfo newItem;
+	newItem.aabbObject = obj;
+	newItem.sphereObject = NULL;
+	newItem.mass = m;
+	newItem.linearVelocity =linVel;
+	newItem.linearAcceleration = linAcc;
+	newItem.angularVelocity = angVel;
+	newItem.angularAcceleration = angAcc;
+	physicsObjects.push_back(*newItem);
 }
 
-void calculateSpeed()
+physicsInfo insertPhysicsObject(sphere_t *obj, float m, Velocity linVel, Force linAcc, Velocity angVel, Force angAcc)
 {
-	//speed = initspeed + acc*t
-	// using verlet integration
-	//v(t2) = pos(t2) - pos(t1)/change in time
-}
-
-void calculateAcceleration()
-{
-	//acc= force/mass
-}
-
-void calculatePosition()
-{
-	// pos = initpos + v*t basic formula
-	// using verlet integration
-	//pos(2) = 2*pos - pos(curtime - change in time) + (Force(t1)/mass)*(change in time)^2
+	physicsInfo newItem;
+	newItem.aabbObject = NULL;
+	newItem.sphereObject = obj;
+	newItem.mass = m;
+	newItem.linearVelocity =linVel;
+	newItem.linearAcceleration = linAcc;
+	newItem.angularVelocity = angVel;
+	newItem.angularAcceleration = angAcc;
+	physicsObjects.push_back(*newItem);
 }
 // combined formula pos = initpos + intvel*t + 1/2 acc *t^2
 /*•  You will need:

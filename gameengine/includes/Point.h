@@ -7,4 +7,15 @@ typedef struct point_t {
 	int z;
 } Point;
 
+typedef struct force_t{
+	float x;
+	float y;
+	float z;
+} Force;
+
+typedef struct velocity_t{
+	float x;
+	float y;
+	float z;
+} Velocity ;
 #endif
