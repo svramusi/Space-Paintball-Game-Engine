@@ -56,7 +56,7 @@ SphereTest::testCollision(void)
     sphere2.center = point2;
     sphere2.radius = 2.0;
 
-        CPPUNIT_ASSERT(1 == cd->isIntersection(sphere1, sphere2));
+    CPPUNIT_ASSERT(1 == cd->isIntersection(sphere1, sphere2));
 
     point1.x = 0;
     point1.y = 0;
@@ -72,7 +72,7 @@ SphereTest::testCollision(void)
     sphere2.center = point2;
     sphere2.radius = 1.0;
 
-        CPPUNIT_ASSERT(1 == cd->isIntersection(sphere1, sphere2));
+    CPPUNIT_ASSERT(1 == cd->isIntersection(sphere1, sphere2));
 }
 void
 SphereTest::testVeryCloseCollision(void)
@@ -95,7 +95,7 @@ SphereTest::testVeryCloseCollision(void)
     sphere2.center = point2;
     sphere2.radius = 2.44;
 
-        CPPUNIT_ASSERT(0 == cd->isIntersection(sphere1, sphere2));
+    CPPUNIT_ASSERT(0 == cd->isIntersection(sphere1, sphere2));
 
     point1.x = 0;
     point1.y = 0;
@@ -111,7 +111,7 @@ SphereTest::testVeryCloseCollision(void)
     sphere2.center = point2;
     sphere2.radius = 2.464101615;
 
-        CPPUNIT_ASSERT(1 == cd->isIntersection(sphere1, sphere2));
+    CPPUNIT_ASSERT(1 == cd->isIntersection(sphere1, sphere2));
 
 
     point1.x = 0;
@@ -128,5 +128,5 @@ SphereTest::testVeryCloseCollision(void)
     sphere2.center = point2;
     sphere2.radius = 2.47;
 
-        CPPUNIT_ASSERT(1 == cd->isIntersection(sphere1, sphere2));
+    CPPUNIT_ASSERT(1 == cd->isIntersection(sphere1, sphere2));
 }
