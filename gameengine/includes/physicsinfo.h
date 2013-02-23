@@ -10,10 +10,15 @@ Linear velocity
 Linear acceleration
 Angular velocity
 Angular acceleration*/
+typedef struct vector_3_t {
+	int x;
+	int y;
+	int z;
+} vector3;
+
 typedef struct physics_info_t { //all units MKS: meters, kilograms, seconds
-	float xPos;
-	float yPos;
-	float zPos;
+	int objectID;
+	vector3 position; //center of mass
 	float mass;
 	float linearVelovity;
 	float angularVelocity;
@@ -22,3 +27,6 @@ typedef struct physics_info_t { //all units MKS: meters, kilograms, seconds
 	//point centerOfMass
 
 } physicsInfo;
+
+
+#endif
