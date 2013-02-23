@@ -7,6 +7,7 @@
 #include <cppunit/extensions/HelperMacros.h>
 
 #include "AABB.h"
+#include "collisiondetection.h"
 
 using namespace CppUnit;
 
@@ -26,7 +27,7 @@ public:
     void testCollision(void);
 
 private:
-    AABB *aabb;
+    CollisionDetection *cd;
 };
 
 #endif

@@ -6,6 +6,7 @@
 #include <cppunit/extensions/HelperMacros.h>
 
 #include "Sphere.h"
+#include "collisiondetection.h"
 
 using namespace CppUnit;
 
@@ -26,7 +27,7 @@ public:
     void testVeryCloseCollision(void);
 
 private:
-    Sphere *sphere;
+    CollisionDetection *cd;
 };
 
 #endif

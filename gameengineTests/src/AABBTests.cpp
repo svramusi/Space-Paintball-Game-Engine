@@ -2,13 +2,13 @@
 
 void AABBTest::setUp(void)
 {
-	aabb = new AABB();
+    cd = new CollisionDetection();
 }
 
 void AABBTest::tearDown(void)
 {
-	if(aabb)
-		delete aabb;
+    if(cd)
+        delete cd;
 }
 
 void
@@ -36,7 +36,7 @@ AABBTest::testNoCollision(void)
 	aabb2.radii[1] = 1.0;
 	aabb2.radii[1] = 1.0;
 
-    CPPUNIT_ASSERT(0 == aabb->isIntersection(aabb1, aabb2));
+    CPPUNIT_ASSERT(0 == cd->isIntersection(aabb1, aabb2));
 }
 
 void
@@ -64,5 +64,5 @@ AABBTest::testCollision(void)
 	aabb2.radii[1] = 2.0;
 	aabb2.radii[2] = 2.0;
 
-    CPPUNIT_ASSERT(1 == aabb->isIntersection(aabb1, aabb2));
+    CPPUNIT_ASSERT(1 == cd->isIntersection(aabb1, aabb2));
 }
