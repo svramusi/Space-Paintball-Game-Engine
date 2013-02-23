@@ -148,6 +148,8 @@ int GetUpdateFromServer()
 	//int input = getUpdateFromServer();
 	int input = 0;
 
+
+
 	return input;
 }
 
