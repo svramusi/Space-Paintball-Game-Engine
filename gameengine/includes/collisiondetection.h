@@ -16,6 +16,7 @@ public:
 
     int isIntersection(aabb_t aabb1, aabb_t aabb2);
     int isIntersection(sphere_t sphere1, sphere_t sphere2);
+    int isIntersection(aabb_t aabb, sphere_t sphere);
 
 private:
 

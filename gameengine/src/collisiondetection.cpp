@@ -34,7 +34,6 @@ CollisionDetection::detect_collision(detectCollision* collidableObject)
 int
 CollisionDetection::isIntersection(aabb_t aabb1, aabb_t aabb2)
 {
-
     if(abs(aabb1.center.x - aabb2.center.x) > (aabb1.radii[0] + aabb2.radii[0]))
         return 0;
 
@@ -61,4 +60,19 @@ CollisionDetection::isIntersection(sphere_t sphere1, sphere_t sphere2)
     float radiusSum = sphere1.radius + sphere2.radius;
 
     return dist_between_centers <= radiusSum * radiusSum;
+}
+
+int
+CollisionDetection::isIntersection(aabb_t aabb, sphere_t sphere)
+{
+    if(abs(aabb.center.x - sphere.center.x) > (aabb.radii[0] + sphere.radius))
+        return 0;
+
+    if(abs(aabb.center.y - sphere.center.y) > (aabb.radii[1] + sphere.radius))
+        return 0;
+
+    if(abs(aabb.center.z - sphere.center.z) > (aabb.radii[2] + sphere.radius))
+        return 0;
+
+    return 1;
 }
