@@ -4,8 +4,8 @@
 #include "Point.h"
 
 struct aabb_t {
-	Point center;
-	float radii[3];
+    Point center;
+    float radii[3];
 };
 
 #endif

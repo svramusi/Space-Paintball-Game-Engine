@@ -14,10 +14,10 @@ using namespace CppUnit;
 
 class AABBTest : public CppUnit::TestFixture
 {
-	CPPUNIT_TEST_SUITE(AABBTest);
-	CPPUNIT_TEST(testNoCollision);
-	CPPUNIT_TEST(testCollision);
-	CPPUNIT_TEST_SUITE_END();
+    CPPUNIT_TEST_SUITE(AABBTest);
+    CPPUNIT_TEST(testNoCollision);
+    CPPUNIT_TEST(testCollision);
+    CPPUNIT_TEST_SUITE_END();
 
 public:
     void setUp(void);

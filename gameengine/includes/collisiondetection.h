@@ -10,12 +10,12 @@
 
 class CollisionDetection {
 public:
-	CollisionDetection();
-	~CollisionDetection();
-	collisionDetection* detect_collision(detectCollision* collidableObject);
+    CollisionDetection();
+    ~CollisionDetection();
+    collisionDetection* detect_collision(detectCollision* collidableObject);
 
-	int isIntersection(aabb_t aabb1, aabb_t aabb2);
-	int isIntersection(sphere_t sphere1, sphere_t sphere2);
+    int isIntersection(aabb_t aabb1, aabb_t aabb2);
+    int isIntersection(sphere_t sphere1, sphere_t sphere2);
 
 private:
 
