@@ -70,12 +70,39 @@ Point calculatePointofImapct(physicsInfo *item, float deltaT)
 	return POI;
 }
 //WE NEED TO FIGURE THIS OUT, NOT SURE HOW TO DO IT
-float calculateAngle(Point POI, Point Center)
+double calculateAngle(Point POI, Point Center)
 {
-	float angle;
+	double angle = GetAngleBetweenVerticese(Vertex v1, Vertex v2, Vertex v3);
 	return angle;
 
 }
+
+double GetDistanceOfVertex(double x, double y)
+        {
+            return sqrt((x * x) + (y * y));
+        }
+
+double GetDistanceBetweenVertices(Point v1, Point v2)
+        {
+            double xDistance = abs(v1.x - v2.x);
+            double yDistance = abs(v1.y - v2.y);
+            return GetDistanceOfVertex(xDistance, yDistance);
+        }
+
+        //V2 ALWAYS NEEDS TO BE THE MIDDLE VERTEX
+       double GetAngleBetweenVerticese(Point v1, Point v2, Point v3)
+        {
+            double a = GetDistanceBetweenVertices(v1, v2);
+            double b = GetDistanceBetweenVertices(v2, v3);
+            double c = GetDistanceBetweenVertices(v1, v3);
+
+            return RadiansToDegrees(cos(((a * a) + (b * b) - (c * c)) / (2 * a * b)));
+        }
+
+       double RadiansToDegrees(double rad)
+        {
+            return rad * (180.0 / Math.PI);
+        }
 
 void calculateAngularVelocity(physicsInfo *item, float deltaT)
 {
