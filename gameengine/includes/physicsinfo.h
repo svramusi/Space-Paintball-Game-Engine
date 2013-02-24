@@ -1,5 +1,5 @@
 #ifndef PHYSICS_INFO_H
-#define
+#define PHYSICS_INFO_H
 
 #include "AABB.h"
 #include "Sphere.h"
@@ -16,12 +16,12 @@ Angular acceleration*/
 typedef struct physics_info_t { //all units MKS: meters, kilograms, seconds
 	aabb_t *aabbObject;   //one will always be NULL
 	sphere_t *sphereObject; //.center for Position
-
+	//Point oldPosition;
 	Velocity linearVelocity;
 	float mass;
 
 	Velocity angularVelocity; //One value will always be 0, only 2d ANgular velocity
-	Force linearAcceleration;
-	Force angularAcceleration;//One value will always be 0, only 2d ANgular velocity
+	Force linearForce;//force actual acc = force/mass
+	Force angularForce;//One value will always be 0, only 2d ANgular velocity
 
 } physicsInfo;

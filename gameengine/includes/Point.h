@@ -2,9 +2,9 @@
 #define POINT_H
 
 typedef struct point_t {
-	int x;
-	int y;
-	int z;
+	float x;
+	float y;
+	float z;
 } Point;
 
 typedef struct force_t{

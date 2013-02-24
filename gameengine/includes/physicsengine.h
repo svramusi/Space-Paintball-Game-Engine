@@ -7,8 +7,10 @@
 #include "collisiondetection.h"
 
 class PhysicsEngine {
-	float gravity, airfriction;
+
 public:
+	float gravity;
+	float airfriction;
 	PhysicsEngine();
 	PhysicsEngine(float grav, float air);
 	int SetWorldParams(float grav, float air);
@@ -18,7 +20,14 @@ public:
     physicsInfo insertPhysicsObject(sphere_t *obj, float mass, Velocity linVel, Force linAcc, Velocity angVel, Force angAcc);
 private:
     CollisionDetection *cd;
-   vector<physicsInfo> physicsObjects;
+
+    std::vector<physicsInfo> physicsObjects;
+
+    void calculatePosition(physicsInfo obj, float deltaT);
+    void calculateLinearVelocity(physicsInfo &item, float deltaT);
+    void calculateLinearAcceleration(physicsInfo &item, float deltaT);
+    void calculateAngularVelocity(physicsInfo &item, float deltaT);
+    void calculateAngularAcceleration(physicsInfo &item, float deltaT);
 
     void freeCollisions(collisionDetection* collisions);
 
