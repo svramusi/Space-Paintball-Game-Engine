@@ -54,7 +54,7 @@ void PhysicsEngine::calculateAngularVelocity(physicsInfo *item, float deltaT)
 	Point current;
 	float I;
 	Point N;
-		 if(item->aabbObject != NULL)
+		 if(item.aabbObject != NULL)
 		 {
 			  current =item->aabbObject->center;
 			  I = (item->aabbObject->radii[0]+ item->aabbObject->radii[1])/12; //only 2d H and Width
@@ -217,7 +217,7 @@ void PhysicsEngine::calculateLinearVelocity(physicsInfo *item, float deltaT)
 	 newP.y = current.y + accel.y+ calcVel.y;
 	 newP.z = current.z + accel.z+ calcVel.z;
 
-	 if(item->aabbObject != NULL)
+	 if(item.aabbObject != NULL)
 	 {
 	 		item->aabbObject->center.x =  current.x + accel.x+ calcVel.x;
 	 		item->aabbObject->center.y =  current.y + accel.y+ calcVel.y;
