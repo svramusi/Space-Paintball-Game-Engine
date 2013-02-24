@@ -1,13 +1,17 @@
 #include <stdlib.h>
+#include <math.h>
+
 
 #include "physicsengine.h"
+
+#define PI 3.14159265
 
 using namespace std;
 
 PhysicsEngine::PhysicsEngine()
 {
 	cd = new CollisionDetection();
-	SetWorldParams(9.78,air);
+	SetWorldParams(9.81, 1.225);  //defaults to earth
 }
 PhysicsEngine::PhysicsEngine(float grav, float air)
 {
@@ -59,24 +63,71 @@ PhysicsEngine::freeCollisions(collisionDetection* collisions)
 		current = next;
 	}
 }
-
-void calculateAngularVelocity(physicsInfo &item, float deltaT)
+//WE NEED TO FIGURE THIS OUT, NOT SURE HOW TO DO IT
+Point calculatePointofImapct(physicsInfo *item, float deltaT)
 {
-	//ang velnew = and velcurr + ang acc *deltat
-	Velocity newV;
-	 Force accel;
-
-			 accel.x = (item.angularForce.x/item.mass)*deltaT;
-			 accel.y = (item.angularForce.y/item.mass)*deltaT;
-			 accel.z = (item.angularForce.z/item.mass)*deltaT;
-
-			 newV.x = item.angularVelocity.x + accel.x;
-			 newV.y = item.angularVelocity.y + accel.y;
-			 newV.z = item.angularVelocity.z + accel.z;
-			 item.angularVelocity = newV;
+	Point POI;
+	return POI;
+}
+//WE NEED TO FIGURE THIS OUT, NOT SURE HOW TO DO IT
+float calculateAngle(Point POI, Point Center)
+{
+	float angle;
+	return angle;
 
 }
-void calculateLinearAcceleration(physicsInfo &item, float deltaT)
+
+void calculateAngularVelocity(physicsInfo *item, float deltaT)
+{
+	//and vel = ang vel + abs(poi - pos cur) * ABS(Ang Force Cur) * sin(a)
+	Velocity newV;
+	Point current;
+	float I;
+	Point N;
+		 if(item.aabbObject != NULL)
+		 {
+			  current =item.aabbObject->center;
+			  I = (item->abbObject->radii[0]+ item->abbObject->radii[1])/12; //only 2d H and Width
+		 }
+		 else
+		 {
+			  current =item.sphereObject->center;
+			  I = item->mass (item.spereObject.radius*item.spereObject.radius*)/2
+		 }
+	Point poi = calculatePointofImpact(item,deltaT);
+	float alpha = calculateAngle(poi, current);
+	N.x = abs(poi.x - current.x)* abs(item->angularForce.x)*sin(alpha);
+	N.y = abs(poi.y - current.y)* abs(item->angularForce.y)*sin(alpha);
+	//We ignore Z, no 3d angular force
+	newV.x= item->angularVelocity.x + (N/I)* deltaT;
+	newV.y= item->angularVelocity.y + (N/I)* deltaT;
+	newV.z= item->angularVelocity.z; //dummy
+	item->angularVelocity = newV;
+}
+
+
+
+void calculateAngularPosition(physicsInfo *item, float deltaT)
+{
+	//ang velnew = and velcurr + ang acc *deltat
+	Point newP;
+
+
+			/* accel.x = (item.angularForce.x/item.mass)*deltaT;
+			 accel.y = (item.angularForce.y/item.mass)*deltaT;
+			 accel.z = (item.angularForce.z/item.mass)*deltaT;*/
+	 	 	 newP.x = item.angularPosition.x + item.angularVelocity.x * deltaT;
+	 	 	 newP.y= item.angularPosition.y + item.angularVelocity.y * deltaT;
+	 	 	 newP.z = item.angularPosition.z + item.angularVelocity.z * deltaT;
+			 /*newV.x = item.angularVelocity.x + accel.x;
+			 newV.y = item.angularVelocity.y + accel.y;
+			 newV.z = item.angularVelocity.z + accel.z;*/
+			 item.angularPosition= newP;
+
+}
+
+
+void calculateLinearAcceleration(physicsInfo *item, float deltaT)
 {
 	//accel x = accel x - gravity*deltaT
 	//accel y= accel y - wind *deltaT
@@ -91,7 +142,7 @@ void calculateLinearAcceleration(physicsInfo &item, float deltaT)
 }
 
 
-void calculateLinearVelocity(physicsInfo &item, float deltaT)
+void calculateLinearVelocity(physicsInfo *item, float deltaT)
 {
 	//Velocity new = vel cur + Acc * deltaT
 	     Force accel;
@@ -106,7 +157,7 @@ void calculateLinearVelocity(physicsInfo &item, float deltaT)
 		 item.linearVelocity = newV;
 }
 
- void calculatePosition(physicsInfo &item, float deltaT)
+ void calculatePosition(physicsInfo *item, float deltaT)
  {
 
 		// using verlet integration
@@ -150,31 +201,34 @@ void calculateLinearVelocity(physicsInfo &item, float deltaT)
 
  }
 
-physicsInfo insertPhysicsObject(aabb_t *obj, float m, Velocity linVel, Force linFrc, Velocity angVel, Force angFrc)
+physicsInfo insertPhysicsObject(aabb_t *obj, float m, Velocity linVel, Force linFrc, Velocity angVel, Force angFrc, Point angPos)
 {
 	physicsInfo newItem;
-	newItem.aabbObject = obj;
-	newItem.sphereObject = NULL;
-	newItem.mass = m;
-	newItem.linearVelocity =linVel;
-	newItem.linearForce= linFrc;
-	newItem.angularVelocity = angVel;
-	newItem.angularForce = angFrc;
+	newItem->aabbObject = obj;
+	newItem->sphereObject = NULL;
+	newItem->mass = m;
+	newItem->linearVelocity =linVel;
+	newItem->linearForce= linFrc;
+	newItem->angularVelocity = angVel;
+	newItem->angularForce = angFrc;
+	newItem->angularPosition = angPos;
 	physicsObjects.push_back(newItem);
+
 	//newItem.oldPosition = obj->center;
 	return newItem;
 }
 
-physicsInfo insertPhysicsObject(sphere_t *obj, float m, Velocity linVel, Force linFrc, Velocity angVel, Force angFrc)
+physicsInfo insertPhysicsObject(sphere_t *obj, float m, Velocity linVel, Force linFrc, Velocity angVel, Force angFrc, Point angPos)
 {
 	physicsInfo newItem;
-	newItem.aabbObject = NULL;
-	newItem.sphereObject = obj;
-	newItem.mass = m;
-	newItem.linearVelocity =linVel;
-	newItem.linearForce= linFrc;
-	newItem.angularVelocity = angVel;
-	newItem.angularFrc= angFrc;
+	newItem->angularPosition = angPos;
+	newItem->aabbObject = NULL;
+	newItem->sphereObject = obj;
+	newItem->mass = m;
+	newItem->linearVelocity =linVel;
+	newItem->linearForce= linFrc;
+	newItem->angularVelocity = angVel;
+	newItem->angularFrc= angFrc;
 	//newItem.oldPosition = obj->center;
 	physicsObjects.push_back(newItem);
 	return newItem;

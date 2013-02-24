@@ -19,7 +19,7 @@ typedef struct physics_info_t { //all units MKS: meters, kilograms, seconds
 	//Point oldPosition;
 	Velocity linearVelocity;
 	float mass;
-
+	Point angularPosition; //point used for rendering
 	Velocity angularVelocity; //One value will always be 0, only 2d ANgular velocity
 	Force linearForce;//force actual acc = force/mass
 	Force angularForce;//One value will always be 0, only 2d ANgular velocity
