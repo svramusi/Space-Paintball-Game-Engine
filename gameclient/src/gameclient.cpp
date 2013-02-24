@@ -8,13 +8,14 @@
 #include "net/Net.h"
 #include "net/Connection.h"
 #include "net/NetUtils.h"
+#include "net/ClientConnection.h"
 #include "GameEngine.h"
 #include "TestCollectGameState.h"
 
 using namespace std;
 using namespace net;
 
-const int ServerPort = 30000;
+const int ServerMasterPort = 30000;
 const int ClientPort = 30001;
 const int ProtocolId = 0x99887766;
 const float DeltaTime = 0.25f;
@@ -23,6 +24,8 @@ const float TimeOut = 10.0f;
 // One frame each 20 milliseconds (i.e. 50 frames per second)
 const Uint32 RedrawingPeriod = 20;
 const int MaxFrameSkip = 10;
+
+ClientConnection* clientConnection;
 
 int PollForOSMessages(bool* quit);
 int ConnectToGameMasterServer();
@@ -43,6 +46,14 @@ int main( int argc, char * argv[] )
 	GameEngine gameEngine;
 	Uint32 time = SDL_GetTicks();
 	bool needToRedraw = true;
+
+	// Initialize the client connection
+	Address* clientAddress = new Address(127,0,0,1, ClientPort);
+	clientConnection = new ClientConnection(clientAddress);
+
+	// Connect to the server
+	Address* serverMasterAddress = new Address(127,0,0,1, ServerMasterPort);
+	clientConnection->Connect(serverMasterAddress);
 
 	// Client Game Loop
 	while(!quit)
@@ -110,7 +121,7 @@ int main( int argc, char * argv[] )
 		//Update Game State Copy
 		int inputFromServer = GetUpdateFromServer();
 		// Update local game state (or game state copy).
-		gameEngine.UpdateGameState(inputFromServer);
+		//gameEngine.UpdateGameState(inputFromServer);
 		///////////////////////////////////////////////////////////
 
 		/*
@@ -119,7 +130,7 @@ int main( int argc, char * argv[] )
 		 * the HUD is not rendered by the game engine, but
 		 * separately).
 		 */
-		UpdateStatistics();
+		//UpdateStatistics();
 
 		if(TimeForRendering())
 		{
@@ -147,7 +158,6 @@ int GetUpdateFromServer()
 	// TODO: Fix this
 	//int input = getUpdateFromServer();
 	int input = 0;
-
 
 
 	return input;
@@ -213,7 +223,7 @@ int ConnectToGameMasterServer()
 		return 1;
 	}
 
-	connection.Connect( Address(127,0,0,1,ServerPort ) );
+	connection.Connect( Address(127,0,0,1,ServerMasterPort ) );
 
 	bool connected = false;
 

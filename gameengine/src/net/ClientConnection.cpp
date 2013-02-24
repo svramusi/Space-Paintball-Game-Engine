@@ -9,16 +9,15 @@
 
 namespace net
 {
-	ClientConnection::ClientConnection(Address* clientAddress) {
-		this->clientAddress = clientAddress;
+	ClientConnection::ClientConnection(Address* clientAddress) : GameConnection(clientAddress) {
+
 	}
 
 	ClientConnection::~ClientConnection() {
 		delete serverConnection;
-		delete clientAddress;
 	}
 
-	void ClientConnection::connect(Address* serverMasterAddress) {
+	void ClientConnection::Connect(Address* serverMasterAddress) {
 		ServerMasterConnection * serverMasterConnection = new ServerMasterConnection(serverMasterAddress);
 
 		if ( !serverMasterConnection->Init() )
@@ -27,17 +26,19 @@ namespace net
 			// Throw exception.
 		}
 
-		this->serverConnection = serverMasterConnection->AcceptConection(clientAddress);
+		serverConnection = serverMasterConnection->AcceptConection(address);
 	}
 
 	void ClientConnection::Send(GamePacket* data) {
 		// Need to implement this method.
+		//unsigned char packet[] = "client to server";
+		serverConnection->Send(data);
 	}
 
 	GamePacket* ClientConnection::Receive() {
 		// Need to implement this method.
-		unsigned char packet[] = "client to server";
-		GamePacket* gamePacket = new GamePacket(packet);
+//		unsigned char packet[] = "client to server";
+		GamePacket* gamePacket = serverConnection->Receive();
 		return gamePacket;
 	}
 

@@ -15,19 +15,19 @@
 #include "Address.h"
 #include "ServerConnection.h"
 #include "ServerMasterConnection.h"
+#include "GameConnection.h"
 
 namespace net
 {
-	class ClientConnection {
+	class ClientConnection : public GameConnection {
 	public:
 		ClientConnection(Address* clientAddress);
 		virtual ~ClientConnection();
-		void connect(Address* serverMasterAddress);
+		void Connect(Address* serverMasterAddress);
 		void Send(GamePacket* data);
 		GamePacket* Receive();
 		bool HasData() const;
 	private:
-		Address* clientAddress;
 		ServerConnection* serverConnection;
 	};
 }
