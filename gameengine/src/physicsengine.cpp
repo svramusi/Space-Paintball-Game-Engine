@@ -54,15 +54,15 @@ void PhysicsEngine::calculateAngularVelocity(physicsInfo *item, float deltaT)
 	Point current;
 	float I;
 	Point N;
-		 if(item.aabbObject != NULL)
+		 if(item->aabbObject != NULL)
 		 {
-			  current =item.aabbObject->center;
+			  current =item->aabbObject.center;
 			  I = (item->aabbObject->radii[0]+ item->aabbObject->radii[1])/12; //only 2d H and Width
 		 }
 		 else
 		 {
-			  current =item.sphereObject->center;
-			  I = item.mass *(item.sphereObject.radius*item.spereObject.radius*)/2;
+			  current =item->sphereObject->center;
+			  I = item.mass *(item->sphereObject->radius*item.spereObject->radius)/2;
 		 }
 	Point poi = calculatePointofImapct(item,deltaT);
 	Point temp ;
@@ -74,8 +74,8 @@ void PhysicsEngine::calculateAngularVelocity(physicsInfo *item, float deltaT)
 	N.x = abs(poi.x - current.x)* abs(item->angularForce.x)*sin(alpha);
 	N.y = abs(poi.y - current.y)* abs(item->angularForce.y)*sin(alpha);
 	//We ignore Z, no 3d angular force
-	newV.x= item->angularVelocity.x + (N/I)* deltaT;
-	newV.y= item->angularVelocity.y + (N/I)* deltaT;
+	newV.x= item->angularVelocity.x + (N.x/I)* deltaT;
+	newV.y= item->angularVelocity.y + (N.y/I)* deltaT;
 	newV.z= item->angularVelocity.z; //dummy
 	item->angularVelocity = newV;
 }
@@ -150,7 +150,7 @@ void PhysicsEngine::calculateAngularPosition(physicsInfo *item, float deltaT)
 			/* accel.x = (item.angularForce.x/item.mass)*deltaT;
 			 accel.y = (item.angularForce.y/item.mass)*deltaT;
 			 accel.z = (item.angularForce.z/item.mass)*deltaT;*/
-	 	 	 newP.x = item.angularPosition.x + item.angularVelocity.x * deltaT;
+	 	 	 newP.x = item->angularPosition.x + item.angularVelocity.x * deltaT;
 	 	 	 newP.y= item.angularPosition.y + item.angularVelocity.y * deltaT;
 	 	 	 newP.z = item.angularPosition.z + item.angularVelocity.z * deltaT;
 			 /*newV.x = item.angularVelocity.x + accel.x;
@@ -197,11 +197,11 @@ void PhysicsEngine::calculateLinearVelocity(physicsInfo *item, float deltaT)
 		// using verlet integration
 	 	 // postion of New = Position current + vel Cur* deltaT + acceleration (dt^2)
 	 Point current;
-	 if(item.aabbObject != NULL)
-		  current =item.aabbObject->center;
+	 if(item->aabbObject != NULL)
+		  current =item->aabbObject.center;
 	 else
-		  current =item.sphereObject->center;
-	 Point calcVel = item.linearVelocity;
+		  current =item->sphereObject.center;
+	 Velocity calcVel = item->linearVelocity;
 	 Force accel;
 	 Point newP;
 	 float timeSqr = deltaT*deltaT;
@@ -217,17 +217,17 @@ void PhysicsEngine::calculateLinearVelocity(physicsInfo *item, float deltaT)
 	 newP.y = current.y + accel.y+ calcVel.y;
 	 newP.z = current.z + accel.z+ calcVel.z;
 
-	 if(item.aabbObject != NULL)
+	 if(item->aabbObject != NULL)
 	 {
-	 		item.aabbObject->center.x =  current.x + accel.x+ calcVel.x;
-	 		item.aabbObject->center.y =  current.y + accel.y+ calcVel.y;
-	 		item.aabbObject->center.z =  current.z + accel.z+ calcVel.z;
+	 		item->aabbObject.center.x =  current.x + accel.x+ calcVel.x;
+	 		item->aabbObject.center.y =  current.y + accel.y+ calcVel.y;
+	 		item->aabbObject.center.z =  current.z + accel.z+ calcVel.z;
 	 }
 	 else
 	 {
-		 	 item.sphereObject->center.x =  current.x + accel.x+ calcVel.x;
-		 	 item.sphereObject->center.y =  current.y + accel.y+ calcVel.y;
-		 	 item.sphereObject->center.z =  current.z + accel.z+ calcVel.z;
+		 	 item->sphereObject.center.x =  current.x + accel.x+ calcVel.x;
+		 	 item->sphereObject.center.y =  current.y + accel.y+ calcVel.y;
+		 	 item->sphereObject.center.z =  current.z + accel.z+ calcVel.z;
 	 }
 	// item.oldPosition = current;
 
@@ -238,8 +238,8 @@ void PhysicsEngine::calculateLinearVelocity(physicsInfo *item, float deltaT)
 physicsInfo PhysicsEngine::insertPhysicsObject(aabb_t *obj, float m, Velocity linVel, Force linFrc, Velocity angVel, Force angFrc, Point angPos)
 {
 	physicsInfo newItem;
-	newItem.aabbObject = obj;
-	newItem.sphereObject = NULL;
+	newitem->aabbObject = obj;
+	newitem->sphereObject = NULL;
 	newItem.mass = m;
 	newItem.linearVelocity =linVel;
 	newItem.linearForce= linFrc;
@@ -255,14 +255,14 @@ physicsInfo PhysicsEngine::insertPhysicsObject(aabb_t *obj, float m, Velocity li
 physicsInfo PhysicsEngine::insertPhysicsObject(sphere_t *obj, float m, Velocity linVel, Force linFrc, Velocity angVel, Force angFrc, Point angPos)
 {
 	physicsInfo newItem;
-	newItem->angularPosition = angPos;
-	newItem->aabbObject = NULL;
-	newItem->sphereObject = obj;
-	newItem->mass = m;
-	newItem->linearVelocity =linVel;
-	newItem->linearForce= linFrc;
-	newItem->angularVelocity = angVel;
-	newItem->angularFrc= angFrc;
+	newItem.angularPosition = angPos;
+	newitem->aabbObject = NULL;
+	newitem->sphereObject = obj;
+	newItem.mass = m;
+	newItem.linearVelocity =linVel;
+	newItem.linearForce= linFrc;
+	newItem.angularVelocity = angVel;
+	newItem.angularForce= angFrc;
 	//newItem.oldPosition = obj->center;
 	physicsObjects.push_back(newItem);
 	return newItem;

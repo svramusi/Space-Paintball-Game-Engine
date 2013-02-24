@@ -23,10 +23,10 @@ private:
 
     std::vector<physicsInfo> physicsObjects;
 
-    void calculatePosition(physicsInfo obj, float deltaT);
+    void calculatePosition(physicsInfo *item, float deltaT);
     void calculateLinearVelocity(physicsInfo *item, float deltaT);
     void calculateLinearAcceleration(physicsInfo *item, float deltaT);
-    void calculateAngularVelocity(physicsInfo *item, float deltaT);
+    void calculateAngularPosition(physicsInfo *item, float deltaT);
     void calculateAngularVelocity(physicsInfo *item, float deltaT);
     void calculateAngularAcceleration(physicsInfo *item, float deltaT);
     Point calculatePointofImapct(physicsInfo *item, float deltaT);
@@ -34,7 +34,6 @@ private:
 
     float calculateAngle(Point POI, Point Center, Point p3);
 
-    Point calculatePointofImapct(physicsInfo *item, float deltaT);
 
             //V2 ALWAYS NEEDS TO BE THE MIDDLE VERTEX
     float GetAngleBetweenVerticese(Point v1, Point v2, Point v3);
