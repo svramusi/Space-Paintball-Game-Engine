@@ -47,7 +47,38 @@ PhysicsEngine::updateWorld()
 	freeCollisions(collisions);
 	free(collidableObject);
 }
+void PhysicsEngine::calculateAngularVelocity(physicsInfo *item, float deltaT)
+{
+	//and vel = ang vel + abs(poi - pos cur) * ABS(Ang Force Cur) * sin(a)
+	Velocity newV;
+	Point current;
+	float I;
+	Point N;
+		 if(item.aabbObject != NULL)
+		 {
+			  current =item.aabbObject->center;
+			  I = (item->aabbObject->radii[0]+ item->aabbObject->radii[1])/12; //only 2d H and Width
+		 }
+		 else
+		 {
+			  current =item.sphereObject->center;
+			  I = item.mass *(item.sphereObject.radius*item.spereObject.radius*)/2;
+		 }
+	Point poi = calculatePointofImapct(item,deltaT);
+	Point temp ;
+	temp.x= item->angularVelocity.x * deltaT;
+	temp.y = item->angularVelocity.y * deltaT;
+	temp.z = item->angularVelocity.z * deltaT;
 
+	float alpha = calculateAngle(current,poi,temp);
+	N.x = abs(poi.x - current.x)* abs(item->angularForce.x)*sin(alpha);
+	N.y = abs(poi.y - current.y)* abs(item->angularForce.y)*sin(alpha);
+	//We ignore Z, no 3d angular force
+	newV.x= item->angularVelocity.x + (N/I)* deltaT;
+	newV.y= item->angularVelocity.y + (N/I)* deltaT;
+	newV.z= item->angularVelocity.z; //dummy
+	item->angularVelocity = newV;
+}
 void
 PhysicsEngine::freeCollisions(collisionDetection* collisions)
 {
@@ -83,60 +114,30 @@ float PhysicsEngine::GetDistanceOfVertex(float x, float y)
             return sqrt((x * x) + (y * y));
         }
 
-float PhysicsEngine::GetDistanceBetweenVertices(Point v1, Point v2)
-        {
-            float xDistance = abs(v1.x - v2.x);
-            float yDistance = abs(v1.y - v2.y);
-            return GetDistanceOfVertex(xDistance, yDistance);
-        }
 
         //V2 ALWAYS NEEDS TO BE THE MIDDLE VERTEX
-       float GetAngleBetweenVerticese(Point v1, Point v2, Point v3)
+       float PhysicsEngine::GetAngleBetweenVerticese(Point v1, Point v2, Point v3)
         {
             float a = GetDistanceBetweenVertices(v1, v2);
             float b = GetDistanceBetweenVertices(v2, v3);
             float c = GetDistanceBetweenVertices(v1, v3);
 
-            return RadiansToDegrees(cos(((a * a) + (b * b) - (c * c)) / (2 * a * b)));
+            return (RadiansToDegrees(cos(((a * a) + (b * b) - (c * c)) / (2 * a * b))));
         }
 
-       float RadiansToDegrees(float rad)
+       float PhysicsEngine::GetDistanceBetweenVertices(Point v1, Point v2)
+               {
+                   float xDistance = abs(v1.x - v2.x);
+                   float yDistance = abs(v1.y - v2.y);
+                   return GetDistanceOfVertex(xDistance, yDistance);
+               }
+
+       float PhysicsEngine::RadiansToDegrees(float rad)
         {
-            return rad * (180.0 / Math.PI);
+            return (rad * (180.0 / PI));
         }
 
-void PhysicsEngine::calculateAngularVelocity(physicsInfo *item, float deltaT)
-{
-	//and vel = ang vel + abs(poi - pos cur) * ABS(Ang Force Cur) * sin(a)
-	Velocity newV;
-	Point current;
-	float I;
-	Point N;
-		 if(item.aabbObject != NULL)
-		 {
-			  current =item.aabbObject->center;
-			  I = (item->abbObject->radii[0]+ item->aabbObject->radii[1])/12; //only 2d H and Width
-		 }
-		 else
-		 {
-			  current =item.sphereObject->center;
-			  I = item->mass (item.sphereObject.radius*item.spereObject.radius*)/2
-		 }
-	Point poi = calculatePointofImpact(item,deltaT);
-	Point temp ;
-	temp.x= item->angularVelocity.x * deltaT;
-	temp.y = item->angularVelocity.y * deltaT;
-	temp.z = item->angularVelocity.z * deltaT;
 
-	float alpha = calculateAngle(current,poi,temp);
-	N.x = abs(poi.x - current.x)* abs(item->angularForce.x)*sin(alpha);
-	N.y = abs(poi.y - current.y)* abs(item->angularForce.y)*sin(alpha);
-	//We ignore Z, no 3d angular force
-	newV.x= item->angularVelocity.x + (N/I)* deltaT;
-	newV.y= item->angularVelocity.y + (N/I)* deltaT;
-	newV.z= item->angularVelocity.z; //dummy
-	item->angularVelocity = newV;
-}
 
 
 
@@ -237,14 +238,14 @@ void PhysicsEngine::calculateLinearVelocity(physicsInfo *item, float deltaT)
 physicsInfo PhysicsEngine::insertPhysicsObject(aabb_t *obj, float m, Velocity linVel, Force linFrc, Velocity angVel, Force angFrc, Point angPos)
 {
 	physicsInfo newItem;
-	newItem->aabbObject = obj;
-	newItem->sphereObject = NULL;
-	newItem->mass = m;
-	newItem->linearVelocity =linVel;
-	newItem->linearForce= linFrc;
-	newItem->angularVelocity = angVel;
-	newItem->angularForce = angFrc;
-	newItem->angularPosition = angPos;
+	newItem.aabbObject = obj;
+	newItem.sphereObject = NULL;
+	newItem.mass = m;
+	newItem.linearVelocity =linVel;
+	newItem.linearForce= linFrc;
+	newItem.angularVelocity = angVel;
+	newItem.angularForce = angFrc;
+	newItem.angularPosition = angPos;
 	physicsObjects.push_back(newItem);
 
 	//newItem.oldPosition = obj->center;

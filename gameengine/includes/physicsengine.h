@@ -24,23 +24,24 @@ private:
     std::vector<physicsInfo> physicsObjects;
 
     void calculatePosition(physicsInfo obj, float deltaT);
-    void calculateLinearVelocity(physicsInfo &item, float deltaT);
-    void calculateLinearAcceleration(physicsInfo &item, float deltaT);
-    void calculateAngularVelocity(physicsInfo &item, float deltaT);
-    void calculateAngularVelocity(physicsInfo &item, float deltaT);
-    void calculateAngularAcceleration(physicsInfo &item, float deltaT);
-    Point calculatePointofImapct(physicsInfo &item, float deltaT);
-    float GetDistanceOfVertex(float x, float y)
+    void calculateLinearVelocity(physicsInfo *item, float deltaT);
+    void calculateLinearAcceleration(physicsInfo *item, float deltaT);
+    void calculateAngularVelocity(physicsInfo *item, float deltaT);
+    void calculateAngularVelocity(physicsInfo *item, float deltaT);
+    void calculateAngularAcceleration(physicsInfo *item, float deltaT);
+    Point calculatePointofImapct(physicsInfo *item, float deltaT);
+    float GetDistanceOfVertex(float x, float y);
 
+    float calculateAngle(Point POI, Point Center, Point p3);
 
-    float GetDistanceBetweenVertices(Point v1, Point v2)
-
+    Point calculatePointofImapct(physicsInfo *item, float deltaT);
 
             //V2 ALWAYS NEEDS TO BE THE MIDDLE VERTEX
-    float GetAngleBetweenVerticese(Point v1, Point v2, Point v3)
+    float GetAngleBetweenVerticese(Point v1, Point v2, Point v3);
 
 
-    float RadiansToDegrees(float rad)
+    float RadiansToDegrees(float rad);
+    float GetDistanceBetweenVertices(Point v1, Point v2);
     void freeCollisions(collisionDetection* collisions);
 
 };
