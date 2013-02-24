@@ -56,13 +56,13 @@ void PhysicsEngine::calculateAngularVelocity(physicsInfo *item, float deltaT)
 	Point N;
 		 if(item->aabbObject != NULL)
 		 {
-			  current =item->aabbObject.center;
+			  current =item->aabbObject->center;
 			  I = (item->aabbObject->radii[0]+ item->aabbObject->radii[1])/12; //only 2d H and Width
 		 }
 		 else
 		 {
 			  current =item->sphereObject->center;
-			  I = item.mass *(item->sphereObject->radius*item.spereObject->radius)/2;
+			  I = item->mass *(item->sphereObject->radius*item->sphereObject->radius)/2;
 		 }
 	Point poi = calculatePointofImapct(item,deltaT);
 	Point temp ;
@@ -150,13 +150,13 @@ void PhysicsEngine::calculateAngularPosition(physicsInfo *item, float deltaT)
 			/* accel.x = (item.angularForce.x/item.mass)*deltaT;
 			 accel.y = (item.angularForce.y/item.mass)*deltaT;
 			 accel.z = (item.angularForce.z/item.mass)*deltaT;*/
-	 	 	 newP.x = item->angularPosition.x + item.angularVelocity.x * deltaT;
-	 	 	 newP.y= item.angularPosition.y + item.angularVelocity.y * deltaT;
-	 	 	 newP.z = item.angularPosition.z + item.angularVelocity.z * deltaT;
+	 	 	 newP.x = item->angularPosition.x + item->angularVelocity.x * deltaT;
+	 	 	 newP.y= item->angularPosition.y + item->angularVelocity.y * deltaT;
+	 	 	 newP.z = item->angularPosition.z + item->angularVelocity.z * deltaT;
 			 /*newV.x = item.angularVelocity.x + accel.x;
 			 newV.y = item.angularVelocity.y + accel.y;
 			 newV.z = item.angularVelocity.z + accel.z;*/
-			 item.angularPosition= newP;
+			 item->angularPosition= newP;
 
 }
 
@@ -166,13 +166,13 @@ void PhysicsEngine::calculateLinearAcceleration(physicsInfo *item, float deltaT)
 	//accel x = accel x - gravity*deltaT
 	//accel y= accel y - wind *deltaT
 	Force accel;
-	accel.x = (item.linearForce.x/item.mass)+(gravity*deltaT);
-	accel.y = (item.linearForce.y/item.mass)+(airfriction*deltaT);
-	accel.z = (item.linearForce.z/item.mass); //no wind so no Z force
+	accel.x = (item->linearForce.x/item->mass)+(gravity*deltaT);
+	accel.y = (item->linearForce.y/item->mass)+(airfriction*deltaT);
+	accel.z = (item->linearForce.z/item->mass); //no wind so no Z force
 
-	item.linearForce.x = accel.x*item.mass;
-	item.linearForce.y = accel.y*item.mass;
-	item.linearForce.z = accel.z*item.mass;
+	item->linearForce.x = accel.x*item->mass;
+	item->linearForce.y = accel.y*item->mass;
+	item->linearForce.z = accel.z*item->mass;
 }
 
 
@@ -181,14 +181,14 @@ void PhysicsEngine::calculateLinearVelocity(physicsInfo *item, float deltaT)
 	//Velocity new = vel cur + Acc * deltaT
 	     Force accel;
 	     Velocity newV;
-		 accel.x = (item.linearForce.x/item.mass)*deltaT;
-		 accel.y = (item.linearForce.y/item.mass)*deltaT;
-		 accel.z = (item.linearForce.z/item.mass)*deltaT;
+		 accel.x = (item->linearForce.x/item->mass)*deltaT;
+		 accel.y = (item->linearForce.y/item->mass)*deltaT;
+		 accel.z = (item->linearForce.z/item->mass)*deltaT;
 
-		 newV.x = item.linearVelocity.x + accel.x;
-		 newV.y = item.linearVelocity.y + accel.y;
-		 newV.z = item.linearVelocity.z + accel.z;
-		 item.linearVelocity = newV;
+		 newV.x = item->linearVelocity.x + accel.x;
+		 newV.y = item->linearVelocity.y + accel.y;
+		 newV.z = item->linearVelocity.z + accel.z;
+		 item->linearVelocity = newV;
 }
 
  void PhysicsEngine::calculatePosition(physicsInfo *item, float deltaT)
@@ -198,9 +198,9 @@ void PhysicsEngine::calculateLinearVelocity(physicsInfo *item, float deltaT)
 	 	 // postion of New = Position current + vel Cur* deltaT + acceleration (dt^2)
 	 Point current;
 	 if(item->aabbObject != NULL)
-		  current =item->aabbObject.center;
+		  current =item->aabbObject->center;
 	 else
-		  current =item->sphereObject.center;
+		  current =item->sphereObject->center;
 	 Velocity calcVel = item->linearVelocity;
 	 Force accel;
 	 Point newP;
@@ -209,9 +209,9 @@ void PhysicsEngine::calculateLinearVelocity(physicsInfo *item, float deltaT)
 	 calcVel.y =calcVel.y * deltaT;
 	 calcVel.z = calcVel.z * deltaT;
 
-	 accel.x = (item.linearForce.x/item.mass)*timeSqr;
-	 accel.y = (item.linearForce.y/item.mass)*timeSqr;
-	 accel.z = (item.linearForce.z/item.mass)*timeSqr;
+	 accel.x = (item->linearForce.x/item->mass)*timeSqr;
+	 accel.y = (item->linearForce.y/item->mass)*timeSqr;
+	 accel.z = (item->linearForce.z/item->mass)*timeSqr;
 
 	 newP.x = current.x + accel.x+ calcVel.x;
 	 newP.y = current.y + accel.y+ calcVel.y;
@@ -219,15 +219,15 @@ void PhysicsEngine::calculateLinearVelocity(physicsInfo *item, float deltaT)
 
 	 if(item->aabbObject != NULL)
 	 {
-	 		item->aabbObject.center.x =  current.x + accel.x+ calcVel.x;
-	 		item->aabbObject.center.y =  current.y + accel.y+ calcVel.y;
-	 		item->aabbObject.center.z =  current.z + accel.z+ calcVel.z;
+	 		item->aabbObject->center.x =  current.x + accel.x+ calcVel.x;
+	 		item->aabbObject->center.y =  current.y + accel.y+ calcVel.y;
+	 		item->aabbObject->center.z =  current.z + accel.z+ calcVel.z;
 	 }
 	 else
 	 {
-		 	 item->sphereObject.center.x =  current.x + accel.x+ calcVel.x;
-		 	 item->sphereObject.center.y =  current.y + accel.y+ calcVel.y;
-		 	 item->sphereObject.center.z =  current.z + accel.z+ calcVel.z;
+		 	 item->sphereObject->center.x =  current.x + accel.x+ calcVel.x;
+		 	 item->sphereObject->center.y =  current.y + accel.y+ calcVel.y;
+		 	 item->sphereObject->center.z =  current.z + accel.z+ calcVel.z;
 	 }
 	// item.oldPosition = current;
 
@@ -238,8 +238,8 @@ void PhysicsEngine::calculateLinearVelocity(physicsInfo *item, float deltaT)
 physicsInfo PhysicsEngine::insertPhysicsObject(aabb_t *obj, float m, Velocity linVel, Force linFrc, Velocity angVel, Force angFrc, Point angPos)
 {
 	physicsInfo newItem;
-	newitem->aabbObject = obj;
-	newitem->sphereObject = NULL;
+	newItem.aabbObject = obj;
+	newItem.sphereObject = NULL;
 	newItem.mass = m;
 	newItem.linearVelocity =linVel;
 	newItem.linearForce= linFrc;
@@ -256,8 +256,8 @@ physicsInfo PhysicsEngine::insertPhysicsObject(sphere_t *obj, float m, Velocity 
 {
 	physicsInfo newItem;
 	newItem.angularPosition = angPos;
-	newitem->aabbObject = NULL;
-	newitem->sphereObject = obj;
+	newItem.aabbObject = NULL;
+	newItem.sphereObject = obj;
 	newItem.mass = m;
 	newItem.linearVelocity =linVel;
 	newItem.linearForce= linFrc;
