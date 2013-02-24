@@ -137,7 +137,7 @@ int main( int argc, char * argv[] )
 			/*
 			 * Redraw the game.
 			 */
-			gameEngine.Render();
+			//gameEngine.Render();
 		}
 
 		FPSControl();
@@ -148,6 +148,10 @@ int main( int argc, char * argv[] )
 		 */
 		SDL_Delay(1);
 	} // End Client Game Loop
+
+	delete clientAddress;
+	delete serverMasterAddress;
+	delete clientConnection;
 
 	return 0;
 }
