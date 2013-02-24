@@ -76,3 +76,49 @@ CollisionDetection::isIntersection(aabb_t aabb, sphere_t sphere)
 
     return 1;
 }
+
+int
+CollisionDetection::isIntersection(sphere_t sphere, capsule_t capsule)
+{
+    return 1;
+}
+
+float
+CollisionDetection::getDistanceBetweenLineAndVertex(Point startPoint, Point endPoint, Point vertex)
+{
+    typedef std::vector<float> float_vect;
+
+    float_vect ab(3);
+    ab[0] = endPoint.x - startPoint.x;
+    ab[1] = endPoint.y - startPoint.y;
+    ab[2] = endPoint.z - startPoint.z;
+
+    float_vect ac(3);
+    ac[0] = vertex.x - startPoint.x;
+    ac[1] = vertex.y - startPoint.y;
+    ac[2] = vertex.z - startPoint.z;
+
+    float_vect bc(3);
+    bc[0] = vertex.x - endPoint.x;
+    bc[1] = vertex.y - endPoint.y;
+    bc[2] = vertex.z - endPoint.z;
+
+
+    colvec cv_ac = conv_to< colvec >::from(ac);
+    colvec cv_ab = conv_to< colvec >::from(ab);
+
+    float e = dot(cv_ac, cv_ab);
+
+    if(e <= 0.0f)
+        return dot(cv_ac, cv_ac);
+
+    float f = dot(cv_ab, cv_ab);
+
+    if(e >= f)
+    {
+        colvec cv_bc = conv_to< colvec >::from(bc);
+        return dot(cv_bc, cv_bc);
+    }
+
+    return dot(cv_ac, cv_ac) - e * e / f;
+}
