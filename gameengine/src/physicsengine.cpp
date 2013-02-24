@@ -71,36 +71,36 @@ Point calculatePointofImapct(physicsInfo *item, float deltaT)
 }
 
 
-double calculateAngle(Point POI, Point Center, Point p3)
+float calculateAngle(Point POI, Point Center, Point p3)
 {
-	double angle = GetAngleBetweenVerticese(Center, POI, p3);
+	float angle = GetAngleBetweenVerticese(Center, POI, p3);
 	return angle;
 
 }
 
-double GetDistanceOfVertex(double x, double y)
+float GetDistanceOfVertex(float x, float y)
         {
             return sqrt((x * x) + (y * y));
         }
 
-double GetDistanceBetweenVertices(Point v1, Point v2)
+float GetDistanceBetweenVertices(Point v1, Point v2)
         {
-            double xDistance = abs(v1.x - v2.x);
-            double yDistance = abs(v1.y - v2.y);
+            float xDistance = abs(v1.x - v2.x);
+            float yDistance = abs(v1.y - v2.y);
             return GetDistanceOfVertex(xDistance, yDistance);
         }
 
         //V2 ALWAYS NEEDS TO BE THE MIDDLE VERTEX
-       double GetAngleBetweenVerticese(Point v1, Point v2, Point v3)
+       float GetAngleBetweenVerticese(Point v1, Point v2, Point v3)
         {
-            double a = GetDistanceBetweenVertices(v1, v2);
-            double b = GetDistanceBetweenVertices(v2, v3);
-            double c = GetDistanceBetweenVertices(v1, v3);
+            float a = GetDistanceBetweenVertices(v1, v2);
+            float b = GetDistanceBetweenVertices(v2, v3);
+            float c = GetDistanceBetweenVertices(v1, v3);
 
             return RadiansToDegrees(cos(((a * a) + (b * b) - (c * c)) / (2 * a * b)));
         }
 
-       double RadiansToDegrees(double rad)
+       float RadiansToDegrees(float rad)
         {
             return rad * (180.0 / Math.PI);
         }
