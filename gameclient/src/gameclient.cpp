@@ -51,7 +51,7 @@ int main( int argc, char * argv[] )
 	Address* clientAddress = new Address(127,0,0,1, ClientPort);
 	clientConnection = new ClientConnection(clientAddress);
 
-	// Connect to the server
+	// Connect the client to the server.
 	Address* serverMasterAddress = new Address(127,0,0,1, ServerMasterPort);
 	clientConnection->Connect(serverMasterAddress);
 

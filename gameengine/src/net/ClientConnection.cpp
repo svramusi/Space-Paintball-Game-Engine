@@ -18,15 +18,23 @@ namespace net
 	}
 
 	void ClientConnection::Connect(Address* serverMasterAddress) {
-		ServerMasterConnection * serverMasterConnection = new ServerMasterConnection(serverMasterAddress);
+		//ServerMasterConnection * serverMasterConnection = new ServerMasterConnection(serverMasterAddress);
 
-		if ( !serverMasterConnection->Init() )
-		{
-			printf( "could not start connection to server master on port %d\n", serverMasterAddress->GetPort() );
+		//if ( !serverMasterConnection->Init() )
+		//{
+		//	printf( "could not start connection to server master on port %d\n", serverMasterAddress->GetPort() );
 			// Throw exception.
+		//}
+
+		//serverConnection = serverMasterConnection->AcceptConection(address);
+
+		if ( !connection->Start( address->GetPort() ) )
+		{
+			printf( "could not start client connection on port %d\n", address->GetPort() );
+			return;
 		}
 
-		serverConnection = serverMasterConnection->AcceptConection(address);
+		connection->Connect( *serverMasterAddress );
 	}
 
 	void ClientConnection::Send(GamePacket* data) {
