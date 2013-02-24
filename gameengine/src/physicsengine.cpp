@@ -69,10 +69,11 @@ Point calculatePointofImapct(physicsInfo *item, float deltaT)
 	Point POI;
 	return POI;
 }
-//WE NEED TO FIGURE THIS OUT, NOT SURE HOW TO DO IT
-double calculateAngle(Point POI, Point Center)
+
+
+double calculateAngle(Point POI, Point Center, Point p3)
 {
-	double angle = GetAngleBetweenVerticese(Vertex v1, Vertex v2, Vertex v3);
+	double angle = GetAngleBetweenVerticese(Center, POI, p3);
 	return angle;
 
 }
@@ -119,10 +120,15 @@ void calculateAngularVelocity(physicsInfo *item, float deltaT)
 		 else
 		 {
 			  current =item.sphereObject->center;
-			  I = item->mass (item.spereObject.radius*item.spereObject.radius*)/2
+			  I = item->mass (item.sphereObject.radius*item.spereObject.radius*)/2
 		 }
 	Point poi = calculatePointofImpact(item,deltaT);
-	float alpha = calculateAngle(poi, current);
+	Point temp ;
+	temp.x= item->angularVelocity.x * deltaT;
+	temp.y = item->angularVelocity.y * deltaT;
+	temp.z = item->angularVelocity.z * deltaT;
+
+	float alpha = calculateAngle(current,poi,temp);
 	N.x = abs(poi.x - current.x)* abs(item->angularForce.x)*sin(alpha);
 	N.y = abs(poi.y - current.y)* abs(item->angularForce.y)*sin(alpha);
 	//We ignore Z, no 3d angular force
