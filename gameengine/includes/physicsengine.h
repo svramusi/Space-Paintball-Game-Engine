@@ -30,17 +30,17 @@ private:
     void calculateAngularVelocity(physicsInfo &item, float deltaT);
     void calculateAngularAcceleration(physicsInfo &item, float deltaT);
     Point calculatePointofImapct(physicsInfo &item, float deltaT);
-    double GetDistanceOfVertex(double x, double y)
+    float GetDistanceOfVertex(float x, float y)
 
 
-    double GetDistanceBetweenVertices(Vertex v1, Vertex v2)
+    float GetDistanceBetweenVertices(Point v1, Point v2)
 
 
             //V2 ALWAYS NEEDS TO BE THE MIDDLE VERTEX
-    double GetAngleBetweenVerticese(Vertex v1, Vertex v2, Vertex v3)
+    float GetAngleBetweenVerticese(Point v1, Point v2, Point v3)
 
 
-    double RadiansToDegrees(double rad)
+    float RadiansToDegrees(float rad)
     void freeCollisions(collisionDetection* collisions);
 
 };

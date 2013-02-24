@@ -64,26 +64,26 @@ PhysicsEngine::freeCollisions(collisionDetection* collisions)
 	}
 }
 //WE NEED TO FIGURE THIS OUT, NOT SURE HOW TO DO IT
-Point calculatePointofImapct(physicsInfo *item, float deltaT)
+Point PhysicsEngine::calculatePointofImapct(physicsInfo *item, float deltaT)
 {
 	Point POI;
 	return POI;
 }
 
 
-float calculateAngle(Point POI, Point Center, Point p3)
+float PhysicsEngine::calculateAngle(Point POI, Point Center, Point p3)
 {
 	float angle = GetAngleBetweenVerticese(Center, POI, p3);
 	return angle;
 
 }
 
-float GetDistanceOfVertex(float x, float y)
+float PhysicsEngine::GetDistanceOfVertex(float x, float y)
         {
             return sqrt((x * x) + (y * y));
         }
 
-float GetDistanceBetweenVertices(Point v1, Point v2)
+float PhysicsEngine::GetDistanceBetweenVertices(Point v1, Point v2)
         {
             float xDistance = abs(v1.x - v2.x);
             float yDistance = abs(v1.y - v2.y);
@@ -105,7 +105,7 @@ float GetDistanceBetweenVertices(Point v1, Point v2)
             return rad * (180.0 / Math.PI);
         }
 
-void calculateAngularVelocity(physicsInfo *item, float deltaT)
+void PhysicsEngine::calculateAngularVelocity(physicsInfo *item, float deltaT)
 {
 	//and vel = ang vel + abs(poi - pos cur) * ABS(Ang Force Cur) * sin(a)
 	Velocity newV;
@@ -115,7 +115,7 @@ void calculateAngularVelocity(physicsInfo *item, float deltaT)
 		 if(item.aabbObject != NULL)
 		 {
 			  current =item.aabbObject->center;
-			  I = (item->abbObject->radii[0]+ item->abbObject->radii[1])/12; //only 2d H and Width
+			  I = (item->abbObject->radii[0]+ item->aabbObject->radii[1])/12; //only 2d H and Width
 		 }
 		 else
 		 {
@@ -140,7 +140,7 @@ void calculateAngularVelocity(physicsInfo *item, float deltaT)
 
 
 
-void calculateAngularPosition(physicsInfo *item, float deltaT)
+void PhysicsEngine::calculateAngularPosition(physicsInfo *item, float deltaT)
 {
 	//ang velnew = and velcurr + ang acc *deltat
 	Point newP;
@@ -160,7 +160,7 @@ void calculateAngularPosition(physicsInfo *item, float deltaT)
 }
 
 
-void calculateLinearAcceleration(physicsInfo *item, float deltaT)
+void PhysicsEngine::calculateLinearAcceleration(physicsInfo *item, float deltaT)
 {
 	//accel x = accel x - gravity*deltaT
 	//accel y= accel y - wind *deltaT
@@ -175,7 +175,7 @@ void calculateLinearAcceleration(physicsInfo *item, float deltaT)
 }
 
 
-void calculateLinearVelocity(physicsInfo *item, float deltaT)
+void PhysicsEngine::calculateLinearVelocity(physicsInfo *item, float deltaT)
 {
 	//Velocity new = vel cur + Acc * deltaT
 	     Force accel;
@@ -190,7 +190,7 @@ void calculateLinearVelocity(physicsInfo *item, float deltaT)
 		 item.linearVelocity = newV;
 }
 
- void calculatePosition(physicsInfo *item, float deltaT)
+ void PhysicsEngine::calculatePosition(physicsInfo *item, float deltaT)
  {
 
 		// using verlet integration
@@ -234,7 +234,7 @@ void calculateLinearVelocity(physicsInfo *item, float deltaT)
 
  }
 
-physicsInfo insertPhysicsObject(aabb_t *obj, float m, Velocity linVel, Force linFrc, Velocity angVel, Force angFrc, Point angPos)
+physicsInfo PhysicsEngine::insertPhysicsObject(aabb_t *obj, float m, Velocity linVel, Force linFrc, Velocity angVel, Force angFrc, Point angPos)
 {
 	physicsInfo newItem;
 	newItem->aabbObject = obj;
@@ -251,7 +251,7 @@ physicsInfo insertPhysicsObject(aabb_t *obj, float m, Velocity linVel, Force lin
 	return newItem;
 }
 
-physicsInfo insertPhysicsObject(sphere_t *obj, float m, Velocity linVel, Force linFrc, Velocity angVel, Force angFrc, Point angPos)
+physicsInfo PhysicsEngine::insertPhysicsObject(sphere_t *obj, float m, Velocity linVel, Force linFrc, Velocity angVel, Force angFrc, Point angPos)
 {
 	physicsInfo newItem;
 	newItem->angularPosition = angPos;

@@ -25,3 +25,4 @@ typedef struct physics_info_t { //all units MKS: meters, kilograms, seconds
 	Force angularForce;//One value will always be 0, only 2d ANgular velocity
 
 } physicsInfo;
+#endif
