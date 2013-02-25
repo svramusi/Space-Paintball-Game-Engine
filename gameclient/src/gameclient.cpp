@@ -199,7 +199,7 @@ int GetUpdateFromServer()
 		{
 			break;
 		}
-		printf( "received packet from server\n" );
+		printf( "received packet from server: %s\n", gamePacket->ToString().c_str() );
 	}
 
 	clientConnection->Update( DeltaTime );

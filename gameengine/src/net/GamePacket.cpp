@@ -37,4 +37,9 @@ namespace net
 
 		return gamePacket;
 	}
+
+	string GamePacket::ToString() {
+		string theString((char *)packet, size);
+		return theString;
+	}
 }

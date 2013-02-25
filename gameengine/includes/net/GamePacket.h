@@ -8,6 +8,10 @@
 #ifndef GAMEPACKET_H_
 #define GAMEPACKET_H_
 
+#include<string>
+
+using namespace std;
+
 namespace net
 {
 	/*
@@ -27,6 +31,7 @@ namespace net
 		 * This method decodes the packet from an array of bytes.
 		 */
 		static GamePacket* Decode( unsigned char *data, int size );
+		string ToString();
 	private:
 		unsigned char* packet;
 		int size;
