@@ -22,6 +22,14 @@ public:
 
     float getDistanceBetweenLineAndVertex(Point startPoint, Point endPoint, Point vertex);
 
+    float getPenetrationDistance(float dist_between_centers, float radiusSum);
+    std::vector<float> getNormalizedVector(Point point1, Point point2);
+    std::vector<float> getPenetrationVector(sphere_t sphere1, sphere_t sphere2);
+
+    std::vector<float> getDiffVectorAbs(Point point1, Point point2);
+    std::vector<float> getDiffVector(Point point1, Point point2);
+
+
 private:
 
 };
