@@ -8,7 +8,6 @@
 #include "net/Net.h"
 #include "net/Connection.h"
 #include "net/NetUtils.h"
-#include "net/ClientConnection.h"
 #include "GameEngine.h"
 #include "TestCollectGameState.h"
 
@@ -24,8 +23,6 @@ const float TimeOut = 10.0f;
 // One frame each 20 milliseconds (i.e. 50 frames per second)
 const Uint32 RedrawingPeriod = 20;
 const int MaxFrameSkip = 10;
-
-ClientConnection* clientConnection;
 
 int PollForOSMessages(bool* quit);
 int ConnectToGameMasterServer();
@@ -59,15 +56,6 @@ int main( int argc, char * argv[] )
 		theClientPort = ClientPort;
 	}
 
-	// Initialize the client connection
-	Address* clientAddress = new Address(127,0,0,1, theClientPort);
-	clientConnection = new ClientConnection(clientAddress);
-
-	// Connect the client to the server.
-	Address* serverMasterAddress = new Address(127,0,0,1, ServerMasterPort);
-	clientConnection->Connect(serverMasterAddress);
-
-//	ConnectToGameMasterServer();
 	// Client Game Loop
 	while(!quit)
 	{
@@ -176,34 +164,7 @@ int GetUpdateFromServer()
 	//int input = getUpdateFromServer();
 	int input = 0;
 
-	if (clientConnection->IsConnected() )
-	{
-		printf( "client connected to server\n" );
-	}
-
-	if ( clientConnection->ConnectFailed() )
-	{
-		printf( "connection failed\n" );
-	}
-
-	unsigned char packet[] = "client to server: player1 pressed up arrow";
-	GamePacket* gamePacket = new GamePacket(packet, sizeof( packet ));
-	clientConnection->Send( gamePacket );
-	delete gamePacket;
-
-	while ( true )
-	{
-		unsigned char packet[256];
-		GamePacket* gamePacket = clientConnection->Receive();
-		if ( gamePacket == NULL )
-		{
-			break;
-		}
-		printf( "received packet from server: %s\n", gamePacket->ToString().c_str() );
-	}
-
-	clientConnection->Update( DeltaTime );
-	NetUtils::wait( DeltaTime );
+	ConnectToGameMasterServer();
 
 	return input;
 }
@@ -272,8 +233,8 @@ int ConnectToGameMasterServer()
 
 	bool connected = false;
 
-	while ( true )
-	{
+	//while ( true )
+	//{
 		if ( !connected && connection.IsConnected() )
 		{
 			printf( "client connected to server\n" );
@@ -283,24 +244,26 @@ int ConnectToGameMasterServer()
 		if ( !connected && connection.ConnectFailed() )
 		{
 			printf( "connection failed\n" );
-			break;
+			//break;
 		}
-
-		unsigned char packet[] = "client to server";
-		connection.SendPacket( packet, sizeof( packet ) );
-
-		while ( true )
+		else
 		{
-			unsigned char packet[256];
-			int bytes_read = connection.ReceivePacket( packet, sizeof(packet) );
-			if ( bytes_read == 0 )
-				break;
-			printf( "received packet from server\n" );
-		}
+			unsigned char packet[] = "client to server";
+			connection.SendPacket( packet, sizeof( packet ) );
 
-		connection.Update( DeltaTime );
-		NetUtils::wait( DeltaTime );
-	}
+			while ( true )
+			{
+				unsigned char packet[256];
+				int bytes_read = connection.ReceivePacket( packet, sizeof(packet) );
+				if ( bytes_read == 0 )
+					break;
+				printf( "received packet from server\n" );
+			}
+
+			connection.Update( DeltaTime );
+			NetUtils::wait( DeltaTime );
+		}
+	//}
 
 	return 0;
 }
