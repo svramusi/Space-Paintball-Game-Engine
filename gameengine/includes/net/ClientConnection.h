@@ -27,6 +27,9 @@ namespace net
 		void Send(GamePacket* data);
 		GamePacket* Receive();
 		bool HasData() const;
+		bool ConnectFailed() const;
+		void Update( float deltaTime );
+		bool IsConnected() const;
 	private:
 		ServerConnection* serverConnection;
 	};

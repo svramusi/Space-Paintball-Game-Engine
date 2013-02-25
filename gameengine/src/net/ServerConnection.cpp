@@ -28,9 +28,7 @@ namespace net
 	}
 
 	void ServerConnection::Send(GamePacket* data) {
-		//connection->SendPacket(data->Encode(), data->GetByteSize());
-		unsigned char packet[] = "server to client";
-		connection->SendPacket( packet, sizeof( packet ) );
+		connection->SendPacket( data->GetDataPtr(), sizeof( data->GetByteSize() ) );
 	}
 
 	GamePacket* ServerConnection::Receive() {
@@ -44,7 +42,7 @@ namespace net
 		}
 		else
 		{
-			GamePacket* gamePacket = new GamePacket(packet);
+			GamePacket* gamePacket = new GamePacket(packet, bytes_read);
 			return gamePacket;
 		}
 	}

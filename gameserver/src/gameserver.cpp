@@ -29,6 +29,7 @@ ServerMasterConnection* serverMasterConnection;
 int StartGameMasterServer();
 int PollForOSMessages(bool* quit);
 int GetInputFromClient(bool* quit);
+int GetInputFromOneClient();
 bool TimeForRendering();
 void UpdateStatistics();
 void FPSControl();
@@ -63,6 +64,7 @@ int main( int argc, char * argv[] )
 		return 1;
 	}
 
+	//StartGameMasterServer();
 	// Server Game Loop
 	while(!quit)
 	{
@@ -72,7 +74,8 @@ int main( int argc, char * argv[] )
 		 */
 		PollForOSMessages(&quit);
 
-		int input = GetInputFromClient(&quit);
+		//int input = GetInputFromClient(&quit);
+		GetInputFromOneClient();
 
 		///////////////////////////////////////////////////////////
 		//Update Game State
@@ -96,8 +99,8 @@ int main( int argc, char * argv[] )
 		SDL_Delay(1);
 	} // End Server Game Loop
 
-	delete serverMasterAddress;
-	delete serverMasterConnection;
+	//delete serverMasterAddress;
+	//delete serverMasterConnection;
 
 	return 0;
 }
@@ -152,6 +155,28 @@ int PollForOSMessages(bool* quit)
 	return 0;
 }
 
+int GetInputFromOneClient()
+{
+	unsigned char packet[] = "server to client: player1 pressed up arrow";
+	GamePacket* gamePacket = new GamePacket(packet, sizeof( packet ));
+	serverMasterConnection->Send( gamePacket );
+	delete gamePacket;
+
+	while ( true )
+	{
+		unsigned char packet[256];
+		GamePacket* gamePacket = serverMasterConnection->Receive();
+		if ( gamePacket == NULL )
+		{
+			break;
+		}
+		printf( "received packet from sclient\n" );
+	}
+
+	serverMasterConnection->Update( DeltaTime );
+	NetUtils::wait( DeltaTime );
+}
+
 /*
  * Check the keyboard/mouse state and identify any user
  * input. Also, if there are players over the network,
@@ -172,7 +197,7 @@ int GetInputFromClient(bool* quit)
         	if ( serverConnection->IsConnected() )
 			{
         		unsigned char packet[] = "server to client";
-        		serverConnection->Send(new GamePacket(packet));
+        		serverConnection->Send(new GamePacket(packet, sizeof(packet)));
 			}
         	if( serverConnection->HasData() )
         	{

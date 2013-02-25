@@ -28,6 +28,7 @@ namespace net
 
 		// Start listening
 		connection->Listen();
+
 		return true;
 	}
 
@@ -54,17 +55,23 @@ namespace net
 	}
 
 	void ServerMasterConnection::Send(GamePacket* data) {
-		//connection->SendPacket(data->Encode(), data->GetByteSize());
-		unsigned char packet[] = "master server to client";
-		connection->SendPacket( packet, sizeof( packet ) );
+		connection->SendPacket( data->GetDataPtr(), sizeof( data->GetByteSize() ) );
 	}
 
 	GamePacket* ServerMasterConnection::Receive() {
 		// Need to implement this method.
 		unsigned char packet[256];
 		int bytes_read = connection->ReceivePacket( packet, sizeof(packet) );
-		GamePacket* gamePacket = new GamePacket(packet);
-		return gamePacket;
+
+		if(bytes_read == 0)
+		{
+			return NULL;
+		}
+		else
+		{
+			GamePacket* gamePacket = new GamePacket(packet, bytes_read);
+			return gamePacket;
+		}
 	}
 
 	bool ServerMasterConnection::HasData() const {

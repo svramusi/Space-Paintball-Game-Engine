@@ -15,7 +15,7 @@ namespace net
 	 */
 	class GamePacket {
 	public:
-		GamePacket(unsigned char* packet);
+		GamePacket(unsigned char* packet, int size);
 		virtual ~GamePacket();
 		int GetByteSize();
 		unsigned char* GetDataPtr();
@@ -29,6 +29,7 @@ namespace net
 		static GamePacket* Decode( unsigned char *data, int size );
 	private:
 		unsigned char* packet;
+		int size;
 	};
 }
 

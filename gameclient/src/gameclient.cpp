@@ -47,14 +47,27 @@ int main( int argc, char * argv[] )
 	Uint32 time = SDL_GetTicks();
 	bool needToRedraw = true;
 
+	int theClientPort = 0;
+	// Loop through each argument and print its number and value
+	for (int nArg=0; nArg < argc; nArg++)
+	{
+	    theClientPort = atoi(argv[nArg]);
+	}
+
+	if(theClientPort == 0)
+	{
+		theClientPort = ClientPort;
+	}
+
 	// Initialize the client connection
-	Address* clientAddress = new Address(127,0,0,1, ClientPort);
+	Address* clientAddress = new Address(127,0,0,1, theClientPort);
 	clientConnection = new ClientConnection(clientAddress);
 
 	// Connect the client to the server.
 	Address* serverMasterAddress = new Address(127,0,0,1, ServerMasterPort);
 	clientConnection->Connect(serverMasterAddress);
 
+//	ConnectToGameMasterServer();
 	// Client Game Loop
 	while(!quit)
 	{
@@ -149,9 +162,9 @@ int main( int argc, char * argv[] )
 		SDL_Delay(1);
 	} // End Client Game Loop
 
-	delete clientAddress;
-	delete serverMasterAddress;
-	delete clientConnection;
+	//delete clientAddress;
+	//delete serverMasterAddress;
+	//delete clientConnection;
 
 	return 0;
 }
@@ -163,6 +176,34 @@ int GetUpdateFromServer()
 	//int input = getUpdateFromServer();
 	int input = 0;
 
+	if (clientConnection->IsConnected() )
+	{
+		printf( "client connected to server\n" );
+	}
+
+	if ( clientConnection->ConnectFailed() )
+	{
+		printf( "connection failed\n" );
+	}
+
+	unsigned char packet[] = "client to server: player1 pressed up arrow";
+	GamePacket* gamePacket = new GamePacket(packet, sizeof( packet ));
+	clientConnection->Send( gamePacket );
+	delete gamePacket;
+
+	while ( true )
+	{
+		unsigned char packet[256];
+		GamePacket* gamePacket = clientConnection->Receive();
+		if ( gamePacket == NULL )
+		{
+			break;
+		}
+		printf( "received packet from server\n" );
+	}
+
+	clientConnection->Update( DeltaTime );
+	NetUtils::wait( DeltaTime );
 
 	return input;
 }

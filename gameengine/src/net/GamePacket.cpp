@@ -9,16 +9,17 @@
 
 namespace net
 {
-	GamePacket::GamePacket(unsigned char* packet) {
+	GamePacket::GamePacket(unsigned char* packet, int size) {
 		this->packet = packet;
+		this->size = size;
 	}
 
 	GamePacket::~GamePacket() {
-		delete packet;
+		//delete packet;
 	}
 
 	int GamePacket::GetByteSize() {
-		return sizeof(packet);
+		return size;
 	}
 
 	unsigned char * GamePacket::GetDataPtr() {
@@ -32,7 +33,7 @@ namespace net
 
 	GamePacket* GamePacket::Decode(unsigned char *data, int size) {
 		// Needs to be implemented.
-		GamePacket* gamePacket = new GamePacket(data);
+		GamePacket* gamePacket = new GamePacket(data, size);
 
 		return gamePacket;
 	}
