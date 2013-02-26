@@ -10,6 +10,12 @@
 
 #include <stdio.h>
 
+
+#include "AABB.h"
+#include "Sphere.h"
+#include "physicsengine.h"
+
+
 using namespace std;
 
 class GameEngine {
@@ -23,6 +29,9 @@ public:
 	void UpdatePhysics(int input);
 	void UpdateGameState(int input);
 	void Render();
+
+private:
+    PhysicsEngine *physics;
 };
 
 #endif /* GAMEENGINE_H_ */
