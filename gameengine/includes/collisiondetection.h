@@ -32,8 +32,8 @@ public:
 
     //collisionDetection* detect_collision(detectCollision* collidableObject);
 
-    void addObject(aabb_t aabb);
-    void addObject(sphere_t sphere);
+    void addObject(CollidableObject collidableObject);
+    void removeObject(int ID);
 
     int isIntersection(aabb_t aabb1, aabb_t aabb2);
     int isIntersection(sphere_t sphere1, sphere_t sphere2);
@@ -87,8 +87,7 @@ checkForAnyCollisions();
 
 
 private:
-    std::vector<aabb_t> aabbs;
-    std::vector<sphere_t> spheres;
+    std::vector<CollidableObject*> collidableObjects;
 
 };
 #endif

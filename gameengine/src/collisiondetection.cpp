@@ -39,15 +39,26 @@ CollisionDetection::freeCollisions(collisions_t *collisions)
 }
 
 void
-CollisionDetection::addObject(aabb_t aabb)
+CollisionDetection::addObject(CollidableObject *collidableObject)
 {
-    aabbs.push_back(aabb);
+    collidableObjects.push_back(collidableObject);
 }
 
 void
-CollisionDetection::addObject(sphere_t sphere)
+CollisionDetection::removeObject(int ID)
 {
-    spheres.push_back(sphere);
+    int counter = 0;
+    for(std::vector<CollidableObject*>::iterator it = collidableObjects.begin();
+            it != collidableObjects.end();
+            ++it) {
+
+        if((*it).ID == ID) {
+            collidableObjects.erase(collidableObjects.begin() + counter);
+            break;
+        }
+
+        counter++;
+    }
 }
 
 /*
