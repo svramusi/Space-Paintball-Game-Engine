@@ -8,13 +8,14 @@
 #include "net/Net.h"
 #include "net/Connection.h"
 #include "net/NetUtils.h"
+#include "net/ClientConnection.h"
 #include "GameEngine.h"
 #include "TestCollectGameState.h"
 
 using namespace std;
 using namespace net;
 
-const int ServerPort = 30000;
+const int ServerMasterPort = 30000;
 const int ClientPort = 30001;
 const int ProtocolId = 0x99887766;
 const float DeltaTime = 0.25f;
@@ -23,6 +24,8 @@ const float TimeOut = 10.0f;
 // One frame each 20 milliseconds (i.e. 50 frames per second)
 const Uint32 RedrawingPeriod = 20;
 const int MaxFrameSkip = 10;
+
+ClientConnection* clientConnection;
 
 int PollForOSMessages(bool* quit);
 int ConnectToGameMasterServer();
@@ -44,6 +47,27 @@ int main( int argc, char * argv[] )
 	Uint32 time = SDL_GetTicks();
 	bool needToRedraw = true;
 
+	int theClientPort = 0;
+	// Loop through each argument and print its number and value
+	for (int nArg=0; nArg < argc; nArg++)
+	{
+	    theClientPort = atoi(argv[nArg]);
+	}
+
+	if(theClientPort == 0)
+	{
+		theClientPort = ClientPort;
+	}
+
+	// Initialize the client connection
+	Address* clientAddress = new Address(127,0,0,1, theClientPort);
+	clientConnection = new ClientConnection(clientAddress);
+
+	// Connect the client to the server.
+	Address* serverMasterAddress = new Address(127,0,0,1, ServerMasterPort);
+	clientConnection->Connect(serverMasterAddress);
+
+//	ConnectToGameMasterServer();
 	// Client Game Loop
 	while(!quit)
 	{
@@ -110,7 +134,7 @@ int main( int argc, char * argv[] )
 		//Update Game State Copy
 		int inputFromServer = GetUpdateFromServer();
 		// Update local game state (or game state copy).
-		gameEngine.UpdateGameState(inputFromServer);
+		//gameEngine.UpdateGameState(inputFromServer);
 		///////////////////////////////////////////////////////////
 
 		/*
@@ -119,14 +143,14 @@ int main( int argc, char * argv[] )
 		 * the HUD is not rendered by the game engine, but
 		 * separately).
 		 */
-		UpdateStatistics();
+		//UpdateStatistics();
 
 		if(TimeForRendering())
 		{
 			/*
 			 * Redraw the game.
 			 */
-			gameEngine.Render();
+			//gameEngine.Render();
 		}
 
 		FPSControl();
@@ -138,6 +162,10 @@ int main( int argc, char * argv[] )
 		SDL_Delay(1);
 	} // End Client Game Loop
 
+	//delete clientAddress;
+	//delete serverMasterAddress;
+	//delete clientConnection;
+
 	return 0;
 }
 
@@ -147,6 +175,35 @@ int GetUpdateFromServer()
 	// TODO: Fix this
 	//int input = getUpdateFromServer();
 	int input = 0;
+
+	if (clientConnection->IsConnected() )
+	{
+		printf( "client connected to server\n" );
+	}
+
+	if ( clientConnection->ConnectFailed() )
+	{
+		printf( "connection failed\n" );
+	}
+
+	unsigned char packet[] = "client to server: player1 pressed up arrow";
+	GamePacket* gamePacket = new GamePacket(packet, sizeof( packet ));
+	clientConnection->Send( gamePacket );
+	delete gamePacket;
+
+	while ( true )
+	{
+		unsigned char packet[256];
+		GamePacket* gamePacket = clientConnection->Receive();
+		if ( gamePacket == NULL )
+		{
+			break;
+		}
+		printf( "received packet from server\n" );
+	}
+
+	clientConnection->Update( DeltaTime );
+	NetUtils::wait( DeltaTime );
 
 	return input;
 }
@@ -211,7 +268,7 @@ int ConnectToGameMasterServer()
 		return 1;
 	}
 
-	connection.Connect( Address(127,0,0,1,ServerPort ) );
+	connection.Connect( Address(127,0,0,1,ServerMasterPort ) );
 
 	bool connected = false;
 

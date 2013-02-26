@@ -9,71 +9,102 @@
 
 namespace net
 {
-	ClientConnection::ClientConnection(int clientPort ) {
-		this-> clientPort = clientPort;
+	ClientConnection::ClientConnection(Address* clientAddress) : GameConnection(clientAddress) {
 
 	}
 
 	ClientConnection::~ClientConnection() {
-		// TODO Auto-generated destructor stub
+		delete serverConnection;
 	}
 
-	void ClientConnection::connect(int IP, int port) {
-		Connection connection( PROTOCOL_ID, TIME_OUT );
+	void ClientConnection::Connect(Address* serverMasterAddress) {
+		//ServerMasterConnection * serverMasterConnection = new ServerMasterConnection(serverMasterAddress);
 
-		if ( !connection.Start( clientPort ) )
-		{
-			printf( "could not start connection on port %d\n", clientPort );
+		//if ( !serverMasterConnection->Init() )
+		//{
+		//	printf( "could not start connection to server master on port %d\n", serverMasterAddress->GetPort() );
 			// Throw exception.
+		//}
+
+		//serverConnection = serverMasterConnection->AcceptConection(address);
+
+		if ( !connection->Start( address->GetPort() ) )
+		{
+			printf( "could not start client connection on port %d\n", address->GetPort() );
+			return;
 		}
 
-		connection.Connect( Address(127,0,0,1,SERVER_PORT ) );
+		connection->Connect( *serverMasterAddress );
+		/*
+		connection->Connect( Address(127,0,0,1, SERVER_PORT ));
 
 		bool connected = false;
 
-		while ( true )
-		{
-			if ( !connected && connection.IsConnected() )
-			{
-				printf( "client connected to server\n" );
-				connected = true;
-			}
-
-			if ( !connected && connection.ConnectFailed() )
-			{
-				printf( "connection failed\n" );
-				break;
-			}
-
-			unsigned char packet[] = "client to server";
-			connection.SendPacket( packet, sizeof( packet ) );
-
 			while ( true )
 			{
-				unsigned char packet[256];
-				int bytes_read = connection.ReceivePacket( packet, sizeof(packet) );
-				if ( bytes_read == 0 )
-					break;
-				printf( "received packet from server\n" );
-			}
+				if ( !connected && connection->IsConnected() )
+				{
+					printf( "client connected to server\n" );
+					connected = true;
+				}
 
-			connection.Update( DELTA_TIME );
-			NetUtils::wait( DELTA_TIME );
+				if ( !connected && connection->ConnectFailed() )
+				{
+					printf( "connection failed\n" );
+					break;
+				}
+
+				unsigned char packet[] = "client to server";
+				connection->SendPacket( packet, sizeof( packet ) );
+
+				while ( true )
+				{
+					unsigned char packet[256];
+					int bytes_read = connection->ReceivePacket( packet, sizeof(packet) );
+					if ( bytes_read == 0 )
+						break;
+					printf( "received packet from server\n" );
+				}
+
+				connection->Update( DELTA_TIME );
+				NetUtils::wait( DELTA_TIME );
+			}
+			*/
+	}
+
+	void ClientConnection::Send(GamePacket* data) {
+		connection->SendPacket(data->GetDataPtr(), data->GetByteSize());
+	}
+
+	GamePacket* ClientConnection::Receive() {
+		unsigned char packet[256];
+		int bytes_read = connection->ReceivePacket( packet, sizeof(packet) );
+
+		if(bytes_read == 0)
+		{
+			return NULL;
+		}
+		else
+		{
+			GamePacket* gamePacket = new GamePacket(packet, bytes_read);
+			return gamePacket;
 		}
 	}
 
-	void ClientConnection::Send(GamePacket data) {
-		// Need to implement this method.
+	bool ClientConnection::HasData() const {
+		return connection->HasData();
 	}
 
-	GamePacket ClientConnection::Receive() {
-		// Need to implement this method.
-		GamePacket gamePacket;
-		return gamePacket;
+	bool ClientConnection::ConnectFailed() const {
+		return connection->ConnectFailed();
 	}
 
-	bool ClientConnection::HasData() {
-		// Need to implement this method.
-		return true;
+	void ClientConnection::Update( float deltaTime ) {
+		connection->Update(deltaTime);
+	}
+
+	bool ClientConnection::IsConnected() const
+	{
+		return connection->IsConnected();
 	}
 }

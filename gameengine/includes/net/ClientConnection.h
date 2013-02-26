@@ -10,23 +10,28 @@
 
 #include "Constants.hpp"
 #include "GamePacket.h"
-#include "GameConnection.h"
 #include "Connection.h"
 #include "NetUtils.h"
+#include "Address.h"
+#include "ServerConnection.h"
+#include "ServerMasterConnection.h"
+#include "GameConnection.h"
 
 namespace net
 {
-	class ClientConnection : GameConnection {
+	class ClientConnection : public GameConnection {
 	public:
-		ClientConnection(int clientPort);
+		ClientConnection(Address* clientAddress);
 		virtual ~ClientConnection();
-		void connect(int IP, int port);
-		void Send(GamePacket data);
-		GamePacket Receive();
-		bool HasData();
+		void Connect(Address* serverMasterAddress);
+		void Send(GamePacket* data);
+		GamePacket* Receive();
+		bool HasData() const;
+		bool ConnectFailed() const;
+		void Update( float deltaTime );
+		bool IsConnected() const;
 	private:
-		int clientPort;
-		Connection connection;
+		ServerConnection* serverConnection;
 	};
 }
 #endif /* CLIENTCONNECTION_H_ */

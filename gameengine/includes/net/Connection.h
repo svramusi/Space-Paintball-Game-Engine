@@ -31,6 +31,7 @@ namespace net
 		void Listen();
 		void Connect( const Address & address );
 		bool IsConnecting() const;
+		bool HasData() const;
 		bool ConnectFailed() const;
 		bool IsConnected() const;
 		bool IsListening() const;

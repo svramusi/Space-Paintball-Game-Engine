@@ -9,17 +9,15 @@
 
 namespace net
 {
-	GameConnection::GameConnection() {
-
-	}
-
-	GameConnection::GameConnection(Connection connection, int localIp) {
-		this->connection = connection;
-		this->localIp = localIp;
+	GameConnection::GameConnection(Address* address) {
+		this->connection = new Connection( PROTOCOL_ID, TIME_OUT );
+		this->address = address;
 	}
 
 	GameConnection::~GameConnection() {
-		connection.Stop();
+		connection->Stop();
+		delete connection;
+		delete address;
 	}
 
 }
