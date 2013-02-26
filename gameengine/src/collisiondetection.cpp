@@ -14,6 +14,43 @@ CollisionDetection::~CollisionDetection()
 {
 }
 
+void
+CollisionDetection::freeCollisions(collisions_t *collisions)
+{
+    collisions_t *current = collisions;
+    collisions_t *next_current = collisions;
+
+    collision_info_t *current_info = NULL;
+    collision_info_t *next_current_info = NULL;
+
+    while(current != NULL) {
+        current_info = current->info;
+
+        while(current_info != NULL) {
+            next_current_info = current_info->next;
+            free(current_info);
+            current_info = next_current_info;
+        }
+
+        next_current = current->next;
+        free(current);
+        current = next_current;
+    }
+}
+
+void
+CollisionDetection::addObject(aabb_t aabb)
+{
+    aabbs.push_back(aabb);
+}
+
+void
+CollisionDetection::addObject(sphere_t sphere)
+{
+    spheres.push_back(sphere);
+}
+
+/*
 collisionDetection*
 CollisionDetection::detect_collision(detectCollision* collidableObject)
 {
@@ -29,6 +66,59 @@ CollisionDetection::detect_collision(detectCollision* collidableObject)
     printf("collidable object id: %i\n",collidableObject->collidableObjectID);
 
     return cd;
+}
+*/
+
+collisions_t*
+CollisionDetection::checkForAnyCollisions()
+{
+    collisions_t *collisions;
+    collisions_t *current;
+
+    collisions = NULL;
+    current = NULL;
+
+    //THIS IS BEYOND TERRIBLE!!
+    //MUST FIX!!!!
+    for(std::vector<aabb_t>::iterator it1 = aabbs.begin(); it1 != aabbs.end(); ++it1) {
+        for(std::vector<aabb_t>::iterator it2 = aabbs.begin(); it2 != aabbs.end(); ++it2) {
+            if((*it1).ID == (*it2).ID)
+                continue;
+
+            if(isIntersection(*it1, *it2)) {
+                collision_info_t *collision_info;
+                collision_info = (collision_info_t*)malloc(sizeof(collision_info_t));
+
+//cout << endl << "found an intersection between: " << (*it1).ID << " and " << (*it2).ID << endl;
+//cout << endl << "found a collision and mallocing!!!" << endl;
+
+                collision_info->ID = (*it2).ID;
+                //NEED TO FIX BOTH OF THESE!
+                //collision_info->p = std::vector<float>(3);
+                collision_info->next = NULL;
+
+                if(collisions == NULL) {
+                    collisions = (collisions_t*)malloc(sizeof(collisions_t));
+                    collisions->ID = (*it1).ID;
+                    collisions->info = collision_info;
+                    collisions->next = NULL;
+
+                    current = collisions;
+                }
+                else {
+                    collisions_t *newCollision = (collisions_t*)malloc(sizeof(collisions_t));
+                    newCollision->ID = (*it1).ID;
+                    newCollision->info = collision_info;
+                    newCollision->next = NULL;
+
+                    current->next = newCollision;
+                    current = newCollision;
+                }
+            }
+        }
+    }
+
+    return collisions;
 }
 
 float

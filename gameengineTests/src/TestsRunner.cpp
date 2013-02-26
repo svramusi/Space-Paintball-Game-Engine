@@ -4,11 +4,13 @@
 #include "SphereTests.h"
 #include "AABBSphereTests.h"
 #include "SweptSphereTests.h"
+#include "CollisionDetectionTests.h"
 
 CPPUNIT_TEST_SUITE_REGISTRATION( AABBTest );
 CPPUNIT_TEST_SUITE_REGISTRATION( SphereTest );
 CPPUNIT_TEST_SUITE_REGISTRATION( AABBSphereTest );
 CPPUNIT_TEST_SUITE_REGISTRATION( SweptSphereTest );
+CPPUNIT_TEST_SUITE_REGISTRATION( CollisionDetectionTest );
 
 int main(int argc, char* argv[])
 {

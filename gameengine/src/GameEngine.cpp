@@ -23,14 +23,18 @@ GameEngine::GameEngine() {
     rect.radii[1] = 1;
     rect.radii[2] = 0;
 
-    Point sphere_center;
-    sphere_center.x = 4;
-    sphere_center.y = 8;
-    sphere_center.z = 0;
 
-    sphere_t sphere;
-    sphere.center = sphere_center;
-    sphere.radius = 1;
+    Point block_center;
+    block_center.x = 4;
+    block_center.y = 8;
+    block_center.z = 0;
+
+    aabb_t block;
+    block.center = block_center;
+    block.radii[0] = 1;
+    block.radii[1] = 1;
+    block.radii[2] = 1;
+
 
     Velocity zeroVel;
     zeroVel.x = 0;
@@ -53,7 +57,7 @@ GameEngine::GameEngine() {
     zeroPoint.z = 0;
 
     physics->insertPhysicsObject(rect, 10, zeroVel, zeroForce, zeroVel, zeroForce, zeroPoint);
-    physics->insertPhysicsObject(sphere, 10, ballVel, zeroForce, zeroVel, zeroForce, zeroPoint);
+    physics->insertPhysicsObject(block, 10, ballVel, zeroForce, zeroVel, zeroForce, zeroPoint);
 }
 
 GameEngine::~GameEngine() {

@@ -10,9 +10,9 @@ using namespace std;
 
 PhysicsEngine::PhysicsEngine()
 {
-    cd = new CollisionDetection();
-    SetWorldParams(9.81, 1.225);  //defaults to earth
+    PhysicsEngine(9.81, 1.225);
 }
+
 PhysicsEngine::PhysicsEngine(float grav, float air)
 {
     cd = new CollisionDetection();
@@ -37,6 +37,17 @@ PhysicsEngine::SetWorldParams(float grav, float air)
 void
 PhysicsEngine::updateWorld()
 {
+
+    collisions_t *collisions = cd->checkForAnyCollisions();
+
+    if(collisions != NULL) {
+        cout << endl << "There is a collision between object ID: " << collisions->ID
+            << " and object ID: " << collisions->info->ID << endl << endl;
+    }
+
+    cd->freeCollisions(collisions);
+
+/*
     detectCollision* collidableObject;
 
     collidableObject = (detectCollision*)malloc(sizeof(detectCollision));
@@ -46,6 +57,7 @@ PhysicsEngine::updateWorld()
 
     freeCollisions(collisions);
     free(collidableObject);
+*/
 }
 
 void PhysicsEngine::calculateAngularVelocity(physicsInfo *item, float deltaT)
@@ -233,6 +245,7 @@ physicsInfo PhysicsEngine::insertPhysicsObject(aabb_t obj, float m, Velocity lin
     physicsInfo newItem;
 
     newItem.ID = latestID;
+    obj.ID = latestID;
     newItem.aabbObject = &obj; //THIS IS GONNA CRASH!!!
     newItem.sphereObject = NULL;
     newItem.mass = m;
@@ -242,6 +255,8 @@ physicsInfo PhysicsEngine::insertPhysicsObject(aabb_t obj, float m, Velocity lin
     newItem.angularForce = angFrc;
     newItem.angularPosition = angPos;
     physicsObjects.push_back(newItem);
+
+    cd->addObject(obj);
 
     //newItem.oldPosition = obj->center;
     latestID++;
@@ -255,6 +270,7 @@ physicsInfo PhysicsEngine::insertPhysicsObject(sphere_t obj, float m, Velocity l
     newItem.ID = latestID;
     newItem.angularPosition = angPos;
     newItem.aabbObject = NULL;
+    obj.ID = latestID;
     newItem.sphereObject = &obj;  //THIS IS GONNA CRASH!!!!!!!!!!
     newItem.mass = m;
     newItem.linearVelocity =linVel;
@@ -263,6 +279,8 @@ physicsInfo PhysicsEngine::insertPhysicsObject(sphere_t obj, float m, Velocity l
     newItem.angularForce= angFrc;
     //newItem.oldPosition = obj->center;
     physicsObjects.push_back(newItem);
+
+    cd->addObject(obj);
 
     latestID++;
     return newItem;
