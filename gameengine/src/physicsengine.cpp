@@ -256,7 +256,8 @@ physicsInfo PhysicsEngine::insertPhysicsObject(aabb_t obj, float m, Velocity lin
     newItem.angularPosition = angPos;
     physicsObjects.push_back(newItem);
 
-    cd->addObject(obj);
+    AABB *aabb = new AABB(obj.ID, obj.center, obj.radii);
+    cd->addObject(aabb);
 
     //newItem.oldPosition = obj->center;
     latestID++;
@@ -280,7 +281,13 @@ physicsInfo PhysicsEngine::insertPhysicsObject(sphere_t obj, float m, Velocity l
     //newItem.oldPosition = obj->center;
     physicsObjects.push_back(newItem);
 
-    cd->addObject(obj);
+    float radii[3];
+    radii[0] = obj.radius;
+    radii[1] = obj.radius;
+    radii[2] = obj.radius;
+
+    Sphere *sphere = new Sphere(obj.ID, obj.center, radii);
+    cd->addObject(sphere);
 
     latestID++;
     return newItem;

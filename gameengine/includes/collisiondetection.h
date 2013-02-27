@@ -2,12 +2,14 @@
 #define COLLISION_DETECTION_H
 
 #include "collisioninfo.h"
-#include "AABB.h"
-#include "Sphere.h"
+#include "AABBClass.h"
+#include "SphereClass.h"
 #include "Capsule.h"
+#include "Point.h"
 
 #include <armadillo>
 #include <cmath>
+#include <typeinfo>
 
 struct collision_info_t;
 
@@ -32,19 +34,20 @@ public:
 
     //collisionDetection* detect_collision(detectCollision* collidableObject);
 
-    void addObject(CollidableObject collidableObject);
+    void addObject(CollidableObject *collidableObject);
     void removeObject(int ID);
 
-    int isIntersection(aabb_t aabb1, aabb_t aabb2);
-    int isIntersection(sphere_t sphere1, sphere_t sphere2);
-    int isIntersection(aabb_t aabb, sphere_t sphere);
-    int isIntersection(sphere_t sphere, capsule_t capsule);
+    int isIntersection(CollidableObject *obj1, CollidableObject *obj2);
+    int isIntersection(AABB aabb1, AABB aabb2);
+    int isIntersection(Sphere sphere1, Sphere sphere2);
+    int isIntersection(AABB aabb, Sphere sphere);
+    int isIntersection(Sphere sphere, capsule_t capsule);
 
     float getDistanceBetweenLineAndVertex(Point startPoint, Point endPoint, Point vertex);
 
     float getPenetrationDistance(float dist_between_centers, float radiusSum);
     std::vector<float> getNormalizedVector(Point point1, Point point2);
-    std::vector<float> getPenetrationVector(sphere_t sphere1, sphere_t sphere2);
+    std::vector<float> getPenetrationVector(Sphere sphere1, Sphere sphere2);
 
     std::vector<float> getDiffVectorAbs(Point point1, Point point2);
     std::vector<float> getDiffVector(Point point1, Point point2);

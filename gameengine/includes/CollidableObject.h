@@ -1,11 +1,31 @@
-#ifndef SPHERE_CLASS_H
-#define SPHERE_CLASS_H
+#ifndef COLLIDABLE_OBJECT_CLASS_H
+#define COLLIDABLE_OBJECT_CLASS_H
 
-#include "CollidableObject.h"
+#include "Point.h"
 
-class Sphere: public CollidableObject {
+class CollidableObject {
 public:
-    Sphere(int ID, Point center, float radii[3]);
+    CollidableObject(int _ID, Point center, float radii[3]);
+    virtual ~CollidableObject();
+
+    int getID();
+
+    Point getCenter();
+
+    float getXRadius();
+    float getYRadius();
+    float getZRadius();
+
+private:
+    int ID;
+
+    float centerX;
+    float centerY;
+    float centerZ;
+
+    float radiusX;
+    float radiusY;
+    float radiusZ;
 };
 
 #endif

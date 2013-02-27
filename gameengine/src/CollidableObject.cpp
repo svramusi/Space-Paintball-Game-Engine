@@ -4,9 +4,9 @@ CollidableObject::CollidableObject(int _ID, Point center, float radii[3])
 {
   ID = _ID;
 
-  centerX = center.X;
-  centerY = center.Y;
-  centerZ = center.Z;
+  centerX = center.x;
+  centerY = center.y;
+  centerZ = center.z;
 
   radiusX = radii[0];
   radiusY = radii[1];
@@ -14,13 +14,13 @@ CollidableObject::CollidableObject(int _ID, Point center, float radii[3])
 }
 
 int
-CollidableObject::GetID()
+CollidableObject::getID()
 {
     return ID;
 }
 
 Point
-CollidableObject::GetCenter()
+CollidableObject::getCenter()
 {
     Point center;
     center.x = centerX;
@@ -31,19 +31,19 @@ CollidableObject::GetCenter()
 }
 
 float
-CollidableObject::GetXRadius()
+CollidableObject::getXRadius()
 {
   return radiusX;
 }
 
 float
-CollidableObject::GetYRadius()
+CollidableObject::getYRadius()
 {
   return radiusY;
 }
 
 float
-CollidableObject::GetZRadius()
+CollidableObject::getZRadius()
 {
     return radiusZ;
 }
