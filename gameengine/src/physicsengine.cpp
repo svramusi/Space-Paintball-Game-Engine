@@ -35,8 +35,26 @@ PhysicsEngine::SetWorldParams(float grav, float air)
 }
 
 void
-PhysicsEngine::updateWorld()
+PhysicsEngine::updateWorld(float timeStep)
 {
+	//NEED DELTAT
+
+	/*1) Add all the forces (gravity, etc.) for each object
+	2) Run the physical simulation step ("Explicit Euler" or "Verlet Integration")
+	3) Call the collision detection module to detect collisions
+	4) For each collision detected, execute the physics code that determines their velocities after the collision (i.e. the formulas in slide 57).
+	5) Execute the collision fixer*/
+
+	for (std::vector<physicsInfo>::iterator it = physicsObjects.begin(); it != physicsObjects.end(); ++it)
+	{
+		calculateLinearAcceleration(&(*it),timeStep);
+		calculateLinearVelocity(&(*it),timeStep);
+		calculatePosition(&(*it),timeStep);
+		calculateAngularVelocity(&(*it),timeStep);
+		calculateAngularPosition(&(*it),timeStep); //NEEDS CALCULATE POI UPDATED TO WORK
+	    //call UPDATE HERE t.ID, if->aabb ...
+		//are we better to just do center in constructor?
+	}
 
     collisions_t *collisions = cd->checkForAnyCollisions();
 
@@ -59,6 +77,8 @@ PhysicsEngine::updateWorld()
     free(collidableObject);
 */
 }
+
+
 
 void PhysicsEngine::calculateAngularVelocity(physicsInfo *item, float deltaT)
 {
@@ -113,6 +133,10 @@ PhysicsEngine::freeCollisions(collisionDetection* collisions)
 Point PhysicsEngine::calculatePointofImapct(physicsInfo *item, float deltaT)
 {
     Point POI;
+    if(item->aabbObject != NULL)
+             POI =item->aabbObject->center;
+        else
+             POI =item->sphereObject->center;
     return POI;
 }
 

@@ -15,7 +15,7 @@ public:
     PhysicsEngine(float grav, float air);
     void SetWorldParams(float grav, float air);
     ~PhysicsEngine();
-    void updateWorld();
+    void updateWorld(float timeStep);
     physicsInfo insertPhysicsObject(aabb_t obj, float mass, Velocity linVel, Force linAcc, Velocity angVel, Force angAcc, Point angPos);
     physicsInfo insertPhysicsObject(sphere_t obj, float mass, Velocity linVel, Force linAcc, Velocity angVel, Force angAcc, Point angPos);
 private:
