@@ -18,6 +18,7 @@ namespace net
 	class Socket {
 	public:
 		Socket();
+		Socket(int & theSocket);
 		virtual ~Socket();
 
 		bool Open( unsigned short port );

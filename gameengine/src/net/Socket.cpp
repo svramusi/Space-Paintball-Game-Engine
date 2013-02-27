@@ -11,7 +11,10 @@ namespace net
 {
 	Socket::Socket() {
 		socket = 0;
+	}
 
+	Socket::Socket(int & theSocket) {
+		socket = theSocket;
 	}
 
 	Socket::~Socket() {
