@@ -30,17 +30,6 @@ bool MasterSocket::Open( unsigned short port ) {
 		return false;
 	}
 
-	int opt = TRUE;
-	/*
-	 *  set master socket to allow multiple connections (this is just a good habit) it will
-	 *  work without this
-	 */
-	if(setsockopt(socket, SOL_SOCKET, SO_REUSEADDR, (char*)&opt, sizeof(opt)) < 0)
-	{
-		perror("setsockopt");
-		exit(EXIT_FAILURE);
-	}
-
 	// bind to port
 
 	sockaddr_in address;
@@ -48,18 +37,11 @@ bool MasterSocket::Open( unsigned short port ) {
 	address.sin_addr.s_addr = INADDR_ANY;
 	address.sin_port = htons( (unsigned short) port );
 
-	if ( bind( socket, (const sockaddr*) &address, sizeof(sockaddr_in) ) < 0 )
+	if ( bind( socket, (const sockaddr*) &address, sizeof(address) ) < 0 )
 	{
 		printf( "failed to bind socket\n" );
 		Close();
 		return false;
-	}
-
-	// try to specify a maximum of 3 pending connections for the mater socket
-	if( listen(socket, 3) < 0)
-	{
-		perror("listen");
-		exit(EXIT_FAILURE);
 	}
 
 	// set non-blocking io
@@ -141,6 +123,65 @@ Socket MasterSocket::Accept(const Address & source) {
 	}
 
     printf("New connection, socket fd: %d, IP: %s, port: %d \n", new_socket, inet_ntoa(address.sin_addr), ntohs(address.sin_port));
+
+    ////////////////////////////////////////////////////////////////////////////////
+    // send new connection greeting message
+    ////////////////////////////////////////////////////////////////////////////////
+
+    //a message
+    char *message = "ECHO Daemon\r\n";
+    if( send(new_socket, message, strlen(message), 0) != strlen(message))
+    {
+    	perror("send");
+    }
+
+    puts("Welcome message sent successfully");
+
+    // add new socket to array of sockets
+    for(int i = 0; i < max_clients; i++)
+    {
+    	int s = client_socket[i];
+    	if( s == 0 )
+    	{
+    		client_socket[i] = new_socket;
+    		printf("Adding to list of sockets as %d\n", i);
+    		i = max_clients;
+    	}
+    }
+    ////////////////////////////////////////////////////////////////////////////////
+
+    ////////////////////////////////////////////////////////////////////////////////
+    // Else its some IO operation on some other socket
+    ////////////////////////////////////////////////////////////////////////////////
+    for(int i = 0; i < max_clients; i++)
+    {
+    	int s = client_socket[i];
+
+    	if( FD_ISSET( s, &readfds ) )
+    	{
+    		// Check if it was for closing, and also read the incoming message.
+    		int valread;
+    		char buffer[1025];
+    		if((valread = read( s, buffer, 1024 )) == 0)
+    		{
+    			// Somebody disconnected, get their details and print
+    			getpeername(s, (sockaddr*)&address, (socklen_t*)&addrlen);
+    			printf("Host disconnected, IP: %s, port: %d \n", inet_ntoa(address.sin_addr), ntohs(address.sin_port));
+
+    			//Close the socket and mark as 0 in list for reuse.
+    			close(s);
+    			client_socket[i] = 0;
+    		}
+    		else
+    		{
+    			// Echo back the message that came in.
+    			// Set the terminating NULL byte on  the end of the data read
+    			buffer[valread = '\0'];
+    			send( s, buffer, strlen(buffer), 0);
+    		}
+    	}
+    }
+    ////////////////////////////////////////////////////////////////////////////////
 
 	return Socket(new_socket);
 }

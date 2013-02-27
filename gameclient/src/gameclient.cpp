@@ -25,10 +25,10 @@ const Uint32 RedrawingPeriod = 20;
 const int MaxFrameSkip = 10;
 
 int PollForOSMessages(bool* quit);
-int ConnectToGameMasterServer();
+int ConnectToGameMasterServer(int & theClientPort);
 int GetInput(bool* quit);
 void SendInputToServer(int input);
-int GetUpdateFromServer();
+int GetUpdateFromServer(int & theClientPort);
 bool TimeForRendering();
 void UpdateStatistics();
 void FPSControl();
@@ -120,7 +120,7 @@ int main( int argc, char * argv[] )
 
 		///////////////////////////////////////////////////////////
 		//Update Game State Copy
-		int inputFromServer = GetUpdateFromServer();
+		int inputFromServer = GetUpdateFromServer(theClientPort);
 		// Update local game state (or game state copy).
 		//gameEngine.UpdateGameState(inputFromServer);
 		///////////////////////////////////////////////////////////
@@ -157,14 +157,14 @@ int main( int argc, char * argv[] )
 	return 0;
 }
 
-int GetUpdateFromServer()
+int GetUpdateFromServer(int & theClientPort)
 {
 	// Get the update from server.
 	// TODO: Fix this
 	//int input = getUpdateFromServer();
 	int input = 0;
 
-	ConnectToGameMasterServer();
+	ConnectToGameMasterServer(theClientPort);
 
 	return input;
 }
@@ -219,13 +219,13 @@ int PollForOSMessages(bool* quit)
 	return 0;
 }
 
-int ConnectToGameMasterServer()
+int ConnectToGameMasterServer(int & theClientPort)
 {
 	Connection connection( ProtocolId, TimeOut );
 
-	if ( !connection.Start( ClientPort ) )
+	if ( !connection.Start( theClientPort ) )
 	{
-		printf( "could not start connection on port %d\n", ClientPort );
+		printf( "could not start connection on port %d\n", theClientPort );
 		return 1;
 	}
 

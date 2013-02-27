@@ -6,7 +6,7 @@
 #include "SDL-1.2.15/include/SDL.h"
 
 #include "net/Net.h"
-#include "net/Connection.h"
+#include "net/MasterConnection.h"
 #include "net/NetUtils.h"
 #include "utils/gun_utils.h"
 #include "physicsengine.h"
@@ -49,11 +49,44 @@ int main( int argc, char * argv[] )
 	Uint32 time = SDL_GetTicks();
 	bool needToRedraw = true;
 
-	StartGameMasterServer();
+	//StartGameMasterServer();
+	MasterConnection connection( ProtocolId, TimeOut );
+
+	if ( !connection.Start( ServerMasterPort ) )
+	{
+		printf( "could not start connection on port %d\n", ServerMasterPort );
+		//Throw exception.
+		return 1;
+	}
+
+	connection.Listen();
+
+//	while ( true )
+//	{
+	//}
+
 
 	// Server Game Loop
 	while(!quit)
 	{
+		if ( connection.IsConnected() )
+		{
+			unsigned char packet[] = "server to client";
+			connection.SendPacket( packet, sizeof( packet ) );
+		}
+
+		while ( true )
+		{
+			unsigned char packet[256];
+			int bytes_read = connection.ReceivePacket( packet, sizeof(packet) );
+			if ( bytes_read == 0 )
+				break;
+			printf( "received packet from client\n" );
+		}
+
+		connection.Update( DeltaTime );
+		NetUtils::wait( DeltaTime );
+
 		/*
 		 * Poll for OS Events/Messages; this is
 		 * the event pump.
@@ -152,7 +185,7 @@ int GetInputFromClient(bool* quit)
 
 int StartGameMasterServer()
 {
-	Connection connection( ProtocolId, TimeOut );
+	MasterConnection connection( ProtocolId, TimeOut );
 
 	if ( !connection.Start( ServerMasterPort ) )
 	{
