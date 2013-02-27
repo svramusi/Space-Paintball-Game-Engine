@@ -12,28 +12,24 @@ GameEngine::GameEngine() {
 
     physics = new PhysicsEngine();
 
-    Point rect_center;
-    rect_center.x = 4;
-    rect_center.y = 3;
-    rect_center.z = 0;
+    Point stationary_center;
+    stationary_center.x = 4;
+    stationary_center.y = 3;
+    stationary_center.z = 0;
 
-    aabb_t rect;
-    rect.center = rect_center;
-    rect.radii[0] = 2;
-    rect.radii[1] = 1;
-    rect.radii[2] = 0;
+    sphere_t stationary_sphere;
+    stationary_sphere.center = stationary_center;
+    stationary_sphere.radius = 2;
 
 
-    Point block_center;
-    block_center.x = 4;
-    block_center.y = 8;
-    block_center.z = 0;
+    Point bouncing_center;
+    bouncing_center.x = 4;
+    bouncing_center.y = 8;
+    bouncing_center.z = 0;
 
-    aabb_t block;
-    block.center = block_center;
-    block.radii[0] = 1;
-    block.radii[1] = 1;
-    block.radii[2] = 1;
+    sphere_t bouncing_sphere;
+    bouncing_sphere.center = bouncing_center;
+    bouncing_sphere.radius = 1;
 
 
     Velocity zeroVel;
@@ -56,8 +52,8 @@ GameEngine::GameEngine() {
     zeroPoint.y = 0;
     zeroPoint.z = 0;
 
-    physics->insertPhysicsObject(rect, 10, zeroVel, zeroForce, zeroVel, zeroForce, zeroPoint);
-    physics->insertPhysicsObject(block, 10, ballVel, zeroForce, zeroVel, zeroForce, zeroPoint);
+    physics->insertPhysicsObject(stationary_sphere, 10, zeroVel, zeroForce, zeroVel, zeroForce, zeroPoint);
+    physics->insertPhysicsObject(bouncing_sphere, 10, ballVel, zeroForce, zeroVel, zeroForce, zeroPoint);
 }
 
 GameEngine::~GameEngine() {
