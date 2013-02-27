@@ -169,17 +169,17 @@ CollisionDetection::getNormalizedVector(Point point1, Point point2)
 }
 
 std::vector<float>
-CollisionDetection::getPenetrationVector(Sphere sphere1, Sphere sphere2)
+CollisionDetection::getPenetrationVector(Sphere *sphere1, Sphere *sphere2)
 {
     std::vector<float> diff_vector;
-    diff_vector = getDiffVector(sphere1.getCenter(), sphere2.getCenter());
+    diff_vector = getDiffVector(sphere1->getCenter(), sphere2->getCenter());
 
     colvec d = conv_to< colvec >::from(diff_vector);
     float dist_between_centers = dot(d, d);
-    float radiusSum = sphere1.getRadius() + sphere2.getRadius();
+    float radiusSum = sphere1->getRadius() + sphere2->getRadius();
 
     float penetration = getPenetrationDistance(dist_between_centers, radiusSum);
-    std::vector<float> normalized = getNormalizedVector(sphere1.getCenter(), sphere2.getCenter());
+    std::vector<float> normalized = getNormalizedVector(sphere1->getCenter(), sphere2->getCenter());
 
 
     std::vector<float> penetrationVector(3);
@@ -217,63 +217,60 @@ CollisionDetection::isIntersection(CollidableObject *obj1, CollidableObject *obj
 {
     //TYPE* dynamic_cast<TYPE*> (object);
     //typeid(Poly_Base)==typeid(*ppolybase)
-    if((typeid(AABB) == typeid(*obj1)) &&
-        (typeid(AABB) == typeid(*obj2)))
+    if((typeid(AABB) == typeid(*obj1)) && (typeid(AABB) == typeid(*obj2)))
         return isIntersection(dynamic_cast<AABB*>(obj1), dynamic_cast<AABB*>(obj2));
-    else if((typeid(Sphere) == typeid(*obj1)) &&
-        (typeid(Sphere) == typeid(*obj2)))
+    else if((typeid(Sphere) == typeid(*obj1)) && (typeid(Sphere) == typeid(*obj2)))
         return isIntersection(dynamic_cast<Sphere*>(obj1), dynamic_cast<Sphere*>(obj2));
-    else if((typeid(AABB) == typeid(*obj1)) &&
-        (typeid(Sphere) == typeid(*obj2)))
+    else if((typeid(AABB) == typeid(*obj1)) && (typeid(Sphere) == typeid(*obj2)))
         return isIntersection(dynamic_cast<AABB*>(obj1), dynamic_cast<Sphere*>(obj2));
     else
         return -1;
 }
 
 int
-CollisionDetection::isIntersection(AABB aabb1, AABB aabb2)
+CollisionDetection::isIntersection(AABB *aabb1, AABB *aabb2)
 {
-    if(abs(aabb1.getCenter().x - aabb2.getCenter().x) >
-                (aabb1.getXRadius() + aabb2.getXRadius()))
+    if(abs(aabb1->getCenter().x - aabb2->getCenter().x) >
+                (aabb1->getXRadius() + aabb2->getXRadius()))
         return 0;
 
-    if(abs(aabb1.getCenter().y - aabb2.getCenter().y) >
-                (aabb1.getYRadius() + aabb2.getYRadius()))
+    if(abs(aabb1->getCenter().y - aabb2->getCenter().y) >
+                (aabb1->getYRadius() + aabb2->getYRadius()))
         return 0;
 
-    if(abs(aabb1.getCenter().z - aabb2.getCenter().z) >
-                (aabb1.getZRadius() + aabb2.getZRadius()))
+    if(abs(aabb1->getCenter().z - aabb2->getCenter().z) >
+                (aabb1->getZRadius() + aabb2->getZRadius()))
         return 0;
 
     return 1;
 }
 
 int
-CollisionDetection::isIntersection(Sphere sphere1, Sphere sphere2)
+CollisionDetection::isIntersection(Sphere *sphere1, Sphere *sphere2)
 {
     std::vector<float> diff_vector;
-    diff_vector = getDiffVectorAbs(sphere1.getCenter(), sphere2.getCenter());
+    diff_vector = getDiffVectorAbs(sphere1->getCenter(), sphere2->getCenter());
 
     colvec d = conv_to< colvec >::from(diff_vector);
     float dist_between_centers = dot(d, d);
-    float radiusSum = sphere1.getRadius() + sphere2.getRadius();
+    float radiusSum = sphere1->getRadius() + sphere2->getRadius();
 
     return dist_between_centers <= radiusSum * radiusSum;
 }
 
 int
-CollisionDetection::isIntersection(AABB aabb, Sphere sphere)
+CollisionDetection::isIntersection(AABB *aabb, Sphere *sphere)
 {
-    if(abs(aabb.getCenter().x - sphere.getCenter().x) >
-                (aabb.getXRadius() + sphere.getRadius()))
+    if(abs(aabb->getCenter().x - sphere->getCenter().x) >
+                (aabb->getXRadius() + sphere->getRadius()))
         return 0;
 
-    if(abs(aabb.getCenter().y - sphere.getCenter().y) >
-                (aabb.getYRadius() + sphere.getRadius()))
+    if(abs(aabb->getCenter().y - sphere->getCenter().y) >
+                (aabb->getYRadius() + sphere->getRadius()))
         return 0;
 
-    if(abs(aabb.getCenter().z - sphere.getCenter().z) >
-                (aabb.getZRadius() + sphere.getRadius()))
+    if(abs(aabb->getCenter().z - sphere->getCenter().z) >
+                (aabb->getZRadius() + sphere->getRadius()))
         return 0;
 
     return 1;

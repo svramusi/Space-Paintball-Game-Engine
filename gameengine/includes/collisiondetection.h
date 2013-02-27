@@ -38,16 +38,16 @@ public:
     void removeObject(int ID);
 
     int isIntersection(CollidableObject *obj1, CollidableObject *obj2);
-    int isIntersection(AABB aabb1, AABB aabb2);
-    int isIntersection(Sphere sphere1, Sphere sphere2);
-    int isIntersection(AABB aabb, Sphere sphere);
+    int isIntersection(AABB *aabb1, AABB *aabb2);
+    int isIntersection(Sphere *sphere1, Sphere *sphere2);
+    int isIntersection(AABB *aabb, Sphere *sphere);
     int isIntersection(Sphere sphere, capsule_t capsule);
 
     float getDistanceBetweenLineAndVertex(Point startPoint, Point endPoint, Point vertex);
 
     float getPenetrationDistance(float dist_between_centers, float radiusSum);
     std::vector<float> getNormalizedVector(Point point1, Point point2);
-    std::vector<float> getPenetrationVector(Sphere sphere1, Sphere sphere2);
+    std::vector<float> getPenetrationVector(Sphere *sphere1, Sphere *sphere2);
 
     std::vector<float> getDiffVectorAbs(Point point1, Point point2);
     std::vector<float> getDiffVector(Point point1, Point point2);

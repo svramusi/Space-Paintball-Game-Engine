@@ -6,7 +6,7 @@
 class CollidableObject {
 public:
     CollidableObject(int _ID, Point center, float radii[3]);
-    virtual ~CollidableObject();
+    virtual ~CollidableObject() {};
 
     int getID();
 
