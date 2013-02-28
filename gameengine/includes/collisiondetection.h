@@ -35,6 +35,7 @@ public:
     //collisionDetection* detect_collision(detectCollision* collidableObject);
 
     void addObject(CollidableObject *collidableObject);
+    void updateObject(int ID, Point newCenter);
     void removeObject(int ID);
 
     int isIntersection(CollidableObject *obj1, CollidableObject *obj2);

@@ -10,7 +10,8 @@ using namespace std;
 
 PhysicsEngine::PhysicsEngine()
 {
-    PhysicsEngine(9.81, 1.225);
+    cd = new CollisionDetection();
+    SetWorldParams(9.81, 1.225);
 }
 
 PhysicsEngine::PhysicsEngine(float grav, float air)
@@ -37,24 +38,34 @@ PhysicsEngine::SetWorldParams(float grav, float air)
 void
 PhysicsEngine::updateWorld(float timeStep)
 {
-	//NEED DELTAT
+    //NEED DELTAT
 
-	/*1) Add all the forces (gravity, etc.) for each object
-	2) Run the physical simulation step ("Explicit Euler" or "Verlet Integration")
-	3) Call the collision detection module to detect collisions
-	4) For each collision detected, execute the physics code that determines their velocities after the collision (i.e. the formulas in slide 57).
-	5) Execute the collision fixer*/
+    /*1) Add all the forces (gravity, etc.) for each object
+    2) Run the physical simulation step ("Explicit Euler" or "Verlet Integration")
+    3) Call the collision detection module to detect collisions
+    4) For each collision detected, execute the physics code that determines their velocities after the collision (i.e. the formulas in slide 57).
+    5) Execute the collision fixer*/
 
-	for (std::vector<physicsInfo>::iterator it = physicsObjects.begin(); it != physicsObjects.end(); ++it)
-	{
-		calculateLinearAcceleration(&(*it),timeStep);
-		calculateLinearVelocity(&(*it),timeStep);
-		calculatePosition(&(*it),timeStep);
-		calculateAngularVelocity(&(*it),timeStep);
-		calculateAngularPosition(&(*it),timeStep); //NEEDS CALCULATE POI UPDATED TO WORK
-	    //call UPDATE HERE t.ID, if->aabb ...
-		//are we better to just do center in constructor?
-	}
+cout << endl << "updating world.  current time is: " << timeStep << endl << endl;
+
+    for (std::vector<physicsInfo>::iterator it = physicsObjects.begin(); it != physicsObjects.end(); ++it)
+    {
+        cout << endl << "updating object. id:" << (*it).ID;
+        cout << endl << "center X:" << (*it).collidableObject->getCenter().x;
+        cout << endl << "center Y:" << (*it).collidableObject->getCenter().y;
+        cout << endl << "center Z:" << (*it).collidableObject->getCenter().z;
+        cout << endl << endl;
+
+        calculateLinearAcceleration(&(*it),timeStep);
+        calculateLinearVelocity(&(*it),timeStep);
+        calculatePosition(&(*it),timeStep);
+        calculateAngularVelocity(&(*it),timeStep);
+        calculateAngularPosition(&(*it),timeStep); //NEEDS CALCULATE POI UPDATED TO WORK
+        //call UPDATE HERE t.ID, if->aabb ...
+        cd->updateObject((*it).ID, (*it).collidableObject->getCenter());
+
+        //are we better to just do center in constructor?
+    }
 
     collisions_t *collisions = cd->checkForAnyCollisions();
 
@@ -87,18 +98,28 @@ void PhysicsEngine::calculateAngularVelocity(physicsInfo *item, float deltaT)
     Point current;
     float I;
     Point N;
-         if(item->aabbObject != NULL)
-         {
-              current =item->aabbObject->center;
-              I = (item->aabbObject->radii[0]+ item->aabbObject->radii[1])/12; //only 2d H and Width
-         }
-         else
-         {
-              current =item->sphereObject->center;
-              I = item->mass *(item->sphereObject->radius*item->sphereObject->radius)/2;
-         }
+
+    current = item->collidableObject->getCenter();
+    CollidableObject *collidableObject = item->collidableObject;
+
+    if(typeid(AABB) == typeid(collidableObject))
+    {
+        AABB *tempAABB = dynamic_cast<AABB*>(collidableObject);
+        float xRadius  = tempAABB->getXRadius();
+        float yRadius  = tempAABB->getYRadius();
+        I = (xRadius + yRadius)/12;
+        delete tempAABB;
+    }
+    else if(typeid(Sphere) == typeid(collidableObject))
+    {
+        Sphere *sphere = dynamic_cast<Sphere*>(collidableObject);
+        float radius = sphere->getRadius();
+        I = item->mass * (radius * radius)/2;
+        delete sphere;
+    }
+
     Point poi = calculatePointofImapct(item,deltaT);
-    Point temp ;
+    Point temp;
     temp.x= item->angularVelocity.x * deltaT;
     temp.y = item->angularVelocity.y * deltaT;
     temp.z = item->angularVelocity.z * deltaT;
@@ -132,11 +153,7 @@ PhysicsEngine::freeCollisions(collisionDetection* collisions)
 //WE NEED TO FIGURE THIS OUT, NOT SURE HOW TO DO IT
 Point PhysicsEngine::calculatePointofImapct(physicsInfo *item, float deltaT)
 {
-    Point POI;
-    if(item->aabbObject != NULL)
-             POI =item->aabbObject->center;
-        else
-             POI =item->sphereObject->center;
+    Point POI = item->collidableObject->getCenter();
     return POI;
 }
 
@@ -163,17 +180,16 @@ float PhysicsEngine::GetAngleBetweenVerticese(Point v1, Point v2, Point v3)
 }
 
 float PhysicsEngine::GetDistanceBetweenVertices(Point v1, Point v2)
-       {
-           float xDistance = abs(v1.x - v2.x);
-           float yDistance = abs(v1.y - v2.y);
-           return GetDistanceOfVertex(xDistance, yDistance);
-       }
+{
+    float xDistance = abs(v1.x - v2.x);
+    float yDistance = abs(v1.y - v2.y);
+    return GetDistanceOfVertex(xDistance, yDistance);
+}
 
 float PhysicsEngine::RadiansToDegrees(float rad)
 {
     return (rad * (180.0 / PI));
 }
-
 
 void PhysicsEngine::calculateAngularPosition(physicsInfo *item, float deltaT)
 {
@@ -181,15 +197,15 @@ void PhysicsEngine::calculateAngularPosition(physicsInfo *item, float deltaT)
     Point newP;
 
     /* accel.x = (item.angularForce.x/item.mass)*deltaT;
-     accel.y = (item.angularForce.y/item.mass)*deltaT;
-     accel.z = (item.angularForce.z/item.mass)*deltaT;*/
-     newP.x = item->angularPosition.x + item->angularVelocity.x * deltaT;
-     newP.y= item->angularPosition.y + item->angularVelocity.y * deltaT;
-     newP.z = item->angularPosition.z + item->angularVelocity.z * deltaT;
-     /*newV.x = item.angularVelocity.x + accel.x;
-     newV.y = item.angularVelocity.y + accel.y;
-     newV.z = item.angularVelocity.z + accel.z;*/
-     item->angularPosition= newP;
+    accel.y = (item.angularForce.y/item.mass)*deltaT;
+    accel.z = (item.angularForce.z/item.mass)*deltaT;*/
+    newP.x = item->angularPosition.x + item->angularVelocity.x * deltaT;
+    newP.y= item->angularPosition.y + item->angularVelocity.y * deltaT;
+    newP.z = item->angularPosition.z + item->angularVelocity.z * deltaT;
+    /*newV.x = item.angularVelocity.x + accel.x;
+    newV.y = item.angularVelocity.y + accel.y;
+    newV.z = item.angularVelocity.z + accel.z;*/
+    item->angularPosition= newP;
 }
 
 void PhysicsEngine::calculateLinearAcceleration(physicsInfo *item, float deltaT)
@@ -224,97 +240,57 @@ void PhysicsEngine::calculateLinearVelocity(physicsInfo *item, float deltaT)
 
  void PhysicsEngine::calculatePosition(physicsInfo *item, float deltaT)
  {
+    // using verlet integration
+    // postion of New = Position current + vel Cur* deltaT + acceleration (dt^2)
+    Point current = item->collidableObject->getCenter();
 
-     // using verlet integration
-     // postion of New = Position current + vel Cur* deltaT + acceleration (dt^2)
-     Point current;
-     if(item->aabbObject != NULL)
-          current =item->aabbObject->center;
-     else
-          current =item->sphereObject->center;
+    Velocity calcVel = item->linearVelocity;
+    Force accel;
+    Point newP;
+    float timeSqr = deltaT*deltaT;
+    calcVel.x = calcVel.x * deltaT;
+    calcVel.y =calcVel.y * deltaT;
+    calcVel.z = calcVel.z * deltaT;
 
-     Velocity calcVel = item->linearVelocity;
-     Force accel;
-     Point newP;
-     float timeSqr = deltaT*deltaT;
-     calcVel.x = calcVel.x * deltaT;
-     calcVel.y =calcVel.y * deltaT;
-     calcVel.z = calcVel.z * deltaT;
+    accel.x = (item->linearForce.x/item->mass)*timeSqr;
+    accel.y = (item->linearForce.y/item->mass)*timeSqr;
+    accel.z = (item->linearForce.z/item->mass)*timeSqr;
 
-     accel.x = (item->linearForce.x/item->mass)*timeSqr;
-     accel.y = (item->linearForce.y/item->mass)*timeSqr;
-     accel.z = (item->linearForce.z/item->mass)*timeSqr;
+    newP.x = current.x + accel.x+ calcVel.x;
+    newP.y = current.y + accel.y+ calcVel.y;
+    newP.z = current.z + accel.z+ calcVel.z;
 
-     newP.x = current.x + accel.x+ calcVel.x;
-     newP.y = current.y + accel.y+ calcVel.y;
-     newP.z = current.z + accel.z+ calcVel.z;
+    Point newCenter;
+    newCenter.x = current.x + accel.x + calcVel.x;
+    newCenter.y = current.y + accel.y + calcVel.y;
+    newCenter.z = current.z + accel.z + calcVel.z;
 
-     if(item->aabbObject != NULL)
-     {
-            item->aabbObject->center.x =  current.x + accel.x+ calcVel.x;
-            item->aabbObject->center.y =  current.y + accel.y+ calcVel.y;
-            item->aabbObject->center.z =  current.z + accel.z+ calcVel.z;
-     }
-     else
-     {
-             item->sphereObject->center.x =  current.x + accel.x+ calcVel.x;
-             item->sphereObject->center.y =  current.y + accel.y+ calcVel.y;
-             item->sphereObject->center.z =  current.z + accel.z+ calcVel.z;
-     }
+    item->collidableObject->setCenter(newCenter);
     // item.oldPosition = current;
  }
 
-physicsInfo PhysicsEngine::insertPhysicsObject(aabb_t obj, float m, Velocity linVel, Force linFrc, Velocity angVel, Force angFrc, Point angPos)
+void PhysicsEngine::insertPhysicsObject(CollidableObject *obj, float m, Velocity linVel, Force linFrc, Velocity angVel, Force angFrc, Point angPos)
 {
     physicsInfo newItem;
 
     newItem.ID = latestID;
-    obj.ID = latestID;
-    newItem.aabbObject = &obj; //THIS IS GONNA CRASH!!!
-    newItem.sphereObject = NULL;
+    obj->setID(latestID);
+    newItem.collidableObject = obj;
+
     newItem.mass = m;
-    newItem.linearVelocity =linVel;
-    newItem.linearForce= linFrc;
+
+    newItem.linearVelocity = linVel;
+    newItem.linearForce = linFrc;
+
     newItem.angularVelocity = angVel;
     newItem.angularForce = angFrc;
     newItem.angularPosition = angPos;
-    physicsObjects.push_back(newItem);
-
-    AABB *aabb = new AABB(obj.ID, obj.center, obj.radii);
-    cd->addObject(aabb);
-
-    //newItem.oldPosition = obj->center;
-    latestID++;
-    return newItem;
-}
-
-physicsInfo PhysicsEngine::insertPhysicsObject(sphere_t obj, float m, Velocity linVel, Force linFrc, Velocity angVel, Force angFrc, Point angPos)
-{
-    physicsInfo newItem;
-
-    newItem.ID = latestID;
-    newItem.angularPosition = angPos;
-    newItem.aabbObject = NULL;
-    obj.ID = latestID;
-    newItem.sphereObject = &obj;  //THIS IS GONNA CRASH!!!!!!!!!!
-    newItem.mass = m;
-    newItem.linearVelocity =linVel;
-    newItem.linearForce= linFrc;
-    newItem.angularVelocity = angVel;
-    newItem.angularForce= angFrc;
     //newItem.oldPosition = obj->center;
     physicsObjects.push_back(newItem);
 
-    float radii[3];
-    radii[0] = obj.radius;
-    radii[1] = obj.radius;
-    radii[2] = obj.radius;
-
-    Sphere *sphere = new Sphere(obj.ID, obj.center, radii);
-    cd->addObject(sphere);
+    cd->addObject(obj);
 
     latestID++;
-    return newItem;
 }
 // combined formula pos = initpos + intvel*t + 1/2 acc *t^2
 /*•  You will need:

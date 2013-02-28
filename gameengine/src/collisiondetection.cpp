@@ -45,6 +45,20 @@ CollisionDetection::addObject(CollidableObject *collidableObject)
 }
 
 void
+CollisionDetection::updateObject(int ID, Point newCenter)
+{
+    for(std::vector<CollidableObject*>::iterator it = collidableObjects.begin();
+            it != collidableObjects.end();
+            ++it) {
+
+        if((*it)->getID() == ID) {
+            (*it)->setCenter(newCenter);
+            break;
+        }
+    }
+}
+
+void
 CollisionDetection::removeObject(int ID)
 {
     int counter = 0;

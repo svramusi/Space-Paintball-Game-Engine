@@ -6,6 +6,8 @@
 #include "collisioninfo.h"
 #include "collisiondetection.h"
 
+#include "CollidableObject.h"
+
 class PhysicsEngine {
 
 public:
@@ -16,8 +18,8 @@ public:
     void SetWorldParams(float grav, float air);
     ~PhysicsEngine();
     void updateWorld(float timeStep);
-    physicsInfo insertPhysicsObject(aabb_t obj, float mass, Velocity linVel, Force linAcc, Velocity angVel, Force angAcc, Point angPos);
-    physicsInfo insertPhysicsObject(sphere_t obj, float mass, Velocity linVel, Force linAcc, Velocity angVel, Force angAcc, Point angPos);
+
+    void insertPhysicsObject(CollidableObject *obj, float mass, Velocity linVel, Force linAcc, Velocity angVel, Force angAcc, Point angPos);
 private:
     CollisionDetection *cd;
 

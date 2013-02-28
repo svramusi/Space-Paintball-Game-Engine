@@ -12,14 +12,20 @@ GameEngine::GameEngine() {
 
     physics = new PhysicsEngine();
 
+    float radii[3];
+
+    CollidableObject *stationary_sphere;
+    CollidableObject *bouncing_sphere;
+
     Point stationary_center;
     stationary_center.x = 4;
     stationary_center.y = 3;
     stationary_center.z = 0;
 
-    sphere_t stationary_sphere;
-    stationary_sphere.center = stationary_center;
-    stationary_sphere.radius = 2;
+    radii[0] = 2.0f;
+    radii[1] = 2.0f;
+    radii[2] = 2.0f;
+    stationary_sphere = new Sphere(-1, stationary_center, radii);
 
 
     Point bouncing_center;
@@ -27,9 +33,10 @@ GameEngine::GameEngine() {
     bouncing_center.y = 8;
     bouncing_center.z = 0;
 
-    sphere_t bouncing_sphere;
-    bouncing_sphere.center = bouncing_center;
-    bouncing_sphere.radius = 1;
+    radii[0] = 1.0f;
+    radii[1] = 1.0f;
+    radii[2] = 1.0f;
+    bouncing_sphere = new Sphere(-1, bouncing_center, radii);
 
 
     Velocity zeroVel;
@@ -54,6 +61,9 @@ GameEngine::GameEngine() {
 
     physics->insertPhysicsObject(stationary_sphere, 10, zeroVel, zeroForce, zeroVel, zeroForce, zeroPoint);
     physics->insertPhysicsObject(bouncing_sphere, 10, ballVel, zeroForce, zeroVel, zeroForce, zeroPoint);
+
+    for(int i=0; i<1000; i++)
+        physics->updateWorld(i);
 }
 
 GameEngine::~GameEngine() {
