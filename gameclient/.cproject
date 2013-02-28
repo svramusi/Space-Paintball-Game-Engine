@@ -32,6 +32,7 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/gameengine/includes}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/gameengine/src}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/thirdparty}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/thirdparty}/armadillo-3.6.2/include/&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/gameassets/includes}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/gameassets/src}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/gameclient/includes}&quot;"/>
