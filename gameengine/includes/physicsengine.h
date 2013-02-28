@@ -45,7 +45,6 @@ private:
 
     float RadiansToDegrees(float rad);
     float GetDistanceBetweenVertices(Point v1, Point v2);
-    void freeCollisions(collisionDetection* collisions);
 
 };
 #endif
