@@ -130,6 +130,7 @@
 							<tool id="cdt.managedbuild.tool.gnu.cpp.linker.exe.release.398500001" name="GCC C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.exe.release">
 								<option id="gnu.cpp.link.option.paths.2064752798" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths" valueType="libPaths">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/thirdparty/SDL-1.2.15}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/gameengine}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/gameassets}&quot;"/>
 								</option>
 								<option id="gnu.cpp.link.option.libs.752031616" name="Libraries (-l)" superClass="gnu.cpp.link.option.libs" valueType="libs">
