@@ -38,6 +38,7 @@ public:
 	void Update( float deltaTime );
 	bool SendPacket( const unsigned char data[], int size );
 	int ReceivePacket( unsigned char data[], int size );
+	bool HasData() const;
 
 protected:
 	void ClearData();

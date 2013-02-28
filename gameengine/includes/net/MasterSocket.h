@@ -11,8 +11,10 @@
 #include "Socket.h"
 #include <stdlib.h>
 #include <errno.h>
-#include <sys/time.h>
 #include <arpa/inet.h>
+#include <string>
+
+using namespace std;
 
 namespace net {
 

@@ -59,6 +59,11 @@ void MasterConnection::Connect( const Address & address )
 	this->address = address;
 }
 
+bool MasterConnection::HasData() const
+{
+	return socket.HasData();
+}
+
 bool MasterConnection::IsConnecting() const
 {
 	return state == Connecting;

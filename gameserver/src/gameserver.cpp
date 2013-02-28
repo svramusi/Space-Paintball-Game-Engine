@@ -75,13 +75,16 @@ int main( int argc, char * argv[] )
 			connection.SendPacket( packet, sizeof( packet ) );
 		}
 
-		while ( true )
+		if( connection.HasData() )
 		{
-			unsigned char packet[256];
-			int bytes_read = connection.ReceivePacket( packet, sizeof(packet) );
-			if ( bytes_read == 0 )
-				break;
-			printf( "received packet from client\n" );
+			while ( true )
+			{
+				unsigned char packet[256];
+				int bytes_read = connection.ReceivePacket( packet, sizeof(packet) );
+				if ( bytes_read == 0 )
+					break;
+				printf( "received packet from client\n" );
+			}
 		}
 
 		connection.Update( DeltaTime );

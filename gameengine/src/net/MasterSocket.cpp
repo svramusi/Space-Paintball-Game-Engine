@@ -188,7 +188,27 @@ Socket MasterSocket::Accept(const Address & source) {
 
 bool MasterSocket::HasData() const
 {
-	return true;
+	// Determine if the socket has data.
+	bool            result;
+	fd_set          sready;
+	struct timeval  nowait;
+
+	FD_ZERO(&sready);
+	FD_SET((unsigned int)this->socket,&sready);
+	//bzero((char *)&nowait,sizeof(nowait));
+	memset((char *)&nowait,0,sizeof(nowait));
+
+	result = select(this->socket+1,&sready,NULL,NULL,&nowait);
+	if( FD_ISSET(this->socket,&sready) )
+	{
+		result = true;
+	}
+	else
+	{
+		result = false;
+	}
+
+	return result;
 }
 
 void MasterSocket::Close()
@@ -240,10 +260,17 @@ int MasterSocket::Receive( Address & sender, void * data, int size )
 	int received_bytes = recvfrom( socket, (char*)data, size, 0, (sockaddr*)&from, &fromLength );
 
 	if ( received_bytes <= 0 )
+	{
+		perror("recvfrom");
 		return 0;
+	}
 
 	unsigned int address = ntohl( from.sin_addr.s_addr );
 	unsigned short port = ntohs( from.sin_port );
+
+	std::string message((char*)data, size);
+
+	printf("Received packet from %s:%d\n Data: %s\n\n", inet_ntoa(from.sin_addr), port, message.c_str());
 
 	sender = Address( address, port );
 
