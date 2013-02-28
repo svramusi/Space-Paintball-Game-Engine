@@ -1,20 +1,19 @@
-#ifndef AABB_TESTS_H
-#define AABB_TESTS_H
-
+#ifndef COLLISION_TESTS_H
+#define COLLISION_TESTS_H
 
 #include <cppunit/TestCase.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 
-#include "AABBClass.h"
+#include "AABB.h"
+#include "Sphere.h"
 #include "collisiondetection.h"
 
 using namespace CppUnit;
 
-
-class AABBTest : public CppUnit::TestFixture
+class CollisionDetectionTest : public CppUnit::TestFixture
 {
-    CPPUNIT_TEST_SUITE(AABBTest);
+    CPPUNIT_TEST_SUITE(CollisionDetectionTest);
     CPPUNIT_TEST(testNoCollision);
     CPPUNIT_TEST(testCollision);
     CPPUNIT_TEST_SUITE_END();

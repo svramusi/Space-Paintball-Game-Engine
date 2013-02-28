@@ -38,6 +38,10 @@ void FPSControl();
 
 int main( int argc, char * argv[] )
 {
+    GameEngine *ge = new GameEngine();
+    delete ge;
+    return 0;
+
 	TestCollectGameState* test = new TestCollectGameState();
 	test->PrintGameState();
 	delete test;

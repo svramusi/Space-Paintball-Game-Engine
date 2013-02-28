@@ -14,6 +14,68 @@ CollisionDetection::~CollisionDetection()
 {
 }
 
+void
+CollisionDetection::freeCollisions(collisions_t *collisions)
+{
+    collisions_t *current = collisions;
+    collisions_t *next_current = collisions;
+
+    collision_info_t *current_info = NULL;
+    collision_info_t *next_current_info = NULL;
+
+    while(current != NULL) {
+        current_info = current->info;
+
+        while(current_info != NULL) {
+            next_current_info = current_info->next;
+            free(current_info);
+            current_info = next_current_info;
+        }
+
+        next_current = current->next;
+        free(current);
+        current = next_current;
+    }
+}
+
+void
+CollisionDetection::addObject(CollidableObject *collidableObject)
+{
+    collidableObjects.push_back(collidableObject);
+}
+
+void
+CollisionDetection::updateObject(int ID, Point newCenter)
+{
+    for(std::vector<CollidableObject*>::iterator it = collidableObjects.begin();
+            it != collidableObjects.end();
+            ++it) {
+
+        if((*it)->getID() == ID) {
+            (*it)->setCenter(newCenter);
+            break;
+        }
+    }
+}
+
+void
+CollisionDetection::removeObject(int ID)
+{
+    int counter = 0;
+    for(std::vector<CollidableObject*>::iterator it = collidableObjects.begin();
+            it != collidableObjects.end();
+            ++it) {
+
+        if((*it)->getID() == ID) {
+            collidableObjects.erase(collidableObjects.begin() + counter);
+            break;
+        }
+
+        counter++;
+    }
+}
+
+/*
 collisionDetection*
 CollisionDetection::detect_collision(detectCollision* collidableObject)
 {
@@ -29,6 +91,59 @@ CollisionDetection::detect_collision(detectCollision* collidableObject)
     printf("collidable object id: %i\n",collidableObject->collidableObjectID);
 
     return cd;
+}
+*/
+
+collisions_t*
+CollisionDetection::checkForAnyCollisions()
+{
+    collisions_t *collisions;
+    collisions_t *current;
+
+    collisions = NULL;
+    current = NULL;
+
+    //THIS IS BEYOND TERRIBLE!!
+    //MUST FIX!!!!
+    for(std::vector<CollidableObject*>::iterator it1 = collidableObjects.begin(); it1 != collidableObjects.end(); ++it1) {
+        for(std::vector<CollidableObject*>::iterator it2 = collidableObjects.begin(); it2 != collidableObjects.end(); ++it2) {
+            if((*it1)->getID() == (*it2)->getID())
+                continue;
+
+            if(isIntersection(*it1, *it2)) {
+                collision_info_t *collision_info;
+                collision_info = (collision_info_t*)malloc(sizeof(collision_info_t));
+
+//cout << endl << "found an intersection between: " << (*it1).ID << " and " << (*it2).ID << endl;
+//cout << endl << "found a collision and mallocing!!!" << endl;
+
+                collision_info->ID = (*it2)->getID();
+                //NEED TO FIX BOTH OF THESE!
+                //collision_info->p = std::vector<float>(3);
+                collision_info->next = NULL;
+
+                if(collisions == NULL) {
+                    collisions = (collisions_t*)malloc(sizeof(collisions_t));
+                    collisions->ID = (*it1)->getID();
+                    collisions->info = collision_info;
+                    collisions->next = NULL;
+
+                    current = collisions;
+                }
+                else {
+                    collisions_t *newCollision = (collisions_t*)malloc(sizeof(collisions_t));
+                    newCollision->ID = (*it1)->getID();
+                    newCollision->info = collision_info;
+                    newCollision->next = NULL;
+
+                    current->next = newCollision;
+                    current = newCollision;
+                }
+            }
+        }
+    }
+
+    return collisions;
 }
 
 float
@@ -68,17 +183,17 @@ CollisionDetection::getNormalizedVector(Point point1, Point point2)
 }
 
 std::vector<float>
-CollisionDetection::getPenetrationVector(sphere_t sphere1, sphere_t sphere2)
+CollisionDetection::getPenetrationVector(Sphere *sphere1, Sphere *sphere2)
 {
     std::vector<float> diff_vector;
-    diff_vector = getDiffVector(sphere1.center, sphere2.center);
+    diff_vector = getDiffVector(sphere1->getCenter(), sphere2->getCenter());
 
     colvec d = conv_to< colvec >::from(diff_vector);
     float dist_between_centers = dot(d, d);
-    float radiusSum = sphere1.radius + sphere2.radius;
+    float radiusSum = sphere1->getRadius() + sphere2->getRadius();
 
     float penetration = getPenetrationDistance(dist_between_centers, radiusSum);
-    std::vector<float> normalized = getNormalizedVector(sphere1.center, sphere2.center);
+    std::vector<float> normalized = getNormalizedVector(sphere1->getCenter(), sphere2->getCenter());
 
 
     std::vector<float> penetrationVector(3);
@@ -87,21 +202,6 @@ CollisionDetection::getPenetrationVector(sphere_t sphere1, sphere_t sphere2)
     penetrationVector[2] = normalized[2] * penetration;
 
     return penetrationVector;
-}
-
-int
-CollisionDetection::isIntersection(aabb_t aabb1, aabb_t aabb2)
-{
-    if(abs(aabb1.center.x - aabb2.center.x) > (aabb1.radii[0] + aabb2.radii[0]))
-        return 0;
-
-    if(abs(aabb1.center.y - aabb2.center.y) > (aabb1.radii[1] + aabb2.radii[1]))
-        return 0;
-
-    if(abs(aabb1.center.z - aabb2.center.z) > (aabb1.radii[2] + aabb2.radii[2]))
-        return 0;
-
-    return 1;
 }
 
 std::vector<float>
@@ -127,35 +227,71 @@ CollisionDetection::getDiffVector(Point point1, Point point2)
 }
 
 int
-CollisionDetection::isIntersection(sphere_t sphere1, sphere_t sphere2)
+CollisionDetection::isIntersection(CollidableObject *obj1, CollidableObject *obj2)
 {
-    std::vector<float> diff_vector;
-    diff_vector = getDiffVectorAbs(sphere1.center, sphere2.center);
-
-    colvec d = conv_to< colvec >::from(diff_vector);
-    float dist_between_centers = dot(d, d);
-    float radiusSum = sphere1.radius + sphere2.radius;
-
-    return dist_between_centers <= radiusSum * radiusSum;
+    //TYPE* dynamic_cast<TYPE*> (object);
+    //typeid(Poly_Base)==typeid(*ppolybase)
+    if((typeid(AABB) == typeid(*obj1)) && (typeid(AABB) == typeid(*obj2)))
+        return isIntersection(dynamic_cast<AABB*>(obj1), dynamic_cast<AABB*>(obj2));
+    else if((typeid(Sphere) == typeid(*obj1)) && (typeid(Sphere) == typeid(*obj2)))
+        return isIntersection(dynamic_cast<Sphere*>(obj1), dynamic_cast<Sphere*>(obj2));
+    else if((typeid(AABB) == typeid(*obj1)) && (typeid(Sphere) == typeid(*obj2)))
+        return isIntersection(dynamic_cast<AABB*>(obj1), dynamic_cast<Sphere*>(obj2));
+    else
+        return -1;
 }
 
 int
-CollisionDetection::isIntersection(aabb_t aabb, sphere_t sphere)
+CollisionDetection::isIntersection(AABB *aabb1, AABB *aabb2)
 {
-    if(abs(aabb.center.x - sphere.center.x) > (aabb.radii[0] + sphere.radius))
+    if(abs(aabb1->getCenter().x - aabb2->getCenter().x) >
+                (aabb1->getXRadius() + aabb2->getXRadius()))
         return 0;
 
-    if(abs(aabb.center.y - sphere.center.y) > (aabb.radii[1] + sphere.radius))
+    if(abs(aabb1->getCenter().y - aabb2->getCenter().y) >
+                (aabb1->getYRadius() + aabb2->getYRadius()))
         return 0;
 
-    if(abs(aabb.center.z - sphere.center.z) > (aabb.radii[2] + sphere.radius))
+    if(abs(aabb1->getCenter().z - aabb2->getCenter().z) >
+                (aabb1->getZRadius() + aabb2->getZRadius()))
         return 0;
 
     return 1;
 }
 
 int
-CollisionDetection::isIntersection(sphere_t sphere, capsule_t capsule)
+CollisionDetection::isIntersection(Sphere *sphere1, Sphere *sphere2)
+{
+    std::vector<float> diff_vector;
+    diff_vector = getDiffVectorAbs(sphere1->getCenter(), sphere2->getCenter());
+
+    colvec d = conv_to< colvec >::from(diff_vector);
+    float dist_between_centers = dot(d, d);
+    float radiusSum = sphere1->getRadius() + sphere2->getRadius();
+
+    return dist_between_centers <= radiusSum * radiusSum;
+}
+
+int
+CollisionDetection::isIntersection(AABB *aabb, Sphere *sphere)
+{
+    if(abs(aabb->getCenter().x - sphere->getCenter().x) >
+                (aabb->getXRadius() + sphere->getRadius()))
+        return 0;
+
+    if(abs(aabb->getCenter().y - sphere->getCenter().y) >
+                (aabb->getYRadius() + sphere->getRadius()))
+        return 0;
+
+    if(abs(aabb->getCenter().z - sphere->getCenter().z) >
+                (aabb->getZRadius() + sphere->getRadius()))
+        return 0;
+
+    return 1;
+}
+
+int
+CollisionDetection::isIntersection(Sphere sphere, capsule_t capsule)
 {
     return 1;
 }

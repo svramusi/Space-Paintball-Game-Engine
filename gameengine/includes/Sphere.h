@@ -4,6 +4,7 @@
 #include "Point.h"
 
 struct sphere_t {
+    int ID;
     Point center;
     float radius;
 };
