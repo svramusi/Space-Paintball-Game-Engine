@@ -86,6 +86,8 @@ void GameEngine::UpdateAI(int input) {
 
 void GameEngine::UpdatePhysics(int input) {
     printf("Game Engine Physics Updated\n");
+    //Physics need to be class variable ?
+    //physics.updateWorld( timeStep)
 }
 
 void GameEngine::UpdateGameState(int input) {
