@@ -32,6 +32,7 @@ namespace net
 		if ( !socket.Open( port ) )
 			return false;
 		running = true;
+		OnStart();
 		return true;
 	}
 
@@ -39,15 +40,31 @@ namespace net
 	{
 		assert( running );
 		printf( "stop connection\n" );
+		bool connected = IsConnected();
 		ClearData();
 		socket.Close();
 		running = false;
+		if( connected )
+		{
+			OnDisconnect();
+		}
+		OnStop();
+	}
+
+	bool Connection::IsRunning() const
+	{
+		return running;
 	}
 
 	void Connection::Listen()
 	{
 		printf( "server listening for connection\n" );
+		bool connected = IsConnected();
 		ClearData();
+		if( connected )
+		{
+			OnDisconnect();
+		}
 		mode = Server;
 		state = Listening;
 	}
@@ -56,7 +73,12 @@ namespace net
 	{
 		printf( "client connecting to %d.%d.%d.%d:%d\n",
 			address.GetA(), address.GetB(), address.GetC(), address.GetD(), address.GetPort() );
+		bool connected = IsConnected();
 		ClearData();
+		if( connected )
+		{
+			OnDisconnect();
+		}
 		mode = Client;
 		state = Connecting;
 		this->address = address;
@@ -103,13 +125,17 @@ namespace net
 				printf( "connect timed out\n" );
 				ClearData();
 				state = ConnectFail;
+				OnDisconnect();
 			}
 			else if ( state == Connected )
 			{
 				printf( "connection timed out\n" );
 				ClearData();
 				if ( state == Connecting )
+				{
 					state = ConnectFail;
+				}
+				OnDisconnect();
 			}
 		}
 	}
@@ -119,47 +145,37 @@ namespace net
 		assert( running );
 		if ( address.GetAddress() == 0 )
 			return false;
-		unsigned char* packet = new unsigned char[size+4];
+		unsigned char packet[size+4];
 		packet[0] = (unsigned char) ( protocolId >> 24 );
 		packet[1] = (unsigned char) ( ( protocolId >> 16 ) & 0xFF );
 		packet[2] = (unsigned char) ( ( protocolId >> 8 ) & 0xFF );
 		packet[3] = (unsigned char) ( ( protocolId ) & 0xFF );
 		memcpy( &packet[4], data, size );
-		bool res = socket.Send( address, packet, size + 4 );
-		delete [] packet;
-		return res;
+		return socket.Send( address, packet, size + 4 );
 	}
 
 	int Connection::ReceivePacket( unsigned char data[], int size )
 	{
 		assert( running );
-		unsigned char* packet = new unsigned char[size+4];
+		unsigned char packet[size+4];
 		Address sender;
 		int bytes_read = socket.Receive( sender, packet, size + 4 );
 		if ( bytes_read == 0 )
-		{
-			delete [] packet;
 			return 0;
-		}
 		if ( bytes_read <= 4 )
-		{
-			delete [] packet;
 			return 0;
-		}
 		if ( packet[0] != (unsigned char) ( protocolId >> 24 ) ||
 			 packet[1] != (unsigned char) ( ( protocolId >> 16 ) & 0xFF ) ||
 			 packet[2] != (unsigned char) ( ( protocolId >> 8 ) & 0xFF ) ||
 			 packet[3] != (unsigned char) ( protocolId & 0xFF ) )
-		{
-			delete [] packet;
 			return 0;
-		}
 		if ( mode == Server && !IsConnected() )
 		{
 			printf( "server accepts connection from client %d.%d.%d.%d:%d\n",
 				sender.GetA(), sender.GetB(), sender.GetC(), sender.GetD(), sender.GetPort() );
 			state = Connected;
 			address = sender;
+			OnConnect();
 		}
 		if ( sender == address )
 		{
@@ -167,14 +183,18 @@ namespace net
 			{
 				printf( "client completes connection with server\n" );
 				state = Connected;
+				OnConnect();
 			}
 			timeoutAccumulator = 0.0f;
-			memcpy( data, &packet[4], size - 4 );
-			delete [] packet;
-			return size - 4;
+			memcpy( data, &packet[4], bytes_read - 4 );
+			return bytes_read - 4;
 		}
-		delete [] packet;
 		return 0;
+	}
+
+	int Connection::GetHeaderSize() const
+	{
+		return 4;
 	}
 
 	void Connection::ClearData()

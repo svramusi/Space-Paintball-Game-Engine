@@ -23,8 +23,10 @@ namespace net
 		connection.Listen();
 	}
 
-	ServerConnection ServerMasterConnection::AcceptConection(Address& address) {
-		return ServerConnection(address);
+	ServerConnection ServerMasterConnection::AcceptConection(Address& source) {
+		ServerConnection serverConnection(source);
+
+	    return serverConnection;
 	}
 
 	bool ServerMasterConnection::IsConnected() const {

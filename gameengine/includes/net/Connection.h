@@ -28,6 +28,7 @@ namespace net
 
 		bool Start( int port );
 		void Stop();
+		bool IsRunning() const;
 		void Listen();
 		void Connect( const Address & address );
 		bool IsConnecting() const;
@@ -36,14 +37,20 @@ namespace net
 		bool IsConnected() const;
 		bool IsListening() const;
 		Mode GetMode() const;
-		void Update( float deltaTime );
-		bool SendPacket( const unsigned char data[], int size );
-		int ReceivePacket( unsigned char data[], int size );
+		virtual void Update( float deltaTime );
+		virtual bool SendPacket( const unsigned char data[], int size );
+		virtual int ReceivePacket( unsigned char data[], int size );
+		int GetHeaderSize() const;
 
 	protected:
-		void ClearData();
+		virtual void OnStart()		{}
+		virtual void OnStop()		{}
+		virtual void OnConnect()    {}
+		virtual void OnDisconnect() {}
 
 	private:
+		void ClearData();
+
 		enum State
 		{
 			Disconnected,
