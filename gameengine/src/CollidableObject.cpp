@@ -23,7 +23,7 @@ CollidableObject::setID(int _ID)
 }
 
 Point
-CollidableObject::getCenter()
+CollidableObject::getCenter() const
 {
     return center;
 }
@@ -35,19 +35,19 @@ CollidableObject::setCenter(Point newCenter)
 }
 
 float
-CollidableObject::getXRadius()
+CollidableObject::getXRadius() const
 {
   return radiusX;
 }
 
 float
-CollidableObject::getYRadius()
+CollidableObject::getYRadius() const
 {
   return radiusY;
 }
 
 float
-CollidableObject::getZRadius()
+CollidableObject::getZRadius() const
 {
     return radiusZ;
 }

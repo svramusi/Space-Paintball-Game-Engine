@@ -183,7 +183,7 @@ CollisionDetection::getNormalizedVector(Point point1, Point point2)
 }
 
 std::vector<float>
-CollisionDetection::getPenetrationVector(Sphere *sphere1, Sphere *sphere2)
+CollisionDetection::getPenetrationVector(const Sphere *sphere1, const Sphere *sphere2)
 {
     std::vector<float> diff_vector;
     diff_vector = getDiffVector(sphere1->getCenter(), sphere2->getCenter());
@@ -227,22 +227,20 @@ CollisionDetection::getDiffVector(Point point1, Point point2)
 }
 
 int
-CollisionDetection::isIntersection(CollidableObject *obj1, CollidableObject *obj2)
+CollisionDetection::isIntersection(const CollidableObject *obj1, const CollidableObject *obj2)
 {
-    //TYPE* dynamic_cast<TYPE*> (object);
-    //typeid(Poly_Base)==typeid(*ppolybase)
     if((typeid(AABB) == typeid(*obj1)) && (typeid(AABB) == typeid(*obj2)))
-        return isIntersection(dynamic_cast<AABB*>(obj1), dynamic_cast<AABB*>(obj2));
+        return isIntersection(dynamic_cast<const AABB*>(obj1), dynamic_cast<const AABB*>(obj2));
     else if((typeid(Sphere) == typeid(*obj1)) && (typeid(Sphere) == typeid(*obj2)))
-        return isIntersection(dynamic_cast<Sphere*>(obj1), dynamic_cast<Sphere*>(obj2));
+        return isIntersection(dynamic_cast<const Sphere*>(obj1), dynamic_cast<const Sphere*>(obj2));
     else if((typeid(AABB) == typeid(*obj1)) && (typeid(Sphere) == typeid(*obj2)))
-        return isIntersection(dynamic_cast<AABB*>(obj1), dynamic_cast<Sphere*>(obj2));
+        return isIntersection(dynamic_cast<const AABB*>(obj1), dynamic_cast<const Sphere*>(obj2));
     else
         return -1;
 }
 
 int
-CollisionDetection::isIntersection(AABB *aabb1, AABB *aabb2)
+CollisionDetection::isIntersection(const AABB *aabb1, const AABB *aabb2)
 {
     if(abs(aabb1->getCenter().x - aabb2->getCenter().x) >
                 (aabb1->getXRadius() + aabb2->getXRadius()))
@@ -260,7 +258,7 @@ CollisionDetection::isIntersection(AABB *aabb1, AABB *aabb2)
 }
 
 int
-CollisionDetection::isIntersection(Sphere *sphere1, Sphere *sphere2)
+CollisionDetection::isIntersection(const Sphere *sphere1, const Sphere *sphere2)
 {
     std::vector<float> diff_vector;
     diff_vector = getDiffVectorAbs(sphere1->getCenter(), sphere2->getCenter());
@@ -273,7 +271,7 @@ CollisionDetection::isIntersection(Sphere *sphere1, Sphere *sphere2)
 }
 
 int
-CollisionDetection::isIntersection(AABB *aabb, Sphere *sphere)
+CollisionDetection::isIntersection(const AABB *aabb, const Sphere *sphere)
 {
     if(abs(aabb->getCenter().x - sphere->getCenter().x) >
                 (aabb->getXRadius() + sphere->getRadius()))

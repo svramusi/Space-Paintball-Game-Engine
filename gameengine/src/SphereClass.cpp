@@ -9,7 +9,7 @@ Sphere::~Sphere()
 }
 
 float
-Sphere::getRadius()
+Sphere::getRadius() const
 {
     return getXRadius();
 }

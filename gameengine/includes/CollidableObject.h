@@ -11,12 +11,12 @@ public:
     int getID();
     void setID(int _ID);
 
-    Point getCenter();
+    Point getCenter() const;
     void setCenter(Point newCenter);
 
-    float getXRadius();
-    float getYRadius();
-    float getZRadius();
+    float getXRadius() const;
+    float getYRadius() const;
+    float getZRadius() const;
 
 private:
     int ID;

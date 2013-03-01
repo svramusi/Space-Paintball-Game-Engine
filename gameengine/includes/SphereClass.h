@@ -8,7 +8,7 @@ public:
     Sphere(int ID, Point center, float radii[3]);
     ~Sphere();
 
-    float getRadius();
+    float getRadius() const;
 };
 
 #endif
