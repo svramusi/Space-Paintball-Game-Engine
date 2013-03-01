@@ -17,10 +17,10 @@ namespace net
 {
 	class ServerConnection : public GameConnection {
 	public:
-		ServerConnection(Address* address);
+		ServerConnection(Address& address);
 		virtual ~ServerConnection();
-		void Send(GamePacket* data);
-		GamePacket* Receive();
+		bool SendPacket( const unsigned char data[], int size );
+		int ReceivePacket( unsigned char data[], int size );
 		bool HasData() const;
 		bool IsConnected() const;
 		void Update( float deltaTime );

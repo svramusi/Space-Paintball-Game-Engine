@@ -28,7 +28,7 @@ namespace net
 		 * creating the socket, since we might just be setting
 		 * up the data structures.
 		 */
-		ServerMasterConnection(Address * address);
+		ServerMasterConnection(Address& address);
 		virtual ~ServerMasterConnection();
 		/*
 		 * This function does all the work of creating the socket:
@@ -43,21 +43,22 @@ namespace net
 		 * This function accepts the connection, and returns the
 		 * ServerSocket that will be used for that connection.
 		 */
-		ServerConnection* AcceptConection(Address* address);
+		ServerConnection AcceptConection(Address& address);
 
+		void Listen();
 		bool HasData() const;
 		bool IsConnected() const;
-		void Send( GamePacket* data );
-		GamePacket* Receive();
+		bool SendPacket( const unsigned char data[], int size );
+		int ReceivePacket( unsigned char data[], int size );
 		void Update( float deltaTime );
 
-		map<Address*, ServerConnection*> * GetConnections();
+		map<Address, ServerConnection> GetConnections();
 
 		//virtual void Send(GamePacket* data);
 		//virtual GamePacket* Receive();
 
 	private:
-		map<Address*, ServerConnection*>* addressToConnectionMap;
+		map<Address, ServerConnection> addressToConnectionMap;
 	};
 }
 #endif /* SERVERMASTERCONNECTION_H_ */

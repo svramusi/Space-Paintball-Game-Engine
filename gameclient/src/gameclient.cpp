@@ -25,12 +25,9 @@ const float TimeOut = 10.0f;
 const Uint32 RedrawingPeriod = 20;
 const int MaxFrameSkip = 10;
 
-ClientConnection* clientConnection;
-
 int PollForOSMessages(bool* quit);
-int ConnectToGameMasterServer();
 int GetInput(bool* quit);
-void SendInputToServer(int input);
+void SendInputToServer(int input, bool& connected, ClientConnection& connection);
 int GetUpdateFromServer();
 bool TimeForRendering();
 void UpdateStatistics();
@@ -60,14 +57,23 @@ int main( int argc, char * argv[] )
 	}
 
 	// Initialize the client connection
-	Address* clientAddress = new Address(127,0,0,1, theClientPort);
-	clientConnection = new ClientConnection(clientAddress);
+	Address clientAddress(127,0,0,1, theClientPort);
+	ClientConnection clientConnection(clientAddress);
 
-	// Connect the client to the server.
-	Address* serverMasterAddress = new Address(127,0,0,1, ServerMasterPort);
-	clientConnection->Connect(serverMasterAddress);
+	bool clientInitialized = clientConnection.Init();
 
-//	ConnectToGameMasterServer();
+	if(!clientInitialized)
+	{
+		perror("Problem initializing client");
+		return 1;
+	}
+
+	// Connect to the server master.
+	Address serverMasterAddress(127,0,0,1, ServerMasterPort);
+	clientConnection.Connect(serverMasterAddress);
+
+	bool connected = false;
+
 	// Client Game Loop
 	while(!quit)
 	{
@@ -128,7 +134,7 @@ int main( int argc, char * argv[] )
 
 		int input = GetInput(&quit);
 
-		SendInputToServer(input);
+		SendInputToServer(input, connected, clientConnection);
 
 		///////////////////////////////////////////////////////////
 		//Update Game State Copy
@@ -155,6 +161,9 @@ int main( int argc, char * argv[] )
 
 		FPSControl();
 
+		clientConnection.Update( DeltaTime );
+		NetUtils::wait( DeltaTime );
+
 		/*
 		 * Play nice with the OS, and give
 		 * some CPU for another process.
@@ -171,41 +180,6 @@ int main( int argc, char * argv[] )
 
 int GetUpdateFromServer()
 {
-	// Get the update from server.
-	// TODO: Fix this
-	//int input = getUpdateFromServer();
-	int input = 0;
-
-	if (clientConnection->IsConnected() )
-	{
-		printf( "client connected to server\n" );
-	}
-
-	if ( clientConnection->ConnectFailed() )
-	{
-		printf( "connection failed\n" );
-	}
-
-	unsigned char packet[] = "client to server: player1 pressed up arrow";
-	GamePacket* gamePacket = new GamePacket(packet, sizeof( packet ));
-	clientConnection->Send( gamePacket );
-	delete gamePacket;
-
-	while ( true )
-	{
-		unsigned char packet[256];
-		GamePacket* gamePacket = clientConnection->Receive();
-		if ( gamePacket == NULL )
-		{
-			break;
-		}
-		printf( "received packet from server\n" );
-	}
-
-	clientConnection->Update( DeltaTime );
-	NetUtils::wait( DeltaTime );
-
-	return input;
 }
 
 void FPSControl()
@@ -258,56 +232,23 @@ int PollForOSMessages(bool* quit)
 	return 0;
 }
 
-int ConnectToGameMasterServer()
+void SendInputToServer(int input, bool& connected, ClientConnection& connection)
 {
-	Connection connection( ProtocolId, TimeOut );
-
-	if ( !connection.Start( ClientPort ) )
+	if ( !connected && connection.IsConnected() )
 	{
-		printf( "could not start connection on port %d\n", ClientPort );
-		return 1;
+		printf( "client connected to server\n" );
+		connected = true;
 	}
 
-	connection.Connect( Address(127,0,0,1,ServerMasterPort ) );
-
-	bool connected = false;
-
-	while ( true )
+	if ( !connected && connection.ConnectFailed() )
 	{
-		if ( !connected && connection.IsConnected() )
-		{
-			printf( "client connected to server\n" );
-			connected = true;
-		}
-
-		if ( !connected && connection.ConnectFailed() )
-		{
-			printf( "connection failed\n" );
-			break;
-		}
-
+		printf( "connection failed\n" );
+	}
+	else
+	{
 		unsigned char packet[] = "client to server";
 		connection.SendPacket( packet, sizeof( packet ) );
-
-		while ( true )
-		{
-			unsigned char packet[256];
-			int bytes_read = connection.ReceivePacket( packet, sizeof(packet) );
-			if ( bytes_read == 0 )
-				break;
-			printf( "received packet from server\n" );
-		}
-
-		connection.Update( DeltaTime );
-		NetUtils::wait( DeltaTime );
 	}
-
-	return 0;
-}
-
-void SendInputToServer(int input)
-{
-	//TODO: Send input to server
 }
 
 int GetInput(bool* quit)

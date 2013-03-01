@@ -9,15 +9,13 @@
 
 namespace net
 {
-	GameConnection::GameConnection(Address* address) {
-		this->connection = new Connection( PROTOCOL_ID, TIME_OUT );
-		this->address = address;
+	GameConnection::GameConnection(Address& theAddress) {
+		connection = Connection( PROTOCOL_ID, TIME_OUT );
+		address = theAddress;
 	}
 
 	GameConnection::~GameConnection() {
-		connection->Stop();
-		delete connection;
-		delete address;
+		connection.Stop();
 	}
 
 }

@@ -9,54 +9,30 @@
 
 namespace net
 {
-	ServerConnection::ServerConnection(Address* address) : GameConnection(address) {
-		// Set the connection port and start the connection
-		if ( !connection->Start( address->GetPort() ) )
-		{
-			printf( "could not start server connection on port %d\n", address->GetPort() );
-			// Should throw exception if error occurs.
-		}
-		else
-		{
-			// Start listening
-			connection->Listen();
-		}
+	ServerConnection::ServerConnection(Address& address) : GameConnection(address) {
 	}
 
 	ServerConnection::~ServerConnection() {
-		delete connection;
 	}
 
-	void ServerConnection::Send(GamePacket* data) {
-		connection->SendPacket( data->GetDataPtr(), sizeof( data->GetByteSize() ) );
+	bool ServerConnection::SendPacket( const unsigned char data[], int size ) {
+		connection.SendPacket(data, size);
 	}
 
-	GamePacket* ServerConnection::Receive() {
-		// Need to implement this method.
-		unsigned char packet[256];
-		int bytes_read = connection->ReceivePacket( packet, sizeof(packet) );
-
-		if(bytes_read == 0)
-		{
-			return NULL;
-		}
-		else
-		{
-			GamePacket* gamePacket = new GamePacket(packet, bytes_read);
-			return gamePacket;
-		}
+	int ServerConnection::ReceivePacket( unsigned char data[], int size ) {
+		connection.ReceivePacket( data, size );
 	}
 
 	bool ServerConnection::HasData() const {
-		return connection->HasData();
+		return connection.HasData();
 	}
 
 	bool ServerConnection::IsConnected() const {
-		return connection->IsConnected();
+		return connection.IsConnected();
 	}
 
 	void ServerConnection::Update( float deltaTime )
 	{
-		connection->Update(deltaTime);
+		connection.Update(deltaTime);
 	}
 }

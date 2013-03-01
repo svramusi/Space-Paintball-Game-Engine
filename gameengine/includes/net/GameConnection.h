@@ -17,16 +17,16 @@ namespace net
 {
 	class GameConnection {
 	public:
-		GameConnection(Address* address);
+		GameConnection(Address& address);
 		virtual ~GameConnection();
 
-		virtual void Send(GamePacket* data) = 0;
-		virtual GamePacket* Receive() = 0;
+		virtual bool SendPacket( const unsigned char data[], int size ) = 0;
+		virtual int ReceivePacket( unsigned char data[], int size ) = 0;
 		virtual bool HasData() const = 0;
 
 	protected:
-		Connection* connection;
-		Address* address;
+		Connection connection;
+		Address address;
 	};
 }
 #endif /* GAMECONNECTION_H_ */

@@ -13,25 +13,22 @@
 #include "Connection.h"
 #include "NetUtils.h"
 #include "Address.h"
-#include "ServerConnection.h"
-#include "ServerMasterConnection.h"
 #include "GameConnection.h"
 
 namespace net
 {
 	class ClientConnection : public GameConnection {
 	public:
-		ClientConnection(Address* clientAddress);
+		ClientConnection(Address& clientAddress);
 		virtual ~ClientConnection();
-		void Connect(Address* serverMasterAddress);
-		void Send(GamePacket* data);
-		GamePacket* Receive();
+		bool Init();
+		void Connect(Address& serverMasterAddress);
+		bool SendPacket( const unsigned char data[], int size );
+		int ReceivePacket( unsigned char data[], int size );
 		bool HasData() const;
 		bool ConnectFailed() const;
 		void Update( float deltaTime );
 		bool IsConnected() const;
-	private:
-		ServerConnection* serverConnection;
 	};
 }
 #endif /* CLIENTCONNECTION_H_ */

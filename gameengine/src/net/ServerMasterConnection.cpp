@@ -9,77 +9,42 @@
 
 namespace net
 {
-	ServerMasterConnection::ServerMasterConnection(Address* address) : GameConnection(address) {
-		this-> addressToConnectionMap = new map<Address*, ServerConnection*>();
+	ServerMasterConnection::ServerMasterConnection(Address& address) : GameConnection(address) {
 	}
 
 	ServerMasterConnection::~ServerMasterConnection() {
-		delete addressToConnectionMap;
 	}
 
 	bool ServerMasterConnection::Init() {
-		// Set the connection port and start the connection
-		if ( !connection->Start( address->GetPort() ) )
-		{
-			printf( "could not start master connection on port %d\n", address->GetPort() );
-			// Should throw exception if error occurs.
-			return false;
-		}
-
-		// Start listening
-		connection->Listen();
-
-		return true;
+		return connection.Start(address.GetPort());
 	}
 
-	ServerConnection* ServerMasterConnection::AcceptConection(Address* address) {
-		if(connection->HasData())
-		{
-			ServerConnection* serverConnection = new ServerConnection(address);
+	void ServerMasterConnection::Listen() {
+		connection.Listen();
+	}
 
-			// Put server connection into map
-			addressToConnectionMap->insert(make_pair(address, serverConnection));
-
-			return serverConnection;
-		}
-
-		return NULL;
+	ServerConnection ServerMasterConnection::AcceptConection(Address& address) {
+		return ServerConnection(address);
 	}
 
 	bool ServerMasterConnection::IsConnected() const {
-		return connection->IsConnected();
+		return connection.IsConnected();
 	}
 
-	map<Address*, ServerConnection*>* ServerMasterConnection::GetConnections() {
-		return this->addressToConnectionMap;
+	bool ServerMasterConnection::SendPacket( const unsigned char data[], int size ) {
+		connection.SendPacket(data, size);
 	}
 
-	void ServerMasterConnection::Send(GamePacket* data) {
-		connection->SendPacket( data->GetDataPtr(), sizeof( data->GetByteSize() ) );
-	}
-
-	GamePacket* ServerMasterConnection::Receive() {
-		// Need to implement this method.
-		unsigned char packet[256];
-		int bytes_read = connection->ReceivePacket( packet, sizeof(packet) );
-
-		if(bytes_read == 0)
-		{
-			return NULL;
-		}
-		else
-		{
-			GamePacket* gamePacket = new GamePacket(packet, bytes_read);
-			return gamePacket;
-		}
+	int ServerMasterConnection::ReceivePacket( unsigned char data[], int size ) {
+		connection.ReceivePacket( data, size );
 	}
 
 	bool ServerMasterConnection::HasData() const {
-		return connection->HasData();
+		return connection.HasData();
 	}
 
 	void ServerMasterConnection::Update( float deltaTime )
 	{
-		connection->Update(deltaTime);
+		connection.Update(deltaTime);
 	}
 }
