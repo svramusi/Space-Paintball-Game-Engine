@@ -91,14 +91,14 @@ int main( int argc, char * argv[] )
 
 		FPSControl();
 
-		serverMasterConnection.Update( DeltaTime );
-		NetUtils::wait( DeltaTime );
-
 		/*
 		 * Play nice with the OS, and give
 		 * some CPU for another process.
 		 */
-		SDL_Delay(1);
+		//SDL_Delay(1);
+
+		serverMasterConnection.Update( DeltaTime );
+		NetUtils::wait( DeltaTime );
 	} // End Server Game Loop
 
 	return 0;

@@ -161,19 +161,15 @@ int main( int argc, char * argv[] )
 
 		FPSControl();
 
-		clientConnection.Update( DeltaTime );
-		NetUtils::wait( DeltaTime );
-
 		/*
 		 * Play nice with the OS, and give
 		 * some CPU for another process.
 		 */
-		SDL_Delay(1);
-	} // End Client Game Loop
+		//SDL_Delay(1);
 
-	//delete clientAddress;
-	//delete serverMasterAddress;
-	//delete clientConnection;
+		clientConnection.Update( DeltaTime );
+		NetUtils::wait( DeltaTime );
+	} // End Client Game Loop
 
 	return 0;
 }
