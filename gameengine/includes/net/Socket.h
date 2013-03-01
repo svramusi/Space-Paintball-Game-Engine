@@ -9,6 +9,7 @@
 #define SOCKET_H_
 
 #include <sys/select.h>
+#include <arpa/inet.h>
 #include <unistd.h>
 #include "Net.h"
 #include "Address.h"

@@ -27,8 +27,8 @@ const int MaxFrameSkip = 10;
 
 int PollForOSMessages(bool* quit);
 int GetInput(bool* quit);
-void SendInputToServer(int input, bool& connected, ClientConnection& connection);
-int GetUpdateFromServer();
+void SendInputToServer(int input, ClientConnection& connection);
+int GetUpdateFromServer(ClientConnection& connection);
 bool TimeForRendering();
 void UpdateStatistics();
 void FPSControl();
@@ -112,7 +112,7 @@ int main( int argc, char * argv[] )
 			actualTime = SDL_GetTicks();
 			needToRedraw = true;
 			frames++;
-		}
+		} // End inner while loop.
 
 		if(time < actualTime)
 		{
@@ -134,11 +134,23 @@ int main( int argc, char * argv[] )
 
 		int input = GetInput(&quit);
 
-		SendInputToServer(input, connected, clientConnection);
+		if ( !connected && clientConnection.IsConnected() )
+		{
+			printf( "client connected to server\n" );
+			connected = true;
+		}
+
+		if ( !connected && clientConnection.ConnectFailed() )
+		{
+			printf( "connection failed\n" );
+			break;
+		}
+
+		SendInputToServer(input, clientConnection);
 
 		///////////////////////////////////////////////////////////
 		//Update Game State Copy
-		int inputFromServer = GetUpdateFromServer();
+		int inputFromServer = GetUpdateFromServer( clientConnection );
 		// Update local game state (or game state copy).
 		//gameEngine.UpdateGameState(inputFromServer);
 		///////////////////////////////////////////////////////////
@@ -174,8 +186,26 @@ int main( int argc, char * argv[] )
 	return 0;
 }
 
-int GetUpdateFromServer()
+int GetUpdateFromServer(ClientConnection& connection)
 {
+	while ( true )
+	{
+		unsigned char packet[256];
+		int bytes_read = connection.ReceivePacket( packet, sizeof(packet) );
+
+		if ( bytes_read == 0 )
+		{
+			break;
+		}
+
+		printf( "received packet from server\n" );
+	}
+}
+
+void SendInputToServer(int input, ClientConnection& connection)
+{
+	unsigned char packet[] = "client to server";
+	connection.SendPacket( packet, sizeof( packet ) );
 }
 
 void FPSControl()
@@ -226,25 +256,6 @@ int PollForOSMessages(bool* quit)
 	*/
 
 	return 0;
-}
-
-void SendInputToServer(int input, bool& connected, ClientConnection& connection)
-{
-	if ( !connected && connection.IsConnected() )
-	{
-		printf( "client connected to server\n" );
-		connected = true;
-	}
-
-	if ( !connected && connection.ConnectFailed() )
-	{
-		printf( "connection failed\n" );
-	}
-	else
-	{
-		unsigned char packet[] = "client to server";
-		connection.SendPacket( packet, sizeof( packet ) );
-	}
 }
 
 int GetInput(bool* quit)

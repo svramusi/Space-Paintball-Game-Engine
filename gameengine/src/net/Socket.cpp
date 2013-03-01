@@ -114,6 +114,8 @@ namespace net
 		unsigned int address = ntohl( from.sin_addr.s_addr );
 		unsigned short port = ntohs( from.sin_port );
 
+		printf("Received packet from %s:%d\n Data: %s\n\n", inet_ntoa(from.sin_addr), port, data);
+
 		sender = Address( address, port );
 
 		return received_bytes;
