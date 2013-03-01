@@ -5,7 +5,7 @@
 
 class CollidableObject {
 public:
-    CollidableObject(int _ID, Point _center, float radii[3]);
+    CollidableObject(int _ID, Point _center);
     virtual ~CollidableObject() {};
 
     int getID();
@@ -14,18 +14,9 @@ public:
     Point getCenter() const;
     void setCenter(Point newCenter);
 
-    float getXRadius() const;
-    float getYRadius() const;
-    float getZRadius() const;
-
 private:
     int ID;
-
     Point center;
-
-    float radiusX;
-    float radiusY;
-    float radiusZ;
 };
 
 #endif

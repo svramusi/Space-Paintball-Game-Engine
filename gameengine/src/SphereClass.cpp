@@ -1,7 +1,8 @@
 #include "SphereClass.h"
 
-Sphere::Sphere(int ID, Point center, float radii[3]) : CollidableObject(ID, center, radii)
+Sphere::Sphere(int ID, Point center, float _radius) : CollidableObject(ID, center)
 {
+    radius = _radius;
 }
 
 Sphere::~Sphere()
@@ -11,5 +12,5 @@ Sphere::~Sphere()
 float
 Sphere::getRadius() const
 {
-    return getXRadius();
+    return radius;
 }

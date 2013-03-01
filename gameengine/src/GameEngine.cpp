@@ -12,8 +12,6 @@ GameEngine::GameEngine() {
 
     physics = new PhysicsEngine();
 
-    float radii[3];
-
     CollidableObject *stationary_sphere;
     CollidableObject *bouncing_sphere;
 
@@ -22,10 +20,7 @@ GameEngine::GameEngine() {
     stationary_center.y = 3;
     stationary_center.z = 0;
 
-    radii[0] = 2.0f;
-    radii[1] = 2.0f;
-    radii[2] = 2.0f;
-    stationary_sphere = new Sphere(-1, stationary_center, radii);
+    stationary_sphere = new Sphere(-1, stationary_center, 2.0f);
 
 
     Point bouncing_center;
@@ -33,10 +28,7 @@ GameEngine::GameEngine() {
     bouncing_center.y = 8;
     bouncing_center.z = 0;
 
-    radii[0] = 1.0f;
-    radii[1] = 1.0f;
-    radii[2] = 1.0f;
-    bouncing_sphere = new Sphere(-1, bouncing_center, radii);
+    bouncing_sphere = new Sphere(-1, bouncing_center, 1.0f);
 
 
     Velocity zeroVel;

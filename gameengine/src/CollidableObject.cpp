@@ -1,13 +1,9 @@
 #include "CollidableObject.h"
 
-CollidableObject::CollidableObject(int _ID, Point _center, float radii[3])
+CollidableObject::CollidableObject(int _ID, Point _center)
 {
     ID = _ID;
-
     center = _center;
-    radiusX = radii[0];
-    radiusY = radii[1];
-    radiusZ = radii[2];
 }
 
 int
@@ -32,22 +28,4 @@ void
 CollidableObject::setCenter(Point newCenter)
 {
     center = newCenter;
-}
-
-float
-CollidableObject::getXRadius() const
-{
-  return radiusX;
-}
-
-float
-CollidableObject::getYRadius() const
-{
-  return radiusY;
-}
-
-float
-CollidableObject::getZRadius() const
-{
-    return radiusZ;
 }

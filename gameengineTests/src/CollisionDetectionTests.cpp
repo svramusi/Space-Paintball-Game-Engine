@@ -23,9 +23,9 @@ CollisionDetectionTest::testNoCollision(void)
     point1.y = 0;
     point1.z = 0;
 
-    radii[0] = 1.0;
-    radii[1] = 1.0;
-    radii[2] = 1.0;
+    radii[0] = 1.0f;
+    radii[1] = 1.0f;
+    radii[2] = 1.0f;
 
     AABB *aabb1 = new AABB(1, point1, radii);
 
@@ -33,9 +33,9 @@ CollisionDetectionTest::testNoCollision(void)
     point2.y = 10;
     point2.z = 10;
 
-    radii[0] = 1.0;
-    radii[1] = 1.0;
-    radii[2] = 1.0;
+    radii[0] = 1.0f;
+    radii[1] = 1.0f;
+    radii[2] = 1.0f;
 
     AABB *aabb2 = new AABB(2, point2, radii);
 
@@ -65,9 +65,9 @@ CollisionDetectionTest::testCollision(void)
     point1.y = 0;
     point1.z = 0;
 
-    radii[0] = 1.0;
-    radii[1] = 1.0;
-    radii[2] = 1.0;
+    radii[0] = 1.0f;
+    radii[1] = 1.0f;
+    radii[2] = 1.0f;
 
     AABB *aabb1 = new AABB(1, point1, radii);
 
@@ -75,9 +75,9 @@ CollisionDetectionTest::testCollision(void)
     point2.y = 1;
     point2.z = 1;
 
-    radii[0] = 2.0;
-    radii[1] = 2.0;
-    radii[2] = 2.0;
+    radii[0] = 2.0f;
+    radii[1] = 2.0f;
+    radii[2] = 2.0f;
 
     AABB *aabb2 = new AABB(2, point2, radii);
 
