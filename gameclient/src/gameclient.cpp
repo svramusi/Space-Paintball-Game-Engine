@@ -49,6 +49,7 @@ int main( int argc, char * argv[] )
 
 	Mode mode = Client;
 	Address address;
+	int userSpecifiedClientPort = 0;
 
 	if ( argc >= 2 )
 	{
@@ -57,14 +58,29 @@ int main( int argc, char * argv[] )
 		{
 			address = Address(a,b,c,d,ServerPort);
 		}
+
+		if( argc >=3 && sscanf( argv[2], "%d", &userSpecifiedClientPort ) )
+		{
+			printf("User-Specified Client Port: %d\n", userSpecifiedClientPort);
+		}
+	}
+
+	int theClientPort = 0;
+	if( userSpecifiedClientPort > 0)
+	{
+		theClientPort = userSpecifiedClientPort;
+	}
+	else
+	{
+		theClientPort = ClientPort;
 	}
 
 	// Initialize the client connection
 	ReliableConnection connection( ProtocolId, TimeOut );
 
-	if ( !connection.Start( ClientPort ) )
+	if ( !connection.Start( theClientPort ) )
 	{
-		printf( "could not start connection on port %d\n", ClientPort );
+		printf( "could not start connection on port %d\n", theClientPort );
 		return 1;
 	}
 
