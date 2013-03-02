@@ -44,8 +44,7 @@ int main( int argc, char * argv[] )
 
 	enum Mode
 	{
-		Client,
-		Server
+		Client
 	};
 
 	Mode mode = Client;

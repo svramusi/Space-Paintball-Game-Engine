@@ -7,7 +7,8 @@
 
 #include "net/Net.h"
 #include "net/Constants.hpp"
-#include "net/Connection.h"
+#include "net/ReliableConnection.h"
+#include "net/FlowControl.h"
 #include "net/NetUtils.h"
 #include "utils/gun_utils.h"
 #include "physicsengine.h"
@@ -20,7 +21,8 @@ using namespace std;
 using namespace net;
 
 int PollForOSMessages(bool* quit);
-int GetInputFromClient(bool* quit, ServerMasterConnection& connection);
+int GetInputFromClient(bool* quit, ReliableConnection& connection);
+void SendUpdateToClient(const float & sendRate, float& sendAccumulator, ReliableConnection& connection);
 bool TimeForRendering();
 void UpdateStatistics();
 void FPSControl();
@@ -46,19 +48,30 @@ int main( int argc, char * argv[] )
 	Uint32 time = SDL_GetTicks();
 	bool needToRedraw = true;
 
-	// Initialize the client connection
-	Address serverMasterAddress(127,0,0,1, ServerMasterPort);
-	ServerMasterConnection serverMasterConnection(serverMasterAddress);
-
-	bool serverMasterInitialized = serverMasterConnection.Init();
-
-	if(!serverMasterInitialized)
+	enum Mode
 	{
-		perror("Problem initializing server master.");
+		Server
+	};
+
+	Mode mode = Server;
+	Address address;
+
+	// Initialize the client connection
+	ReliableConnection connection( ProtocolId, TimeOut );
+
+	if ( !connection.Start( ServerPort ) )
+	{
+		printf( "could not start connection on port %d\n", ServerPort );
 		return 1;
 	}
 
-	serverMasterConnection.Listen();
+	connection.Listen();
+
+	bool connected = false;
+	float sendAccumulator = 0.0f;
+	float statsAccumulator = 0.0f;
+
+	FlowControl flowControl;
 
 	// Server Game Loop
 	while(!quit)
@@ -69,7 +82,43 @@ int main( int argc, char * argv[] )
 		 */
 		PollForOSMessages(&quit);
 
-		int input = GetInputFromClient(&quit, serverMasterConnection);
+		// update flow control
+
+		if ( connection.IsConnected() )
+		{
+			flowControl.Update( DeltaTime, connection.GetReliabilitySystem().GetRoundTripTime() * 1000.0f );
+		}
+
+		const float sendRate = flowControl.GetSendRate();
+
+		// detect changes in connection state
+
+		if ( mode == Server && connected && !connection.IsConnected() )
+		{
+			flowControl.Reset();
+			printf( "reset flow control\n" );
+			connected = false;
+		}
+
+		if ( !connected && connection.IsConnected() )
+		{
+			printf( "client connected to server\n" );
+			connected = true;
+		}
+
+		if ( !connected && connection.ConnectFailed() )
+		{
+			printf( "connection failed\n" );
+			break;
+		}
+
+		// send and receive packets
+
+		sendAccumulator += DeltaTime;
+
+		SendUpdateToClient(sendRate, sendAccumulator, connection);
+
+		int input = GetInputFromClient(&quit, connection);
 
 		///////////////////////////////////////////////////////////
 		//Update Game State
@@ -92,7 +141,51 @@ int main( int argc, char * argv[] )
 		 */
 		//SDL_Delay(1);
 
-		serverMasterConnection.Update( DeltaTime );
+		// update connection
+		connection.Update( DeltaTime );
+
+		// show packets that were acked this frame
+
+		#ifdef SHOW_ACKS
+		unsigned int * acks = NULL;
+		int ack_count = 0;
+		connection.GetReliabilitySystem().GetAcks( &acks, ack_count );
+		if ( ack_count > 0 )
+		{
+			printf( "acks: %d", acks[0] );
+			for ( int i = 1; i < ack_count; ++i )
+				printf( ",%d", acks[i] );
+			printf( "\n" );
+		}
+		#endif
+
+		// update connection
+
+		connection.Update( DeltaTime );
+
+		// show connection stats
+
+		statsAccumulator += DeltaTime;
+
+		while ( statsAccumulator >= 0.25f && connection.IsConnected() )
+		{
+			float rtt = connection.GetReliabilitySystem().GetRoundTripTime();
+
+			unsigned int sent_packets = connection.GetReliabilitySystem().GetSentPackets();
+			unsigned int acked_packets = connection.GetReliabilitySystem().GetAckedPackets();
+			unsigned int lost_packets = connection.GetReliabilitySystem().GetLostPackets();
+
+			float sent_bandwidth = connection.GetReliabilitySystem().GetSentBandwidth();
+			float acked_bandwidth = connection.GetReliabilitySystem().GetAckedBandwidth();
+
+			printf( "rtt %.1fms, sent %d, acked %d, lost %d (%.1f%%), sent bandwidth = %.1fkbps, acked bandwidth = %.1fkbps\n",
+				rtt * 1000.0f, sent_packets, acked_packets, lost_packets,
+				sent_packets > 0.0f ? (float) lost_packets / (float) sent_packets * 100.0f : 0.0f,
+				sent_bandwidth, acked_bandwidth );
+
+			statsAccumulator -= 0.25f;
+		}
+
 		NetUtils::wait( DeltaTime );
 	} // End Server Game Loop
 
@@ -154,10 +247,9 @@ int PollForOSMessages(bool* quit)
  * input. Also, if there are players over the network,
  * get their inputs.
  */
-int GetInputFromClient(bool* quit, ServerMasterConnection& connection)
+int GetInputFromClient(bool* quit, ReliableConnection& connection)
 {
 	int input = 0;
-
 	while ( true )
 	{
 		unsigned char packet[256];
@@ -166,16 +258,17 @@ int GetInputFromClient(bool* quit, ServerMasterConnection& connection)
 		{
 			break;
 		}
-		// If input from all clients is to shutdown game server, set quit
-		//else if() {quit = true;}
-		else
-		{
-			// TODO: Determine the input based on message from client.
-			input = 1;
-		}
-
-		printf( "received packet from client\n" );
 	}
 
 	return input;
+}
+
+void SendUpdateToClient(const float & sendRate, float& sendAccumulator, ReliableConnection& connection) {
+	while ( sendAccumulator > 1.0f / sendRate )
+	{
+		unsigned char packet[PacketSize];
+		memset( packet, 0, sizeof( packet ) );
+		connection.SendPacket( packet, sizeof( packet ) );
+		sendAccumulator -= 1.0f / sendRate;
+	}
 }
