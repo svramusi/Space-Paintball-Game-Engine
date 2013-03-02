@@ -6,29 +6,27 @@
 #include "SDL-1.2.15/include/SDL.h"
 
 #include "net/Net.h"
-#include "net/Connection.h"
+#include "net/Constants.hpp"
+#include "net/ReliableConnection.h"
+#include "net/PacketQueue.h"
+#include "net/FlowControl.h"
 #include "net/NetUtils.h"
-#include "net/ClientConnection.h"
 #include "GameEngine.h"
 #include "TestCollectGameState.h"
+
+//#define SHOW_ACKS
 
 using namespace std;
 using namespace net;
 
-const int ServerMasterPort = 30000;
-const int ClientPort = 30001;
-const int ProtocolId = 0x99887766;
-const float DeltaTime = 0.25f;
-const float SendRate = 0.25f;
-const float TimeOut = 10.0f;
 // One frame each 20 milliseconds (i.e. 50 frames per second)
 const Uint32 RedrawingPeriod = 20;
 const int MaxFrameSkip = 10;
 
 int PollForOSMessages(bool* quit);
 int GetInput(bool* quit);
-void SendInputToServer(int input, ClientConnection& connection);
-int GetUpdateFromServer(ClientConnection& connection);
+void SendInputToServer(int input, const float & sendRate, float & sendAccumulator, ReliableConnection& connection);
+int GetUpdateFromServer(ReliableConnection& connection);
 bool TimeForRendering();
 void UpdateStatistics();
 void FPSControl();
@@ -44,35 +42,40 @@ int main( int argc, char * argv[] )
 	Uint32 time = SDL_GetTicks();
 	bool needToRedraw = true;
 
-	int theClientPort = 0;
-	// Loop through each argument and print its number and value
-	for (int nArg=0; nArg < argc; nArg++)
+	enum Mode
 	{
-	    theClientPort = atoi(argv[nArg]);
-	}
+		Client,
+		Server
+	};
 
-	if(theClientPort == 0)
+	Mode mode = Client;
+	Address address;
+
+	if ( argc >= 2 )
 	{
-		theClientPort = ClientPort;
+		int a,b,c,d;
+		if ( sscanf( argv[1], "%d.%d.%d.%d", &a, &b, &c, &d ) )
+		{
+			address = Address(a,b,c,d,ServerPort);
+		}
 	}
 
 	// Initialize the client connection
-	Address clientAddress(127,0,0,1, theClientPort);
-	ClientConnection clientConnection(clientAddress);
+	ReliableConnection connection( ProtocolId, TimeOut );
 
-	bool clientInitialized = clientConnection.Init();
-
-	if(!clientInitialized)
+	if ( !connection.Start( ClientPort ) )
 	{
-		perror("Problem initializing client");
+		printf( "could not start connection on port %d\n", ClientPort );
 		return 1;
 	}
 
-	// Connect to the server master.
-	Address serverMasterAddress(127,0,0,1, ServerMasterPort);
-	clientConnection.Connect(serverMasterAddress);
+	connection.Connect( address );
 
 	bool connected = false;
+	float sendAccumulator = 0.0f;
+	float statsAccumulator = 0.0f;
+
+	FlowControl flowControl;
 
 	// Client Game Loop
 	while(!quit)
@@ -134,26 +137,54 @@ int main( int argc, char * argv[] )
 
 		int input = GetInput(&quit);
 
-		if ( !connected && clientConnection.IsConnected() )
+		// update flow control
+		if ( connection.IsConnected() )
+		{
+			flowControl.Update( DeltaTime, connection.GetReliabilitySystem().GetRoundTripTime() * 1000.0f );
+		}
+
+		const float sendRate = flowControl.GetSendRate();
+
+		if ( !connected && connection.IsConnected() )
 		{
 			printf( "client connected to server\n" );
 			connected = true;
 		}
 
-		if ( !connected && clientConnection.ConnectFailed() )
+		if ( !connected && connection.ConnectFailed() )
 		{
 			printf( "connection failed\n" );
 			break;
 		}
 
-		SendInputToServer(input, clientConnection);
+		// send and receive packets
+
+		sendAccumulator += DeltaTime;
+
+		SendInputToServer(input, sendRate, sendAccumulator, connection);
 
 		///////////////////////////////////////////////////////////
 		//Update Game State Copy
-		int inputFromServer = GetUpdateFromServer( clientConnection );
+		int inputFromServer = GetUpdateFromServer( connection );
 		// Update local game state (or game state copy).
 		//gameEngine.UpdateGameState(inputFromServer);
 		///////////////////////////////////////////////////////////
+
+		// show packets that were acked this frame
+
+		#ifdef SHOW_ACKS
+		unsigned int * acks = NULL;
+		int ack_count = 0;
+		connection.GetReliabilitySystem().GetAcks( &acks, ack_count );
+		if ( ack_count > 0 )
+		{
+			printf( "acks: %d", acks[0] );
+			for ( int i = 1; i < ack_count; ++i )
+				printf( ",%d", acks[i] );
+			printf( "\n" );
+		}
+		#endif
+
 
 		/*
 		 * Get information from the game engine to update
@@ -179,33 +210,60 @@ int main( int argc, char * argv[] )
 		 */
 		//SDL_Delay(1);
 
-		clientConnection.Update( DeltaTime );
+		// update connection
+		connection.Update( DeltaTime );
+
+		// show connection stats
+		statsAccumulator += DeltaTime;
+
+		while ( statsAccumulator >= 0.25f && connection.IsConnected() )
+		{
+			float rtt = connection.GetReliabilitySystem().GetRoundTripTime();
+
+			unsigned int sent_packets = connection.GetReliabilitySystem().GetSentPackets();
+			unsigned int acked_packets = connection.GetReliabilitySystem().GetAckedPackets();
+			unsigned int lost_packets = connection.GetReliabilitySystem().GetLostPackets();
+
+			float sent_bandwidth = connection.GetReliabilitySystem().GetSentBandwidth();
+			float acked_bandwidth = connection.GetReliabilitySystem().GetAckedBandwidth();
+
+			printf( "rtt %.1fms, sent %d, acked %d, lost %d (%.1f%%), sent bandwidth = %.1fkbps, acked bandwidth = %.1fkbps\n",
+				rtt * 1000.0f, sent_packets, acked_packets, lost_packets,
+				sent_packets > 0.0f ? (float) lost_packets / (float) sent_packets * 100.0f : 0.0f,
+				sent_bandwidth, acked_bandwidth );
+
+			statsAccumulator -= 0.25f;
+		}
+
+
 		NetUtils::wait( DeltaTime );
 	} // End Client Game Loop
 
 	return 0;
 }
 
-int GetUpdateFromServer(ClientConnection& connection)
+int GetUpdateFromServer(ReliableConnection& connection)
 {
 	while ( true )
 	{
 		unsigned char packet[256];
 		int bytes_read = connection.ReceivePacket( packet, sizeof(packet) );
-
 		if ( bytes_read == 0 )
-		{
 			break;
-		}
 
 		printf( "received packet from server\n" );
 	}
 }
 
-void SendInputToServer(int input, ClientConnection& connection)
+void SendInputToServer(int input, const float & sendRate, float & sendAccumulator, ReliableConnection& connection)
 {
-	unsigned char packet[] = "client to server";
-	connection.SendPacket( packet, sizeof( packet ) );
+	while ( sendAccumulator > 1.0f / sendRate )
+	{
+		unsigned char packet[PacketSize];
+		memset( packet, 0, sizeof( packet ) );
+		connection.SendPacket( packet, sizeof( packet ) );
+		sendAccumulator -= 1.0f / sendRate;
+	}
 }
 
 void FPSControl()

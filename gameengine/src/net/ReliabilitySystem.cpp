@@ -9,7 +9,7 @@
 
 namespace net {
 
-ReliabilitySystem::ReliabilitySystem( unsigned int max_sequence = 0xFFFFFFFF )
+ReliabilitySystem::ReliabilitySystem( unsigned int max_sequence )
 {
 	this->rtt_maximum = rtt_maximum;
 	this->max_sequence = max_sequence;

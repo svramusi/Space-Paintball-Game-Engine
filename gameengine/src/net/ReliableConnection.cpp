@@ -9,7 +9,7 @@
 
 namespace net {
 
-ReliableConnection::ReliableConnection( unsigned int protocolId, float timeout, unsigned int max_sequence = 0xFFFFFFFF )
+ReliableConnection::ReliableConnection( unsigned int protocolId, float timeout, unsigned int max_sequence )
 			: Connection( protocolId, timeout ), reliabilitySystem( max_sequence )
 {
 	ClearData();

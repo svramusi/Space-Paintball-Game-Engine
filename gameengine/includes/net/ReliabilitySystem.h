@@ -8,6 +8,11 @@
 #ifndef RELIABILITYSYSTEM_H_
 #define RELIABILITYSYSTEM_H_
 
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include "PacketQueue.h"
+
 namespace net {
 
 /*

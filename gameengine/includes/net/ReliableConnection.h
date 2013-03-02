@@ -8,6 +8,8 @@
 #ifndef RELIABLECONNECTION_H_
 #define RELIABLECONNECTION_H_
 
+#include <iostream>
+#include <fstream>
 #include "Connection.h"
 #include "ReliabilitySystem.h"
 
@@ -42,7 +44,7 @@ protected:
 		void ReadInteger( const unsigned char * data, unsigned int & value );
 		void ReadHeader( const unsigned char * header, unsigned int & sequence, unsigned int & ack, unsigned int & ack_bits );
 		virtual void OnStop();
-		virtual void OnDisconnect()
+		virtual void OnDisconnect();
 
 private:
 	void ClearData();

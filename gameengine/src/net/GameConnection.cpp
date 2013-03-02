@@ -10,7 +10,7 @@
 namespace net
 {
 	GameConnection::GameConnection(Address& theAddress) {
-		connection = Connection( PROTOCOL_ID, TIME_OUT );
+		connection = Connection( ProtocolId, TimeOut );
 		address = theAddress;
 	}
 

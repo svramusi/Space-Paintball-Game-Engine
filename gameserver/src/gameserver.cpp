@@ -6,23 +6,18 @@
 #include "SDL-1.2.15/include/SDL.h"
 
 #include "net/Net.h"
+#include "net/Constants.hpp"
 #include "net/Connection.h"
 #include "net/NetUtils.h"
-#include "net/ServerMasterConnection.h"
 #include "utils/gun_utils.h"
 #include "physicsengine.h"
 #include "GameEngine.h"
 #include "TestCollectGameState.h"
 
+//#define SHOW_ACKS
+
 using namespace std;
 using namespace net;
-
-const int ServerMasterPort = 30000;
-const int ClientPort = 30001;
-const int ProtocolId = 0x99887766;
-const float DeltaTime = 0.25f;
-const float SendRate = 0.25f;
-const float TimeOut = 10.0f;
 
 int PollForOSMessages(bool* quit);
 int GetInputFromClient(bool* quit, ServerMasterConnection& connection);

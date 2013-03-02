@@ -8,6 +8,7 @@
 #ifndef PACKETQUEUE_H_
 #define PACKETQUEUE_H_
 
+#include <assert.h>
 #include <list>
 
 using namespace std;
