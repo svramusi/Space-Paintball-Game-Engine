@@ -2,6 +2,8 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include <iostream>
+#include <ostream>
 
 #include "SDL-1.2.15/include/SDL.h"
 
@@ -23,19 +25,20 @@ using namespace net;
 int PollForOSMessages(bool* quit);
 int GetInputFromClient(bool* quit, ReliableConnection& connection);
 void SendUpdateToClient(const float & sendRate, float& sendAccumulator, ReliableConnection& connection);
+void SendAddressToClient(const float & sendRate, float& sendAccumulator, ReliableConnection& connection, Address& address);
 bool TimeForRendering();
 void UpdateStatistics();
 void FPSControl();
 
 int main( int argc, char * argv[] )
 {
-	TestCollectGameState* test = new TestCollectGameState();
-	test->PrintGameState();
-	delete test;
+//	TestCollectGameState* test = new TestCollectGameState();
+//	test->PrintGameState();
+//	delete test;
 
-	GunUtils *guns = new GunUtils("example.xml");
-	guns->print_guns();
-	delete guns;
+//	GunUtils *guns = new GunUtils("example.xml");
+//	guns->print_guns();
+//	delete guns;
 
 //	PhysicsEngine *physics_engine = new PhysicsEngine();
 //	physics_engine->updateWorld();
@@ -56,7 +59,7 @@ int main( int argc, char * argv[] )
 	Mode mode = Server;
 	Address address;
 
-	// Initialize the client connection
+	// Initialize the master server connection
 	ReliableConnection connection( ProtocolId, TimeOut );
 
 	if ( !connection.Start( ServerPort ) )
@@ -91,6 +94,35 @@ int main( int argc, char * argv[] )
 
 		const float sendRate = flowControl.GetSendRate();
 
+		// Check if someone is trying to connect to the master server.
+		if(connection.HasData())
+		{
+			// Someone is trying to connect so get that client's address.
+			unsigned char packet[256];
+			Address clientAddress;
+			connection.GetAddress(clientAddress, packet, sizeof(packet));
+			printf( "client %d.%d.%d.%d:%d is trying to connect\n",
+					clientAddress.GetA(), clientAddress.GetB(), clientAddress.GetC(), clientAddress.GetD(), clientAddress.GetPort() );
+
+			// Initialize the regular server connection for the client to reconnect to.
+			ReliableConnection serverConnection( ProtocolId, TimeOut );
+
+			int theServerPort = ServerPort + 1;
+			if ( !serverConnection.Start( theServerPort ) )
+			{
+				printf( "could not start connection on port %d\n", theServerPort );
+				//return 1;
+			}
+
+			// Start listening for the client.
+			serverConnection.Listen();
+
+			// Store the regular server address.
+			Address serverAddress(127, 0, 0, 1, theServerPort);
+			// Send the client the regular server address to connect to.
+			//SendAddressToClient(sendRate, sendAccumulator, connection, serverAddress);
+		}
+
 		// detect changes in connection state
 
 		if ( mode == Server && connected && !connection.IsConnected() )
@@ -116,7 +148,7 @@ int main( int argc, char * argv[] )
 
 		sendAccumulator += DeltaTime;
 
-		SendUpdateToClient(sendRate, sendAccumulator, connection);
+		//SendUpdateToClient(sendRate, sendAccumulator, connection);
 
 		int input = GetInputFromClient(&quit, connection);
 
@@ -269,6 +301,23 @@ void SendUpdateToClient(const float & sendRate, float& sendAccumulator, Reliable
 		unsigned char packet[PacketSize];
 		memset( packet, 0, sizeof( packet ) );
 		connection.SendPacket( packet, sizeof( packet ) );
+		sendAccumulator -= 1.0f / sendRate;
+	}
+}
+
+void SendAddressToClient(const float & sendRate, float& sendAccumulator, ReliableConnection& connection, Address& address) {
+	while ( sendAccumulator > 1.0f / sendRate )
+	{
+		unsigned int port = (unsigned int)address.GetPort();
+		unsigned char packet[PacketSize];
+
+		printf(">>>>>>>>>>>>>>>>>>>>>>>>>>>%d\n", port);
+		for(int i = 0; i < PacketSize; i++)
+		{
+			packet[i] = 1;
+		}
+		//connection.WriteInteger(packet, port);
+		//connection.SendPacket( packet, sizeof( packet ) );
 		sendAccumulator -= 1.0f / sendRate;
 	}
 }

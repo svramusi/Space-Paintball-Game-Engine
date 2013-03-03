@@ -9,7 +9,7 @@
 #define CONSTANTS_HPP_
 
 namespace net {
-	const int ServerPort = 30000;
+	const int ServerPort = 40000;
 	const int ClientPort = 30001;
 	const int ProtocolId = 0x11223344;
 	const float DeltaTime = 1.0f / 30.0f;

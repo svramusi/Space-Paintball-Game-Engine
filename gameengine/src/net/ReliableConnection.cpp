@@ -18,12 +18,26 @@ ReliableConnection::ReliableConnection( unsigned int protocolId, float timeout, 
 	#endif
 }
 
+ReliableConnection::ReliableConnection( Socket theSocket, unsigned int protocolId, float timeout, unsigned int max_sequence )
+			: Connection( protocolId, timeout ), reliabilitySystem( max_sequence )
+{
+	this->socket = theSocket;
+	ClearData();
+	#ifdef NET_UNIT_TEST
+	packet_loss_mask = 0;
+	#endif
+}
 
 ReliableConnection::~ReliableConnection() {
 	if ( IsRunning() )
 	{
 		Stop();
 	}
+}
+
+ReliableConnection ReliableConnection::AcceptConnection( unsigned int protocolId, float timeout )
+{
+	return ReliableConnection( socket.AcceptConnection(), protocolId, timeout );
 }
 
 bool ReliableConnection::SendPacket( const unsigned char data[], int size )
@@ -42,7 +56,7 @@ bool ReliableConnection::SendPacket( const unsigned char data[], int size )
 	unsigned int ack_bits = reliabilitySystem.GenerateAckBits();
 	WriteHeader( packet, seq, ack, ack_bits );
 	memcpy( packet + header, data, size );
-		if ( !Connection::SendPacket( packet, size + header ) )
+	if ( !Connection::SendPacket( packet, size + header ) )
 		return false;
 	reliabilitySystem.PacketSent( size );
 	return true;

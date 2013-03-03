@@ -41,8 +41,10 @@ namespace net
 		virtual bool SendPacket( const unsigned char data[], int size );
 		virtual int ReceivePacket( unsigned char data[], int size );
 		int GetHeaderSize() const;
+		int GetAddress( Address & sender, unsigned char data[], int size );
 
 	protected:
+		Socket socket;
 		virtual void OnStart()		{}
 		virtual void OnStop()		{}
 		virtual void OnConnect()    {}
@@ -66,7 +68,6 @@ namespace net
 		bool running;
 		Mode mode;
 		State state;
-		Socket socket;
 		float timeoutAccumulator;
 		Address address;
 	};

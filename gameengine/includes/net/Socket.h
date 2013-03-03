@@ -8,7 +8,6 @@
 #ifndef SOCKET_H_
 #define SOCKET_H_
 
-#include <sys/select.h>
 #include <arpa/inet.h>
 #include <unistd.h>
 #include "Net.h"
@@ -19,10 +18,13 @@ namespace net
 	class Socket {
 	public:
 		Socket();
+		Socket(int& theSocket);
 		virtual ~Socket();
 
 		bool Open( unsigned short port );
 		void Close();
+		bool Listen();
+		Socket AcceptConnection();
 		bool IsOpen() const;
 		bool HasData() const;
 		bool Send( const Address & destination, const void * data, int size );

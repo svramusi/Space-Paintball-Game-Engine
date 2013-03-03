@@ -11,7 +11,10 @@ namespace net
 {
 	Socket::Socket() {
 		socket = 0;
+	}
 
+	Socket::Socket(int& theSocket) {
+		socket = theSocket;
 	}
 
 	Socket::~Socket() {
@@ -40,7 +43,7 @@ namespace net
 		address.sin_addr.s_addr = INADDR_ANY;
 		address.sin_port = htons( (unsigned short) port );
 
-		if ( bind( socket, (const sockaddr*) &address, sizeof(sockaddr_in) ) < 0 )
+		if ( bind( socket, (const sockaddr*) &address, sizeof(address) ) < 0 )
 		{
 			printf( "failed to bind socket\n" );
 			Close();
@@ -58,6 +61,41 @@ namespace net
 		}
 
 		return true;
+	}
+
+	/*
+	 * Listen will only work for TCP connections.
+	 */
+	bool Socket::Listen()
+	{
+		if(listen(socket,5) < 0)
+		{
+			printf("failed to listen\n");
+			Close();
+			return false;
+		}
+
+		return true;
+	}
+
+	Socket Socket::AcceptConnection()
+	{
+		struct sockaddr_in cli_addr;
+		printf(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>1\n");
+		socklen_t clilen = sizeof(sockaddr_in);
+		printf(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>2\n");
+		int newSocket = accept(socket,
+				 (struct sockaddr *) &cli_addr,
+				 &clilen);
+		printf(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>3\n");
+		if (newSocket < 0)
+		{
+		   printf("ERROR on accept");
+		   Close();
+		   return Socket();
+		}
+
+		return Socket(newSocket);
 	}
 
 	void Socket::Close()
@@ -123,8 +161,9 @@ namespace net
 
 	bool Socket::HasData() const
 	{
+		/*
 		// Determine if the socket has data.
-	    bool            result;
+	    bool            result = false;
 	    fd_set          sready;
 	    struct timeval  nowait;
 
@@ -133,7 +172,17 @@ namespace net
 	    //bzero((char *)&nowait,sizeof(nowait));
 	    memset((char *)&nowait,0,sizeof(nowait));
 
-	    result = select(this->socket+1,&sready,NULL,NULL,&nowait);
+	    int returnValue = select(this->socket+1,&sready,NULL,NULL,&nowait);
+
+	    if(returnValue == -1)
+	    {
+	    	perror("select()");
+	    }
+	    else
+	    {
+	    	printf("Data is available for reading now.\n");
+	    }
+
 	    if( FD_ISSET(this->socket,&sready) )
 	    {
 	    	result = true;
@@ -144,5 +193,28 @@ namespace net
 	    }
 
 	    return result;
+	    */
+		int timeOut = 100; //ms
+		fd_set socketReadSet;
+		FD_ZERO(&socketReadSet);
+		FD_SET(socket,&socketReadSet);
+		struct timeval tv;
+		if (timeOut) {
+			tv.tv_sec  = timeOut / 1000;
+			tv.tv_usec = (timeOut % 1000) * 1000;
+		} else {
+			tv.tv_sec  = 0;
+			tv.tv_usec = 0;
+		} // if
+
+		if (select(socket+1,&socketReadSet,0,0,&tv) == -1) {
+			perror("select()\n");
+			return false;
+		} // if
+		int res = FD_ISSET(socket,&socketReadSet);
+
+		//printf("res>>>>>>>>>>>>>>>>>>>>>%d\n", res);
+
+		return res != 0;
 	}
 }

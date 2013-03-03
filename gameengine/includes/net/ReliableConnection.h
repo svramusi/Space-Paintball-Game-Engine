@@ -21,6 +21,7 @@ namespace net {
 class ReliableConnection : public Connection {
 public:
 	ReliableConnection( unsigned int protocolId, float timeout, unsigned int max_sequence = 0xFFFFFFFF );
+	ReliableConnection( Socket theSocket, unsigned int protocolId, float timeout, unsigned int max_sequence = 0xFFFFFFFF );
 	virtual ~ReliableConnection();
 
 	// overriden functions from "Connection"
@@ -29,6 +30,7 @@ public:
 	void Update( float deltaTime );
 	int GetHeaderSize() const;
 	ReliabilitySystem & GetReliabilitySystem();
+	ReliableConnection AcceptConnection( unsigned int protocolId, float timeout );
 
 	// unit test controls
 	#ifdef NET_UNIT_TEST

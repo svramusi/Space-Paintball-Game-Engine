@@ -10,6 +10,7 @@
 namespace net
 {
 	Connection::Connection() {
+
 	}
 
 	Connection::Connection( unsigned int protocolId, float timeout ) {
@@ -61,6 +62,7 @@ namespace net
 		printf( "server listening for connection\n" );
 		bool connected = IsConnected();
 		ClearData();
+		// Commenting out since listen only works for TCP connection -- socket.Listen();
 		if( connected )
 		{
 			OnDisconnect();
@@ -69,6 +71,9 @@ namespace net
 		state = Listening;
 	}
 
+	/*
+	 * Client Method
+	 */
 	void Connection::Connect( const Address & address )
 	{
 		printf( "client connecting to %d.%d.%d.%d:%d\n",
@@ -159,6 +164,44 @@ namespace net
 		assert( running );
 		unsigned char packet[size+4];
 		Address sender;
+		int bytes_read = socket.Receive( sender, packet, size + 4 );
+		if ( bytes_read == 0 )
+			return 0;
+		if ( bytes_read <= 4 )
+			return 0;
+		if ( packet[0] != (unsigned char) ( protocolId >> 24 ) ||
+			 packet[1] != (unsigned char) ( ( protocolId >> 16 ) & 0xFF ) ||
+			 packet[2] != (unsigned char) ( ( protocolId >> 8 ) & 0xFF ) ||
+			 packet[3] != (unsigned char) ( protocolId & 0xFF ) )
+			return 0;
+		if ( mode == Server && !IsConnected() )
+		{
+			printf( "server accepts connection from client %d.%d.%d.%d:%d\n",
+				sender.GetA(), sender.GetB(), sender.GetC(), sender.GetD(), sender.GetPort() );
+			state = Connected;
+			address = sender;
+			OnConnect();
+		}
+		if ( sender == address )
+		{
+			if ( mode == Client && state == Connecting )
+			{
+				printf( "client completes connection with server\n" );
+				state = Connected;
+				OnConnect();
+			}
+			timeoutAccumulator = 0.0f;
+			memcpy( data, &packet[4], bytes_read - 4 );
+			return bytes_read - 4;
+		}
+		return 0;
+	}
+
+	int Connection::GetAddress( Address & sender, unsigned char data[], int size )
+	{
+		assert( running );
+		unsigned char packet[size+4];
+
 		int bytes_read = socket.Receive( sender, packet, size + 4 );
 		if ( bytes_read == 0 )
 			return 0;

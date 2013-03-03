@@ -30,6 +30,7 @@ int GetUpdateFromServer(ReliableConnection& connection);
 bool TimeForRendering();
 void UpdateStatistics();
 void FPSControl();
+bool GetAddressFromServer(Address & address, FlowControl & flowControl, float & sendAccumulator, float & statsAccumulator, ReliableConnection& connection);
 
 int main( int argc, char * argv[] )
 {
@@ -91,6 +92,8 @@ int main( int argc, char * argv[] )
 	float statsAccumulator = 0.0f;
 
 	FlowControl flowControl;
+	Address serverAddress;
+	//GetAddressFromServer(serverAddress, flowControl, sendAccumulator, statsAccumulator, connection);
 
 	// Client Game Loop
 	while(!quit)
@@ -255,6 +258,90 @@ int main( int argc, char * argv[] )
 	} // End Client Game Loop
 
 	return 0;
+}
+
+bool GetAddressFromServer( Address & address, FlowControl & flowControl, float & sendAccumulator, float & statsAccumulator, ReliableConnection& connection )
+{
+	bool connected = false;
+
+	while(!connected)
+	{
+		// update flow control
+		if ( connection.IsConnected() )
+		{
+			flowControl.Update( DeltaTime, connection.GetReliabilitySystem().GetRoundTripTime() * 1000.0f );
+		}
+
+		const float sendRate = flowControl.GetSendRate();
+
+		if ( !connected && connection.IsConnected() )
+		{
+			printf( "client connected to server\n" );
+			connected = true;
+		}
+
+		if ( !connected && connection.ConnectFailed() )
+		{
+			printf( "connection failed\n" );
+
+		}
+
+		// send and receive packets
+
+		sendAccumulator += DeltaTime;
+
+		while ( sendAccumulator > 1.0f / sendRate )
+		{
+			unsigned char packet[PacketSize];
+			memset( packet, 0, sizeof( packet ) );
+			connection.SendPacket( packet, sizeof( packet ) );
+			sendAccumulator -= 1.0f / sendRate;
+		}
+
+		while ( true )
+		{
+			unsigned char packet[256];
+			int bytes_read = connection.ReceivePacket( packet, sizeof(packet) );
+			if ( bytes_read == 0 )
+				break;
+
+			for(int i = 0; i < sizeof(packet); i++)
+			{
+				printf("Packet[%d]: %u\n", i, packet[i]);
+			}
+		}
+
+		// update connection
+		connection.Update( DeltaTime );
+
+		// show connection stats
+		statsAccumulator += DeltaTime;
+
+		while ( statsAccumulator >= 0.25f && connection.IsConnected() )
+		{
+			float rtt = connection.GetReliabilitySystem().GetRoundTripTime();
+
+			unsigned int sent_packets = connection.GetReliabilitySystem().GetSentPackets();
+			unsigned int acked_packets = connection.GetReliabilitySystem().GetAckedPackets();
+			unsigned int lost_packets = connection.GetReliabilitySystem().GetLostPackets();
+
+			float sent_bandwidth = connection.GetReliabilitySystem().GetSentBandwidth();
+			float acked_bandwidth = connection.GetReliabilitySystem().GetAckedBandwidth();
+
+			printf( "rtt %.1fms, sent %d, acked %d, lost %d (%.1f%%), sent bandwidth = %.1fkbps, acked bandwidth = %.1fkbps\n",
+				rtt * 1000.0f, sent_packets, acked_packets, lost_packets,
+				sent_packets > 0.0f ? (float) lost_packets / (float) sent_packets * 100.0f : 0.0f,
+				sent_bandwidth, acked_bandwidth );
+
+			statsAccumulator -= 0.25f;
+		}
+
+
+		NetUtils::wait( DeltaTime );
+	}
+	address = Address(127, 0, 0, 1, ServerPort+1);
+
+	return true;
 }
 
 int GetUpdateFromServer(ReliableConnection& connection)

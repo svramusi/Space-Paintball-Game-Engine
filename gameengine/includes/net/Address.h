@@ -8,6 +8,12 @@
 #ifndef ADDRESS_H_
 #define ADDRESS_H_
 
+#include <iomanip>
+#include <sstream>
+#include <string>
+
+using namespace std;
+
 namespace net
 {
 	// Internet address class
@@ -27,6 +33,7 @@ namespace net
 		bool operator == ( const Address & other ) const;
 		bool operator != ( const Address & other ) const;
 		bool operator < ( const Address & other ) const;
+		string ToString();
 
 	private:
 		unsigned int address;
