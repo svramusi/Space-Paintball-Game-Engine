@@ -13,7 +13,7 @@ struct collision_info_t;
 
 struct collision_info_t {
     int ID; //id of the object that collides with the ID specified in collisions_t
-    //std::vector<float> p; //penetration vector that you'll use to resolve the collision
+    Point p; //penetration vector that you'll use to resolve the collision
     collision_info_t *next;
 };
 
@@ -27,7 +27,7 @@ class CollisionDetection {
 public:
     CollisionDetection();
     ~CollisionDetection();
-
+    void updatePosition(int ID, Point newCenter);
     void freeCollisions(collisions_t *collisions);
 
     //collisionDetection* detect_collision(detectCollision* collidableObject);

@@ -5,6 +5,7 @@
 #include "physicsengine.h"
 
 #define PI 3.14159265
+#define ELASTIC .98
 
 using namespace std;
 
@@ -52,7 +53,12 @@ PhysicsEngine::updateWorld(float timeStep)
 		calculatePosition(&(*it),timeStep);
 		calculateAngularVelocity(&(*it),timeStep);
 		calculateAngularPosition(&(*it),timeStep); //NEEDS CALCULATE POI UPDATED TO WORK
-	    //call UPDATE HERE t.ID, if->aabb ...
+		   if(it->aabbObject != NULL)
+			   cd->updatePosition(it->ID, (it->aabbObject->center));
+		   else
+		       cd->updatePosition(it->ID, (it->sphereObject->center));
+
+		//call UPDATE HERE t.ID, if->aabb ...
 		//are we better to just do center in constructor?
 	}
 
@@ -61,10 +67,79 @@ PhysicsEngine::updateWorld(float timeStep)
     if(collisions != NULL) {
         cout << endl << "There is a collision between object ID: " << collisions->ID
             << " and object ID: " << collisions->info->ID << endl << endl;
+        //The cout will not work
+        processCollsion(collisions);
     }
 
     cd->freeCollisions(collisions);
+}
 
+physicsInfo* PhysicsEngine::getObject(int ID)
+{
+	for (std::vector<physicsInfo>::iterator it = physicsObjects.begin(); it != physicsObjects.end(); ++it)
+	{
+		if((*it).ID == ID)
+			return &(*it);
+	}
+	return NULL;
+}
+
+int PhysicsEngine::processCollisionID(collisions_t col)
+{
+	Force P;
+	collision_info_t* current;
+	collision_info_t* next;
+	physicsInfo *cur, *cur2;
+	current = col.info;
+    cur = getObject(col.ID);
+
+
+	while(current != NULL)
+	{
+		next = current->next;
+
+		cur2 = getObject(current->ID);
+		P.x = (ELASTIC+1) * ((cur2->angularVelocity.x * current->p.x - cur->angularVelocity.x * current->p.x )/((1/cur->mass)+(1/cur2->mass))* (current->p.x));
+
+		P.y = (ELASTIC+1) * ((cur2->angularVelocity.y * current->p.y - cur->angularVelocity.y * current->p.y )/((1/cur->mass)+(1/cur2->mass))* (current->p.y));
+
+		P.z = (ELASTIC+1) * ((cur2->angularVelocity.z * current->p.z - cur->angularVelocity.z *current->p.z )/((1/cur->mass)+(1/cur2->mass))* (current->p.z));
+
+		cur->angularVelocity.x = cur->angularVelocity.x + (P.x/cur->mass);
+		cur->angularVelocity.y = cur->angularVelocity.y + (P.y/cur->mass);
+		cur->angularVelocity.z = cur->angularVelocity.z + (P.z/cur->mass);
+
+		cur2->angularVelocity.x = cur2->angularVelocity.x + (P.x/cur2->mass);
+		cur2->angularVelocity.y = cur2->angularVelocity.y + (P.y/cur2->mass);
+		cur2->angularVelocity.z = cur2->angularVelocity.z + (P.z/cur2->mass);
+		current = next;
+	}
+	return (col.ID);
+}
+
+void PhysicsEngine::processCollsion(collisions_t* col)
+{
+	std::vector<int> processed;
+	collisions_t* current;
+	collisions_t* next;
+
+	current = col;
+
+	while(current != NULL)
+	    {
+	        next = current->next;
+	        processed.push_back(processCollisionID(*current));
+	        current = next;
+	    }
+
+}
+/*
+ *
+1) Handle all collisions one by one
+2) After collision detection and resolution, implement a "collision fixer", that what it does is to remove all the "penetrations between objects". For example, if a sphere was 0.1 units of distance, inside of another, it will move that sphere 0.1 units (in the direction of the collision vector), so that the sphere is out of the other. In this way, if your simulation step is small enough, you should get a pretty good approximation of what would happen in the real world.
+
+One difficulty in the second approach is that when moving an object out of collision of another, you might be creating a new collision, which you also need to fix (just "fix", i.e. just execute the second step).
+ */
 /*
     detectCollision* collidableObject;
 
@@ -76,7 +151,7 @@ PhysicsEngine::updateWorld(float timeStep)
     freeCollisions(collisions);
     free(collidableObject);
 */
-}
+
 
 
 
