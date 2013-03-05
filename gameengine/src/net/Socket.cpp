@@ -123,6 +123,7 @@ namespace net
 
 	bool Socket::HasData() const
 	{
+		/*
 		// Determine if the socket has data.
 	    bool            result;
 	    fd_set          sready;
@@ -143,6 +144,28 @@ namespace net
 	        result = false;
 	    }
 
-	    return result;
+	    return result;*/
+		int timeOut = 100; //ms
+		fd_set socketReadSet;
+		FD_ZERO(&socketReadSet);
+		FD_SET(socket,&socketReadSet);
+		struct timeval tv;
+		if (timeOut) {
+			tv.tv_sec  = timeOut / 1000;
+			tv.tv_usec = (timeOut % 1000) * 1000;
+		} else {
+			tv.tv_sec  = 0;
+			tv.tv_usec = 0;
+		} // if
+
+		if (select(socket+1,&socketReadSet,0,0,&tv) == -1) {
+			perror("select()\n");
+			return false;
+		} // if
+		int res = FD_ISSET(socket,&socketReadSet);
+
+		//printf("res>>>>>>>>>>>>>>>>>>>>>%d\n", res);
+
+		return res != 0;
 	}
 }

@@ -41,6 +41,7 @@ namespace net
 		virtual bool SendPacket( const unsigned char data[], int size );
 		virtual int ReceivePacket( unsigned char data[], int size );
 		int GetHeaderSize() const;
+		int GetAddress( Address & sender, unsigned char data[], int size );
 
 	protected:
 		virtual void OnStart()		{}

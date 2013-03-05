@@ -2,6 +2,8 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include <iomanip>
+#include <sstream>
 
 #include "SDL-1.2.15/include/SDL.h"
 
@@ -27,6 +29,7 @@ int PollForOSMessages(bool* quit);
 int GetInput(bool* quit);
 void SendInputToServer(int input, const float & sendRate, float & sendAccumulator, ReliableConnection& connection);
 int GetUpdateFromServer(ReliableConnection& connection);
+unsigned short & GetServerPort(FlowControl& flowControl, float & sendAccumulator, ReliableConnection& connection);
 bool TimeForRendering();
 void UpdateStatistics();
 void FPSControl();
@@ -48,7 +51,7 @@ int main( int argc, char * argv[] )
 	};
 
 	Mode mode = Client;
-	Address address;
+	Address masterServerAddress;
 	int userSpecifiedClientPort = 0;
 
 	if ( argc >= 2 )
@@ -56,7 +59,7 @@ int main( int argc, char * argv[] )
 		int a,b,c,d;
 		if ( sscanf( argv[1], "%d.%d.%d.%d", &a, &b, &c, &d ) )
 		{
-			address = Address(a,b,c,d,ServerPort);
+			masterServerAddress = Address(a,b,c,d,MasterServerPort);
 		}
 
 		if( argc >=3 && sscanf( argv[2], "%d", &userSpecifiedClientPort ) )
@@ -84,13 +87,26 @@ int main( int argc, char * argv[] )
 		return 1;
 	}
 
-	connection.Connect( address );
+	connection.Connect( masterServerAddress );
 
 	bool connected = false;
 	float sendAccumulator = 0.0f;
 	float statsAccumulator = 0.0f;
 
 	FlowControl flowControl;
+
+	unsigned short serverPort = GetServerPort(flowControl, sendAccumulator, connection);
+	Address serverAddress(masterServerAddress.GetA(), masterServerAddress.GetB(), masterServerAddress.GetC(), masterServerAddress.GetD(), serverPort);
+
+	connection.Stop();
+
+	if ( !connection.Start( theClientPort ) )
+	{
+		printf( "could not start connection on port %d\n", theClientPort );
+		return 1;
+	}
+
+	connection.Connect( serverAddress );
 
 	// Client Game Loop
 	while(!quit)
@@ -180,7 +196,7 @@ int main( int argc, char * argv[] )
 
 		///////////////////////////////////////////////////////////
 		//Update Game State Copy
-		int inputFromServer = GetUpdateFromServer( connection );
+		//int inputFromServer = GetUpdateFromServer( connection );
 		// Update local game state (or game state copy).
 		//gameEngine.UpdateGameState(inputFromServer);
 		///////////////////////////////////////////////////////////
@@ -257,6 +273,49 @@ int main( int argc, char * argv[] )
 	return 0;
 }
 
+unsigned short & GetServerPort(FlowControl& flowControl, float & sendAccumulator, ReliableConnection& connection)
+{
+	unsigned short serverPort = 0;
+	char port [6] = {0, 0, 0, 0, 0, 0};
+
+	while( serverPort == 0 )
+	{
+		const float sendRate = flowControl.GetSendRate();
+
+		sendAccumulator += DeltaTime;
+
+		SendInputToServer(0, sendRate, sendAccumulator, connection);
+
+		while ( true )
+		{
+			unsigned char packet[256];
+			int bytes_read = connection.ReceivePacket( packet, sizeof(packet) );
+			if ( bytes_read == 0 )
+			{
+				break;
+			}
+
+			printf( "received packet from server\n" );
+
+			for(int i = 0; i < sizeof(packet); i++)
+			{
+				port[i] = packet[i];
+
+				if( packet[i] == '\0')
+				{
+					break;
+				}
+			}
+		}
+
+		serverPort = (unsigned short) strtoul(port, NULL, 0);
+	}
+
+	printf( "Port is: %d\n", serverPort);
+
+	return serverPort;
+}
+
 int GetUpdateFromServer(ReliableConnection& connection)
 {
 	while ( true )
@@ -267,6 +326,7 @@ int GetUpdateFromServer(ReliableConnection& connection)
 			break;
 
 		printf( "received packet from server\n" );
+		printf( "Data received: %s", packet );
 	}
 }
 
