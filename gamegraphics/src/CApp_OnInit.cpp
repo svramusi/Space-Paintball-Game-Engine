@@ -9,9 +9,9 @@ bool CApp::OnInit() {
         return false;
     }
  
-  /*  if((Surf_Test = CSurface::OnLoad("myimage.bmp")) == NULL) {
+    if((Surf_Test = CSurface::OnLoad("ball.bmp")) == NULL) {
         return false;
-    }*/ //load custom image
+    } //load custom image
  
     return true;
 }
