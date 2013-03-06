@@ -29,6 +29,9 @@ int CApp::OnExecute() {
     return 0;
 }
 
+void CApp::OnEvent(SDL_Event* Event) {
+    CEvent::OnEvent(Event);
+}
 
 void CApp::OnExit() {
     Running = false;

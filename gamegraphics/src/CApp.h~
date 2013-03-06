@@ -19,8 +19,6 @@ class CApp {
         bool OnInit();
 
         void OnEvent(SDL_Event* Event);
-	
-	void OnExit();
 
         void OnLoop();
 

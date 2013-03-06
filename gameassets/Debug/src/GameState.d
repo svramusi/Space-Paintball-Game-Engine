@@ -1,4 +1,4 @@
 src/GameState.d: ../src/GameState.cpp \
- /home/amarppatel/workspace/Space-Paintball-Game-Engine/gameassets/includes/GameState.h
+ /home/bmtbandit/spaceBall_startover2/Space-Paintball-Game-Engine/gameassets/includes/GameState.h
 
-/home/amarppatel/workspace/Space-Paintball-Game-Engine/gameassets/includes/GameState.h:
+/home/bmtbandit/spaceBall_startover2/Space-Paintball-Game-Engine/gameassets/includes/GameState.h:
