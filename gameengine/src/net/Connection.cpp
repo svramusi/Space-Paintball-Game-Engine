@@ -154,6 +154,20 @@ namespace net
 		return socket.Send( address, packet, size + 4 );
 	}
 
+	bool Connection::SendPacket( Address & theAddress, const unsigned char data[], int size )
+	{
+		assert( running );
+		if ( theAddress.GetAddress() == 0 )
+			return false;
+		unsigned char packet[size+4];
+		packet[0] = (unsigned char) ( protocolId >> 24 );
+		packet[1] = (unsigned char) ( ( protocolId >> 16 ) & 0xFF );
+		packet[2] = (unsigned char) ( ( protocolId >> 8 ) & 0xFF );
+		packet[3] = (unsigned char) ( ( protocolId ) & 0xFF );
+		memcpy( &packet[4], data, size );
+		return socket.Send( theAddress, packet, size + 4 );
+	}
+
 	int Connection::ReceivePacket( unsigned char data[], int size )
 	{
 		assert( running );

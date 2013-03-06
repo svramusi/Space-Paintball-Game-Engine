@@ -169,7 +169,7 @@ int main( int argc, char * argv[] )
 		int input = GetInput(&quit);
 
 		// update flow control
-		if ( connection.IsConnected() )
+		//if ( connection.IsConnected() )
 		{
 			flowControl.Update( DeltaTime, connection.GetReliabilitySystem().GetRoundTripTime() * 1000.0f );
 		}
@@ -196,7 +196,7 @@ int main( int argc, char * argv[] )
 
 		///////////////////////////////////////////////////////////
 		//Update Game State Copy
-		//int inputFromServer = GetUpdateFromServer( connection );
+		int inputFromServer = GetUpdateFromServer( connection );
 		// Update local game state (or game state copy).
 		//gameEngine.UpdateGameState(inputFromServer);
 		///////////////////////////////////////////////////////////
@@ -281,20 +281,22 @@ unsigned short & GetServerPort(FlowControl& flowControl, float & sendAccumulator
 	while( serverPort == 0 )
 	{
 		const float sendRate = flowControl.GetSendRate();
-
+		//printf("1\n");
 		sendAccumulator += DeltaTime;
-
+		//printf("2\n");
 		SendInputToServer(0, sendRate, sendAccumulator, connection);
-
+		//printf("3\n");
 		while ( true )
 		{
 			unsigned char packet[256];
 			int bytes_read = connection.ReceivePacket( packet, sizeof(packet) );
+			printf("4\n");
 			if ( bytes_read == 0 )
 			{
 				break;
 			}
-
+			printf("\5\n");
+			printf( "Port 123 is: %s\n", packet);
 			printf( "received packet from server\n" );
 
 			for(int i = 0; i < sizeof(packet); i++)
@@ -309,6 +311,7 @@ unsigned short & GetServerPort(FlowControl& flowControl, float & sendAccumulator
 		}
 
 		serverPort = (unsigned short) strtoul(port, NULL, 0);
+		//printf( "Port is: %d\n", serverPort);
 	}
 
 	printf( "Port is: %d\n", serverPort);

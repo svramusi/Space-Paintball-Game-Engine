@@ -38,6 +38,7 @@ namespace net
 		bool IsListening() const;
 		Mode GetMode() const;
 		virtual void Update( float deltaTime );
+		bool SendPacket( Address & theAddress, const unsigned char data[], int size );
 		virtual bool SendPacket( const unsigned char data[], int size );
 		virtual int ReceivePacket( unsigned char data[], int size );
 		int GetHeaderSize() const;

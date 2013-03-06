@@ -81,7 +81,7 @@ int main( int argc, char * argv[] )
 	// Server Game Loop
 	while(!quit)
 	{
-		if ( connection.IsConnected() )
+		//if ( connection.IsConnected() )
 		{
 			flowControl.Update( DeltaTime, connection.GetReliabilitySystem().GetRoundTripTime() * 1000.0f );
 		}
@@ -128,7 +128,7 @@ int main( int argc, char * argv[] )
 				clientAddressAlreadyProcessed = true;
 			}
 
-			if(clientAddressAlreadyProcessed)
+			if(!clientAddressAlreadyProcessed)
 			{
 				printf( "client %d.%d.%d.%d:%d is trying to connect\n",
 						clientAddress.GetA(), clientAddress.GetB(), clientAddress.GetC(), clientAddress.GetD(), clientAddress.GetPort() );
@@ -171,7 +171,8 @@ int main( int argc, char * argv[] )
 					// Add string terminator.
 					buff[5] = '\0';
 
-					connection.SendPacket( buff, sizeof( buff ) );
+					connection.SendPacket( clientAddress, buff, sizeof( buff ) );
+					printf("SENT %s\n", buff);
 					sendAccumulator -= 1.0f / sendRate;
 				}
 			} // End if !map.containsKey(clientAddress)

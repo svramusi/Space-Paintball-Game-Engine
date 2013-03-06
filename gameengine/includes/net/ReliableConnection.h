@@ -24,6 +24,7 @@ public:
 	virtual ~ReliableConnection();
 
 	// overriden functions from "Connection"
+	bool SendPacket( Address & theAddress, const unsigned char data[], int size );
 	bool SendPacket( const unsigned char data[], int size );
 	int ReceivePacket( unsigned char data[], int size );
 	void Update( float deltaTime );

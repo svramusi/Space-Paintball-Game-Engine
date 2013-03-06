@@ -26,6 +26,28 @@ ReliableConnection::~ReliableConnection() {
 	}
 }
 
+bool ReliableConnection::SendPacket( Address & theAddress, const unsigned char data[], int size )
+{
+	#ifdef NET_UNIT_TEST
+	if ( reliabilitySystem.GetLocalSequence() & packet_loss_mask )
+	{
+		reliabilitySystem.PacketSent( size );
+		return true;
+	}
+	#endif
+	const int header = 12;
+	unsigned char packet[header+size];
+	unsigned int seq = reliabilitySystem.GetLocalSequence();
+	unsigned int ack = reliabilitySystem.GetRemoteSequence();
+	unsigned int ack_bits = reliabilitySystem.GenerateAckBits();
+	WriteHeader( packet, seq, ack, ack_bits );
+	memcpy( packet + header, data, size );
+		if ( !Connection::SendPacket( theAddress, packet, size + header ) )
+		return false;
+	reliabilitySystem.PacketSent( size );
+	return true;
+}
+
 bool ReliableConnection::SendPacket( const unsigned char data[], int size )
 {
 	#ifdef NET_UNIT_TEST
