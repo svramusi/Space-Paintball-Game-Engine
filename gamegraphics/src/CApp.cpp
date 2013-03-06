@@ -7,7 +7,12 @@ CApp::CApp() {
  
     Running = true;
 }
+void CApp::setPos(int xP, int yP)
+{
+	LocX= xP;
+	LocY = yP;
 
+}
 int CApp::OnExecute() {
     if(OnInit() == false) {
         return -1;

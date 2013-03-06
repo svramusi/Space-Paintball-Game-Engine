@@ -12,6 +12,7 @@ class CApp : public CEvent {
         SDL_Surface*    Surf_Display;
  
         SDL_Surface*    Surf_Test;
+        int 			LocX, LocY;
  
     public:
         CApp();
@@ -19,6 +20,7 @@ class CApp : public CEvent {
         int OnExecute();
  
     public:
+        void setPos(int x, int y);
         bool OnInit();
  
         void OnEvent(SDL_Event* Event);
@@ -26,9 +28,14 @@ class CApp : public CEvent {
         void OnLoop();
  
         void OnRender();
- 
+        void OnRender(int x, int y);
+        void OnClear();
+
         void OnCleanup();
 
 	void OnExit();
+	void OnMouseMove(int mX, int mY, int relX, int relY, bool Left,bool Right,bool Middle);
+	void OnLButtonDown(int mX, int mY);
+	void OnKeyDown(SDLKey sym, SDLMod mod, Uint16 unicode);
 };
 #endif

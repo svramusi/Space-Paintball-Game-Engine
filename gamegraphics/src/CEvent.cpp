@@ -1,4 +1,5 @@
 #include "CEvent.h"
+#include "CApp.h"
  //http://www.sdltutorials.com/sdl-events
 CEvent::CEvent() {
 }
@@ -160,7 +161,8 @@ void CEvent::OnMouseBlur() {
 }
  
 void CEvent::OnMouseMove(int mX, int mY, int relX, int relY, bool Left,bool Right,bool Middle) {
-    //Pure virtual, do nothing
+
+	//Pure virtual, do nothing
 }
  
 void CEvent::OnMouseWheel(bool Up, bool Down) {
