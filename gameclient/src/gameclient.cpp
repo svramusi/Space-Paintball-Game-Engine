@@ -173,7 +173,6 @@ int main( int argc, char * argv[] )
 		}
 		printf("Recieved bytes %d\nReceived string \"%s\"\n", bytecount, buffer);
 
-		close(hsock);
 		///////////////////////////////////////////////////////////
 
 		SendInputToServer(input);
@@ -212,6 +211,7 @@ int main( int argc, char * argv[] )
 		NetUtils::wait( DeltaTime );
 	} // End Client Game Loop
 
+	close(hsock);
 FINISH:
 ;
 }

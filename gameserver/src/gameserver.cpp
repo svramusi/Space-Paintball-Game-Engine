@@ -28,6 +28,7 @@ bool TimeForRendering();
 void UpdateStatistics();
 void FPSControl();
 void* SocketHandler(void*);
+bool HasData(int & csock);
 
 int main( int argc, char * argv[] )
 {
@@ -228,27 +229,60 @@ void* SocketHandler(void* lp)
 {
     int *csock = (int*)lp;
 
-	char buffer[1024];
-	int buffer_len = 1024;
-	int bytecount;
+    bool quit = false;
 
-	memset(buffer, 0, buffer_len);
-	if((bytecount = recv(*csock, buffer, buffer_len, 0))== -1){
-		fprintf(stderr, "Error receiving data %d\n", errno);
-		goto FINISH;
-	}
-	printf("Received bytes %d\nReceived string \"%s\"\n", bytecount, buffer);
-	strcat(buffer, " SERVER ECHO");
+    while(!quit)
+    {
+    	if(HasData(*csock))
+    	{
+			char buffer[1024];
+			int buffer_len = 1024;
+			int bytecount;
 
-	if((bytecount = send(*csock, buffer, strlen(buffer), 0))== -1){
-		fprintf(stderr, "Error sending data %d\n", errno);
-		goto FINISH;
-	}
+			memset(buffer, 0, buffer_len);
+			if((bytecount = recv(*csock, buffer, buffer_len, 0))== -1){
+				fprintf(stderr, "Error receiving data %d\n", errno);
+				goto FINISH;
+			}
+			printf("Received bytes %d\nReceived string \"%s\"\n", bytecount, buffer);
+			strcat(buffer, " SERVER ECHO");
 
-	printf("Sent bytes %d\n", bytecount);
+			if((bytecount = send(*csock, buffer, strlen(buffer), 0))== -1){
+				fprintf(stderr, "Error sending data %d\n", errno);
+				goto FINISH;
+			}
 
+			printf("Sent bytes %d\n", bytecount);
+    	}
+
+		NetUtils::wait( DeltaTime );
+    }
 
 FINISH:
 	free(csock);
     return 0;
+}
+
+bool HasData(int& csock)
+{
+	int timeOut = 100; //ms
+	fd_set socketReadSet;
+	FD_ZERO(&socketReadSet);
+	FD_SET(csock,&socketReadSet);
+	struct timeval tv;
+	if (timeOut) {
+		tv.tv_sec  = timeOut / 1000;
+		tv.tv_usec = (timeOut % 1000) * 1000;
+	} else {
+		tv.tv_sec  = 0;
+		tv.tv_usec = 0;
+	} // if
+
+	if (select(csock+1,&socketReadSet,0,0,&tv) == -1) {
+		perror("select()\n");
+		return false;
+	} // if
+	int res = FD_ISSET(csock,&socketReadSet);
+
+	return res != 0;
 }
