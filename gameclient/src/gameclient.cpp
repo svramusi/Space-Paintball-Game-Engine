@@ -27,7 +27,7 @@ const int MaxFrameSkip = 10;
 
 int PollForOSMessages(bool* quit);
 int GetInput(bool* quit);
-void SendInputToServer(int input, const float & sendRate, float & sendAccumulator, ReliableConnection& connection);
+void SendInputToServer(Address& serverAddress, int input, const float & sendRate, float & sendAccumulator, ReliableConnection& connection);
 int GetUpdateFromServer(ReliableConnection& connection);
 unsigned short & GetServerPort(FlowControl& flowControl, float & sendAccumulator, ReliableConnection& connection);
 void ConnectToMasterServer(FlowControl& flowControl, float & sendAccumulator, ReliableConnection& connection);
@@ -96,10 +96,11 @@ int main( int argc, char * argv[] )
 
 	FlowControl flowControl;
 
-	//unsigned short serverPort = GetServerPort(flowControl, sendAccumulator, connection);
-	//Address serverAddress(masterServerAddress.GetA(), masterServerAddress.GetB(), masterServerAddress.GetC(), masterServerAddress.GetD(), serverPort);
+	unsigned short serverPort = GetServerPort(flowControl, sendAccumulator, connection);
+	printf("Server Port: %d\n", serverPort);
+	Address serverAddress(masterServerAddress.GetA(), masterServerAddress.GetB(), masterServerAddress.GetC(), masterServerAddress.GetD(), serverPort);
 
-	ConnectToMasterServer(flowControl, sendAccumulator, connection);
+	//ConnectToMasterServer(flowControl, sendAccumulator, connection);
 
 	connection.Stop();
 
@@ -109,8 +110,8 @@ int main( int argc, char * argv[] )
 		return 1;
 	}
 
-	//connection.Connect( serverAddress );
-	connection.Listen();
+	connection.Connect( serverAddress );
+	//connection.Listen();
 
 	// Client Game Loop
 	while(!quit)
@@ -196,7 +197,8 @@ int main( int argc, char * argv[] )
 
 		sendAccumulator += DeltaTime;
 
-		SendInputToServer(input, sendRate, sendAccumulator, connection);
+		//Address serverAddress(127,0,0,1,theClientPort);
+		SendInputToServer(serverAddress, input, sendRate, sendAccumulator, connection);
 
 		///////////////////////////////////////////////////////////
 		//Update Game State Copy
@@ -276,16 +278,17 @@ int main( int argc, char * argv[] )
 
 	return 0;
 }
-
+/*
 void ConnectToMasterServer(FlowControl& flowControl, float & sendAccumulator, ReliableConnection& connection)
 {
 	int messageReceived = 0;
+	Address masterServerAddress(127,0,0,1,ServerPort);
 
 	while( messageReceived == 0 )
 	{
 		const float sendRate = flowControl.GetSendRate();
 		sendAccumulator += DeltaTime;
-		SendInputToServer(0, sendRate, sendAccumulator, connection);
+		SendInputToServer(masterServerAddress, 0, sendRate, sendAccumulator, connection);
 		while ( true )
 		{
 			unsigned char packet[256];
@@ -295,11 +298,14 @@ void ConnectToMasterServer(FlowControl& flowControl, float & sendAccumulator, Re
 				break;
 			}
 
+			printf("ACKNOWLEDGEMENT RECEIVED!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n");
 			messageReceived = 1;
 		}
 	}
-}
 
+	printf("OUT OF LOOP\n");
+}
+*/
 unsigned short & GetServerPort(FlowControl& flowControl, float & sendAccumulator, ReliableConnection& connection)
 {
 	unsigned short serverPort = 0;
@@ -311,7 +317,8 @@ unsigned short & GetServerPort(FlowControl& flowControl, float & sendAccumulator
 		//printf("1\n");
 		sendAccumulator += DeltaTime;
 		//printf("2\n");
-		SendInputToServer(0, sendRate, sendAccumulator, connection);
+		Address masterServerAddress(127,0,0,1, MasterServerPort);
+		SendInputToServer(masterServerAddress, 0, sendRate, sendAccumulator, connection);
 		//printf("3\n");
 		while ( true )
 		{
@@ -360,13 +367,13 @@ int GetUpdateFromServer(ReliableConnection& connection)
 	}
 }
 
-void SendInputToServer(int input, const float & sendRate, float & sendAccumulator, ReliableConnection& connection)
+void SendInputToServer(Address& serverAddress, int input, const float & sendRate, float & sendAccumulator, ReliableConnection& connection)
 {
 	while ( sendAccumulator > 1.0f / sendRate )
 	{
 		unsigned char packet[PacketSize];
 		memset( packet, 0, sizeof( packet ) );
-		connection.SendPacket( packet, sizeof( packet ) );
+		connection.SendPacket( serverAddress, packet, sizeof( packet ) );
 		sendAccumulator -= 1.0f / sendRate;
 	}
 }

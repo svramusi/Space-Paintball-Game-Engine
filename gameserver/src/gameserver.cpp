@@ -25,6 +25,7 @@ using namespace net;
 
 int PollForOSMessages(bool* quit);
 int GetInputFromClient(bool* quit, ReliableConnection* connection);
+void SendAcknowledgementToClient(Address& clientAddress, const float & sendRate, float& sendAccumulator, ReliableConnection* connection);
 void SendUpdateToClient(const float & sendRate, float& sendAccumulator, ReliableConnection* connection);
 bool TimeForRendering();
 void UpdateStatistics();
@@ -145,22 +146,21 @@ int main( int argc, char * argv[] )
 				}
 
 				// Start listening for the client.
-				//serverConnection->Listen();
-				serverConnection->Connect(clientAddress);
+				serverConnection->Listen();
+				//serverConnection->Connect(clientAddress);
 
 				serverConnections.insert(make_pair(clientAddress, serverConnection));
 
 				const float sendRate = flowControl.GetSendRate();
 				//printf(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>%f<<<<<<<<<<<<<<<<<<<<<<<<<<<<<", sendRate);
 
-				SendUpdateToClient(sendRate, sendAccumulator, &connection);
+				//SendAcknowledgementToClient(clientAddress, sendRate, sendAccumulator, &connection);
 
 				// Store the regular server address.
-				//Address serverAddress(127, 0, 0, 1, theCurrentServerPort);
+				Address serverAddress(127, 0, 0, 1, theCurrentServerPort);
 				// Send the client the regular server address to connect to.
 				//SendAddressToClient(sendRate, sendAccumulator, connection, serverAddress);
 
-				/*
 				string result;
 				ostringstream convert;
 				convert << theCurrentServerPort;
@@ -183,7 +183,6 @@ int main( int argc, char * argv[] )
 					printf("SENT %s\n", buff);
 					sendAccumulator -= 1.0f / sendRate;
 				}
-				*/
 			} // End if !map.containsKey(clientAddress)
 		}
 
@@ -406,7 +405,24 @@ int GetInputFromClient(bool* quit, ReliableConnection* connection)
 	return input;
 }
 
-void SendUpdateToClient(const float & sendRate, float& sendAccumulator, ReliableConnection* connection) {
+void SendAcknowledgementToClient(Address& clientAddress, const float & sendRate, float& sendAccumulator, ReliableConnection* connection)
+{
+	printf("Send rate: %f | Send accumulator: %f\n", sendRate, sendAccumulator);
+	while ( sendAccumulator > 1.0f / sendRate )
+	{
+		unsigned char packet[PacketSize];
+		memset( packet, 0, sizeof( packet ) );
+		connection->SendPacket( clientAddress, packet, sizeof( packet ) );
+		sendAccumulator -= 1.0f / sendRate;
+		//unsigned char buff [] = "Hello World!";
+		//connection.SendPacket( buff, sizeof( buff ) );
+		//sendAccumulator -= 1.0f / sendRate;
+		printf(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>ACKNOWLEDGEMENT SENT<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n");
+	}
+}
+
+void SendUpdateToClient(const float & sendRate, float& sendAccumulator, ReliableConnection* connection)
+{
 	printf("Send rate: %f | Send accumulator: %f\n", sendRate, sendAccumulator);
 	while ( sendAccumulator > 1.0f / sendRate )
 	{
