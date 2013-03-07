@@ -4,14 +4,13 @@
 #include <vector>
 #include <iomanip>
 #include <sstream>
+#include <errno.h>
+#include <arpa/inet.h>
 
 #include "SDL-1.2.15/include/SDL.h"
 
 #include "net/Net.h"
 #include "net/Constants.hpp"
-#include "net/ReliableConnection.h"
-#include "net/PacketQueue.h"
-#include "net/FlowControl.h"
 #include "net/NetUtils.h"
 #include "GameEngine.h"
 #include "TestCollectGameState.h"
@@ -27,96 +26,69 @@ const int MaxFrameSkip = 10;
 
 int PollForOSMessages(bool* quit);
 int GetInput(bool* quit);
-void SendInputToServer(Address& serverAddress, int input, const float & sendRate, float & sendAccumulator, ReliableConnection& connection);
-int GetUpdateFromServer(ReliableConnection& connection);
-void InitializeServerPort(int & theServerPort, FlowControl& flowControl, float & sendAccumulator, ReliableConnection& connection);
-unsigned short & GetServerPort(FlowControl& flowControl, float & sendAccumulator, ReliableConnection& connection);
-void ConnectToMasterServer(FlowControl& flowControl, float & sendAccumulator, ReliableConnection& connection);
+void SendInputToServer(int input);
+int GetUpdateFromServer();
 bool TimeForRendering();
 void UpdateStatistics();
 void FPSControl();
 
 int main( int argc, char * argv[] )
 {
-	TestCollectGameState* test = new TestCollectGameState();
-	test->PrintGameState();
-	delete test;
+//	TestCollectGameState* test = new TestCollectGameState();
+//	test->PrintGameState();
+//	delete test;
 
 	bool quit = false;
 	GameEngine gameEngine;
 	Uint32 time = SDL_GetTicks();
 	bool needToRedraw = true;
 
-	enum Mode
-	{
-		Client
-	};
+	///////////////////////////////////////////////////////////////////
+	// Client Socket Initialization
+	///////////////////////////////////////////////////////////////////
+	int host_port= 1101;
+	char* host_name="127.0.0.1";
 
-	Mode mode = Client;
-	Address masterServerAddress;
-	int userSpecifiedClientPort = 0;
+	struct sockaddr_in my_addr;
 
-	if ( argc >= 2 )
-	{
-		int a,b,c,d;
-		if ( sscanf( argv[1], "%d.%d.%d.%d", &a, &b, &c, &d ) )
-		{
-			masterServerAddress = Address(a,b,c,d,MasterServerPort);
+	char buffer[1024];
+	int bytecount;
+	int buffer_len=0;
+
+	int hsock;
+	int * p_int;
+	int err;
+
+	hsock = socket(AF_INET, SOCK_STREAM, 0);
+	if(hsock == -1){
+		printf("Error initializing socket %d\n",errno);
+		goto FINISH;
+	}
+
+	p_int = (int*)malloc(sizeof(int));
+	*p_int = 1;
+
+	if( (setsockopt(hsock, SOL_SOCKET, SO_REUSEADDR, (char*)p_int, sizeof(int)) == -1 )||
+		(setsockopt(hsock, SOL_SOCKET, SO_KEEPALIVE, (char*)p_int, sizeof(int)) == -1 ) ){
+		printf("Error setting options %d\n",errno);
+		free(p_int);
+		goto FINISH;
+	}
+	free(p_int);
+
+	my_addr.sin_family = AF_INET ;
+	my_addr.sin_port = htons(host_port);
+
+	memset(&(my_addr.sin_zero), 0, 8);
+	my_addr.sin_addr.s_addr = inet_addr(host_name);
+
+	if( connect( hsock, (struct sockaddr*)&my_addr, sizeof(my_addr)) == -1 ){
+		if((err = errno) != EINPROGRESS){
+			fprintf(stderr, "Error connecting socket %d\n", errno);
+			goto FINISH;
 		}
-
-		if( argc >=3 && sscanf( argv[2], "%d", &userSpecifiedClientPort ) )
-		{
-			printf("User-Specified Client Port: %d\n", userSpecifiedClientPort);
-		}
 	}
-
-	int theClientPort = 0;
-	if( userSpecifiedClientPort > 0)
-	{
-		theClientPort = userSpecifiedClientPort;
-	}
-	else
-	{
-		theClientPort = ClientPort;
-	}
-
-	// Initialize the client connection
-	ReliableConnection connection( ProtocolId, TimeOut );
-
-	if ( !connection.Start( theClientPort ) )
-	{
-		printf( "could not start connection on port %d\n", theClientPort );
-		return 1;
-	}
-
-	connection.Connect( masterServerAddress );
-
-	bool connected = false;
-	float sendAccumulator = 0.0f;
-	float statsAccumulator = 0.0f;
-
-	FlowControl flowControl;
-
-	int theServerPort = theClientPort + 1;
-	sendAccumulator += DeltaTime;
-	InitializeServerPort(theServerPort, flowControl, sendAccumulator, connection);
-	printf("Server Port: %d\n", theServerPort);
-	Address serverAddress(masterServerAddress.GetA(), masterServerAddress.GetB(), masterServerAddress.GetC(), masterServerAddress.GetD(), theServerPort);
-
-	//ConnectToMasterServer(flowControl, sendAccumulator, connection);
-
-	connection.Stop();
-
-	if ( !connection.Start( theClientPort ) )
-	{
-		printf( "could not start connection on port %d\n", theClientPort );
-		return 1;
-	}
-
-	usleep(2000);
-
-	connection.Connect( serverAddress );
-	//connection.Listen();
+	///////////////////////////////////////////////////////////////////
 
 	// Client Game Loop
 	while(!quit)
@@ -178,55 +150,40 @@ int main( int argc, char * argv[] )
 
 		int input = GetInput(&quit);
 
-		// update flow control
-		if ( connection.IsConnected() )
-		{
-			flowControl.Update( DeltaTime, connection.GetReliabilitySystem().GetRoundTripTime() * 1000.0f );
+		///////////////////////////////////////////////////////////
+		// Client socket work
+		///////////////////////////////////////////////////////////
+		buffer_len = 1024;
+
+		memset(buffer, '\0', buffer_len);
+
+		printf("Enter some text to send to the server (press enter)\n");
+		fgets(buffer, 1024, stdin);
+		buffer[strlen(buffer)-1]='\0';
+
+		if( (bytecount=send(hsock, buffer, strlen(buffer),0))== -1){
+			fprintf(stderr, "Error sending data %d\n", errno);
+			goto FINISH;
 		}
+		printf("Sent bytes %d\n", bytecount);
 
-		const float sendRate = flowControl.GetSendRate();
-
-		if ( !connected && connection.IsConnected() )
-		{
-			printf( "client connected to server\n" );
-			connected = true;
+		if((bytecount = recv(hsock, buffer, buffer_len, 0))== -1){
+			fprintf(stderr, "Error receiving data %d\n", errno);
+			goto FINISH;
 		}
+		printf("Recieved bytes %d\nReceived string \"%s\"\n", bytecount, buffer);
 
-		if ( !connected && connection.ConnectFailed() )
-		{
-			printf( "connection failed\n" );
-			break;
-		}
+		close(hsock);
+		///////////////////////////////////////////////////////////
 
-		// send and receive packets
-
-		sendAccumulator += DeltaTime;
-
-		//Address serverAddress(127,0,0,1,theClientPort);
-		SendInputToServer(serverAddress, input, sendRate, sendAccumulator, connection);
+		SendInputToServer(input);
 
 		///////////////////////////////////////////////////////////
 		//Update Game State Copy
-		int inputFromServer = GetUpdateFromServer( connection );
+		int inputFromServer = GetUpdateFromServer();
 		// Update local game state (or game state copy).
 		//gameEngine.UpdateGameState(inputFromServer);
 		///////////////////////////////////////////////////////////
-
-		// show packets that were acked this frame
-
-		#ifdef SHOW_ACKS
-		unsigned int * acks = NULL;
-		int ack_count = 0;
-		connection.GetReliabilitySystem().GetAcks( &acks, ack_count );
-		if ( ack_count > 0 )
-		{
-			printf( "acks: %d", acks[0] );
-			for ( int i = 1; i < ack_count; ++i )
-				printf( ",%d", acks[i] );
-			printf( "\n" );
-		}
-		#endif
-
 
 		/*
 		 * Get information from the game engine to update
@@ -252,182 +209,21 @@ int main( int argc, char * argv[] )
 		 */
 		//SDL_Delay(1);
 
-		// update connection
-		connection.Update( DeltaTime );
-
-		// show connection stats
-		statsAccumulator += DeltaTime;
-
-		while ( statsAccumulator >= 0.25f && connection.IsConnected() )
-		{
-			float rtt = connection.GetReliabilitySystem().GetRoundTripTime();
-
-			unsigned int sent_packets = connection.GetReliabilitySystem().GetSentPackets();
-			unsigned int acked_packets = connection.GetReliabilitySystem().GetAckedPackets();
-			unsigned int lost_packets = connection.GetReliabilitySystem().GetLostPackets();
-
-			float sent_bandwidth = connection.GetReliabilitySystem().GetSentBandwidth();
-			float acked_bandwidth = connection.GetReliabilitySystem().GetAckedBandwidth();
-
-			printf( "rtt %.1fms, sent %d, acked %d, lost %d (%.1f%%), sent bandwidth = %.1fkbps, acked bandwidth = %.1fkbps\n",
-				rtt * 1000.0f, sent_packets, acked_packets, lost_packets,
-				sent_packets > 0.0f ? (float) lost_packets / (float) sent_packets * 100.0f : 0.0f,
-				sent_bandwidth, acked_bandwidth );
-
-			statsAccumulator -= 0.25f;
-		}
-
-
 		NetUtils::wait( DeltaTime );
 	} // End Client Game Loop
 
+FINISH:
+;
+}
+
+int GetUpdateFromServer()
+{
 	return 0;
 }
-/*
-void ConnectToMasterServer(FlowControl& flowControl, float & sendAccumulator, ReliableConnection& connection)
+
+void SendInputToServer(int input)
 {
-	int messageReceived = 0;
-	Address masterServerAddress(127,0,0,1,ServerPort);
 
-	while( messageReceived == 0 )
-	{
-		const float sendRate = flowControl.GetSendRate();
-		sendAccumulator += DeltaTime;
-		SendInputToServer(masterServerAddress, 0, sendRate, sendAccumulator, connection);
-		while ( true )
-		{
-			unsigned char packet[256];
-			int bytes_read = connection.ReceivePacket( packet, sizeof(packet) );
-			if ( bytes_read == 0 )
-			{
-				break;
-			}
-
-			printf("ACKNOWLEDGEMENT RECEIVED!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n");
-			messageReceived = 1;
-		}
-	}
-
-	printf("OUT OF LOOP\n");
-}
-*/
-unsigned short & GetServerPort(FlowControl& flowControl, float & sendAccumulator, ReliableConnection& connection)
-{
-	unsigned short serverPort = 0;
-	char port [6] = {0, 0, 0, 0, 0, 0};
-
-	while( serverPort == 0 )
-	{
-		const float sendRate = flowControl.GetSendRate();
-		//printf("1\n");
-		sendAccumulator += DeltaTime;
-		//printf("2\n");
-		Address masterServerAddress(127,0,0,1, MasterServerPort);
-		SendInputToServer(masterServerAddress, 0, sendRate, sendAccumulator, connection);
-		//printf("3\n");
-		while ( true )
-		{
-			unsigned char packet[256];
-			int bytes_read = connection.ReceivePacket( packet, sizeof(packet) );
-			printf("4\n");
-			if ( bytes_read == 0 )
-			{
-				break;
-			}
-			printf("\5\n");
-			printf( "Port 123 is: %s\n", packet);
-			printf( "received packet from server\n" );
-
-			for(int i = 0; i < sizeof(packet); i++)
-			{
-				port[i] = packet[i];
-
-				if( packet[i] == '\0')
-				{
-					break;
-				}
-			}
-		}
-
-		serverPort = (unsigned short) strtoul(port, NULL, 0);
-		//printf( "Port is: %d\n", serverPort);
-	}
-
-	printf( "Port is: %d\n", serverPort);
-
-	return serverPort;
-}
-
-void InitializeServerPort(int & theServerPort, FlowControl& flowControl, float & sendAccumulator, ReliableConnection& connection)
-{
-	const float sendRate = flowControl.GetSendRate();
-
-	Address masterServerAddress(127,0,0,1,MasterServerPort);
-
-	SendInputToServer(masterServerAddress, 0, sendRate, sendAccumulator, connection);
-
-	string result;
-	ostringstream convert;
-	convert << theServerPort;
-
-	result = convert.str();
-	printf("InitializeServerPort(): sendRate: %f | sendAccumulator: %f\n", sendRate, sendAccumulator);
-
-	printf("InitializeServerPort(): result %s\n", result.c_str());
-
-	bool sent = false;
-	while(!sent)
-	{
-		sendAccumulator += DeltaTime;
-
-		while ( sendAccumulator > 1.0f / sendRate )
-		{
-			unsigned char buff [6];
-			for(int i = 0; i < result.length(); i++)
-			{
-				buff[i] = result.at(i);
-			}
-
-			// Add string terminator.
-			buff[5] = '\0';
-
-			connection.SendPacket( buff, sizeof( buff ) );
-			printf("SENT %s\n", buff);
-			sent = true;
-			sendAccumulator -= 1.0f / sendRate;
-		}
-	}
-}
-
-int GetUpdateFromServer(ReliableConnection& connection)
-{
-	while ( true )
-	{
-		unsigned char packet[256];
-		int bytes_read = connection.ReceivePacket( packet, sizeof(packet) );
-		if ( bytes_read == 0 )
-			break;
-
-		printf( "received packet from server\n" );
-		printf( "Data received: %s", packet );
-	}
-}
-
-void SendInputToServer(Address& serverAddress, int input, const float & sendRate, float & sendAccumulator, ReliableConnection& connection)
-{
-	bool sent = false;
-	while(!sent)
-	{
-		sendAccumulator += DeltaTime;
-		while ( sendAccumulator > 1.0f / sendRate )
-		{
-			unsigned char packet[PacketSize];
-			memset( packet, 0, sizeof( packet ) );
-			connection.SendPacket( serverAddress, packet, sizeof( packet ) );
-			sendAccumulator -= 1.0f / sendRate;
-			sent = true;
-		}
-	}
 }
 
 void FPSControl()
