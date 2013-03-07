@@ -29,6 +29,7 @@ int PollForOSMessages(bool* quit);
 int GetInput(bool* quit);
 void SendInputToServer(Address& serverAddress, int input, const float & sendRate, float & sendAccumulator, ReliableConnection& connection);
 int GetUpdateFromServer(ReliableConnection& connection);
+void InitializeServerPort(int & theServerPort, FlowControl& flowControl, float & sendAccumulator, ReliableConnection& connection);
 unsigned short & GetServerPort(FlowControl& flowControl, float & sendAccumulator, ReliableConnection& connection);
 void ConnectToMasterServer(FlowControl& flowControl, float & sendAccumulator, ReliableConnection& connection);
 bool TimeForRendering();
@@ -96,9 +97,11 @@ int main( int argc, char * argv[] )
 
 	FlowControl flowControl;
 
-	unsigned short serverPort = GetServerPort(flowControl, sendAccumulator, connection);
-	printf("Server Port: %d\n", serverPort);
-	Address serverAddress(masterServerAddress.GetA(), masterServerAddress.GetB(), masterServerAddress.GetC(), masterServerAddress.GetD(), serverPort);
+	int theServerPort = theClientPort + 1;
+	sendAccumulator += DeltaTime;
+	InitializeServerPort(theServerPort, flowControl, sendAccumulator, connection);
+	printf("Server Port: %d\n", theServerPort);
+	Address serverAddress(masterServerAddress.GetA(), masterServerAddress.GetB(), masterServerAddress.GetC(), masterServerAddress.GetD(), theServerPort);
 
 	//ConnectToMasterServer(flowControl, sendAccumulator, connection);
 
@@ -109,6 +112,8 @@ int main( int argc, char * argv[] )
 		printf( "could not start connection on port %d\n", theClientPort );
 		return 1;
 	}
+
+	usleep(2000);
 
 	connection.Connect( serverAddress );
 	//connection.Listen();
@@ -353,6 +358,47 @@ unsigned short & GetServerPort(FlowControl& flowControl, float & sendAccumulator
 	return serverPort;
 }
 
+void InitializeServerPort(int & theServerPort, FlowControl& flowControl, float & sendAccumulator, ReliableConnection& connection)
+{
+	const float sendRate = flowControl.GetSendRate();
+
+	Address masterServerAddress(127,0,0,1,MasterServerPort);
+
+	SendInputToServer(masterServerAddress, 0, sendRate, sendAccumulator, connection);
+
+	string result;
+	ostringstream convert;
+	convert << theServerPort;
+
+	result = convert.str();
+	printf("InitializeServerPort(): sendRate: %f | sendAccumulator: %f\n", sendRate, sendAccumulator);
+
+	printf("InitializeServerPort(): result %s\n", result.c_str());
+
+	bool sent = false;
+	while(!sent)
+	{
+		sendAccumulator += DeltaTime;
+
+		while ( sendAccumulator > 1.0f / sendRate )
+		{
+			unsigned char buff [6];
+			for(int i = 0; i < result.length(); i++)
+			{
+				buff[i] = result.at(i);
+			}
+
+			// Add string terminator.
+			buff[5] = '\0';
+
+			connection.SendPacket( buff, sizeof( buff ) );
+			printf("SENT %s\n", buff);
+			sent = true;
+			sendAccumulator -= 1.0f / sendRate;
+		}
+	}
+}
+
 int GetUpdateFromServer(ReliableConnection& connection)
 {
 	while ( true )
@@ -369,12 +415,18 @@ int GetUpdateFromServer(ReliableConnection& connection)
 
 void SendInputToServer(Address& serverAddress, int input, const float & sendRate, float & sendAccumulator, ReliableConnection& connection)
 {
-	while ( sendAccumulator > 1.0f / sendRate )
+	bool sent = false;
+	while(!sent)
 	{
-		unsigned char packet[PacketSize];
-		memset( packet, 0, sizeof( packet ) );
-		connection.SendPacket( serverAddress, packet, sizeof( packet ) );
-		sendAccumulator -= 1.0f / sendRate;
+		sendAccumulator += DeltaTime;
+		while ( sendAccumulator > 1.0f / sendRate )
+		{
+			unsigned char packet[PacketSize];
+			memset( packet, 0, sizeof( packet ) );
+			connection.SendPacket( serverAddress, packet, sizeof( packet ) );
+			sendAccumulator -= 1.0f / sendRate;
+			sent = true;
+		}
 	}
 }
 

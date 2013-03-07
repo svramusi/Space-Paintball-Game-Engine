@@ -25,6 +25,7 @@ using namespace net;
 
 int PollForOSMessages(bool* quit);
 int GetInputFromClient(bool* quit, ReliableConnection* connection);
+unsigned short GetServerPort(FlowControl& flowControl, float & sendAccumulator, ReliableConnection& connection);
 void SendAcknowledgementToClient(Address& clientAddress, const float & sendRate, float& sendAccumulator, ReliableConnection* connection);
 void SendUpdateToClient(const float & sendRate, float& sendAccumulator, ReliableConnection* connection);
 bool TimeForRendering();
@@ -137,8 +138,8 @@ int main( int argc, char * argv[] )
 				// Initialize the regular server connection for the client to reconnect to.
 				ReliableConnection *serverConnection = new ReliableConnection( ProtocolId, TimeOut );
 
+				unsigned short theCurrentServerPort = GetServerPort(flowControl, sendAccumulator, connection);
 
-				theCurrentServerPort += 1;
 				if ( !serverConnection->Start( theCurrentServerPort ) )
 				{
 					printf( "could not start connection on port %d\n", theCurrentServerPort );
@@ -157,10 +158,10 @@ int main( int argc, char * argv[] )
 				//SendAcknowledgementToClient(clientAddress, sendRate, sendAccumulator, &connection);
 
 				// Store the regular server address.
-				Address serverAddress(127, 0, 0, 1, theCurrentServerPort);
+				//Address serverAddress(127, 0, 0, 1, theCurrentServerPort);
 				// Send the client the regular server address to connect to.
 				//SendAddressToClient(sendRate, sendAccumulator, connection, serverAddress);
-
+/*
 				string result;
 				ostringstream convert;
 				convert << theCurrentServerPort;
@@ -180,9 +181,10 @@ int main( int argc, char * argv[] )
 					buff[5] = '\0';
 
 					connection.SendPacket( clientAddress, buff, sizeof( buff ) );
-					printf("SENT %s\n", buff);
+					//printf("SENT %s\n", buff);
 					sendAccumulator -= 1.0f / sendRate;
 				}
+				*/
 			} // End if !map.containsKey(clientAddress)
 		}
 
@@ -435,4 +437,49 @@ void SendUpdateToClient(const float & sendRate, float& sendAccumulator, Reliable
 		//sendAccumulator -= 1.0f / sendRate;
 		printf(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>PACKET SENT<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n");
 	}
+}
+
+unsigned short GetServerPort(FlowControl& flowControl, float & sendAccumulator, ReliableConnection& connection)
+{
+	unsigned short serverPort = 0;
+	char port [6] = {0, 0, 0, 0, 0, 0};
+
+	while( serverPort == 0 )
+	{
+		const float sendRate = flowControl.GetSendRate();
+		//printf("1\n");
+		sendAccumulator += DeltaTime;
+		//printf("2\n");
+		//Address masterServerAddress(127,0,0,1, MasterServerPort);
+		//SendInputToServer(masterServerAddress, 0, sendRate, sendAccumulator, connection);
+		//printf("3\n");
+		while ( true )
+		{
+			unsigned char packet[256];
+			int bytes_read = connection.ReceivePacket( packet, sizeof(packet) );
+			//printf("4\n");
+			if ( bytes_read == 0 )
+			{
+				break;
+			}
+			//printf("\5\n");
+			printf( "Port is: %s\n", packet);
+			printf( "received packet from server\n" );
+
+			for(int i = 0; i < sizeof(packet); i++)
+			{
+				port[i] = packet[i];
+
+				if( packet[i] == '\0')
+				{
+					break;
+				}
+			}
+		}
+
+		serverPort = (unsigned short) strtoul(port, NULL, 0);
+		//printf( "Port is: %d\n", serverPort);
+	}
+
+	return serverPort;
 }
