@@ -1,9 +1,15 @@
 #ifndef _CAPP_H_
     #define _CAPP_H_
 
+#include <vector>
 #include "SDL-1.2.15/include/SDL.h"
+#include "SDL-1.2.15/include/SDL_opengl.h"
+/*#include <gl.h>
+#include <glu.h>
+#include <glut.h>*/
 #include "CEvent.h"
 #include "CSurface.h"
+#include "graphicsinfo.h"
 
 class CApp : public CEvent {
     private:
@@ -13,13 +19,19 @@ class CApp : public CEvent {
  
         SDL_Surface*    Surf_Test;
         int 			LocX, LocY;
+        int 			latestID;
+        std::vector<graphicsInfo> graphicsObjects;
  
     public:
         CApp();
  
         int OnExecute();
- 
-    public:
+        void UpdateGraphicsObject(int id, int x, int y, int z);
+        void InsertGraphicsObject(int x, int y, int z, char* file);
+        graphicsInfo* getObject(int ID);
+
+
+
         void setPos(int x, int y);
         bool OnInit();
  
@@ -37,5 +49,7 @@ class CApp : public CEvent {
 	void OnMouseMove(int mX, int mY, int relX, int relY, bool Left,bool Right,bool Middle);
 	void OnLButtonDown(int mX, int mY);
 	void OnKeyDown(SDLKey sym, SDLMod mod, Uint16 unicode);
+
+
 };
 #endif
