@@ -81,7 +81,7 @@ int main( int argc, char * argv[] )
 	// Server Game Loop
 	while(!quit)
 	{
-		//if ( connection.IsConnected() )
+		if ( connection.IsConnected() )
 		{
 			flowControl.Update( DeltaTime, connection.GetReliabilitySystem().GetRoundTripTime() * 1000.0f );
 		}
@@ -136,6 +136,7 @@ int main( int argc, char * argv[] )
 				// Initialize the regular server connection for the client to reconnect to.
 				ReliableConnection *serverConnection = new ReliableConnection( ProtocolId, TimeOut );
 
+
 				theCurrentServerPort += 1;
 				if ( !serverConnection->Start( theCurrentServerPort ) )
 				{
@@ -144,15 +145,22 @@ int main( int argc, char * argv[] )
 				}
 
 				// Start listening for the client.
-				serverConnection->Listen();
+				//serverConnection->Listen();
+				serverConnection->Connect(clientAddress);
 
 				serverConnections.insert(make_pair(clientAddress, serverConnection));
 
+				const float sendRate = flowControl.GetSendRate();
+				//printf(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>%f<<<<<<<<<<<<<<<<<<<<<<<<<<<<<", sendRate);
+
+				SendUpdateToClient(sendRate, sendAccumulator, &connection);
+
 				// Store the regular server address.
-				Address serverAddress(127, 0, 0, 1, theCurrentServerPort);
+				//Address serverAddress(127, 0, 0, 1, theCurrentServerPort);
 				// Send the client the regular server address to connect to.
 				//SendAddressToClient(sendRate, sendAccumulator, connection, serverAddress);
 
+				/*
 				string result;
 				ostringstream convert;
 				convert << theCurrentServerPort;
@@ -175,6 +183,7 @@ int main( int argc, char * argv[] )
 					printf("SENT %s\n", buff);
 					sendAccumulator -= 1.0f / sendRate;
 				}
+				*/
 			} // End if !map.containsKey(clientAddress)
 		}
 
@@ -398,6 +407,7 @@ int GetInputFromClient(bool* quit, ReliableConnection* connection)
 }
 
 void SendUpdateToClient(const float & sendRate, float& sendAccumulator, ReliableConnection* connection) {
+	printf("Send rate: %f | Send accumulator: %f\n", sendRate, sendAccumulator);
 	while ( sendAccumulator > 1.0f / sendRate )
 	{
 		unsigned char packet[PacketSize];
@@ -407,5 +417,6 @@ void SendUpdateToClient(const float & sendRate, float& sendAccumulator, Reliable
 		//unsigned char buff [] = "Hello World!";
 		//connection.SendPacket( buff, sizeof( buff ) );
 		//sendAccumulator -= 1.0f / sendRate;
+		printf(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>PACKET SENT<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n");
 	}
 }

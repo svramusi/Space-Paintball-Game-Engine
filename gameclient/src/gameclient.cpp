@@ -30,6 +30,7 @@ int GetInput(bool* quit);
 void SendInputToServer(int input, const float & sendRate, float & sendAccumulator, ReliableConnection& connection);
 int GetUpdateFromServer(ReliableConnection& connection);
 unsigned short & GetServerPort(FlowControl& flowControl, float & sendAccumulator, ReliableConnection& connection);
+void ConnectToMasterServer(FlowControl& flowControl, float & sendAccumulator, ReliableConnection& connection);
 bool TimeForRendering();
 void UpdateStatistics();
 void FPSControl();
@@ -95,8 +96,10 @@ int main( int argc, char * argv[] )
 
 	FlowControl flowControl;
 
-	unsigned short serverPort = GetServerPort(flowControl, sendAccumulator, connection);
-	Address serverAddress(masterServerAddress.GetA(), masterServerAddress.GetB(), masterServerAddress.GetC(), masterServerAddress.GetD(), serverPort);
+	//unsigned short serverPort = GetServerPort(flowControl, sendAccumulator, connection);
+	//Address serverAddress(masterServerAddress.GetA(), masterServerAddress.GetB(), masterServerAddress.GetC(), masterServerAddress.GetD(), serverPort);
+
+	ConnectToMasterServer(flowControl, sendAccumulator, connection);
 
 	connection.Stop();
 
@@ -106,7 +109,8 @@ int main( int argc, char * argv[] )
 		return 1;
 	}
 
-	connection.Connect( serverAddress );
+	//connection.Connect( serverAddress );
+	connection.Listen();
 
 	// Client Game Loop
 	while(!quit)
@@ -169,7 +173,7 @@ int main( int argc, char * argv[] )
 		int input = GetInput(&quit);
 
 		// update flow control
-		//if ( connection.IsConnected() )
+		if ( connection.IsConnected() )
 		{
 			flowControl.Update( DeltaTime, connection.GetReliabilitySystem().GetRoundTripTime() * 1000.0f );
 		}
@@ -271,6 +275,29 @@ int main( int argc, char * argv[] )
 	} // End Client Game Loop
 
 	return 0;
+}
+
+void ConnectToMasterServer(FlowControl& flowControl, float & sendAccumulator, ReliableConnection& connection)
+{
+	int messageReceived = 0;
+
+	while( messageReceived == 0 )
+	{
+		const float sendRate = flowControl.GetSendRate();
+		sendAccumulator += DeltaTime;
+		SendInputToServer(0, sendRate, sendAccumulator, connection);
+		while ( true )
+		{
+			unsigned char packet[256];
+			int bytes_read = connection.ReceivePacket( packet, sizeof(packet) );
+			if ( bytes_read == 0 )
+			{
+				break;
+			}
+
+			messageReceived = 1;
+		}
+	}
 }
 
 unsigned short & GetServerPort(FlowControl& flowControl, float & sendAccumulator, ReliableConnection& connection)
