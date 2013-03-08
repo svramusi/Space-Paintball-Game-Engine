@@ -58,9 +58,9 @@ int main( int argc, char * argv[] )
 	// New code
 	///////////////////////////////////////////////////////////////////
 	net::Point payload;
-	payload.set_x(1.0f);
-	payload.set_y(2.0f);
-	payload.set_z(3.0f);
+	payload.set_x(10.0f);
+	payload.set_y(22.0f);
+	payload.set_z(345.0f);
 
 	cout<<"size after serilizing is "<<payload.ByteSize()<<endl;
 	int siz = payload.ByteSize()+4;
@@ -191,7 +191,6 @@ int main( int argc, char * argv[] )
 				usleep(1);
 			}
 		}
-		delete pkt;
 
 		// now you can write buf.data() to the socket
 		///////////////////////////////////////////////////////////
@@ -232,6 +231,7 @@ int main( int argc, char * argv[] )
 		net::NetUtils::wait( net::DeltaTime );
 	} // End Client Game Loop
 
+	delete pkt;
 FINISH:
 	close(hsock);
 }
