@@ -8,11 +8,17 @@ CApp::CApp() {
     Surf_Display = NULL;
     latestID = 0;
     Running = true;
+    LocX = 0;
+    LocY= 0;
+    LocZ= 0;
 }
-void CApp::setPos(int xP, int yP) //Player Position
+void CApp::setPos(int xP, int yP, int yZ) //Player Position
 {
-	LocX= xP;
-	LocY = yP;
+	LocX+=  xP;
+	LocX %= 360;
+	LocY +=yP;
+	LocY %= 360;
+	LocZ +=yZ;
 
 }
 

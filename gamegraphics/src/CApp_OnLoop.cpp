@@ -12,6 +12,12 @@ void CApp::OnLoop() {
 
 	for (std::vector<graphicsInfo>::iterator it = graphicsObjects.begin(); it != graphicsObjects.end(); ++it)
 	    	{
-				UpdateGraphicsObject((*it).ID , rand() % 639 + 1, rand() % 480 + 1,rand()%400);
+				int x,y,z;
+				x= (rand() % 199 + 1)/2;
+				y =  (rand() % 199 + 1)/2;
+				x -= 100;
+				y-= 100;
+				z = rand()%400;
+				UpdateGraphicsObject((*it).ID , x,y,z);
 	    	}
 }

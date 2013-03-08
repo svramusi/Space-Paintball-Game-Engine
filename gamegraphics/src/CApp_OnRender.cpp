@@ -51,25 +51,33 @@ void CApp::OnRender() {
         glColor3f(1, 1, 1); glVertex3f(LocX, 100+LocY, 0);
     glEnd();*/
 
-
-
+	  gluLookAt((double)LocX,(double)LocY,(double)LocZ,0.0,0.0,0.0,0.0,1.0,0.0);
+	  glTranslatef(0,0,-50);
+	      				//glTranslatef(-260,-100,-500);
+	      				//x goes from -110 to 110 (-10)
+	      				glBegin(GL_QUADS); //3D RENDERING
+	      	    				glColor3f(1, 0, 0); glVertex3f(0,0, 0);
+	      	    		        glColor3f(1, 1, 0); glVertex3f(10,0, 0);
+	      	    		        glColor3f(1, 0, 1); glVertex3f(10,10, 0);
+	      	    		        glColor3f(1, 1, 1); glVertex3f(0,10, 0);
+	      	    		glEnd();
     for (std::vector<graphicsInfo>::iterator it = graphicsObjects.begin(); it != graphicsObjects.end(); ++it)
     	{
-    		glBegin(GL_QUADS); //2D RENDERING
+    		/*glBegin(GL_QUADS); //2D RENDERING
     				glColor3f(1, 0, 0); glVertex3f((*it).x, (*it).y, (*it).z);
     		        glColor3f(1, 1, 0); glVertex3f(100+(*it).x, (*it).y, (*it).z);
     		        glColor3f(1, 0, 1); glVertex3f(100+(*it).x, 100+(*it).y, (*it).z);
     		        glColor3f(1, 1, 1); glVertex3f((*it).x, 100+(*it).y, (*it).z);
-    		glEnd();
-    				//glTranslatef((*it).x,(*it).y,-(*it).z);
-    				/*glTranslatef(-260,-100,-500);
+    		glEnd();*/
+    				glTranslatef((*it).x,(*it).y,-(*it).z);
+    				//glTranslatef(-260,-100,-500);
     				//x goes from -110 to 110 (-10)
     				glBegin(GL_QUADS); //3D RENDERING
     	    				glColor3f(1, 0, 0); glVertex3f(0,0, 0);
     	    		        glColor3f(1, 1, 0); glVertex3f(10,0, 0);
     	    		        glColor3f(1, 0, 1); glVertex3f(10,10, 0);
     	    		        glColor3f(1, 1, 1); glVertex3f(0,10, 0);
-    	    		glEnd();*/
+    	    		glEnd();
     	}
 
 

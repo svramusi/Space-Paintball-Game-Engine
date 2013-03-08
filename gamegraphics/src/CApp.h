@@ -18,7 +18,7 @@ class CApp : public CEvent {
         SDL_Surface*    Surf_Display;
  
         SDL_Surface*    Surf_Test;
-        int 			LocX, LocY;
+        int 			LocX, LocY, LocZ;
         int 			latestID;
         std::vector<graphicsInfo> graphicsObjects;
  
@@ -32,7 +32,7 @@ class CApp : public CEvent {
 
 
 
-        void setPos(int x, int y);
+        void setPos(int x, int y,int z);
         bool OnInit();
  
         void OnEvent(SDL_Event* Event);

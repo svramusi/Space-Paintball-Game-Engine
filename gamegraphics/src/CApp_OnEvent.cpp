@@ -8,7 +8,13 @@ void CApp::OnEvent(SDL_Event* Event) {
 
 void CApp::OnMouseMove(int mX, int mY, int relX, int relY, bool Left,bool Right,bool Middle) {
 
-	setPos (mX, mY);
+	if(!Left){
+		setPos (relX, relY,0);
+	}
+	if(Left){
+		setPos (0, 0,relY);
+	}
+
 }
 
 void CApp::OnLButtonDown(int mX, int mY)
@@ -20,19 +26,19 @@ void CApp::OnLButtonDown(int mX, int mY)
 void CApp::OnKeyDown(SDLKey sym, SDLMod mod, Uint16 unicode) {
 	switch(sym) {
 	        case SDLK_UP: {
-	        	setPos(LocX,--LocY);
+	        	setPos(LocX,--LocY,0);
 	        break;
 	        }
 	        case SDLK_DOWN: {
-	        	setPos(LocX,++LocY);
+	        	setPos(LocX,++LocY,0);
 	        	        break;
 	        }
 	        case SDLK_LEFT: {
-	        	setPos(--LocX,LocY);
+	        	setPos(--LocX,LocY,0);
 	        	        break;
 	        }
 	        case SDLK_RIGHT: {
-	        	setPos(++LocX,LocY);
+	        	setPos(++LocX,LocY,0);
 	        	        break;
 	        }
 	        default: {
