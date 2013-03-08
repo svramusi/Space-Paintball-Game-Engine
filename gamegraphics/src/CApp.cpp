@@ -17,7 +17,7 @@ void CApp::setPos(int xP, int yP) //Player Position
 }
 
 int CApp::OnExecute() {
-	printf("Starting/n");
+	//printf("Starting/n");
     if(OnInit() == false) {
         return -1;
     }
@@ -25,7 +25,7 @@ int CApp::OnExecute() {
     SDL_Event Event;
 
     while(Running) {
-    	printf("WHILE RUNNING /N");
+    	//printf("WHILE RUNNING /N");
         while(SDL_PollEvent(&Event)) {
             OnEvent(&Event);
         }
@@ -77,6 +77,9 @@ void CApp::UpdateGraphicsObject(int id, int x, int y, int z){
 
 int main(int argc, char* argv[]) {
     CApp theApp;
-
+    theApp.InsertGraphicsObject(1,1,1,"");
+    theApp.InsertGraphicsObject(10,10,10,"");
+    theApp.InsertGraphicsObject(100,100,100,"");
+    theApp.InsertGraphicsObject(500,500,1,"");
     return theApp.OnExecute();
 }

@@ -35,8 +35,9 @@ bool CApp::OnInit() {
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
 
-    glOrtho(0, 640, 480, 0, 1, -1);
-
+    glOrtho(0, 640, 480, 0, -1, -500);//1,-1
+    //gluPerspective( 60.0, ratio, 1.0, 1024.0 );
+  //  gluPerspective(45.0f, 640.0f / 480.0f, 1.0f, 500.0f);
     glMatrixMode(GL_MODELVIEW);
 
     glEnable(GL_TEXTURE_2D);

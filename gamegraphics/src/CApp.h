@@ -3,10 +3,10 @@
 
 #include <vector>
 #include "SDL-1.2.15/include/SDL.h"
-#include "SDL-1.2.15/include/SDL_opengl.h"
-/*#include <gl.h>
+//#include "SDL-1.2.15/include/SDL_opengl.h"
+#include <gl.h>
 #include <glu.h>
-#include <glut.h>*/
+#include <glut.h>
 #include "CEvent.h"
 #include "CSurface.h"
 #include "graphicsinfo.h"
