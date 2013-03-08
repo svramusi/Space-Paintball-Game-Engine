@@ -18,7 +18,8 @@ void CApp::setPos(int xP, int yP, int yZ) //Player Position
 	LocX %= 360;
 	LocY +=yP;
 	LocY %= 360;
-	LocZ +=yZ;
+	LocZ +=yZ; //Z is left button and x axis
+
 
 }
 

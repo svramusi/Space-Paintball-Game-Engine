@@ -51,6 +51,7 @@ void CApp::OnRender() {
         glColor3f(1, 1, 1); glVertex3f(LocX, 100+LocY, 0);
     glEnd();*/
 
+	  //Handles Camera movement
 	  gluLookAt((double)LocX,(double)LocY,(double)LocZ,0.0,0.0,0.0,0.0,1.0,0.0);
 	  glTranslatef(0,0,-50);
 	      				//glTranslatef(-260,-100,-500);

@@ -12,7 +12,7 @@ void CApp::OnMouseMove(int mX, int mY, int relX, int relY, bool Left,bool Right,
 		setPos (relX, relY,0);
 	}
 	if(Left){
-		setPos (0, 0,relY);
+		setPos (0, 0,relX);
 	}
 
 }
