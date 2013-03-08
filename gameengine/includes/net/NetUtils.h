@@ -9,6 +9,7 @@
 #define NETUTILS_H_
 
 #include <unistd.h>
+#import "Point.h"
 
 namespace net
 {

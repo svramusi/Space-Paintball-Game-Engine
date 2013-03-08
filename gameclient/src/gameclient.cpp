@@ -14,11 +14,14 @@
 #include "net/NetUtils.h"
 #include "GameEngine.h"
 #include "TestCollectGameState.h"
+#include "Point.h"
+#include "net/GameEngine.pb.h"
+#include "net/GameEngine.pb.cc"
 
 //#define SHOW_ACKS
 
 using namespace std;
-using namespace net;
+//using namespace net;
 
 // One frame each 20 milliseconds (i.e. 50 frames per second)
 const Uint32 RedrawingPeriod = 20;
@@ -34,6 +37,7 @@ void FPSControl();
 
 int main( int argc, char * argv[] )
 {
+	GOOGLE_PROTOBUF_VERIFY_VERSION;
 //	TestCollectGameState* test = new TestCollectGameState();
 //	test->PrintGameState();
 //	delete test;
@@ -156,7 +160,7 @@ int main( int argc, char * argv[] )
 		buffer_len = 1024;
 
 		memset(buffer, '\0', buffer_len);
-
+/*
 		printf("Enter some text to send to the server (press enter)\n");
 		fgets(buffer, 1024, stdin);
 		buffer[strlen(buffer)-1]='\0';
@@ -172,7 +176,33 @@ int main( int argc, char * argv[] )
 			goto FINISH;
 		}
 		printf("Recieved bytes %d\nReceived string \"%s\"\n", bytecount, buffer);
+*/
+		///////////////////////////////////////////////////////////
 
+		///////////////////////////////////////////////////////////
+		// Pass Point to server
+		///////////////////////////////////////////////////////////
+		//Point temp;
+		//temp.x = 1.0f;
+		//temp.y = 2.0f;
+		//temp.z = 3.0f;
+
+		net::Point pbPoint;
+		pbPoint.set_x(1.0f);
+		pbPoint.set_y(2.0f);
+		pbPoint.set_z(3.0f);
+
+		string buff;
+		bytecount=0;
+		pbPoint.SerializeToString(&buff);
+		if( (bytecount=send(hsock, buff.data(), sizeof(buff.data()),0))== -1)
+		{
+			fprintf(stderr, "Error sending data %d\n", errno);
+			goto FINISH;
+		}
+		printf("Sent of protocol buffer bytes %d\n", bytecount);
+
+		// now you can write buf.data() to the socket
 		///////////////////////////////////////////////////////////
 
 		SendInputToServer(input);
@@ -208,7 +238,7 @@ int main( int argc, char * argv[] )
 		 */
 		//SDL_Delay(1);
 
-		NetUtils::wait( DeltaTime );
+		net::NetUtils::wait( net::DeltaTime );
 	} // End Client Game Loop
 
 	close(hsock);

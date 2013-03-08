@@ -17,6 +17,8 @@
 #include "physicsengine.h"
 #include "GameEngine.h"
 #include "TestCollectGameState.h"
+#include "net/GameEngine.pb.h"
+#include "net/GameEngine.pb.cc"
 
 using namespace std;
 using namespace net;
@@ -244,6 +246,13 @@ void* SocketHandler(void* lp)
 				fprintf(stderr, "Error receiving data %d\n", errno);
 				goto FINISH;
 			}
+
+			string str1(buffer, buffer_len);
+			net::Point pbPoint;
+			pbPoint.ParseFromString(str1);
+
+			printf("Point(X,Y,Z): (%f,%f,%f)\n", pbPoint.x(), pbPoint.y(), pbPoint.z());
+
 			printf("Received bytes %d\nReceived string \"%s\"\n", bytecount, buffer);
 			strcat(buffer, " SERVER ECHO");
 
