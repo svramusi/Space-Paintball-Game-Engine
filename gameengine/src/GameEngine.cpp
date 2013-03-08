@@ -20,7 +20,7 @@ GameEngine::GameEngine() {
     stationary_center.y = 3;
     stationary_center.z = 0;
 
-    stationary_sphere = new Sphere(-1, stationary_center, 2.0f);
+    stationary_sphere = new Sphere(-1, stationary_center, 2.0f, false);
 
 
     Point bouncing_center;
@@ -28,7 +28,7 @@ GameEngine::GameEngine() {
     bouncing_center.y = 8;
     bouncing_center.z = 0;
 
-    bouncing_sphere = new Sphere(-1, bouncing_center, 1.0f);
+    bouncing_sphere = new Sphere(-1, bouncing_center, 1.0f, true);
 
 
     Velocity zeroVel;

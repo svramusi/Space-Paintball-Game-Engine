@@ -1,9 +1,10 @@
 #include "CollidableObject.h"
 
-CollidableObject::CollidableObject(int _ID, Point _center)
+CollidableObject::CollidableObject(int _ID, Point _center, int _movable)
 {
     ID = _ID;
     center = _center;
+    movable = _movable;
 }
 
 int
@@ -28,4 +29,10 @@ void
 CollidableObject::setCenter(Point newCenter)
 {
     center = newCenter;
+}
+
+int
+CollidableObject::isMovable()
+{
+    return movable;
 }

@@ -5,7 +5,7 @@
 
 class Sphere: public CollidableObject {
 public:
-    Sphere(int ID, Point center, float radius);
+    Sphere(int ID, Point center, float radius, int movable);
     ~Sphere();
 
     float getRadius() const;

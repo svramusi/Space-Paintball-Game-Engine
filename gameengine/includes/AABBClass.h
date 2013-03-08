@@ -6,7 +6,7 @@
 
 class AABB: public CollidableObject {
 public:
-    AABB(int ID, Point center, float radii[3]);
+    AABB(int ID, Point center, float radii[3], int movable);
     ~AABB();
 
     float getXRadius() const;
