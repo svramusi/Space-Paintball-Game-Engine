@@ -16,40 +16,40 @@ GameEngine::GameEngine() {
     CollidableObject *bouncing_sphere;
 
     Point stationary_center;
-    stationary_center.x = 4;
-    stationary_center.y = 3;
-    stationary_center.z = 0;
+    stationary_center.x = 4.0f;
+    stationary_center.y = 3.0f;
+    stationary_center.z = 0.0f;
 
     stationary_sphere = new Sphere(-1, stationary_center, 2.0f, false);
 
 
     Point bouncing_center;
-    bouncing_center.x = 4;
-    bouncing_center.y = 8;
-    bouncing_center.z = 0;
+    bouncing_center.x = 4.0f;
+    bouncing_center.y = 8.0f;
+    bouncing_center.z = 0.0f;
 
     bouncing_sphere = new Sphere(-1, bouncing_center, 1.0f, true);
 
 
     Velocity zeroVel;
-    zeroVel.x = 0;
-    zeroVel.y = 0;
-    zeroVel.z = 0;
+    zeroVel.x = 0.0f;
+    zeroVel.y = 0.0f;
+    zeroVel.z = 0.0f;
 
     Velocity ballVel;
-    ballVel.x = 0;
-    ballVel.y = -9.8;
-    ballVel.z = 0;
+    ballVel.x = 0.0f;
+    ballVel.y = -9.8f;
+    ballVel.z = 0.0f;
 
     Force zeroForce;
-    zeroForce.x = 0;
-    zeroForce.y = 0;
-    zeroForce.z = 0;
+    zeroForce.x = 0.0f;
+    zeroForce.y = 0.0f;
+    zeroForce.z = 0.0f;
 
     Point zeroPoint;
-    zeroPoint.x = 0;
-    zeroPoint.y = 0;
-    zeroPoint.z = 0;
+    zeroPoint.x = 0.0f;
+    zeroPoint.y = 0.0f;
+    zeroPoint.z = 0.0f;
 
     physics->insertPhysicsObject(stationary_sphere, 10, zeroVel, zeroForce, zeroVel, zeroForce, zeroPoint);
     physics->insertPhysicsObject(bouncing_sphere, 10, ballVel, zeroForce, zeroVel, zeroForce, zeroPoint);

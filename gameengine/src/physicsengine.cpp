@@ -1,6 +1,8 @@
 #include <stdlib.h>
 #include <math.h>
 
+#include <iomanip>
+
 
 #include "physicsengine.h"
 
@@ -55,7 +57,7 @@ cout << endl << "updating world.  current time is: " << timeStep << endl << endl
 
     for (std::vector<physicsInfo>::iterator it = physicsObjects.begin(); it != physicsObjects.end(); ++it)
     {
-        if((*it).moveable) {
+        if((*it).movable) {
             calculateLinearForce(&(*it), delta);
 
             calculateLinearVelocity(&(*it), delta);
@@ -66,11 +68,13 @@ cout << endl << "updating world.  current time is: " << timeStep << endl << endl
 
             calculateAngularPosition(&(*it),timeStep); //NEEDS CALCULATE POI UPDATED TO WORK
 
+/*
             cout << endl << "updating object. id:" << (*it).ID;
             cout << endl << "center X:" << (*it).collidableObject->getCenter().x;
             cout << endl << "center Y:" << (*it).collidableObject->getCenter().y;
             cout << endl << "center Z:" << (*it).collidableObject->getCenter().z;
             cout << endl << endl;
+*/
 
             cd->updateObject((*it).ID, (*it).collidableObject->getCenter());
 
@@ -78,32 +82,41 @@ cout << endl << "updating world.  current time is: " << timeStep << endl << endl
         }
     }
 
+    resolveCollisions();
+}
+
+void
+PhysicsEngine::resolveCollisions()
+{
     collisions_t *collisions = cd->checkForAnyCollisions();
 
-    if(collisions != NULL) {
+    if(collisions != NULL)
+    {
         cout << endl << "There is a collision between object ID: " << collisions->ID
-            << " and object ID: " << collisions->info->ID << endl << endl;
-        penetration_t penetration = collisions->info->penetration;
+                << " and object ID: " << collisions->info->ID << endl << endl;
 
-        cout << endl << "penetration x: " << penetration.x << " penetration y: " << penetration.y << " penetration z: " << penetration.y << endl;
+        for (std::vector<physicsInfo>::iterator it = physicsObjects.begin(); it != physicsObjects.end(); ++it)
+        {
+            physicsInfo* tempInfo = &(*it);
 
+            if((tempInfo->ID == collisions->ID || tempInfo->ID == collisions->info->ID) && tempInfo->movable)
+            {
+                penetration_t penetration = collisions->info->penetration;
+
+                Point currentCenter = tempInfo->collidableObject->getCenter();
+                Point newCenter;
+                newCenter.x = currentCenter.x + penetration.x;
+                newCenter.y = currentCenter.y + penetration.y;
+                newCenter.z = currentCenter.z + penetration.z;
+
+                tempInfo->collidableObject->setCenter(newCenter);
+                cd->updateObject(tempInfo->ID, tempInfo->collidableObject->getCenter());
+            }
+        }
     }
 
     cd->freeCollisions(collisions);
-
-/*
-    detectCollision* collidableObject;
-
-    collidableObject = (detectCollision*)malloc(sizeof(detectCollision));
-    collidableObject->collidableObjectID = 1;
-
-    collisionDetection* collisions = cd->detect_collision(collidableObject);
-
-    freeCollisions(collisions);
-    free(collidableObject);
-*/
 }
-
 
 
 void PhysicsEngine::calculateAngularVelocity(physicsInfo *item, float deltaT)
@@ -284,7 +297,7 @@ void PhysicsEngine::insertPhysicsObject(CollidableObject *obj, float m, Velocity
     newItem.ID = latestID;
     obj->setID(latestID);
     newItem.collidableObject = obj;
-    newItem.moveable = obj->isMovable();
+    newItem.movable = obj->isMovable();
 
     newItem.mass = m;
 

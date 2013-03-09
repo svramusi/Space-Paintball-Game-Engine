@@ -24,7 +24,7 @@ typedef struct physics_info_t { //all units MKS: meters, kilograms, seconds
     Force linearForce;//force actual acc = force/mass
     Force angularForce;//One value will always be 0, only 2d ANgular velocity
 
-    int moveable;
+    int movable;
 
 } physicsInfo;
 #endif
