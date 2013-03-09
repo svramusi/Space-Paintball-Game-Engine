@@ -18,7 +18,7 @@ namespace net
 		Close();
 	}
 
-	bool ClientSocket::Connect( char* host_name, unsigned short port )
+	bool ClientSocket::Connect( const char* host_name, unsigned short port )
 	{
 		Setup();
 

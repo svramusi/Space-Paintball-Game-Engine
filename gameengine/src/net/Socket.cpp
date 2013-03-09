@@ -105,6 +105,30 @@ namespace net
 		return received_bytes;
 	}
 
+	int Socket::ReceiveWaitAll( void * data, int size )
+	{
+		assert( data );
+		assert( size > 0 );
+
+		if ( socket == 0 )
+			return false;
+
+		sockaddr_in from;
+		socklen_t fromLength = sizeof( from );
+
+		int received_bytes;
+
+		if( ( received_bytes = recv( socket, (char*)data, size, MSG_WAITALL ) ) == -1 )
+		{
+			fprintf( stderr, "Error receiving data %d\n", errno );
+		}
+
+		if ( received_bytes <= 0 )
+			return 0;
+
+		return received_bytes;
+	}
+
 	bool Socket::HasData() const
 	{
 		int timeOut = 100; //ms
@@ -129,64 +153,18 @@ namespace net
 		return res != 0;
 	}
 
-	int Socket::Read()
+	int Socket::Peek( void * buffer, int size )
 	{
 		int bytecount = 0;
-		char buffer[ 4 ];
-
-		memset( buffer, '\0', 4 );
 
 		// Peek into the socket and get the packet size.
-		if( ( bytecount = recv( socket, buffer, 4, MSG_PEEK ) ) == -1)
+		if( ( bytecount = recv( socket, (char *) buffer, size, MSG_PEEK ) ) == -1 )
 		{
-			fprintf( stderr, "Error receiving data %d\n", errno );
+			fprintf( stderr, "Error peeking at received data %d\n", errno );
 		}
 
-		printf( "First read byte count is %d\n", bytecount );
-
-		ReadBody( ReadHeader( buffer ) );
+		printf( "Peek(): First read byte count is %d\n", bytecount );
 
 		return bytecount;
-	}
-
-	google::protobuf::uint32 Socket::ReadHeader( char *buf )
-	{
-	  google::protobuf::uint32 size;
-	  google::protobuf::io::ArrayInputStream ais( buf,4 );
-	  CodedInputStream coded_input( &ais );
-	  coded_input.ReadVarint32( &size );//Decode the HDR and get the size
-	  printf( "Size of payload is %d\n", size );
-
-	  return size;
-	}
-
-	void Socket::ReadBody( google::protobuf::uint32 size )
-	{
-	  int bytecount;
-	  net::Point payload;
-	  char buffer [ size + 4 ];//size of the payload and hdr
-	  //Read the entire buffer including the hdr
-	  if( ( bytecount = recv(socket, (void *)buffer, 4 + size, MSG_WAITALL ) ) == -1 )
-	  {
-		  fprintf( stderr, "Error receiving data %d\n", errno );
-	  }
-
-	  printf( "Second read byte count is %d\n", bytecount );
-
-	  //Assign ArrayInputStream with enough memory
-	  google::protobuf::io::ArrayInputStream ais( buffer, size + 4 );
-	  CodedInputStream coded_input( &ais );
-	  //Read an unsigned integer with Varint encoding, truncating to 32 bits.
-	  coded_input.ReadVarint32( &size );
-	  //After the message's length is read, PushLimit() is used to prevent the CodedInputStream
-	  //from reading beyond that length.Limits are used when parsing length-delimited
-	  //embedded messages
-	  google::protobuf::io::CodedInputStream::Limit msgLimit = coded_input.PushLimit( size );
-	  //De-Serialize
-	  payload.ParseFromCodedStream( &coded_input );
-	  //Once the embedded message has been parsed, PopLimit() is called to undo the limit
-	  coded_input.PopLimit( msgLimit );
-	  //Print the message
-	  printf( "Message is %s\n", payload.DebugString().c_str() );
 	}
 }

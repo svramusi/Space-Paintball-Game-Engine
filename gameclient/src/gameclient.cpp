@@ -8,6 +8,7 @@
 
 #include <unistd.h>
 #include <iostream>
+
 #include <google/protobuf/message.h>
 #include <google/protobuf/descriptor.h>
 #include <google/protobuf/io/zero_copy_stream_impl.h>
@@ -19,13 +20,13 @@
 #include "net/Net.h"
 #include "net/Constants.hpp"
 #include "net/NetUtils.h"
-#include "GameEngine.h"
-#include "TestCollectGameState.h"
-#include "Point.h"
+#include "net/ClientSocket.h"
 #include "net/GameEngine.pb.h"
 #include "net/GameEngine.pb.cc"
 
-//#define SHOW_ACKS
+#include "GameEngine.h"
+#include "TestCollectGameState.h"
+//#include "Point.h"
 
 using namespace std;
 using namespace google::protobuf::io;
@@ -55,65 +56,27 @@ int main( int argc, char * argv[] )
 	bool needToRedraw = true;
 
 	///////////////////////////////////////////////////////////////////
-	// New code
+	// Initialize payload
 	///////////////////////////////////////////////////////////////////
 	net::Point payload;
 	payload.set_x(10.0f);
 	payload.set_y(22.0f);
 	payload.set_z(345.0f);
 
-	cout<<"size after serilizing is "<<payload.ByteSize()<<endl;
-	int siz = payload.ByteSize()+4;
-	char *pkt = new char [siz];
-	google::protobuf::io::ArrayOutputStream aos(pkt,siz);
+	printf( "Size after serilizing is %d\n", payload.ByteSize() );
+	int size = payload.ByteSize() + 4;
+	char *packet = new char [size];
+	google::protobuf::io::ArrayOutputStream aos(packet,size);
 	CodedOutputStream *coded_output = new CodedOutputStream(&aos);
 	coded_output->WriteVarint32(payload.ByteSize());
 	payload.SerializeToCodedStream(coded_output);
-
-	int host_port= 1101;
-	char* host_name="127.0.0.1";
-
-	struct sockaddr_in my_addr;
-
-	char buffer[1024];
-	int bytecount;
-	int buffer_len=0;
-
-	int hsock;
-	int * p_int;
-	int err;
-
-	hsock = socket(AF_INET, SOCK_STREAM, 0);
-	if(hsock == -1){
-			printf("Error initializing socket %d\n",errno);
-			goto FINISH;
-	}
-
-	p_int = (int*)malloc(sizeof(int));
-	*p_int = 1;
-
-	if( (setsockopt(hsock, SOL_SOCKET, SO_REUSEADDR, (char*)p_int, sizeof(int)) == -1 )||
-			(setsockopt(hsock, SOL_SOCKET, SO_KEEPALIVE, (char*)p_int, sizeof(int)) == -1 ) ){
-			printf("Error setting options %d\n",errno);
-			free(p_int);
-			goto FINISH;
-	}
-	free(p_int);
-
-	my_addr.sin_family = AF_INET ;
-	my_addr.sin_port = htons(host_port);
-
-	memset(&(my_addr.sin_zero), 0, 8);
-	my_addr.sin_addr.s_addr = inet_addr(host_name);
-	if( connect( hsock, (struct sockaddr*)&my_addr, sizeof(my_addr)) == -1 ){
-			if((err = errno) != EINPROGRESS){
-					fprintf(stderr, "Error connecting socket %d\n", errno);
-					goto FINISH;
-			}
-	}
 	///////////////////////////////////////////////////////////////////
 
-
+	///////////////////////////////////////////////////////////////////
+	// Initialize socket and connect with server.
+	///////////////////////////////////////////////////////////////////
+	net::ClientSocket clientSocket;
+	clientSocket.Connect( net::HOST_NAME, net::MASTER_SOCKET_PORT );
 	///////////////////////////////////////////////////////////////////
 
 	// Client Game Loop
@@ -180,17 +143,7 @@ int main( int argc, char * argv[] )
 		// Client socket work
 		///////////////////////////////////////////////////////////
 
-		for (int i =0;i<10000;i++){
-			for (int j = 0 ;j<10;j++) {
-
-				if( (bytecount=send(hsock, (void *) pkt,siz,0))== -1 ) {
-						fprintf(stderr, "Error sending data %d\n", errno);
-						goto FINISH;
-				}
-				printf("Sent bytes %d\n", bytecount);
-				usleep(1);
-			}
-		}
+		clientSocket.Send( (void * ) packet, size );
 
 		// now you can write buf.data() to the socket
 		///////////////////////////////////////////////////////////
@@ -228,12 +181,11 @@ int main( int argc, char * argv[] )
 		 */
 		//SDL_Delay(1);
 
-		net::NetUtils::wait( net::DeltaTime );
+		net::NetUtils::wait( net::DELTA_TIME );
 	} // End Client Game Loop
 
-	delete pkt;
-FINISH:
-	close(hsock);
+	delete packet;
+	clientSocket.Close();
 }
 
 int GetUpdateFromServer()

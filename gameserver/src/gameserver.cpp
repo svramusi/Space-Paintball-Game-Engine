@@ -12,12 +12,16 @@
 #include "net/Net.h"
 #include "net/Constants.hpp"
 #include "net/NetUtils.h"
+#include "net/Address.h"
+#include "net/ServerMasterSocket.h"
+#include "net/ServerSocket.h"
+#include "net/GameEngine.pb.h"
+#include "net/GameEngine.pb.cc"
+
 #include "utils/gun_utils.h"
 #include "physicsengine.h"
 #include "GameEngine.h"
 #include "TestCollectGameState.h"
-#include "net/GameEngine.pb.h"
-#include "net/GameEngine.pb.cc"
 
 #include <iostream>
 #include <google/protobuf/io/coded_stream.h>
@@ -34,8 +38,11 @@ void SendUpdateToClient();
 bool TimeForRendering();
 void UpdateStatistics();
 void FPSControl();
-void* SocketHandler(void*);
-bool HasData(int & csock);
+bool ClientHasAlreadyConnected( Address& clientAddress );
+google::protobuf::uint32 ReadHeader( char *buf );
+void ReadBody( ServerSocket* serverSocket, google::protobuf::uint32 size );
+
+map<Address, ServerSocket*> serverConnections;
 
 int main( int argc, char * argv[] )
 {
@@ -59,111 +66,92 @@ int main( int argc, char * argv[] )
 	bool needToRedraw = true;
 
 	/////////////////////////////////////////////////////////////////
-	// Setup up server socket
+	// Setup and listen to server socket
 	/////////////////////////////////////////////////////////////////
-    int host_port= 1101;
+	ServerMasterSocket serverMasterSocket;
 
-    struct sockaddr_in my_addr;
-
-    int hsock;
-    int * p_int ;
-    int err;
-
-    socklen_t addr_size = 0;
-    int* csock;
-    sockaddr_in sadr;
-    pthread_t thread_id=0;
-
-    hsock = socket(AF_INET, SOCK_STREAM, 0);
-    if(hsock == -1){
-            printf("Error initializing socket %d\n", errno);
-            goto FINISH;
-    }
-
-    p_int = (int*)malloc(sizeof(int));
-    *p_int = 1;
-
-    if( (setsockopt(hsock, SOL_SOCKET, SO_REUSEADDR, (char*)p_int, sizeof(int)) == -1 )||
-            (setsockopt(hsock, SOL_SOCKET, SO_KEEPALIVE, (char*)p_int, sizeof(int)) == -1 ) ){
-            printf("Error setting options %d\n", errno);
-            free(p_int);
-            goto FINISH;
-    }
-    free(p_int);
-
-    my_addr.sin_family = AF_INET ;
-    my_addr.sin_port = htons(host_port);
-
-    memset(&(my_addr.sin_zero), 0, 8);
-    my_addr.sin_addr.s_addr = INADDR_ANY ;
-
-    if( bind( hsock, (sockaddr*)&my_addr, sizeof(my_addr)) == -1 ){
-            fprintf(stderr,"Error binding to socket, make sure nothing else is listening on this port %d\n",errno);
-            goto FINISH;
-    }
-    if(listen( hsock, 10) == -1 ){
-            fprintf(stderr, "Error listening %d\n",errno);
-            goto FINISH;
-    }
+	serverMasterSocket.Open( MASTER_SOCKET_PORT );
 	/////////////////////////////////////////////////////////////////
 
-    addr_size = sizeof(sockaddr_in);
-
-	// Server Game Loop
+ 	// Server Game Loop
 	while(!quit)
 	{
-		/*
-		 * Poll for OS Events/Messages; this is
-		 * the event pump.
-		 */
-		PollForOSMessages(&quit);
+		if( serverMasterSocket.HasData() )
+		{
+			Address clientAddress;
+			ServerSocket serverSocket = serverMasterSocket.Accept( clientAddress );
 
-		///////////////////////////////////////////////////////////
-		// Socket logic
-		///////////////////////////////////////////////////////////
-		printf("waiting for a connection\n");
-		csock = (int*)malloc(sizeof(int));
-		if((*csock = accept( hsock, (sockaddr*)&sadr, &addr_size))!= -1){
-				printf("---------------------\nReceived connection from %s\n",inet_ntoa(sadr.sin_addr));
-				pthread_create(&thread_id,0,&SocketHandler, (void*)csock );
-				pthread_detach(thread_id);
+			if( !ClientHasAlreadyConnected( clientAddress ) )
+			{
+				serverConnections.insert( make_pair( clientAddress, &serverSocket ) );
+			}
 		}
-		else{
-				fprintf(stderr, "Error accepting %d\n", errno);
-		}
-		///////////////////////////////////////////////////////////
 
-		// send and receive packets
+		for( map<Address, ServerSocket*>::iterator ii = serverConnections.begin(); ii != serverConnections.end(); ++ii )
+		{
+			ServerSocket * serverConnection = ii->second;
 
-		SendUpdateToClient();
+			if( serverConnection->HasData() )
+			{
+				/*
+				 * Poll for OS Events/Messages; this is
+				 * the event pump.
+				 */
+				PollForOSMessages(&quit);
 
-		int input = GetInputFromClient(&quit);
+				// send and receive packets
 
-		///////////////////////////////////////////////////////////
-		//Update Game State
-		//gameEngine.UpdateGameState(input);
-		///////////////////////////////////////////////////////////
+				///////////////////////////////////////////////////////////
+				// Get data
+				///////////////////////////////////////////////////////////
+				char buffer[ 4 ];
+				int bytecount = 0;
 
-		/*
-		 * Get information from the game engine to update
-		 * the player score, health, etc. (since typically
-		 * the HUD is not rendered by the game engine, but
-		 * separately).
-		 */
-		//UpdateStatistics();
+				memset( buffer, '\0', 4 );
 
-		FPSControl();
+				while (1)
+				{
+					bytecount = serverConnection->Peek( buffer, 4 );
 
-		/*
-		 * Play nice with the OS, and give
-		 * some CPU for another process.
-		 */
-		//SDL_Delay(1);
-		NetUtils::wait( DeltaTime );
+					if( bytecount == 0 )
+					{
+						break;
+					}
+
+					ReadBody( serverConnection, ReadHeader( buffer ) );
+				}
+
+				///////////////////////////////////////////////////////////
+
+				SendUpdateToClient();
+
+				int input = GetInputFromClient(&quit);
+
+				///////////////////////////////////////////////////////////
+				// Update Game State
+				//gameEngine.UpdateGameState(input);
+				///////////////////////////////////////////////////////////
+
+				/*
+				 * Get information from the game engine to update
+				 * the player score, health, etc. (since typically
+				 * the HUD is not rendered by the game engine, but
+				 * separately).
+				 */
+				//UpdateStatistics();
+
+				FPSControl();
+
+				/*
+				 * Play nice with the OS, and give
+				 * some CPU for another process.
+				 */
+				//SDL_Delay(1);
+			} // End if connection has data
+
+			NetUtils::wait( DELTA_TIME );
+		} // End for loop through all the server connections.
 	} // End Server Game Loop
-
-FINISH:
-;
 }
 
 void FPSControl()
@@ -232,89 +220,56 @@ void SendUpdateToClient()
 {
 }
 
-google::protobuf::uint32 readHdr(char *buf)
+google::protobuf::uint32 ReadHeader( char *buf )
 {
   google::protobuf::uint32 size;
-  google::protobuf::io::ArrayInputStream ais(buf,4);
-  CodedInputStream coded_input(&ais);
-  coded_input.ReadVarint32(&size);//Decode the HDR and get the size
-  cout<<"size of payload is "<<size<<endl;
+  google::protobuf::io::ArrayInputStream ais( buf,4 );
+  CodedInputStream coded_input( &ais );
+  coded_input.ReadVarint32( &size );//Decode the HDR and get the size
+  printf( "Size of payload is %d\n", size );
+
   return size;
 }
 
-void readBody(int csock,google::protobuf::uint32 siz)
+void ReadBody( ServerSocket* serverSocket, google::protobuf::uint32 size )
 {
   int bytecount;
   net::Point payload;
-  char buffer [siz+4];//size of the payload and hdr
+  char buffer [ size + 4 ];//size of the payload and hdr
   //Read the entire buffer including the hdr
-  if((bytecount = recv(csock, (void *)buffer, 4+siz, MSG_WAITALL))== -1){
-                fprintf(stderr, "Error receiving data %d\n", errno);
-        }
-  cout<<"Second read byte count is "<<bytecount<<endl;
+  bytecount = serverSocket->ReceiveWaitAll( (void *)buffer, 4 + size );
+
+  printf( "Second read byte count is %d\n", bytecount );
+
   //Assign ArrayInputStream with enough memory
-  google::protobuf::io::ArrayInputStream ais(buffer,siz+4);
-  CodedInputStream coded_input(&ais);
+  google::protobuf::io::ArrayInputStream ais( buffer, size + 4 );
+  CodedInputStream coded_input( &ais );
   //Read an unsigned integer with Varint encoding, truncating to 32 bits.
-  coded_input.ReadVarint32(&siz);
+  coded_input.ReadVarint32( &size );
   //After the message's length is read, PushLimit() is used to prevent the CodedInputStream
   //from reading beyond that length.Limits are used when parsing length-delimited
   //embedded messages
-  google::protobuf::io::CodedInputStream::Limit msgLimit = coded_input.PushLimit(siz);
+  google::protobuf::io::CodedInputStream::Limit msgLimit = coded_input.PushLimit( size );
   //De-Serialize
-  payload.ParseFromCodedStream(&coded_input);
+  payload.ParseFromCodedStream( &coded_input );
   //Once the embedded message has been parsed, PopLimit() is called to undo the limit
-  coded_input.PopLimit(msgLimit);
+  coded_input.PopLimit( msgLimit );
   //Print the message
-  cout<<"Message is "<<payload.DebugString();
-
+  printf( "Message is %s\n", payload.DebugString().c_str() );
 }
 
-void* SocketHandler(void* lp){
-    int *csock = (int*)lp;
 
-	char buffer[4];
-	int bytecount=0;
-	string output,pl;
-	//net::Point logp;
+bool ClientHasAlreadyConnected( Address & clientAddress )
+{
+	bool clientHasAlreadyConnected = false;
 
-	memset(buffer, '\0', 4);
+	map<Address, ServerSocket*>::iterator itr = serverConnections.find( clientAddress );
 
-	while (1) {
-		//Peek into the socket and get the packet size
-		if((bytecount = recv(*csock, buffer, 4, MSG_PEEK))== -1){
-				fprintf(stderr, "Error receiving data %d\n", errno);
-		}else if (bytecount == 0)
-				break;
-		cout<<"First read byte count is "<<bytecount<<endl;
-		readBody(*csock,readHdr(buffer));
+	if( itr != serverConnections.end() )
+	{
+		clientHasAlreadyConnected = true;
+		printf( "The client %s has already connected\n", clientAddress.ToString().c_str() );
 	}
 
-FINISH:
-        free(csock);
-    return 0;
-}
-
-bool HasData(int& csock)
-{
-	int timeOut = 100; //ms
-	fd_set socketReadSet;
-	FD_ZERO(&socketReadSet);
-	FD_SET(csock,&socketReadSet);
-	struct timeval tv;
-	if (timeOut) {
-		tv.tv_sec  = timeOut / 1000;
-		tv.tv_usec = (timeOut % 1000) * 1000;
-	} else {
-		tv.tv_sec  = 0;
-		tv.tv_usec = 0;
-	} // if
-
-	if (select(csock+1,&socketReadSet,0,0,&tv) == -1) {
-		perror("select()\n");
-		return false;
-	} // if
-	int res = FD_ISSET(csock,&socketReadSet);
-
-	return res != 0;
+	return clientHasAlreadyConnected;
 }

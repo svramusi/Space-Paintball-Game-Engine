@@ -9,13 +9,9 @@
 #define CONSTANTS_HPP_
 
 namespace net {
-	const int MasterServerPort = 40000;
-	const int ClientPort = 30001;
-	const int ProtocolId = 0x11223344;
-	const float DeltaTime = 1.0f / 30.0f;
-	const float SendRate = 1.0f / 30.0f;
-	const float TimeOut = 10.0f;
-	const int PacketSize = 256;
+	const int MASTER_SOCKET_PORT = 40000;
+	const char* HOST_NAME ="127.0.0.1";
+	const float DELTA_TIME = 1.0f / 30.0f;
 }
 
 #endif /* CONSTANTS_HPP_ */

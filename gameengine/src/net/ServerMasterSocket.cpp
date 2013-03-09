@@ -70,6 +70,7 @@ namespace net
 			fprintf( stderr, "Error accepting %d\n", errno );
 		}
 
+		printf("New server socket: %s\n", sender.ToString().c_str());
 		return serverSocket;
 	}
 

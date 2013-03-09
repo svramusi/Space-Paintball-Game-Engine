@@ -17,7 +17,7 @@ namespace net
 		ClientSocket();
 		virtual ~ClientSocket();
 
-		bool Connect( char* host_name, unsigned short port );
+		bool Connect( const char* host_name, unsigned short port );
 	};
 }
 #endif /* CLIENTSOCKET_H_ */

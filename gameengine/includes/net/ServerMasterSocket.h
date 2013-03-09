@@ -22,7 +22,7 @@ namespace net
 		ServerMasterSocket();
 		virtual ~ServerMasterSocket();
 
-		bool Open( unsigned short port);
+		bool Open( unsigned short port );
 		ServerSocket& Accept( Address& sender );
 		//static void* SocketHandler( void* lp );
 	};
