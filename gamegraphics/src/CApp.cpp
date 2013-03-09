@@ -9,11 +9,11 @@ CApp::CApp() {
     latestID = 0;
     Running = true;
     LocX = 0;
-    LocY= 90;
+    LocY= 0;
     LocZ= 0;
 
     pLocX = 0;
-    pLocY= 6;
+    pLocY= 90;
     pLocZ= 0;
 }
 /*CApp::CApp(int playerX, int playerZ) {
@@ -43,8 +43,11 @@ void CApp::Fire()
 void CApp::setCamPos(int xP, int yP, int yZ) //Cam Position
 {//not sure but its backwards
 	LocX+=  yP*.1;
+
 	if(LocX > 360)
-		LocX -= 360.0;
+				LocX -= 360.0;
+
+
 	LocY +=xP*.1;
 	if(LocY > 360)
 			LocY -= 360.0;
@@ -53,12 +56,12 @@ void CApp::setCamPos(int xP, int yP, int yZ) //Cam Position
 
 void CApp::setPlayerPos(float xP, float yP, float yZ) //PLayer Position
 {
-
+	printf("x%d  y%d\n", xP, yZ);
 	pLocX+=  (xP);
 	if(pLocX > XMAX)
-			pLocX = XMAX;
+			pLocX = XMAX-2;
 	if(pLocX < XMIN)
-				pLocX = XMIN;
+				pLocX = XMIN+2;
 
 	/* May be needed y always independant
 
@@ -66,13 +69,13 @@ void CApp::setPlayerPos(float xP, float yP, float yZ) //PLayer Position
 	LocX %= 360; */
 
 	pLocZ +=(yZ ); //Z is left button
-	if(pLocZ < ZMAX2){
-				pLocZ = ZMAX2;
-				LocZ = ZMAX2;  //adjust Z location with player
+	if(pLocZ < ZMAX){
+				pLocZ = ZMAX;
+				LocZ = ZMAX;  //adjust Z location with player
 	}
-		if(LocZ > ZMIN2){
-				pLocZ = ZMIN2;
-				LocZ = ZMIN2;
+		if(LocZ > ZMIN){
+				pLocZ = ZMIN;
+				LocZ = ZMIN;
 		}
 
 		//CALL Update player Position
@@ -128,7 +131,15 @@ void CApp::InsertGraphicsObject(int x, int y, int z, char* file){
 	    graphicsObjects.push_back(newItem);
 	    latestID++;
 }
+void CApp::InsertGraphicsObject(int ID)
+{
+	for (std::vector<graphicsInfo>::iterator it = graphicsObjects.begin(); it != graphicsObjects.end(); ++it)
+		{
+			if((*it).ID == ID)
+				return &(*it);
+		}
 
+}
 void CApp::UpdateGraphicsObject(int id, int x, int y, int z){
 		graphicsInfo *newItem = getObject(id);
 	    newItem->x= x;

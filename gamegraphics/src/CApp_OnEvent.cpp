@@ -13,6 +13,7 @@ void CApp::OnMouseMove(int mX, int mY, int relX, int relY, bool Left,bool Right,
 
 	}
 	if(Left&&!Right){
+	//	printf("RELX s %d %d\n", relX,relY);
 		setPlayerPos (relX, 0,relY); //left right straff, and forward back
 	}
 

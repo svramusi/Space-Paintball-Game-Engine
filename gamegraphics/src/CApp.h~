@@ -10,23 +10,10 @@
 #include "CEvent.h"
 #include "CSurface.h"
 #include "graphicsinfo.h"
-#include ""
 
-#define XMAX 1000
-#define XMIN -1000
-#define YMAX 100
-#define YMIN 0
-#define ZMAX2 -1000
-#define ZMIN2 -1
-#define ZMAX 1000
-#define ZMIN -100
-
-#define MINYANG 25
-#define MAXYANG 140
-
-#define SCREENX 1024
-#define SCREENY 768
-
+#define SCREENW 640
+#define SCREENL 480
+#define SCREEND 1000
 
 class CApp : public CEvent {
     private:
@@ -35,8 +22,8 @@ class CApp : public CEvent {
         SDL_Surface*    Surf_Display;
  
         SDL_Surface*    Surf_Test;
-        float 			LocX, LocY, LocZ;
-        float				pLocX, pLocY, pLocZ;
+        int 			LocX, LocY, LocZ;
+        int				pLocX, pLocY, pLocZ;
         int 			latestID;
         std::vector<graphicsInfo> graphicsObjects;
  
@@ -48,11 +35,10 @@ class CApp : public CEvent {
         void InsertGraphicsObject(int x, int y, int z, char* file);
         graphicsInfo* getObject(int ID);
 
-        void drawCircle(float radius, int x, int y, int z);
 
 
         void setCamPos(int x, int y,int z);
-        void setPlayerPos(float x, float y,float z);
+        void setPlayerPos(int x, int y,int z);
         bool OnInit();
  
         void OnEvent(SDL_Event* Event);
@@ -64,7 +50,6 @@ class CApp : public CEvent {
         void OnClear();
 
         void OnCleanup();
-        void Fire();
 
 	void OnExit();
 	void OnMouseMove(int mX, int mY, int relX, int relY, bool Left,bool Right,bool Middle);

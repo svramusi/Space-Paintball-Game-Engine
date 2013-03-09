@@ -5,6 +5,7 @@
 
 typedef struct graphics_info_t { //all units MKS: meters, kilograms, seconds
     int ID;
+    CollidableObject *obj
     int x;
     int y;
     int z;
