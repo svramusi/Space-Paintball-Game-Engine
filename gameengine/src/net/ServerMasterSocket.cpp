@@ -43,27 +43,22 @@ namespace net
 		return true;
 	}
 
-	ServerSocket& ServerMasterSocket::Accept( Address& sender )
+	ServerSocket* ServerMasterSocket::Accept( Address& sender )
 	{
 		int sock;
 		sockaddr_in sadr;
 		socklen_t addr_size = 0;
-		pthread_t thread_id = 0;
-		ServerSocket serverSocket;
+		ServerSocket* serverSocket;
 
 		addr_size = sizeof(sockaddr_in);
 
 		if( ( sock = accept( socket, (sockaddr*) &sadr, &addr_size ) ) != -1 )
 		{
-			//printf("---------------------\nReceived connection from %s\n", inet_ntoa( sadr.sin_addr ) );
-			//pthread_create( &thread_id, 0, &ServerMasterSocket::SocketHandler, (void*)sock );
-			//pthread_detach( thread_id );
-
 			unsigned int address = ntohl( sadr.sin_addr.s_addr );
 			unsigned short port = ntohs( sadr.sin_port );
 
 			sender = Address( address, port );
-			serverSocket = ServerSocket( sock );
+			serverSocket = new ServerSocket( sock );
 		}
 		else
 		{

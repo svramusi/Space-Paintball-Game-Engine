@@ -39,6 +39,7 @@ bool TimeForRendering();
 void UpdateStatistics();
 void FPSControl();
 bool ClientHasAlreadyConnected( Address& clientAddress );
+void* SocketHandler( void* );
 google::protobuf::uint32 ReadHeader( char *buf );
 void ReadBody( ServerSocket* serverSocket, google::protobuf::uint32 size );
 
@@ -73,17 +74,23 @@ int main( int argc, char * argv[] )
 	serverMasterSocket.Open( MASTER_SOCKET_PORT );
 	/////////////////////////////////////////////////////////////////
 
+	pthread_t thread_id = 0;
+
  	// Server Game Loop
 	while(!quit)
 	{
 		if( serverMasterSocket.HasData() )
 		{
 			Address clientAddress;
-			ServerSocket serverSocket = serverMasterSocket.Accept( clientAddress );
+			ServerSocket* serverSocket = serverMasterSocket.Accept( clientAddress );
 
 			if( !ClientHasAlreadyConnected( clientAddress ) )
 			{
-				serverConnections.insert( make_pair( clientAddress, &serverSocket ) );
+				serverConnections.insert( make_pair( clientAddress, serverSocket ) );
+
+				printf( "---------------------\nReceived connection from %s\n", clientAddress.ToString().c_str() );
+				pthread_create( &thread_id, 0, &SocketHandler, (void*)serverSocket );
+				pthread_detach(thread_id);
 			}
 		}
 
@@ -272,4 +279,35 @@ bool ClientHasAlreadyConnected( Address & clientAddress )
 	}
 
 	return clientHasAlreadyConnected;
+}
+
+void* SocketHandler(void* lp)
+{
+	//int *csock = (int*) lp;
+
+	ServerSocket* serverSocket = (ServerSocket*) lp;
+
+	char buffer[4];
+	int bytecount = 0;
+	string output, pl;
+	//net::Point logp;
+
+	memset(buffer, '\0', 4);
+
+	while (1) {
+		//Peek into the socket and get the packet size
+		bytecount = serverSocket->Peek( buffer, 4 );
+
+		if ( bytecount == 0 )
+		{
+			break;
+		}
+
+		ReadBody( serverSocket, ReadHeader( buffer ) );
+	}
+
+	FINISH:
+		serverSocket->Close();
+
+	return 0;
 }
