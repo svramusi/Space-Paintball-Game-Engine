@@ -96,9 +96,9 @@ void CApp::OnRender() {
 
 	   glLoadIdentity();
 	   glTranslatef(pLocX, -1, -20-pLocZ);
-	    glRotatef(20,1.0,0.0,0.0);
+	    glRotatef(LocX,1.0,0.0,0.0);
 	    // rotation about Y axis
-	    glRotatef(90,0.0,1.0,0.0);
+	    glRotatef(LocY,0.0,1.0,0.0);
 	    // rotation about Z axis
 	    glRotatef(0,0.0,0.0,1.0);
 	  glBegin(GL_QUADS);        // Draw The Cube Using quads

@@ -26,7 +26,7 @@ class CApp : public CEvent {
         SDL_Surface*    Surf_Display;
  
         SDL_Surface*    Surf_Test;
-        int 			LocX, LocY, LocZ;
+        float 			LocX, LocY, LocZ;
         float				pLocX, pLocY, pLocZ;
         int 			latestID;
         std::vector<graphicsInfo> graphicsObjects;

@@ -8,8 +8,8 @@ CApp::CApp() {
     Surf_Display = NULL;
     latestID = 0;
     Running = true;
-    LocX = 0;
-    LocY= 0;
+    LocX = 20;
+    LocY= 90;
     LocZ= 0;
 
     pLocX = 0;
@@ -42,10 +42,12 @@ void CApp::Fire()
 
 void CApp::setCamPos(int xP, int yP, int yZ) //Cam Position
 {
-	LocX+=  xP;
-	//LocX %= 360;
-	LocY +=yP;
-	//LocY %= 360;
+	LocX+=  xP*.1;
+	if(LocX > 360)
+		LocX -= 360.0;
+	LocY +=yP*.1;
+	if(LocY > 360)
+			LocY -= 360.0;
 	//LocZ +=yZ; //Z is left button
 }
 
