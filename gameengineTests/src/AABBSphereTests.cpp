@@ -72,9 +72,9 @@ AABBSphereTest::testCollision(void)
     CPPUNIT_ASSERT(1 == cd->isIntersection(aabb, sphere));
 
     penetrationVector = cd->getPenetrationVector(aabb, sphere);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(-1.0f, penetrationVector.x, 0.01);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(-1.0f, penetrationVector.y, 0.01);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(-1.0f, penetrationVector.z, 0.01);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0f, penetrationVector.x, 0.01);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0f, penetrationVector.y, 0.01);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0f, penetrationVector.z, 0.01);
 
     delete aabb;
     delete sphere;
@@ -100,9 +100,9 @@ AABBSphereTest::testCollision(void)
     CPPUNIT_ASSERT(1 == cd->isIntersection(aabb, sphere));
 
     penetrationVector = cd->getPenetrationVector(aabb, sphere);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(-1.0f, penetrationVector.x, 0.01);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(-1.0f, penetrationVector.y, 0.01);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(-2.0f, penetrationVector.z, 0.01);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0f, penetrationVector.x, 0.01);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0f, penetrationVector.y, 0.01);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(2.0f, penetrationVector.z, 0.01);
 
     delete aabb;
     delete sphere;

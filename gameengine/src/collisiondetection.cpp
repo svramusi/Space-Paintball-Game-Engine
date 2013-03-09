@@ -199,6 +199,8 @@ CollisionDetection::getPenetrationVector(const CollidableObject *obj1, const Col
         return getPenetrationVector(dynamic_cast<const Sphere*>(obj1), dynamic_cast<const Sphere*>(obj2));
     else if((typeid(AABB) == typeid(*obj1)) && (typeid(Sphere) == typeid(*obj2)))
         return getPenetrationVector(dynamic_cast<const AABB*>(obj1), dynamic_cast<const Sphere*>(obj2));
+    else if((typeid(Sphere) == typeid(*obj1)) && (typeid(AABB) == typeid(*obj2)))
+        return getPenetrationVector(dynamic_cast<const AABB*>(obj2), dynamic_cast<const Sphere*>(obj1));
     else
     {
         penetration_t penetration;
@@ -215,14 +217,14 @@ CollisionDetection::getPenetrationVector(const AABB *aabb1, const AABB *aabb2)
 {
     penetration_t penetrationVector;
 
-    penetrationVector.x = abs(aabb1->getCenter().x - aabb2->getCenter().x)
-                            - (aabb1->getXRadius() + aabb2->getXRadius());
+    penetrationVector.x = (aabb1->getXRadius() + aabb2->getXRadius())
+                            - abs(aabb1->getCenter().x - aabb2->getCenter().x);
 
-    penetrationVector.y = abs(aabb1->getCenter().y - aabb2->getCenter().y)
-                            - (aabb1->getYRadius() + aabb2->getYRadius());
+    penetrationVector.y = (aabb1->getYRadius() + aabb2->getYRadius())
+                            - abs(aabb1->getCenter().y - aabb2->getCenter().y);
 
-    penetrationVector.z = abs(aabb1->getCenter().z - aabb2->getCenter().z)
-                            - (aabb1->getZRadius() + aabb2->getZRadius());
+    penetrationVector.z = (aabb1->getZRadius() + aabb2->getZRadius())
+                            - abs(aabb1->getCenter().z - aabb2->getCenter().z);
 
     return penetrationVector;
 }
@@ -246,12 +248,14 @@ CollisionDetection::getPenetrationVector(const AABB *aabb, const Sphere *sphere)
 {
     penetration_t penetrationVector;
 
-    penetrationVector.x = abs(aabb->getCenter().x - sphere->getCenter().x)
-                            - (aabb->getXRadius() + sphere->getRadius());
-    penetrationVector.y = abs(aabb->getCenter().y - sphere->getCenter().y)
-                            -(aabb->getYRadius() + sphere->getRadius());
-    penetrationVector.z = abs(aabb->getCenter().z - sphere->getCenter().z)
-                            - (aabb->getZRadius() + sphere->getRadius());
+    penetrationVector.x = (aabb->getXRadius() + sphere->getRadius())
+                            - abs(aabb->getCenter().x - sphere->getCenter().x);
+
+    penetrationVector.y = (aabb->getYRadius() + sphere->getRadius())
+                            - abs(aabb->getCenter().y - sphere->getCenter().y);
+
+    penetrationVector.z = (aabb->getZRadius() + sphere->getRadius())
+                            - abs(aabb->getCenter().z - sphere->getCenter().z);
 
     return penetrationVector;
 }
@@ -287,6 +291,8 @@ CollisionDetection::isIntersection(const CollidableObject *obj1, const Collidabl
         return isIntersection(dynamic_cast<const Sphere*>(obj1), dynamic_cast<const Sphere*>(obj2));
     else if((typeid(AABB) == typeid(*obj1)) && (typeid(Sphere) == typeid(*obj2)))
         return isIntersection(dynamic_cast<const AABB*>(obj1), dynamic_cast<const Sphere*>(obj2));
+    else if((typeid(Sphere) == typeid(*obj1)) && (typeid(AABB) == typeid(*obj2)))
+        return isIntersection(dynamic_cast<const AABB*>(obj2), dynamic_cast<const Sphere*>(obj1));
     else
         return -1;
 }
