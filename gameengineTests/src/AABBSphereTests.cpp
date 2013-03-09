@@ -14,7 +14,6 @@ void AABBSphereTest::tearDown(void)
 void
 AABBSphereTest::testNoCollision(void)
 {
-    float radii[3];
     Point point1;
     Point point2;
 
@@ -22,21 +21,19 @@ AABBSphereTest::testNoCollision(void)
     point1.y = 0;
     point1.z = 0;
 
-    radii[0] = 1.0;
-    radii[1] = 1.0;
-    radii[2] = 1.0;
+    float radii[3];
+    radii[0] = 1.0f;
+    radii[1] = 1.0f;
+    radii[2] = 1.0f;
 
-    AABB *aabb = new AABB(1, point1, radii);
+    AABB *aabb = new AABB(1, point1, radii, true);
 
     point2.x = 10;
     point2.y = 10;
     point2.z = 10;
 
-    radii[0] = 1.0;
-    radii[1] = 1.0;
-    radii[2] = 1.0;
 
-    Sphere *sphere = new Sphere(2, point2, radii);
+    Sphere *sphere = new Sphere(2, point2, 1.0f, true);
 
     CPPUNIT_ASSERT(0 == cd->isIntersection(aabb, sphere));
 
@@ -47,7 +44,6 @@ AABBSphereTest::testNoCollision(void)
 void
 AABBSphereTest::testCollision(void)
 {
-    float radii[3];
     Point point1;
     Point point2;
 
@@ -55,21 +51,18 @@ AABBSphereTest::testCollision(void)
     point1.y = 0;
     point1.z = 0;
 
-    radii[0] = 1.0;
-    radii[1] = 1.0;
-    radii[2] = 1.0;
+    float radii[3];
+    radii[0] = 1.0f;
+    radii[1] = 1.0f;
+    radii[2] = 1.0f;
 
-    AABB *aabb = new AABB(1, point1, radii);
+    AABB *aabb = new AABB(1, point1, radii, true);
 
     point2.x = 2;
     point2.y = 2;
     point2.z = 2;
 
-    radii[0] = 1.0;
-    radii[1] = 1.0;
-    radii[2] = 1.0;
-
-    Sphere *sphere = new Sphere(2, point2, radii);
+    Sphere *sphere = new Sphere(2, point2, 1.0f, true);
 
     CPPUNIT_ASSERT(1 == cd->isIntersection(aabb, sphere));
 

@@ -23,21 +23,21 @@ CollisionDetectionTest::testNoCollision(void)
     point1.y = 0;
     point1.z = 0;
 
-    radii[0] = 1.0;
-    radii[1] = 1.0;
-    radii[2] = 1.0;
+    radii[0] = 1.0f;
+    radii[1] = 1.0f;
+    radii[2] = 1.0f;
 
-    AABB *aabb1 = new AABB(1, point1, radii);
+    AABB *aabb1 = new AABB(1, point1, radii, true);
 
     point2.x = 10;
     point2.y = 10;
     point2.z = 10;
 
-    radii[0] = 1.0;
-    radii[1] = 1.0;
-    radii[2] = 1.0;
+    radii[0] = 1.0f;
+    radii[1] = 1.0f;
+    radii[2] = 1.0f;
 
-    AABB *aabb2 = new AABB(2, point2, radii);
+    AABB *aabb2 = new AABB(2, point2, radii, true);
 
     CPPUNIT_ASSERT(0 == cd->isIntersection(aabb1, aabb2));
 
@@ -65,21 +65,21 @@ CollisionDetectionTest::testCollision(void)
     point1.y = 0;
     point1.z = 0;
 
-    radii[0] = 1.0;
-    radii[1] = 1.0;
-    radii[2] = 1.0;
+    radii[0] = 1.0f;
+    radii[1] = 1.0f;
+    radii[2] = 1.0f;
 
-    AABB *aabb1 = new AABB(1, point1, radii);
+    AABB *aabb1 = new AABB(1, point1, radii, true);
 
     point2.x = 1;
     point2.y = 1;
     point2.z = 1;
 
-    radii[0] = 2.0;
-    radii[1] = 2.0;
-    radii[2] = 2.0;
+    radii[0] = 2.0f;
+    radii[1] = 2.0f;
+    radii[2] = 2.0f;
 
-    AABB *aabb2 = new AABB(2, point2, radii);
+    AABB *aabb2 = new AABB(2, point2, radii, true);
 
     CPPUNIT_ASSERT(1 == cd->isIntersection(aabb1, aabb2));
 

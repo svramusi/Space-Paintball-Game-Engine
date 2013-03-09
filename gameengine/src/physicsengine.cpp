@@ -1,6 +1,8 @@
 #include <stdlib.h>
 #include <math.h>
 
+#include <iomanip>
+
 
 #include "physicsengine.h"
 
@@ -29,10 +31,12 @@ PhysicsEngine::~PhysicsEngine()
 void
 PhysicsEngine::SetWorldParams(float grav, float air)
 {
-    gravity =grav;
-    airfriction= air;
+    gravity = grav;
+    airFriction = air;
 
     latestID = 0;
+
+    lastTimeStep = 0.0f;
 }
 
 void
@@ -48,47 +52,71 @@ PhysicsEngine::updateWorld(float timeStep)
 
 cout << endl << "updating world.  current time is: " << timeStep << endl << endl;
 
+    float delta = timeStep - lastTimeStep;
+    lastTimeStep = timeStep;
+
     for (std::vector<physicsInfo>::iterator it = physicsObjects.begin(); it != physicsObjects.end(); ++it)
     {
-        cout << endl << "updating object. id:" << (*it).ID;
-        cout << endl << "center X:" << (*it).collidableObject->getCenter().x;
-        cout << endl << "center Y:" << (*it).collidableObject->getCenter().y;
-        cout << endl << "center Z:" << (*it).collidableObject->getCenter().z;
-        cout << endl << endl;
+        if((*it).movable) {
+            calculateLinearForce(&(*it), delta);
 
-        calculateLinearAcceleration(&(*it),timeStep);
-        calculateLinearVelocity(&(*it),timeStep);
-        calculatePosition(&(*it),timeStep);
-        calculateAngularVelocity(&(*it),timeStep);
-        calculateAngularPosition(&(*it),timeStep); //NEEDS CALCULATE POI UPDATED TO WORK
-        //call UPDATE HERE t.ID, if->aabb ...
-        cd->updateObject((*it).ID, (*it).collidableObject->getCenter());
+            calculateLinearVelocity(&(*it), delta);
 
-        //are we better to just do center in constructor?
+            calculatePosition(&(*it), delta);
+
+            calculateAngularVelocity(&(*it),timeStep);
+
+            calculateAngularPosition(&(*it),timeStep); //NEEDS CALCULATE POI UPDATED TO WORK
+
+/*
+            cout << endl << "updating object. id:" << (*it).ID;
+            cout << endl << "center X:" << (*it).collidableObject->getCenter().x;
+            cout << endl << "center Y:" << (*it).collidableObject->getCenter().y;
+            cout << endl << "center Z:" << (*it).collidableObject->getCenter().z;
+            cout << endl << endl;
+*/
+
+            cd->updateObject((*it).ID, (*it).collidableObject->getCenter());
+
+            //are we better to just do center in constructor?
+        }
     }
 
+    resolveCollisions();
+}
+
+void
+PhysicsEngine::resolveCollisions()
+{
     collisions_t *collisions = cd->checkForAnyCollisions();
 
-    if(collisions != NULL) {
+    if(collisions != NULL)
+    {
         cout << endl << "There is a collision between object ID: " << collisions->ID
-            << " and object ID: " << collisions->info->ID << endl << endl;
+                << " and object ID: " << collisions->info->ID << endl << endl;
+
+        for (std::vector<physicsInfo>::iterator it = physicsObjects.begin(); it != physicsObjects.end(); ++it)
+        {
+            physicsInfo* tempInfo = &(*it);
+
+            if((tempInfo->ID == collisions->ID || tempInfo->ID == collisions->info->ID) && tempInfo->movable)
+            {
+                penetration_t penetration = collisions->info->penetration;
+
+                Point currentCenter = tempInfo->collidableObject->getCenter();
+                Point newCenter;
+                newCenter.x = currentCenter.x + penetration.x;
+                newCenter.y = currentCenter.y + penetration.y;
+                newCenter.z = currentCenter.z + penetration.z;
+
+                tempInfo->collidableObject->setCenter(newCenter);
+                cd->updateObject(tempInfo->ID, tempInfo->collidableObject->getCenter());
+            }
+        }
     }
 
     cd->freeCollisions(collisions);
-
-/*
-    detectCollision* collidableObject;
-
-    collidableObject = (detectCollision*)malloc(sizeof(detectCollision));
-    collidableObject->collidableObjectID = 1;
-
-    collisionDetection* collisions = cd->detect_collision(collidableObject);
-
-    freeCollisions(collisions);
-    free(collidableObject);
-*/
 }
-
 
 
 void PhysicsEngine::calculateAngularVelocity(physicsInfo *item, float deltaT)
@@ -192,65 +220,58 @@ void PhysicsEngine::calculateAngularPosition(physicsInfo *item, float deltaT)
     item->angularPosition= newP;
 }
 
-void PhysicsEngine::calculateLinearAcceleration(physicsInfo *item, float deltaT)
+void PhysicsEngine::calculateLinearForce(physicsInfo *item, float deltaT)
 {
-    //accel x = accel x - gravity*deltaT
-    //accel y= accel y - wind *deltaT
-    Force accel;
-    accel.x = (item->linearForce.x/item->mass)+(gravity*deltaT);
-    accel.y = (item->linearForce.y/item->mass)+(airfriction*deltaT);
-    accel.z = (item->linearForce.z/item->mass); //no wind so no Z force
+    float mass = item->mass;
 
-    item->linearForce.x = accel.x*item->mass;
-    item->linearForce.y = accel.y*item->mass;
-    item->linearForce.z = accel.z*item->mass;
+    float xAccel = (item->linearForce.x/mass) + (airFriction * deltaT);
+    float yAccel = (item->linearForce.y/mass) + (gravity * deltaT);
+    float zAccel = (item->linearForce.z/mass);
+
+    item->linearForce.x = mass * xAccel;
+    item->linearForce.y = mass * yAccel;
+    item->linearForce.z = mass * zAccel;
 }
 
 
 void PhysicsEngine::calculateLinearVelocity(physicsInfo *item, float deltaT)
 {
-    //Velocity new = vel cur + Acc * deltaT
-    Force accel;
-    Velocity newV;
-    accel.x = (item->linearForce.x/item->mass)*deltaT;
-    accel.y = (item->linearForce.y/item->mass)*deltaT;
-    accel.z = (item->linearForce.z/item->mass)*deltaT;
+    float mass = item->mass;
 
-    newV.x = item->linearVelocity.x + accel.x;
-    newV.y = item->linearVelocity.y + accel.y;
-    newV.z = item->linearVelocity.z + accel.z;
-    item->linearVelocity = newV;
+    //Velocity new = vel cur + Acc * deltaT
+    float xAccel = (item->linearForce.x/mass) * deltaT;
+    float yAccel = (item->linearForce.y/mass) * deltaT;
+    float zAccel = (item->linearForce.z/mass) * deltaT;
+
+    item->linearVelocity.x += xAccel;
+    item->linearVelocity.y += yAccel;
+    item->linearVelocity.z += zAccel;
 }
 
  void PhysicsEngine::calculatePosition(physicsInfo *item, float deltaT)
  {
     // using verlet integration
     // postion of New = Position current + vel Cur* deltaT + acceleration (dt^2)
-    Point current = item->collidableObject->getCenter();
 
-    Velocity calcVel = item->linearVelocity;
-    Force accel;
-    Point newP;
+    Velocity velocity = item->linearVelocity;
+    float xVel = velocity.x * deltaT;
+    float yVel = velocity.y * deltaT;
+    float zVel = velocity.z * deltaT;
+
+    float mass = item->mass;
     float timeSqr = deltaT*deltaT;
-    calcVel.x = calcVel.x * deltaT;
-    calcVel.y =calcVel.y * deltaT;
-    calcVel.z = calcVel.z * deltaT;
 
-    accel.x = (item->linearForce.x/item->mass)*timeSqr;
-    accel.y = (item->linearForce.y/item->mass)*timeSqr;
-    accel.z = (item->linearForce.z/item->mass)*timeSqr;
+    float xAccel = (item->linearForce.x/mass) * timeSqr;
+    float yAccel = (item->linearForce.y/mass) * timeSqr;
+    float zAccel = (item->linearForce.z/mass) * timeSqr;
 
-    newP.x = current.x + accel.x+ calcVel.x;
-    newP.y = current.y + accel.y+ calcVel.y;
-    newP.z = current.z + accel.z+ calcVel.z;
-
+    Point currentCenter = item->collidableObject->getCenter();
     Point newCenter;
-    newCenter.x = current.x + accel.x + calcVel.x;
-    newCenter.y = current.y + accel.y + calcVel.y;
-    newCenter.z = current.z + accel.z + calcVel.z;
+    newCenter.x = currentCenter.x + xAccel + xVel;
+    newCenter.y = currentCenter.y + yAccel + yVel;
+    newCenter.z = currentCenter.z + zAccel + zVel;
 
     item->collidableObject->setCenter(newCenter);
-    // item.oldPosition = current;
  }
 
 void PhysicsEngine::insertPhysicsObject(CollidableObject *obj, float m, Velocity linVel, Force linFrc, Velocity angVel, Force angFrc, Point angPos)
@@ -260,6 +281,7 @@ void PhysicsEngine::insertPhysicsObject(CollidableObject *obj, float m, Velocity
     newItem.ID = latestID;
     obj->setID(latestID);
     newItem.collidableObject = obj;
+    newItem.movable = obj->isMovable();
 
     newItem.mass = m;
 
@@ -269,6 +291,8 @@ void PhysicsEngine::insertPhysicsObject(CollidableObject *obj, float m, Velocity
     newItem.angularVelocity = angVel;
     newItem.angularForce = angFrc;
     newItem.angularPosition = angPos;
+
+
     //newItem.oldPosition = obj->center;
     physicsObjects.push_back(newItem);
 

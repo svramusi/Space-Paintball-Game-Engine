@@ -11,8 +11,6 @@
 class PhysicsEngine {
 
 public:
-    float gravity;
-    float airfriction;
     PhysicsEngine();
     PhysicsEngine(float grav, float air);
     void SetWorldParams(float grav, float air);
@@ -23,13 +21,18 @@ public:
 private:
     CollisionDetection *cd;
 
+    float gravity;
+    float airFriction;
+
     int latestID;
+
+    float lastTimeStep;
 
     std::vector<physicsInfo> physicsObjects;
 
     void calculatePosition(physicsInfo *item, float deltaT);
     void calculateLinearVelocity(physicsInfo *item, float deltaT);
-    void calculateLinearAcceleration(physicsInfo *item, float deltaT);
+    void calculateLinearForce(physicsInfo *item, float deltaT);
     void calculateAngularPosition(physicsInfo *item, float deltaT);
     void calculateAngularVelocity(physicsInfo *item, float deltaT);
     void calculateAngularAcceleration(physicsInfo *item, float deltaT);
@@ -38,6 +41,7 @@ private:
 
     float calculateAngle(Point POI, Point Center, Point p3);
 
+    void resolveCollisions();
 
     //V2 ALWAYS NEEDS TO BE THE MIDDLE VERTEX
     float GetAngleBetweenVerticese(Point v1, Point v2, Point v3);

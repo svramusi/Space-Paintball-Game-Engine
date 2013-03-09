@@ -5,10 +5,13 @@
 
 class Sphere: public CollidableObject {
 public:
-    Sphere(int ID, Point center, float radii[3]);
+    Sphere(int ID, Point center, float radius, int movable);
     ~Sphere();
 
-    float getRadius();
+    float getRadius() const;
+
+private:
+    float radius;
 };
 
 #endif
