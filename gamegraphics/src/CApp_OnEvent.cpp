@@ -9,10 +9,11 @@ void CApp::OnEvent(SDL_Event* Event) {
 void CApp::OnMouseMove(int mX, int mY, int relX, int relY, bool Left,bool Right,bool Middle) {
 
 	if(!Left){
-		setPos (relX, relY,0);
+		setCamPos (relX, relY,0); //look left, look up
+
 	}
 	if(Left){
-		setPos (0, 0,relX);
+		setPlayerPos (relX, 0,relY); //left right straff, and forward back
 	}
 
 }

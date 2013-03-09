@@ -11,16 +11,70 @@ CApp::CApp() {
     LocX = 0;
     LocY= 0;
     LocZ= 0;
+
+    pLocX = 0;
+    pLocY= 0;
+    pLocZ= 0;
 }
-void CApp::setPos(int xP, int yP, int yZ) //Player Position
+CApp::CApp(int playerX, int playerZ) {
+
+    Surf_Test = NULL;
+    Surf_Display = NULL;
+    latestID = 0;
+    Running = true;
+    LocX = 0;
+    LocY= 0;
+    LocZ= playerZ;
+
+    pLocX = playerX;
+    pLocY= 0;
+    pLocZ= playerZ;
+}
+
+void CApp::Fire()
+{
+	//Need a call in client
+	/*position = px,y,z
+	vector = cx,y,z
+	rest filled in on client*/
+
+}
+
+void CApp::setCamPos(int xP, int yP, int yZ) //Cam Position
 {
 	LocX+=  xP;
 	LocX %= 360;
 	LocY +=yP;
 	LocY %= 360;
-	LocZ +=yZ; //Z is left button and x axis
+	//LocZ +=yZ; //Z is left button
+}
 
+void CApp::setPlayerPos(int xP, int yP, int yZ) //PLayer Position
+{
+	int xrange = SCREENW/2;
+	int zrange = SCREEND;
+	pLocX+=  xP;
+	if(pLocX > xrange)
+			pLocX = xrange;
+	if(pLocX < -xrange)
+				pLocX = -xrange;
 
+	/* May be needed y always independant
+
+	LocX+=  xP;
+	LocX %= 360; */
+
+	pLocZ +=yZ; //Z is left button
+	if(pLocZ > zrange){
+				pLocX = zrange;
+				LocX = zrange;  //adjust Z location with player
+	}
+		if(LocZ < 1){
+				pLocZ = 1;
+				LocX = 1;
+		}
+
+		//CALL Update player Position
 }
 
 int CApp::OnExecute() {
