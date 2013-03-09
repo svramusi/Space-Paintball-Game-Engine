@@ -23,21 +23,21 @@ bool CApp::OnInit() {
 
     SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES,2);*/
 
-    if((Surf_Display = SDL_SetVideoMode(640, 480, 32, SDL_OPENGL| SDL_HWSURFACE |  SDL_GL_DOUBLEBUFFER )) == NULL) {
+    if((Surf_Display = SDL_SetVideoMode(SCREENX, SCREENY, 32, SDL_OPENGL| SDL_HWSURFACE |  SDL_GL_DOUBLEBUFFER )) == NULL) {
         printf("Failed");
     	return false;
     }
 
     glClearColor(0, 0, 0, 0);
 
-    glViewport(0, 0, 640, 480);
+    glViewport(0, 0, SCREENX, SCREENY);
 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
 
     //glOrtho(0, 640, 480, 0, -1, -500);//1,-1
     //gluPerspective( 60.0, ratio, 1.0, 1024.0 );
-    gluPerspective(45.0f, 640.0f / 480.0f, 1.0f, 500.0f);
+    gluPerspective(45.0f, SCREENX/ SCREENY, 1.0f, 500.0f);
     glMatrixMode(GL_MODELVIEW);
 
     glEnable(GL_TEXTURE_2D);

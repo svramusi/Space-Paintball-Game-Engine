@@ -13,10 +13,15 @@
 
 #define XMAX 1000
 #define XMIN -1000
-#define YMAX 1000
-#define YMIN -1000
+#define YMAX 100
+#define YMIN 0
+#define ZMAX2 -1000
+#define ZMIN2 -1
 #define ZMAX 1000
-#define ZMIN 1
+#define ZMIN -100
+
+#define SCREENX 1024
+#define SCREENY 768
 
 
 class CApp : public CEvent {

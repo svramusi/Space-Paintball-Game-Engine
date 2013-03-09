@@ -7,12 +7,12 @@ void CApp::OnEvent(SDL_Event* Event) {
 }
 
 void CApp::OnMouseMove(int mX, int mY, int relX, int relY, bool Left,bool Right,bool Middle) {
-
-	if(!Left){
+ //NOT RIGHT SO YOU CNA MOVE MOUSE WITH OUT AFFFECT
+	if(!Left&&!Right){
 		setCamPos (relX, relY,0); //look left, look up
 
 	}
-	if(Left){
+	if(Left&&!Right){
 		setPlayerPos (relX, 0,relY); //left right straff, and forward back
 	}
 

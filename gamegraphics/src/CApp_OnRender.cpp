@@ -12,87 +12,7 @@ void CApp::OnRender() {
 
 	  glClearColor(0,0,0,0);
 
-	  // Setup our screen
-	 /* glViewport(0,0,800,600);
-	  glMatrixMode(GL_PROJECTION);
-	  glLoadIdentity();
-	  gluPerspective(45.0f,800.0f/600.0f,1.0f,500.0f);
-	  glMatrixMode(GL_MODELVIEW);*/
 
-	  // This loop will run until Esc is pressed
-
-	   //   if(Keys[VK_ESCAPE]) // Esc Key
-
-
-	     //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-	     //glLoadIdentity(); // Reset current matrix (Modelview)
-
-
-	 // glTranslatef(0,0,-500);
-	//  glColor4f(1.0,1.0,1.0,1.0);
-
-	 /* glBegin(GL_QUADS);
-	  glVertex3f(0,  0,0);
-	  glVertex3f(10, 0,0);
-	  glVertex3f(10,10,0);
-	  glVertex3f(0, 10,0);
-	  glEnd();*/
-
-  /* glBegin(GL_QUADS);
-        glColor3f(1, 0, 0); glVertex3f(0, 0, 0);
-        glColor3f(1, 1, 0); glVertex3f(100, 0,0);
-        glColor3f(1, 1, 1); glVertex3f(100, 100, 0);
-        glColor3f(1, 1, 1); glVertex3f(0, 100, 0);
-        glEnd();
-        glBegin(GL_QUADS);
-        glColor3f(1, 0, 0); glVertex3f(LocX, LocY, 0);
-        glColor3f(1, 1, 0); glVertex3f(100+LocX, LocY, 0);
-        glColor3f(1, 0, 1); glVertex3f(100+LocX, 100+LocY, 0);
-        glColor3f(1, 1, 1); glVertex3f(LocX, 100+LocY, 0);
-    glEnd();*/
-
-	  //Handles Camera movement
-	  //gluLookAt((double)pLocX,(double)pLocY,(double)pLocZ,(double)LocX,(double)LocY,(double)LocZ,0.0,1.0,0.0);
-
-	  //FLOOR
-
-	//  glTranslatef(0, 0, -3);
-	 /* glRotatef(5, 1, 0, 0);
-	  glRotatef(90, 0, 1, 0);
-	  glColor3f(1.0, 1.0, 1.0);
-	  glBegin(GL_LINES);
-	  for (GLfloat i = -2.5; i <= 2.5; i += 0.25) {
-	    glVertex3f(i, 0, 2.5); glVertex3f(i, 0, -2.5);
-	    glVertex3f(2.5, 0, i); glVertex3f(-2.5, 0, i);
-
-	    glVertex3f(2.5, 0, -i); glVertex3f(-2.5, 0, -i);
-	    glVertex3f(2.5, 0, i); glVertex3f(-2.5, 0, i);
-
-	  } //Floor
-	  glEnd();
-
-	  glFlush();*/
-
-
-
-	  	 // glLoadIdentity();
-	  //wall
-
-	 	//  glTranslatef(0, 0, -3);
-	 	 // glRotatef(110, 1, 0, 0);
-	 	 // glRotatef(90, 0, 1, 0);
-	 	//  glRotatef(90, 0, 0, 1);
-	 	/*  glColor3f(0.0, 1.0, 1.0);
-	 	  glBegin(GL_LINES);
-	 	  for (GLfloat i = -2.5; i <= 2.5; i += 0.25) {
-	 	    glVertex3f(i, 0, 2.5); glVertex3f(i, 0, -2.5);
-	 	    glVertex3f(2.5, 0, i); glVertex3f(-2.5, 0, i);
-
-	 	  } //Floor
-	 	  glEnd();
-
-	 	  glFlush();*/
 
 	   glLoadIdentity();
 	   glTranslatef(pLocX, -1, -20-pLocZ);
@@ -100,37 +20,41 @@ void CApp::OnRender() {
 	    // rotation about Y axis
 	    glRotatef(LocY,0.0,1.0,0.0);
 	    // rotation about Z axis
-	    glRotatef(0,0.0,0.0,1.0);
-	  glBegin(GL_QUADS);        // Draw The Cube Using quads
-	    glColor3f(0.0f,1.0f,0.0f);    // Color Blue
-	    glVertex3f( 1.0f, 1.0f,-1.0f);    // Top Right Of The Quad (Top)
-	    glVertex3f(-1.0f, 1.0f,-1.0f);    // Top Left Of The Quad (Top)
-	    glVertex3f(-1.0f, 1.0f, 1.0f);    // Bottom Left Of The Quad (Top)
-	    glVertex3f( 1.0f, 1.0f, 1.0f);    // Bottom Right Of The Quad (Top)
+	   // glRotatef(0,0.0,0.0,1.0);
 
-	    glColor3f(0.0f,1.0f,0.0f);    // Color Blue
-	    	    glVertex3f( -1.0f,-1.0f, 1.0f);    // Top Right Of The Quad (Bottom)
-	    	    glVertex3f( 1.0f,-1.0f, 1.0f);    // Top Left Of The Quad (Bottom)
-	    	    glVertex3f(-1.0f, 1.0f, -1.0f);    // Bottom Left Of The Quad (Bottom)
-	    	    glVertex3f( 1.0f, 1.0f, 1.0f);    // Bottom Right Of The Quad (Bottom)
 
-	    glColor3f(1.0f,0.0f,0.0f);    // Color Red
-	    glVertex3f( 1.0f, 1.0f, 1.0f);    // Top Right Of The Quad (Front)
-	    glVertex3f(-1.0f, 1.0f, 1.0f);    // Top Left Of The Quad (Front)
-	    glVertex3f(-1.0f,-1.0f, 1.0f);    // Bottom Left Of The Quad (Front)
-	    glVertex3f( 1.0f,-1.0f, 1.0f);    // Bottom Right Of The Quad (Front)
-	    glColor3f(1.0f,1.0f,0.0f);    // Color Yellow
-	    glVertex3f( 1.0f,-1.0f,-1.0f);    // Top Right Of The Quad (Back)
-	    glVertex3f(-1.0f,-1.0f,-1.0f);    // Top Left Of The Quad (Back)
-	    glVertex3f(-1.0f, 1.0f,-1.0f);    // Bottom Left Of The Quad (Back)
-	    glVertex3f( 1.0f, 1.0f,-1.0f);    // Bottom Right Of The Quad (Back)
+	    glBegin(GL_QUADS);        // Draw The Cube Using quads
+	      glColor3f(0.0f,1.0f,0.0f);    // Color Blue
+	      glVertex3f( XMAX, YMAX,ZMIN);    // Top Right Of The Quad (Top)
+	      glVertex3f(XMIN, YMAX,ZMIN);    // Top Left Of The Quad (Top)
+	      glVertex3f(XMIN, YMAX, ZMAX);    // Bottom Left Of The Quad (Top)
+	      glVertex3f( XMAX, YMAX, ZMAX);    // Bottom Right Of The Quad (Top)
 
-	    glColor3f(1.0f,0.0f,1.0f);    // Color Violet
-	    glVertex3f( 1.0f, 1.0f,-1.0f);    // Top Right Of The Quad (Right)
-	    glVertex3f( 1.0f, 1.0f, 1.0f);    // Top Left Of The Quad (Right)
-	    glVertex3f( 1.0f,-1.0f, 1.0f);    // Bottom Left Of The Quad (Right)
-	    glVertex3f( 1.0f,-1.0f,-1.0f);    // Bottom Right Of The Quad (Right)
-	  glEnd();            // End Drawing The Cube
+	      glColor3f(1, 0, 0);glVertex3f( XMAX,YMIN, ZMAX);    // Top Right Of The Quad (Bottom)
+	      glColor3f(1, 1, 0);glVertex3f(XMIN,YMIN, ZMAX);    // Top Left Of The Quad (Bottom)
+	      glColor3f(1, 0, 1);glVertex3f(XMIN,YMIN,ZMIN);    // Bottom Left Of The Quad (Bottom)
+	      glColor3f(1, 1, 1);glVertex3f( XMAX,YMIN,ZMIN);    // Bottom Right Of The Quad (Bottom)
+	      glColor3f(1.0f,0.0f,0.0f);    // Color Red
+	      glVertex3f( XMAX, YMAX, ZMAX);    // Top Right Of The Quad (Front)
+	      glVertex3f(XMIN, YMAX, ZMAX);    // Top Left Of The Quad (Front)
+	      glVertex3f(XMIN,YMIN, ZMAX);    // Bottom Left Of The Quad (Front)
+	      glVertex3f(XMAX,YMIN,ZMAX);    // Bottom Right Of The Quad (Front)
+	      glColor3f(1.0f,1.0f,0.0f);    // Color Yellow
+	      glVertex3f( XMAX,YMIN,ZMIN);    // Top Right Of The Quad (Back)
+	      glVertex3f(XMIN,YMIN,ZMIN);    // Top Left Of The Quad (Back)
+	      glVertex3f(XMIN, YMAX,ZMIN);    // Bottom Left Of The Quad (Back)
+	      glVertex3f(XMAX, YMAX,ZMIN);    // Bottom Right Of The Quad (Back)
+	      glColor3f(0.0f,0.0f,1.0f);    // Color Blue
+	      glVertex3f(XMIN, YMAX, ZMAX);    // Top Right Of The Quad (Left)
+	      glVertex3f(XMIN, YMAX,ZMIN);    // Top Left Of The Quad (Left)
+	      glVertex3f(XMIN,YMIN,ZMIN);    // Bottom Left Of The Quad (Left)
+	      glVertex3f(XMIN,YMIN, ZMAX);    // Bottom Right Of The Quad (Left)
+	      glColor3f(1.0f,0.0f,1.0f);    // Color Violet
+	      glVertex3f( XMAX, YMAX,ZMIN);    // Top Right Of The Quad (Right)
+	      glVertex3f( XMAX, YMAX, ZMAX);    // Top Left Of The Quad (Right)
+	      glVertex3f( XMAX,YMIN, ZMAX);    // Bottom Left Of The Quad (Right)
+	      glVertex3f( XMAX,YMIN,ZMIN);    // Bottom Right Of The Quad (Right)
+	    glEnd();            // End Drawing The Cube
 
 	glFlush();
 
