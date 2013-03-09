@@ -1,7 +1,44 @@
 package net;
 
+message Velocity {
+	required float x = 1;
+  	required float y = 2;
+  	required float z = 3;
+}
+
+message Force {
+	required float x = 1;
+  	required float y = 2;
+  	required float z = 3;
+}
+
 message Point {
-  required float x = 1;
-  required float y = 2;
-  required float z = 3;
+  	required float x = 1;
+  	required float y = 2;
+  	required float z = 3;
+}
+
+message Aaab {
+	required Point center = 1;
+	repeated float radii = 2;
+}
+
+message Sphere {
+	required Point center = 1;
+	required float radius = 2;
+}
+
+message PhysicsInfo {
+	required float mass = 1;
+	required Aaab aabbObject = 2;
+	required Sphere sphereObject = 3;
+	required Velocity linearVelocity = 4;
+	required Velocity angularVelocity = 5;
+	required Point angularPosition = 6;
+	required Force linearForce = 7;
+	required Force angularForce = 8;
+}
+
+message GameEngine {
+	repeated PhysicsInfo physicsInfo = 1;
 }

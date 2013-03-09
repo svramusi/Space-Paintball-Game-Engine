@@ -186,6 +186,8 @@ int main( int argc, char * argv[] )
 
 	delete packet;
 	clientSocket.Close();
+	// Delete all global objects allocated by libprotobuf.
+	google::protobuf::ShutdownProtobufLibrary();
 }
 
 int GetUpdateFromServer()

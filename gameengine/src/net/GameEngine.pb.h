@@ -33,9 +33,219 @@ void  protobuf_AddDesc_GameEngine_2eproto();
 void protobuf_AssignDesc_GameEngine_2eproto();
 void protobuf_ShutdownFile_GameEngine_2eproto();
 
+class Velocity;
+class Force;
 class Point;
+class Aaab;
+class Sphere;
+class PhysicsInfo;
+class GameEngine;
 
 // ===================================================================
+
+class Velocity : public ::google::protobuf::Message {
+ public:
+  Velocity();
+  virtual ~Velocity();
+
+  Velocity(const Velocity& from);
+
+  inline Velocity& operator=(const Velocity& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const Velocity& default_instance();
+
+  void Swap(Velocity* other);
+
+  // implements Message ----------------------------------------------
+
+  Velocity* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const Velocity& from);
+  void MergeFrom(const Velocity& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // required float x = 1;
+  inline bool has_x() const;
+  inline void clear_x();
+  static const int kXFieldNumber = 1;
+  inline float x() const;
+  inline void set_x(float value);
+
+  // required float y = 2;
+  inline bool has_y() const;
+  inline void clear_y();
+  static const int kYFieldNumber = 2;
+  inline float y() const;
+  inline void set_y(float value);
+
+  // required float z = 3;
+  inline bool has_z() const;
+  inline void clear_z();
+  static const int kZFieldNumber = 3;
+  inline float z() const;
+  inline void set_z(float value);
+
+  // @@protoc_insertion_point(class_scope:net.Velocity)
+ private:
+  inline void set_has_x();
+  inline void clear_has_x();
+  inline void set_has_y();
+  inline void clear_has_y();
+  inline void set_has_z();
+  inline void clear_has_z();
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  float x_;
+  float y_;
+  float z_;
+
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(3 + 31) / 32];
+
+  friend void  protobuf_AddDesc_GameEngine_2eproto();
+  friend void protobuf_AssignDesc_GameEngine_2eproto();
+  friend void protobuf_ShutdownFile_GameEngine_2eproto();
+
+  void InitAsDefaultInstance();
+  static Velocity* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class Force : public ::google::protobuf::Message {
+ public:
+  Force();
+  virtual ~Force();
+
+  Force(const Force& from);
+
+  inline Force& operator=(const Force& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const Force& default_instance();
+
+  void Swap(Force* other);
+
+  // implements Message ----------------------------------------------
+
+  Force* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const Force& from);
+  void MergeFrom(const Force& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // required float x = 1;
+  inline bool has_x() const;
+  inline void clear_x();
+  static const int kXFieldNumber = 1;
+  inline float x() const;
+  inline void set_x(float value);
+
+  // required float y = 2;
+  inline bool has_y() const;
+  inline void clear_y();
+  static const int kYFieldNumber = 2;
+  inline float y() const;
+  inline void set_y(float value);
+
+  // required float z = 3;
+  inline bool has_z() const;
+  inline void clear_z();
+  static const int kZFieldNumber = 3;
+  inline float z() const;
+  inline void set_z(float value);
+
+  // @@protoc_insertion_point(class_scope:net.Force)
+ private:
+  inline void set_has_x();
+  inline void clear_has_x();
+  inline void set_has_y();
+  inline void clear_has_y();
+  inline void set_has_z();
+  inline void clear_has_z();
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  float x_;
+  float y_;
+  float z_;
+
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(3 + 31) / 32];
+
+  friend void  protobuf_AddDesc_GameEngine_2eproto();
+  friend void protobuf_AssignDesc_GameEngine_2eproto();
+  friend void protobuf_ShutdownFile_GameEngine_2eproto();
+
+  void InitAsDefaultInstance();
+  static Force* default_instance_;
+};
+// -------------------------------------------------------------------
 
 class Point : public ::google::protobuf::Message {
  public:
@@ -137,10 +347,592 @@ class Point : public ::google::protobuf::Message {
   void InitAsDefaultInstance();
   static Point* default_instance_;
 };
+// -------------------------------------------------------------------
+
+class Aaab : public ::google::protobuf::Message {
+ public:
+  Aaab();
+  virtual ~Aaab();
+
+  Aaab(const Aaab& from);
+
+  inline Aaab& operator=(const Aaab& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const Aaab& default_instance();
+
+  void Swap(Aaab* other);
+
+  // implements Message ----------------------------------------------
+
+  Aaab* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const Aaab& from);
+  void MergeFrom(const Aaab& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // required .net.Point center = 1;
+  inline bool has_center() const;
+  inline void clear_center();
+  static const int kCenterFieldNumber = 1;
+  inline const ::net::Point& center() const;
+  inline ::net::Point* mutable_center();
+  inline ::net::Point* release_center();
+  inline void set_allocated_center(::net::Point* center);
+
+  // repeated float radii = 2;
+  inline int radii_size() const;
+  inline void clear_radii();
+  static const int kRadiiFieldNumber = 2;
+  inline float radii(int index) const;
+  inline void set_radii(int index, float value);
+  inline void add_radii(float value);
+  inline const ::google::protobuf::RepeatedField< float >&
+      radii() const;
+  inline ::google::protobuf::RepeatedField< float >*
+      mutable_radii();
+
+  // @@protoc_insertion_point(class_scope:net.Aaab)
+ private:
+  inline void set_has_center();
+  inline void clear_has_center();
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::net::Point* center_;
+  ::google::protobuf::RepeatedField< float > radii_;
+
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(2 + 31) / 32];
+
+  friend void  protobuf_AddDesc_GameEngine_2eproto();
+  friend void protobuf_AssignDesc_GameEngine_2eproto();
+  friend void protobuf_ShutdownFile_GameEngine_2eproto();
+
+  void InitAsDefaultInstance();
+  static Aaab* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class Sphere : public ::google::protobuf::Message {
+ public:
+  Sphere();
+  virtual ~Sphere();
+
+  Sphere(const Sphere& from);
+
+  inline Sphere& operator=(const Sphere& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const Sphere& default_instance();
+
+  void Swap(Sphere* other);
+
+  // implements Message ----------------------------------------------
+
+  Sphere* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const Sphere& from);
+  void MergeFrom(const Sphere& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // required .net.Point center = 1;
+  inline bool has_center() const;
+  inline void clear_center();
+  static const int kCenterFieldNumber = 1;
+  inline const ::net::Point& center() const;
+  inline ::net::Point* mutable_center();
+  inline ::net::Point* release_center();
+  inline void set_allocated_center(::net::Point* center);
+
+  // required float radius = 2;
+  inline bool has_radius() const;
+  inline void clear_radius();
+  static const int kRadiusFieldNumber = 2;
+  inline float radius() const;
+  inline void set_radius(float value);
+
+  // @@protoc_insertion_point(class_scope:net.Sphere)
+ private:
+  inline void set_has_center();
+  inline void clear_has_center();
+  inline void set_has_radius();
+  inline void clear_has_radius();
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::net::Point* center_;
+  float radius_;
+
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(2 + 31) / 32];
+
+  friend void  protobuf_AddDesc_GameEngine_2eproto();
+  friend void protobuf_AssignDesc_GameEngine_2eproto();
+  friend void protobuf_ShutdownFile_GameEngine_2eproto();
+
+  void InitAsDefaultInstance();
+  static Sphere* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class PhysicsInfo : public ::google::protobuf::Message {
+ public:
+  PhysicsInfo();
+  virtual ~PhysicsInfo();
+
+  PhysicsInfo(const PhysicsInfo& from);
+
+  inline PhysicsInfo& operator=(const PhysicsInfo& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const PhysicsInfo& default_instance();
+
+  void Swap(PhysicsInfo* other);
+
+  // implements Message ----------------------------------------------
+
+  PhysicsInfo* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const PhysicsInfo& from);
+  void MergeFrom(const PhysicsInfo& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // required float mass = 1;
+  inline bool has_mass() const;
+  inline void clear_mass();
+  static const int kMassFieldNumber = 1;
+  inline float mass() const;
+  inline void set_mass(float value);
+
+  // required .net.Aaab aabbObject = 2;
+  inline bool has_aabbobject() const;
+  inline void clear_aabbobject();
+  static const int kAabbObjectFieldNumber = 2;
+  inline const ::net::Aaab& aabbobject() const;
+  inline ::net::Aaab* mutable_aabbobject();
+  inline ::net::Aaab* release_aabbobject();
+  inline void set_allocated_aabbobject(::net::Aaab* aabbobject);
+
+  // required .net.Sphere sphereObject = 3;
+  inline bool has_sphereobject() const;
+  inline void clear_sphereobject();
+  static const int kSphereObjectFieldNumber = 3;
+  inline const ::net::Sphere& sphereobject() const;
+  inline ::net::Sphere* mutable_sphereobject();
+  inline ::net::Sphere* release_sphereobject();
+  inline void set_allocated_sphereobject(::net::Sphere* sphereobject);
+
+  // required .net.Velocity linearVelocity = 4;
+  inline bool has_linearvelocity() const;
+  inline void clear_linearvelocity();
+  static const int kLinearVelocityFieldNumber = 4;
+  inline const ::net::Velocity& linearvelocity() const;
+  inline ::net::Velocity* mutable_linearvelocity();
+  inline ::net::Velocity* release_linearvelocity();
+  inline void set_allocated_linearvelocity(::net::Velocity* linearvelocity);
+
+  // required .net.Velocity angularVelocity = 5;
+  inline bool has_angularvelocity() const;
+  inline void clear_angularvelocity();
+  static const int kAngularVelocityFieldNumber = 5;
+  inline const ::net::Velocity& angularvelocity() const;
+  inline ::net::Velocity* mutable_angularvelocity();
+  inline ::net::Velocity* release_angularvelocity();
+  inline void set_allocated_angularvelocity(::net::Velocity* angularvelocity);
+
+  // required .net.Point angularPosition = 6;
+  inline bool has_angularposition() const;
+  inline void clear_angularposition();
+  static const int kAngularPositionFieldNumber = 6;
+  inline const ::net::Point& angularposition() const;
+  inline ::net::Point* mutable_angularposition();
+  inline ::net::Point* release_angularposition();
+  inline void set_allocated_angularposition(::net::Point* angularposition);
+
+  // required .net.Force linearForce = 7;
+  inline bool has_linearforce() const;
+  inline void clear_linearforce();
+  static const int kLinearForceFieldNumber = 7;
+  inline const ::net::Force& linearforce() const;
+  inline ::net::Force* mutable_linearforce();
+  inline ::net::Force* release_linearforce();
+  inline void set_allocated_linearforce(::net::Force* linearforce);
+
+  // required .net.Force angularForce = 8;
+  inline bool has_angularforce() const;
+  inline void clear_angularforce();
+  static const int kAngularForceFieldNumber = 8;
+  inline const ::net::Force& angularforce() const;
+  inline ::net::Force* mutable_angularforce();
+  inline ::net::Force* release_angularforce();
+  inline void set_allocated_angularforce(::net::Force* angularforce);
+
+  // @@protoc_insertion_point(class_scope:net.PhysicsInfo)
+ private:
+  inline void set_has_mass();
+  inline void clear_has_mass();
+  inline void set_has_aabbobject();
+  inline void clear_has_aabbobject();
+  inline void set_has_sphereobject();
+  inline void clear_has_sphereobject();
+  inline void set_has_linearvelocity();
+  inline void clear_has_linearvelocity();
+  inline void set_has_angularvelocity();
+  inline void clear_has_angularvelocity();
+  inline void set_has_angularposition();
+  inline void clear_has_angularposition();
+  inline void set_has_linearforce();
+  inline void clear_has_linearforce();
+  inline void set_has_angularforce();
+  inline void clear_has_angularforce();
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::net::Aaab* aabbobject_;
+  ::net::Sphere* sphereobject_;
+  ::net::Velocity* linearvelocity_;
+  ::net::Velocity* angularvelocity_;
+  ::net::Point* angularposition_;
+  ::net::Force* linearforce_;
+  ::net::Force* angularforce_;
+  float mass_;
+
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(8 + 31) / 32];
+
+  friend void  protobuf_AddDesc_GameEngine_2eproto();
+  friend void protobuf_AssignDesc_GameEngine_2eproto();
+  friend void protobuf_ShutdownFile_GameEngine_2eproto();
+
+  void InitAsDefaultInstance();
+  static PhysicsInfo* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class GameEngine : public ::google::protobuf::Message {
+ public:
+  GameEngine();
+  virtual ~GameEngine();
+
+  GameEngine(const GameEngine& from);
+
+  inline GameEngine& operator=(const GameEngine& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const GameEngine& default_instance();
+
+  void Swap(GameEngine* other);
+
+  // implements Message ----------------------------------------------
+
+  GameEngine* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const GameEngine& from);
+  void MergeFrom(const GameEngine& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // repeated .net.PhysicsInfo physicsInfo = 1;
+  inline int physicsinfo_size() const;
+  inline void clear_physicsinfo();
+  static const int kPhysicsInfoFieldNumber = 1;
+  inline const ::net::PhysicsInfo& physicsinfo(int index) const;
+  inline ::net::PhysicsInfo* mutable_physicsinfo(int index);
+  inline ::net::PhysicsInfo* add_physicsinfo();
+  inline const ::google::protobuf::RepeatedPtrField< ::net::PhysicsInfo >&
+      physicsinfo() const;
+  inline ::google::protobuf::RepeatedPtrField< ::net::PhysicsInfo >*
+      mutable_physicsinfo();
+
+  // @@protoc_insertion_point(class_scope:net.GameEngine)
+ private:
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google::protobuf::RepeatedPtrField< ::net::PhysicsInfo > physicsinfo_;
+
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(1 + 31) / 32];
+
+  friend void  protobuf_AddDesc_GameEngine_2eproto();
+  friend void protobuf_AssignDesc_GameEngine_2eproto();
+  friend void protobuf_ShutdownFile_GameEngine_2eproto();
+
+  void InitAsDefaultInstance();
+  static GameEngine* default_instance_;
+};
 // ===================================================================
 
 
 // ===================================================================
+
+// Velocity
+
+// required float x = 1;
+inline bool Velocity::has_x() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void Velocity::set_has_x() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void Velocity::clear_has_x() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void Velocity::clear_x() {
+  x_ = 0;
+  clear_has_x();
+}
+inline float Velocity::x() const {
+  return x_;
+}
+inline void Velocity::set_x(float value) {
+  set_has_x();
+  x_ = value;
+}
+
+// required float y = 2;
+inline bool Velocity::has_y() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void Velocity::set_has_y() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void Velocity::clear_has_y() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void Velocity::clear_y() {
+  y_ = 0;
+  clear_has_y();
+}
+inline float Velocity::y() const {
+  return y_;
+}
+inline void Velocity::set_y(float value) {
+  set_has_y();
+  y_ = value;
+}
+
+// required float z = 3;
+inline bool Velocity::has_z() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void Velocity::set_has_z() {
+  _has_bits_[0] |= 0x00000004u;
+}
+inline void Velocity::clear_has_z() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline void Velocity::clear_z() {
+  z_ = 0;
+  clear_has_z();
+}
+inline float Velocity::z() const {
+  return z_;
+}
+inline void Velocity::set_z(float value) {
+  set_has_z();
+  z_ = value;
+}
+
+// -------------------------------------------------------------------
+
+// Force
+
+// required float x = 1;
+inline bool Force::has_x() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void Force::set_has_x() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void Force::clear_has_x() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void Force::clear_x() {
+  x_ = 0;
+  clear_has_x();
+}
+inline float Force::x() const {
+  return x_;
+}
+inline void Force::set_x(float value) {
+  set_has_x();
+  x_ = value;
+}
+
+// required float y = 2;
+inline bool Force::has_y() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void Force::set_has_y() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void Force::clear_has_y() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void Force::clear_y() {
+  y_ = 0;
+  clear_has_y();
+}
+inline float Force::y() const {
+  return y_;
+}
+inline void Force::set_y(float value) {
+  set_has_y();
+  y_ = value;
+}
+
+// required float z = 3;
+inline bool Force::has_z() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void Force::set_has_z() {
+  _has_bits_[0] |= 0x00000004u;
+}
+inline void Force::clear_has_z() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline void Force::clear_z() {
+  z_ = 0;
+  clear_has_z();
+}
+inline float Force::z() const {
+  return z_;
+}
+inline void Force::set_z(float value) {
+  set_has_z();
+  z_ = value;
+}
+
+// -------------------------------------------------------------------
 
 // Point
 
@@ -208,6 +1000,458 @@ inline float Point::z() const {
 inline void Point::set_z(float value) {
   set_has_z();
   z_ = value;
+}
+
+// -------------------------------------------------------------------
+
+// Aaab
+
+// required .net.Point center = 1;
+inline bool Aaab::has_center() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void Aaab::set_has_center() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void Aaab::clear_has_center() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void Aaab::clear_center() {
+  if (center_ != NULL) center_->::net::Point::Clear();
+  clear_has_center();
+}
+inline const ::net::Point& Aaab::center() const {
+  return center_ != NULL ? *center_ : *default_instance_->center_;
+}
+inline ::net::Point* Aaab::mutable_center() {
+  set_has_center();
+  if (center_ == NULL) center_ = new ::net::Point;
+  return center_;
+}
+inline ::net::Point* Aaab::release_center() {
+  clear_has_center();
+  ::net::Point* temp = center_;
+  center_ = NULL;
+  return temp;
+}
+inline void Aaab::set_allocated_center(::net::Point* center) {
+  delete center_;
+  center_ = center;
+  if (center) {
+    set_has_center();
+  } else {
+    clear_has_center();
+  }
+}
+
+// repeated float radii = 2;
+inline int Aaab::radii_size() const {
+  return radii_.size();
+}
+inline void Aaab::clear_radii() {
+  radii_.Clear();
+}
+inline float Aaab::radii(int index) const {
+  return radii_.Get(index);
+}
+inline void Aaab::set_radii(int index, float value) {
+  radii_.Set(index, value);
+}
+inline void Aaab::add_radii(float value) {
+  radii_.Add(value);
+}
+inline const ::google::protobuf::RepeatedField< float >&
+Aaab::radii() const {
+  return radii_;
+}
+inline ::google::protobuf::RepeatedField< float >*
+Aaab::mutable_radii() {
+  return &radii_;
+}
+
+// -------------------------------------------------------------------
+
+// Sphere
+
+// required .net.Point center = 1;
+inline bool Sphere::has_center() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void Sphere::set_has_center() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void Sphere::clear_has_center() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void Sphere::clear_center() {
+  if (center_ != NULL) center_->::net::Point::Clear();
+  clear_has_center();
+}
+inline const ::net::Point& Sphere::center() const {
+  return center_ != NULL ? *center_ : *default_instance_->center_;
+}
+inline ::net::Point* Sphere::mutable_center() {
+  set_has_center();
+  if (center_ == NULL) center_ = new ::net::Point;
+  return center_;
+}
+inline ::net::Point* Sphere::release_center() {
+  clear_has_center();
+  ::net::Point* temp = center_;
+  center_ = NULL;
+  return temp;
+}
+inline void Sphere::set_allocated_center(::net::Point* center) {
+  delete center_;
+  center_ = center;
+  if (center) {
+    set_has_center();
+  } else {
+    clear_has_center();
+  }
+}
+
+// required float radius = 2;
+inline bool Sphere::has_radius() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void Sphere::set_has_radius() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void Sphere::clear_has_radius() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void Sphere::clear_radius() {
+  radius_ = 0;
+  clear_has_radius();
+}
+inline float Sphere::radius() const {
+  return radius_;
+}
+inline void Sphere::set_radius(float value) {
+  set_has_radius();
+  radius_ = value;
+}
+
+// -------------------------------------------------------------------
+
+// PhysicsInfo
+
+// required float mass = 1;
+inline bool PhysicsInfo::has_mass() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void PhysicsInfo::set_has_mass() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void PhysicsInfo::clear_has_mass() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void PhysicsInfo::clear_mass() {
+  mass_ = 0;
+  clear_has_mass();
+}
+inline float PhysicsInfo::mass() const {
+  return mass_;
+}
+inline void PhysicsInfo::set_mass(float value) {
+  set_has_mass();
+  mass_ = value;
+}
+
+// required .net.Aaab aabbObject = 2;
+inline bool PhysicsInfo::has_aabbobject() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void PhysicsInfo::set_has_aabbobject() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void PhysicsInfo::clear_has_aabbobject() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void PhysicsInfo::clear_aabbobject() {
+  if (aabbobject_ != NULL) aabbobject_->::net::Aaab::Clear();
+  clear_has_aabbobject();
+}
+inline const ::net::Aaab& PhysicsInfo::aabbobject() const {
+  return aabbobject_ != NULL ? *aabbobject_ : *default_instance_->aabbobject_;
+}
+inline ::net::Aaab* PhysicsInfo::mutable_aabbobject() {
+  set_has_aabbobject();
+  if (aabbobject_ == NULL) aabbobject_ = new ::net::Aaab;
+  return aabbobject_;
+}
+inline ::net::Aaab* PhysicsInfo::release_aabbobject() {
+  clear_has_aabbobject();
+  ::net::Aaab* temp = aabbobject_;
+  aabbobject_ = NULL;
+  return temp;
+}
+inline void PhysicsInfo::set_allocated_aabbobject(::net::Aaab* aabbobject) {
+  delete aabbobject_;
+  aabbobject_ = aabbobject;
+  if (aabbobject) {
+    set_has_aabbobject();
+  } else {
+    clear_has_aabbobject();
+  }
+}
+
+// required .net.Sphere sphereObject = 3;
+inline bool PhysicsInfo::has_sphereobject() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void PhysicsInfo::set_has_sphereobject() {
+  _has_bits_[0] |= 0x00000004u;
+}
+inline void PhysicsInfo::clear_has_sphereobject() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline void PhysicsInfo::clear_sphereobject() {
+  if (sphereobject_ != NULL) sphereobject_->::net::Sphere::Clear();
+  clear_has_sphereobject();
+}
+inline const ::net::Sphere& PhysicsInfo::sphereobject() const {
+  return sphereobject_ != NULL ? *sphereobject_ : *default_instance_->sphereobject_;
+}
+inline ::net::Sphere* PhysicsInfo::mutable_sphereobject() {
+  set_has_sphereobject();
+  if (sphereobject_ == NULL) sphereobject_ = new ::net::Sphere;
+  return sphereobject_;
+}
+inline ::net::Sphere* PhysicsInfo::release_sphereobject() {
+  clear_has_sphereobject();
+  ::net::Sphere* temp = sphereobject_;
+  sphereobject_ = NULL;
+  return temp;
+}
+inline void PhysicsInfo::set_allocated_sphereobject(::net::Sphere* sphereobject) {
+  delete sphereobject_;
+  sphereobject_ = sphereobject;
+  if (sphereobject) {
+    set_has_sphereobject();
+  } else {
+    clear_has_sphereobject();
+  }
+}
+
+// required .net.Velocity linearVelocity = 4;
+inline bool PhysicsInfo::has_linearvelocity() const {
+  return (_has_bits_[0] & 0x00000008u) != 0;
+}
+inline void PhysicsInfo::set_has_linearvelocity() {
+  _has_bits_[0] |= 0x00000008u;
+}
+inline void PhysicsInfo::clear_has_linearvelocity() {
+  _has_bits_[0] &= ~0x00000008u;
+}
+inline void PhysicsInfo::clear_linearvelocity() {
+  if (linearvelocity_ != NULL) linearvelocity_->::net::Velocity::Clear();
+  clear_has_linearvelocity();
+}
+inline const ::net::Velocity& PhysicsInfo::linearvelocity() const {
+  return linearvelocity_ != NULL ? *linearvelocity_ : *default_instance_->linearvelocity_;
+}
+inline ::net::Velocity* PhysicsInfo::mutable_linearvelocity() {
+  set_has_linearvelocity();
+  if (linearvelocity_ == NULL) linearvelocity_ = new ::net::Velocity;
+  return linearvelocity_;
+}
+inline ::net::Velocity* PhysicsInfo::release_linearvelocity() {
+  clear_has_linearvelocity();
+  ::net::Velocity* temp = linearvelocity_;
+  linearvelocity_ = NULL;
+  return temp;
+}
+inline void PhysicsInfo::set_allocated_linearvelocity(::net::Velocity* linearvelocity) {
+  delete linearvelocity_;
+  linearvelocity_ = linearvelocity;
+  if (linearvelocity) {
+    set_has_linearvelocity();
+  } else {
+    clear_has_linearvelocity();
+  }
+}
+
+// required .net.Velocity angularVelocity = 5;
+inline bool PhysicsInfo::has_angularvelocity() const {
+  return (_has_bits_[0] & 0x00000010u) != 0;
+}
+inline void PhysicsInfo::set_has_angularvelocity() {
+  _has_bits_[0] |= 0x00000010u;
+}
+inline void PhysicsInfo::clear_has_angularvelocity() {
+  _has_bits_[0] &= ~0x00000010u;
+}
+inline void PhysicsInfo::clear_angularvelocity() {
+  if (angularvelocity_ != NULL) angularvelocity_->::net::Velocity::Clear();
+  clear_has_angularvelocity();
+}
+inline const ::net::Velocity& PhysicsInfo::angularvelocity() const {
+  return angularvelocity_ != NULL ? *angularvelocity_ : *default_instance_->angularvelocity_;
+}
+inline ::net::Velocity* PhysicsInfo::mutable_angularvelocity() {
+  set_has_angularvelocity();
+  if (angularvelocity_ == NULL) angularvelocity_ = new ::net::Velocity;
+  return angularvelocity_;
+}
+inline ::net::Velocity* PhysicsInfo::release_angularvelocity() {
+  clear_has_angularvelocity();
+  ::net::Velocity* temp = angularvelocity_;
+  angularvelocity_ = NULL;
+  return temp;
+}
+inline void PhysicsInfo::set_allocated_angularvelocity(::net::Velocity* angularvelocity) {
+  delete angularvelocity_;
+  angularvelocity_ = angularvelocity;
+  if (angularvelocity) {
+    set_has_angularvelocity();
+  } else {
+    clear_has_angularvelocity();
+  }
+}
+
+// required .net.Point angularPosition = 6;
+inline bool PhysicsInfo::has_angularposition() const {
+  return (_has_bits_[0] & 0x00000020u) != 0;
+}
+inline void PhysicsInfo::set_has_angularposition() {
+  _has_bits_[0] |= 0x00000020u;
+}
+inline void PhysicsInfo::clear_has_angularposition() {
+  _has_bits_[0] &= ~0x00000020u;
+}
+inline void PhysicsInfo::clear_angularposition() {
+  if (angularposition_ != NULL) angularposition_->::net::Point::Clear();
+  clear_has_angularposition();
+}
+inline const ::net::Point& PhysicsInfo::angularposition() const {
+  return angularposition_ != NULL ? *angularposition_ : *default_instance_->angularposition_;
+}
+inline ::net::Point* PhysicsInfo::mutable_angularposition() {
+  set_has_angularposition();
+  if (angularposition_ == NULL) angularposition_ = new ::net::Point;
+  return angularposition_;
+}
+inline ::net::Point* PhysicsInfo::release_angularposition() {
+  clear_has_angularposition();
+  ::net::Point* temp = angularposition_;
+  angularposition_ = NULL;
+  return temp;
+}
+inline void PhysicsInfo::set_allocated_angularposition(::net::Point* angularposition) {
+  delete angularposition_;
+  angularposition_ = angularposition;
+  if (angularposition) {
+    set_has_angularposition();
+  } else {
+    clear_has_angularposition();
+  }
+}
+
+// required .net.Force linearForce = 7;
+inline bool PhysicsInfo::has_linearforce() const {
+  return (_has_bits_[0] & 0x00000040u) != 0;
+}
+inline void PhysicsInfo::set_has_linearforce() {
+  _has_bits_[0] |= 0x00000040u;
+}
+inline void PhysicsInfo::clear_has_linearforce() {
+  _has_bits_[0] &= ~0x00000040u;
+}
+inline void PhysicsInfo::clear_linearforce() {
+  if (linearforce_ != NULL) linearforce_->::net::Force::Clear();
+  clear_has_linearforce();
+}
+inline const ::net::Force& PhysicsInfo::linearforce() const {
+  return linearforce_ != NULL ? *linearforce_ : *default_instance_->linearforce_;
+}
+inline ::net::Force* PhysicsInfo::mutable_linearforce() {
+  set_has_linearforce();
+  if (linearforce_ == NULL) linearforce_ = new ::net::Force;
+  return linearforce_;
+}
+inline ::net::Force* PhysicsInfo::release_linearforce() {
+  clear_has_linearforce();
+  ::net::Force* temp = linearforce_;
+  linearforce_ = NULL;
+  return temp;
+}
+inline void PhysicsInfo::set_allocated_linearforce(::net::Force* linearforce) {
+  delete linearforce_;
+  linearforce_ = linearforce;
+  if (linearforce) {
+    set_has_linearforce();
+  } else {
+    clear_has_linearforce();
+  }
+}
+
+// required .net.Force angularForce = 8;
+inline bool PhysicsInfo::has_angularforce() const {
+  return (_has_bits_[0] & 0x00000080u) != 0;
+}
+inline void PhysicsInfo::set_has_angularforce() {
+  _has_bits_[0] |= 0x00000080u;
+}
+inline void PhysicsInfo::clear_has_angularforce() {
+  _has_bits_[0] &= ~0x00000080u;
+}
+inline void PhysicsInfo::clear_angularforce() {
+  if (angularforce_ != NULL) angularforce_->::net::Force::Clear();
+  clear_has_angularforce();
+}
+inline const ::net::Force& PhysicsInfo::angularforce() const {
+  return angularforce_ != NULL ? *angularforce_ : *default_instance_->angularforce_;
+}
+inline ::net::Force* PhysicsInfo::mutable_angularforce() {
+  set_has_angularforce();
+  if (angularforce_ == NULL) angularforce_ = new ::net::Force;
+  return angularforce_;
+}
+inline ::net::Force* PhysicsInfo::release_angularforce() {
+  clear_has_angularforce();
+  ::net::Force* temp = angularforce_;
+  angularforce_ = NULL;
+  return temp;
+}
+inline void PhysicsInfo::set_allocated_angularforce(::net::Force* angularforce) {
+  delete angularforce_;
+  angularforce_ = angularforce;
+  if (angularforce) {
+    set_has_angularforce();
+  } else {
+    clear_has_angularforce();
+  }
+}
+
+// -------------------------------------------------------------------
+
+// GameEngine
+
+// repeated .net.PhysicsInfo physicsInfo = 1;
+inline int GameEngine::physicsinfo_size() const {
+  return physicsinfo_.size();
+}
+inline void GameEngine::clear_physicsinfo() {
+  physicsinfo_.Clear();
+}
+inline const ::net::PhysicsInfo& GameEngine::physicsinfo(int index) const {
+  return physicsinfo_.Get(index);
+}
+inline ::net::PhysicsInfo* GameEngine::mutable_physicsinfo(int index) {
+  return physicsinfo_.Mutable(index);
+}
+inline ::net::PhysicsInfo* GameEngine::add_physicsinfo() {
+  return physicsinfo_.Add();
+}
+inline const ::google::protobuf::RepeatedPtrField< ::net::PhysicsInfo >&
+GameEngine::physicsinfo() const {
+  return physicsinfo_;
+}
+inline ::google::protobuf::RepeatedPtrField< ::net::PhysicsInfo >*
+GameEngine::mutable_physicsinfo() {
+  return &physicsinfo_;
 }
 
 

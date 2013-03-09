@@ -30,7 +30,6 @@
 using namespace google::protobuf::io;
 
 using namespace std;
-using namespace net;
 
 int PollForOSMessages(bool* quit);
 int GetInputFromClient(bool* quit);
@@ -38,16 +37,18 @@ void SendUpdateToClient();
 bool TimeForRendering();
 void UpdateStatistics();
 void FPSControl();
-bool ClientHasAlreadyConnected( Address& clientAddress );
+bool ClientHasAlreadyConnected( net::Address& clientAddress );
 void* SocketHandler( void* );
 google::protobuf::uint32 ReadHeader( char *buf );
-void ReadBody( ServerSocket* serverSocket, google::protobuf::uint32 size );
-void FreeServerConnections();
+void ReadBody( net::ServerSocket* serverSocket, google::protobuf::uint32 size );
+void ShutdownGameServer();
 
-map<Address, ServerSocket*> serverConnections;
+map<net::Address, net::ServerSocket*> serverConnections;
 
 int main( int argc, char * argv[] )
 {
+	GOOGLE_PROTOBUF_VERIFY_VERSION;
+
 	//TestCollectGameState* test = new TestCollectGameState();
 	//test->PrintGameState();
 	//delete test;
@@ -70,9 +71,9 @@ int main( int argc, char * argv[] )
 	/////////////////////////////////////////////////////////////////
 	// Setup and listen to server socket
 	/////////////////////////////////////////////////////////////////
-	ServerMasterSocket serverMasterSocket;
+	net::ServerMasterSocket serverMasterSocket;
 
-	serverMasterSocket.Open( MASTER_SOCKET_PORT );
+	serverMasterSocket.Open( net::MASTER_SOCKET_PORT );
 	/////////////////////////////////////////////////////////////////
 
 	pthread_t thread_id = 0;
@@ -82,8 +83,8 @@ int main( int argc, char * argv[] )
 	{
 		if( serverMasterSocket.HasData() )
 		{
-			Address clientAddress;
-			ServerSocket* serverSocket = serverMasterSocket.Accept( clientAddress );
+			net::Address clientAddress;
+			net::ServerSocket* serverSocket = serverMasterSocket.Accept( clientAddress );
 
 			if( !ClientHasAlreadyConnected( clientAddress ) )
 			{
@@ -97,7 +98,7 @@ int main( int argc, char * argv[] )
 	} // End Server Game Loop
 
 	// Reclaim memory.
-	FreeServerConnections();
+	ShutdownGameServer();
 }
 
 void FPSControl()
@@ -177,7 +178,7 @@ google::protobuf::uint32 ReadHeader( char *buf )
   return size;
 }
 
-void ReadBody( ServerSocket* serverSocket, google::protobuf::uint32 size )
+void ReadBody( net::ServerSocket* serverSocket, google::protobuf::uint32 size )
 {
   int bytecount;
   net::Point payload;
@@ -205,11 +206,11 @@ void ReadBody( ServerSocket* serverSocket, google::protobuf::uint32 size )
 }
 
 
-bool ClientHasAlreadyConnected( Address & clientAddress )
+bool ClientHasAlreadyConnected( net::Address & clientAddress )
 {
 	bool clientHasAlreadyConnected = false;
 
-	map<Address, ServerSocket*>::iterator itr = serverConnections.find( clientAddress );
+	map<net::Address, net::ServerSocket*>::iterator itr = serverConnections.find( clientAddress );
 
 	if( itr != serverConnections.end() )
 	{
@@ -220,22 +221,24 @@ bool ClientHasAlreadyConnected( Address & clientAddress )
 	return clientHasAlreadyConnected;
 }
 
-void FreeServerConnections()
+void ShutdownGameServer()
 {
-	for(map<Address, ServerSocket*>::iterator ii = serverConnections.begin(); ii != serverConnections.end(); ++ii)
+	for(map<net::Address, net::ServerSocket*>::iterator ii = serverConnections.begin(); ii != serverConnections.end(); ++ii)
 	{
-		ServerSocket * serverSocket = ii->second;
+		net::ServerSocket * serverSocket = ii->second;
 
 		delete serverSocket;
 	}
+
+	// Delete all global objects allocated by libprotobuf.
+	google::protobuf::ShutdownProtobufLibrary();
 }
 
 void* SocketHandler(void* lp)
 {
-	ServerSocket* serverSocket = (ServerSocket*) lp;
+	net::ServerSocket* serverSocket = (net::ServerSocket*) lp;
 
 	char buffer[ 4 ];
-	int bytecount = 0;
 
 	memset(buffer, '\0', 4);
 
@@ -278,6 +281,8 @@ void* SocketHandler(void* lp)
 
 		int input = GetInputFromClient(&quit);
 
+		printf( "Input is %d\n", input );
+
 		///////////////////////////////////////////////////////////
 		// Update Game State
 		//gameEngine.UpdateGameState(input);
@@ -299,7 +304,7 @@ void* SocketHandler(void* lp)
 		 */
 		//SDL_Delay(1);
 
-		NetUtils::wait( DELTA_TIME );
+		net::NetUtils::wait( net::DELTA_TIME );
 	} // End game loop
 
 	serverSocket->Close();
