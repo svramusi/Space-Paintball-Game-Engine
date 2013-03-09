@@ -89,9 +89,6 @@ namespace net
 		if ( socket == 0 )
 			return false;
 
-		sockaddr_in from;
-		socklen_t fromLength = sizeof( from );
-
 		int received_bytes;
 
 		if( ( received_bytes = recv( socket, (char*)data, size, 0 ) ) == -1 )
@@ -112,9 +109,6 @@ namespace net
 
 		if ( socket == 0 )
 			return false;
-
-		sockaddr_in from;
-		socklen_t fromLength = sizeof( from );
 
 		int received_bytes;
 

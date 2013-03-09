@@ -48,7 +48,7 @@ namespace net
 		int sock;
 		sockaddr_in sadr;
 		socklen_t addr_size = 0;
-		ServerSocket* serverSocket;
+		ServerSocket* serverSocket = NULL;
 
 		addr_size = sizeof(sockaddr_in);
 
@@ -65,7 +65,7 @@ namespace net
 			fprintf( stderr, "Error accepting %d\n", errno );
 		}
 
-		printf("New server socket: %s\n", sender.ToString().c_str());
+		printf( "New server socket: %s\n", sender.ToString().c_str() );
 		return serverSocket;
 	}
 

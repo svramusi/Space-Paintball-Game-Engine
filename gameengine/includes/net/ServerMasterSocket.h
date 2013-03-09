@@ -24,7 +24,6 @@ namespace net
 
 		bool Open( unsigned short port );
 		ServerSocket* Accept( Address& sender );
-		//static void* SocketHandler( void* lp );
 	};
 }
 #endif /* SERVERMASTERSOCKET_H_ */

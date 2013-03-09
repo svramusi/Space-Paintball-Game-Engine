@@ -42,6 +42,7 @@ bool ClientHasAlreadyConnected( Address& clientAddress );
 void* SocketHandler( void* );
 google::protobuf::uint32 ReadHeader( char *buf );
 void ReadBody( ServerSocket* serverSocket, google::protobuf::uint32 size );
+void FreeServerConnections();
 
 map<Address, ServerSocket*> serverConnections;
 
@@ -93,72 +94,10 @@ int main( int argc, char * argv[] )
 				pthread_detach(thread_id);
 			}
 		}
-
-		for( map<Address, ServerSocket*>::iterator ii = serverConnections.begin(); ii != serverConnections.end(); ++ii )
-		{
-			ServerSocket * serverConnection = ii->second;
-
-			if( serverConnection->HasData() )
-			{
-				/*
-				 * Poll for OS Events/Messages; this is
-				 * the event pump.
-				 */
-				PollForOSMessages(&quit);
-
-				// send and receive packets
-
-				///////////////////////////////////////////////////////////
-				// Get data
-				///////////////////////////////////////////////////////////
-				char buffer[ 4 ];
-				int bytecount = 0;
-
-				memset( buffer, '\0', 4 );
-
-				while (1)
-				{
-					bytecount = serverConnection->Peek( buffer, 4 );
-
-					if( bytecount == 0 )
-					{
-						break;
-					}
-
-					ReadBody( serverConnection, ReadHeader( buffer ) );
-				}
-
-				///////////////////////////////////////////////////////////
-
-				SendUpdateToClient();
-
-				int input = GetInputFromClient(&quit);
-
-				///////////////////////////////////////////////////////////
-				// Update Game State
-				//gameEngine.UpdateGameState(input);
-				///////////////////////////////////////////////////////////
-
-				/*
-				 * Get information from the game engine to update
-				 * the player score, health, etc. (since typically
-				 * the HUD is not rendered by the game engine, but
-				 * separately).
-				 */
-				//UpdateStatistics();
-
-				FPSControl();
-
-				/*
-				 * Play nice with the OS, and give
-				 * some CPU for another process.
-				 */
-				//SDL_Delay(1);
-			} // End if connection has data
-
-			NetUtils::wait( DELTA_TIME );
-		} // End for loop through all the server connections.
 	} // End Server Game Loop
+
+	// Reclaim memory.
+	FreeServerConnections();
 }
 
 void FPSControl()
@@ -281,33 +220,90 @@ bool ClientHasAlreadyConnected( Address & clientAddress )
 	return clientHasAlreadyConnected;
 }
 
+void FreeServerConnections()
+{
+	for(map<Address, ServerSocket*>::iterator ii = serverConnections.begin(); ii != serverConnections.end(); ++ii)
+	{
+		ServerSocket * serverSocket = ii->second;
+
+		delete serverSocket;
+	}
+}
+
 void* SocketHandler(void* lp)
 {
-	//int *csock = (int*) lp;
-
 	ServerSocket* serverSocket = (ServerSocket*) lp;
 
-	char buffer[4];
+	char buffer[ 4 ];
 	int bytecount = 0;
-	string output, pl;
-	//net::Point logp;
 
 	memset(buffer, '\0', 4);
 
-	while (1) {
-		//Peek into the socket and get the packet size
-		bytecount = serverSocket->Peek( buffer, 4 );
+	bool quit = false;
 
-		if ( bytecount == 0 )
+	// Game loop for each client connection.
+	while (!quit)
+	{
+		/*
+		 * Poll for OS Events/Messages; this is
+		 * the event pump.
+		 */
+		PollForOSMessages(&quit);
+
+		// send and receive packets
+
+		///////////////////////////////////////////////////////////
+		// Get data
+		///////////////////////////////////////////////////////////
+		char buffer[ 4 ];
+		int bytecount = 0;
+
+		memset( buffer, '\0', 4 );
+
+		while ( true )
 		{
-			break;
+			bytecount = serverSocket->Peek( buffer, 4 );
+
+			if( bytecount == 0 )
+			{
+				// Quit reading data from the socket, if there is nothing to read.
+				break;
+			}
+
+			ReadBody( serverSocket, ReadHeader( buffer ) );
 		}
+		///////////////////////////////////////////////////////////
 
-		ReadBody( serverSocket, ReadHeader( buffer ) );
-	}
+		SendUpdateToClient();
 
-	FINISH:
-		serverSocket->Close();
+		int input = GetInputFromClient(&quit);
+
+		///////////////////////////////////////////////////////////
+		// Update Game State
+		//gameEngine.UpdateGameState(input);
+		///////////////////////////////////////////////////////////
+
+		/*
+		 * Get information from the game engine to update
+		 * the player score, health, etc. (since typically
+		 * the HUD is not rendered by the game engine, but
+		 * separately).
+		 */
+		//UpdateStatistics();
+
+		FPSControl();
+
+		/*
+		 * Play nice with the OS, and give
+		 * some CPU for another process.
+		 */
+		//SDL_Delay(1);
+
+		NetUtils::wait( DELTA_TIME );
+	} // End game loop
+
+	serverSocket->Close();
+	delete serverSocket;
 
 	return 0;
 }
