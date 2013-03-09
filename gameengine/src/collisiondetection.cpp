@@ -193,21 +193,12 @@ CollisionDetection::getNormalizedVector(Point point1, Point point2)
 penetration_t
 CollisionDetection::getPenetrationVector(const CollidableObject *obj1, const CollidableObject *obj2)
 {
-/*
-    if((typeid(AABB) == typeid(*obj1)) && (typeid(AABB) == typeid(*obj2)))
-        return isIntersection(dynamic_cast<const AABB*>(obj1), dynamic_cast<const AABB*>(obj2));
-    else if((typeid(Sphere) == typeid(*obj1)) && (typeid(Sphere) == typeid(*obj2)))
-        return isIntersection(dynamic_cast<const Sphere*>(obj1), dynamic_cast<const Sphere*>(obj2));
-    else if((typeid(AABB) == typeid(*obj1)) && (typeid(Sphere) == typeid(*obj2)))
-        return isIntersection(dynamic_cast<const AABB*>(obj1), dynamic_cast<const Sphere*>(obj2));
-    else
-        return -1;
-*/
-
     if((typeid(AABB) == typeid(*obj1)) && (typeid(AABB) == typeid(*obj2)))
         return getPenetrationVector(dynamic_cast<const AABB*>(obj1), dynamic_cast<const AABB*>(obj2));
     else if((typeid(Sphere) == typeid(*obj1)) && (typeid(Sphere) == typeid(*obj2)))
         return getPenetrationVector(dynamic_cast<const Sphere*>(obj1), dynamic_cast<const Sphere*>(obj2));
+    else if((typeid(AABB) == typeid(*obj1)) && (typeid(Sphere) == typeid(*obj2)))
+        return getPenetrationVector(dynamic_cast<const AABB*>(obj1), dynamic_cast<const Sphere*>(obj2));
     else
     {
         penetration_t penetration;
@@ -225,13 +216,13 @@ CollisionDetection::getPenetrationVector(const AABB *aabb1, const AABB *aabb2)
     penetration_t penetrationVector;
 
     penetrationVector.x = abs(aabb1->getCenter().x - aabb2->getCenter().x)
-        - (aabb1->getXRadius() + aabb2->getXRadius());
+                            - (aabb1->getXRadius() + aabb2->getXRadius());
 
     penetrationVector.y = abs(aabb1->getCenter().y - aabb2->getCenter().y)
-        - (aabb1->getYRadius() + aabb2->getYRadius());
+                            - (aabb1->getYRadius() + aabb2->getYRadius());
 
     penetrationVector.z = abs(aabb1->getCenter().z - aabb2->getCenter().z)
-        - (aabb1->getZRadius() + aabb2->getZRadius());
+                            - (aabb1->getZRadius() + aabb2->getZRadius());
 
     return penetrationVector;
 }
@@ -239,28 +230,28 @@ CollisionDetection::getPenetrationVector(const AABB *aabb1, const AABB *aabb2)
 penetration_t
 CollisionDetection::getPenetrationVector(const Sphere *sphere1, const Sphere *sphere2)
 {
-
     float penetration = getPenetrationDistance(sphere1, sphere2);
     std::vector<float> normalized = getNormalizedVector(sphere1->getCenter(), sphere2->getCenter());
-
-/*
-cout << endl << "spher1 center x: " << sphere1->getCenter().x << endl;
-cout << endl << "spher1 center y: " << sphere1->getCenter().y << endl;
-cout << endl << "spher1 center z: " << sphere1->getCenter().z << endl;
-
-cout << endl << "spher2 center x: " << sphere2->getCenter().x << endl;
-cout << endl << "spher2 center y: " << sphere2->getCenter().y << endl;
-cout << endl << "spher2 center z: " << sphere2->getCenter().z << endl;
-
-cout << endl << "dist between centers: " << dist_between_centers << endl;
-cout << endl << "radius sum: " << radiusSum << endl;
-cout << endl << "penetration amount: " << penetration << endl;
-*/
 
     penetration_t penetrationVector;
     penetrationVector.x = normalized[0] * penetration;
     penetrationVector.y = normalized[1] * penetration;
     penetrationVector.z = normalized[2] * penetration;
+
+    return penetrationVector;
+}
+
+penetration_t
+CollisionDetection::getPenetrationVector(const AABB *aabb, const Sphere *sphere)
+{
+    penetration_t penetrationVector;
+
+    penetrationVector.x = abs(aabb->getCenter().x - sphere->getCenter().x)
+                            - (aabb->getXRadius() + sphere->getRadius());
+    penetrationVector.y = abs(aabb->getCenter().y - sphere->getCenter().y)
+                            -(aabb->getYRadius() + sphere->getRadius());
+    penetrationVector.z = abs(aabb->getCenter().z - sphere->getCenter().z)
+                            - (aabb->getZRadius() + sphere->getRadius());
 
     return penetrationVector;
 }

@@ -107,6 +107,7 @@ private:
 
     penetration_t getPenetrationVector(const Sphere *sphere1, const Sphere *sphere2);
     penetration_t getPenetrationVector(const AABB *aabb1, const AABB *aabb2);
+    penetration_t getPenetrationVector(const AABB *aabb, const Sphere *sphere);
 
 };
 #endif
