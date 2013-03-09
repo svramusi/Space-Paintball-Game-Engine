@@ -56,7 +56,7 @@ public:
 
     float getDistanceBetweenLineAndVertex(Point startPoint, Point endPoint, Point vertex);
 
-    float getPenetrationDistance(float dist_between_centers, float radiusSum);
+    float getPenetrationDistance(const Sphere *sphere1, const Sphere *sphere2);
     std::vector<float> getNormalizedVector(Point point1, Point point2);
 
 

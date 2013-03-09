@@ -146,9 +146,18 @@ CollisionDetection::checkForAnyCollisions()
 }
 
 float
-CollisionDetection::getPenetrationDistance(float dist_between_centers, float radiusSum)
+CollisionDetection::getPenetrationDistance(const Sphere *sphere1, const Sphere *sphere2)
 {
-    return sqrt(dist_between_centers) - sqrt(radiusSum);
+    std::vector<float> diff_vector;
+    diff_vector = getDiffVector(sphere1->getCenter(), sphere2->getCenter());
+
+    colvec d = conv_to< colvec >::from(diff_vector);
+    float dist_between_centers = dot(d, d);
+
+    float radiusSum = sphere1->getRadius() + sphere2->getRadius();
+    float radiusSumSq = radiusSum * radiusSum;
+
+    return sqrt(dist_between_centers) - sqrt(radiusSumSq);
 }
 
 std::vector<float>
@@ -211,16 +220,8 @@ CollisionDetection::getPenetrationVector(const CollidableObject *obj1, const Col
 penetration_t
 CollisionDetection::getPenetrationVector(const Sphere *sphere1, const Sphere *sphere2)
 {
-    std::vector<float> diff_vector;
-    diff_vector = getDiffVector(sphere1->getCenter(), sphere2->getCenter());
 
-    colvec d = conv_to< colvec >::from(diff_vector);
-    float dist_between_centers = dot(d, d);
-
-    float radiusSum = sphere1->getRadius() + sphere2->getRadius();
-    float radiusSumSq = radiusSum * radiusSum;
-
-    float penetration = getPenetrationDistance(dist_between_centers, radiusSumSq);
+    float penetration = getPenetrationDistance(sphere1, sphere2);
     std::vector<float> normalized = getNormalizedVector(sphere1->getCenter(), sphere2->getCenter());
 
 /*

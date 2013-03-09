@@ -82,16 +82,7 @@ SphereTest::testCollision(void)
 
     CPPUNIT_ASSERT(1 == cd->isIntersection(sphere1, sphere2));
 
-
-    std::vector<float> diff_vector = cd->getDiffVector(sphere1->getCenter(), sphere2->getCenter());
-
-    colvec d = conv_to< colvec >::from(diff_vector);
-    float dist_between_centers = dot(d, d);
-
-    float radiusSum = sphere1->getRadius() + sphere2->getRadius();
-    float radiusSumSq = radiusSum * radiusSum;
-
-    float p = cd->getPenetrationDistance(dist_between_centers, radiusSumSq);
+    float p = cd->getPenetrationDistance(sphere1, sphere2);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(-1.585f, p, 0.01);
 
     std::vector<float> normalized = cd->getNormalizedVector(sphere1->getCenter(), sphere2->getCenter());
