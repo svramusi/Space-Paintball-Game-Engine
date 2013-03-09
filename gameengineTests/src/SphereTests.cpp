@@ -44,8 +44,8 @@ SphereTest::testNoCollision(void)
 void
 SphereTest::testCollision(void)
 {
-    Sphere *sphere1;
-    Sphere *sphere2;
+    CollidableObject *sphere1;
+    CollidableObject *sphere2;
 
     Point point1;
     point1.x = 0;
@@ -82,7 +82,7 @@ SphereTest::testCollision(void)
 
     CPPUNIT_ASSERT(1 == cd->isIntersection(sphere1, sphere2));
 
-    float p = cd->getPenetrationDistance(sphere1, sphere2);
+    float p = cd->getPenetrationDistance(dynamic_cast<const Sphere*>(sphere1), dynamic_cast<const Sphere*>(sphere2));
     CPPUNIT_ASSERT_DOUBLES_EQUAL(-1.585f, p, 0.01);
 
     std::vector<float> normalized = cd->getNormalizedVector(sphere1->getCenter(), sphere2->getCenter());

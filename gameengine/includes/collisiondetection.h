@@ -61,7 +61,6 @@ public:
 
 
     penetration_t getPenetrationVector(const CollidableObject *obj1, const CollidableObject *obj2);
-    penetration_t getPenetrationVector(const Sphere *sphere1, const Sphere *sphere2);
 
     std::vector<float> getDiffVectorAbs(Point point1, Point point2);
     std::vector<float> getDiffVector(Point point1, Point point2);
@@ -105,6 +104,9 @@ checkForAnyCollisions();
 
 private:
     std::vector<CollidableObject*> collidableObjects;
+
+    penetration_t getPenetrationVector(const Sphere *sphere1, const Sphere *sphere2);
+    penetration_t getPenetrationVector(const AABB *aabb1, const AABB *aabb2);
 
 };
 #endif

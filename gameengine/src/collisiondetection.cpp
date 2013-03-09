@@ -204,7 +204,9 @@ CollisionDetection::getPenetrationVector(const CollidableObject *obj1, const Col
         return -1;
 */
 
-    if((typeid(Sphere) == typeid(*obj1)) && (typeid(Sphere) == typeid(*obj2)))
+    if((typeid(AABB) == typeid(*obj1)) && (typeid(AABB) == typeid(*obj2)))
+        return getPenetrationVector(dynamic_cast<const AABB*>(obj1), dynamic_cast<const AABB*>(obj2));
+    else if((typeid(Sphere) == typeid(*obj1)) && (typeid(Sphere) == typeid(*obj2)))
         return getPenetrationVector(dynamic_cast<const Sphere*>(obj1), dynamic_cast<const Sphere*>(obj2));
     else
     {
@@ -215,6 +217,23 @@ CollisionDetection::getPenetrationVector(const CollidableObject *obj1, const Col
 
         return penetration;
     }
+}
+
+penetration_t
+CollisionDetection::getPenetrationVector(const AABB *aabb1, const AABB *aabb2)
+{
+    penetration_t penetrationVector;
+
+    penetrationVector.x = abs(aabb1->getCenter().x - aabb2->getCenter().x)
+        - (aabb1->getXRadius() + aabb2->getXRadius());
+
+    penetrationVector.y = abs(aabb1->getCenter().y - aabb2->getCenter().y)
+        - (aabb1->getYRadius() + aabb2->getYRadius());
+
+    penetrationVector.z = abs(aabb1->getCenter().z - aabb2->getCenter().z)
+        - (aabb1->getZRadius() + aabb2->getZRadius());
+
+    return penetrationVector;
 }
 
 penetration_t
