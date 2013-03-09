@@ -18,8 +18,8 @@ void SphereTest::tearDown(void)
 void
 SphereTest::testNoCollision(void)
 {
-    Sphere *sphere1;
-    Sphere *sphere2;
+    CollidableObject *sphere1;
+    CollidableObject *sphere2;
 
     Point point1;
     point1.x = 0;
@@ -121,8 +121,8 @@ SphereTest::testCollision(void)
 void
 SphereTest::testVeryCloseCollision(void)
 {
-    Sphere *sphere1;
-    Sphere *sphere2;
+    CollidableObject *sphere1;
+    CollidableObject *sphere2;
 
     Point point1;
     Point point2;

@@ -8,7 +8,7 @@ CollidableObject::CollidableObject(int _ID, Point _center, int _movable)
 }
 
 int
-CollidableObject::getID()
+CollidableObject::getID() const
 {
     return ID;
 }

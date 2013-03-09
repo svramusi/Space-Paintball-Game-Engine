@@ -75,25 +75,6 @@ CollisionDetection::removeObject(int ID)
     }
 }
 
-/*
-collisionDetection*
-CollisionDetection::detect_collision(detectCollision* collidableObject)
-{
-    collisionDetection *cd;
-    cd = (collisionDetection*)malloc(sizeof(collisionDetection));
-
-    cd->prev = NULL;
-    cd->next = NULL;
-    cd->objectID = 0;
-    cd->collisionID = 0;
-
-    //detect collisions
-    printf("collidable object id: %i\n",collidableObject->collidableObjectID);
-
-    return cd;
-}
-*/
-
 collisions_t*
 CollisionDetection::checkForAnyCollisions()
 {
@@ -286,15 +267,33 @@ int
 CollisionDetection::isIntersection(const CollidableObject *obj1, const CollidableObject *obj2)
 {
     if((typeid(AABB) == typeid(*obj1)) && (typeid(AABB) == typeid(*obj2)))
+    {
         return isIntersection(dynamic_cast<const AABB*>(obj1), dynamic_cast<const AABB*>(obj2));
+    }
     else if((typeid(Sphere) == typeid(*obj1)) && (typeid(Sphere) == typeid(*obj2)))
+    {
         return isIntersection(dynamic_cast<const Sphere*>(obj1), dynamic_cast<const Sphere*>(obj2));
+    }
     else if((typeid(AABB) == typeid(*obj1)) && (typeid(Sphere) == typeid(*obj2)))
+    {
         return isIntersection(dynamic_cast<const AABB*>(obj1), dynamic_cast<const Sphere*>(obj2));
+    }
     else if((typeid(Sphere) == typeid(*obj1)) && (typeid(AABB) == typeid(*obj2)))
+    {
         return isIntersection(dynamic_cast<const AABB*>(obj2), dynamic_cast<const Sphere*>(obj1));
+    }
+    else if((typeid(AABB) == typeid(*obj1)) && (typeid(Capsule) == typeid(*obj2)))
+    {
+        return isIntersection(dynamic_cast<const AABB*>(obj1), dynamic_cast<const Capsule*>(obj2));
+    }
+    else if((typeid(Capsule) == typeid(*obj1)) && (typeid(AABB) == typeid(*obj2)))
+    {
+        return isIntersection(dynamic_cast<const AABB*>(obj2), dynamic_cast<const Capsule*>(obj1));
+    }
     else
+    {
         return -1;
+    }
 }
 
 int
@@ -347,28 +346,64 @@ CollisionDetection::isIntersection(const AABB *aabb, const Sphere *sphere)
 }
 
 int
-CollisionDetection::isIntersection(Sphere sphere, capsule_t capsule)
+CollisionDetection::isIntersection(const AABB *aabb, const Capsule *capsule)
 {
-    return 1;
+/*
+    CollidableObject *startSphere = new Sphere(capsule->getID(), capsule->getStart(),
+                                        capsule->getRadius(), true);
+    CollidableObject *endSphere = new Sphere(capsule->getID(), capsule->getEnd(),
+                                        capsule->getRadius(), true);
+
+    if(isIntersection(aabb, startSphere))
+    {
+        delete startSphere;
+        delete endSphere;
+        return 1;
+    }
+    if(isIntersection(aabb, endSphere))
+    {
+        delete startSphere;
+        delete endSphere;
+        return 1;
+    }
+
+    delete startSphere;
+    delete endSphere;
+
+*/
+
+    float squaredDistance = getSquareDistanceBetweenLineAndVertex(capsule->getStart(), capsule->getEnd(),
+                                aabb->getCenter());
+
+    float xSum = aabb->getXRadius() + capsule->getRadius();
+    float ySum = aabb->getYRadius() + capsule->getRadius();
+    float zSum = aabb->getZRadius() + capsule->getRadius();
+
+    if(squaredDistance < (xSum * xSum))
+        return 1;
+    if(squaredDistance < (ySum * ySum))
+        return 1;
+    if(squaredDistance < (zSum * zSum))
+        return 1;
+
+    return 0;
 }
 
 float
-CollisionDetection::getDistanceBetweenLineAndVertex(Point startPoint, Point endPoint, Point vertex)
+CollisionDetection::getSquareDistanceBetweenLineAndVertex(Point startPoint, Point endPoint, Point vertex)
 {
-    std::vector<float> ab = getDiffVectorAbs(endPoint, startPoint);
-    std::vector<float> ac = getDiffVectorAbs(vertex, startPoint);
-    std::vector<float> bc = getDiffVectorAbs(vertex, endPoint);
+    std::vector<float> ab = getDiffVector(endPoint, startPoint);
+    std::vector<float> ac = getDiffVector(vertex, startPoint);
+    std::vector<float> bc = getDiffVector(vertex, endPoint);
 
     colvec cv_ac = conv_to< colvec >::from(ac);
     colvec cv_ab = conv_to< colvec >::from(ab);
 
     float e = dot(cv_ac, cv_ab);
-
     if(e <= 0.0f)
         return dot(cv_ac, cv_ac);
 
     float f = dot(cv_ab, cv_ab);
-
     if(e >= f)
     {
         colvec cv_bc = conv_to< colvec >::from(bc);

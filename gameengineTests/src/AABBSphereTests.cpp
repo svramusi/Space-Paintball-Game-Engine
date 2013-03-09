@@ -14,6 +14,9 @@ void AABBSphereTest::tearDown(void)
 void
 AABBSphereTest::testNoCollision(void)
 {
+    CollidableObject *aabb;
+    CollidableObject *sphere;
+
     Point point1;
     Point point2;
 
@@ -26,14 +29,13 @@ AABBSphereTest::testNoCollision(void)
     radii[1] = 1.0f;
     radii[2] = 1.0f;
 
-    AABB *aabb = new AABB(1, point1, radii, true);
+    aabb = new AABB(1, point1, radii, true);
 
     point2.x = 10;
     point2.y = 10;
     point2.z = 10;
 
-
-    Sphere *sphere = new Sphere(2, point2, 1.0f, true);
+    sphere = new Sphere(2, point2, 1.0f, true);
 
     CPPUNIT_ASSERT(0 == cd->isIntersection(aabb, sphere));
 

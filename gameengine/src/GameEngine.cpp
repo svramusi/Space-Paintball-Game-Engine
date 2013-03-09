@@ -64,7 +64,8 @@ GameEngine::GameEngine() {
     physics->insertPhysicsObject(stationary_sphere, 10, zeroVel, zeroForce, zeroVel, zeroForce, zeroPoint);
     physics->insertPhysicsObject(bouncing_sphere, 10, ballVel, zeroForce, zeroVel, zeroForce, zeroPoint);
 
-    for(float i=0.0f; i<10.0f; i=i+0.1f)
+    //for(float i=0.0f; i<10.0f; i=i+0.1f)
+    for(int i=0; i<200; i++)
         physics->updateWorld(i);
 }
 

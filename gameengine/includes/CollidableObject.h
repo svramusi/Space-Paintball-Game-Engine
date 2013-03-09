@@ -8,7 +8,7 @@ public:
     CollidableObject(int _ID, Point _center, int movable);
     virtual ~CollidableObject() {};
 
-    int getID();
+    int getID() const;
     void setID(int _ID);
 
     Point getCenter() const;

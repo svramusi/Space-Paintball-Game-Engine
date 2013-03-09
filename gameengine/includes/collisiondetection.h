@@ -42,19 +42,13 @@ public:
 
     void freeCollisions(collisions_t *collisions);
 
-    //collisionDetection* detect_collision(detectCollision* collidableObject);
-
     void addObject(CollidableObject *collidableObject);
     void updateObject(int ID, Point newCenter);
     void removeObject(int ID);
 
     int isIntersection(const CollidableObject *obj1, const CollidableObject *obj2);
-    int isIntersection(const AABB *aabb1, const AABB *aabb2);
-    int isIntersection(const Sphere *sphere1, const Sphere *sphere2);
-    int isIntersection(const AABB *aabb, const Sphere *sphere);
-    int isIntersection(Sphere sphere, capsule_t capsule);
 
-    float getDistanceBetweenLineAndVertex(Point startPoint, Point endPoint, Point vertex);
+    float getSquareDistanceBetweenLineAndVertex(Point startPoint, Point endPoint, Point vertex);
 
     float getPenetrationDistance(const Sphere *sphere1, const Sphere *sphere2);
     std::vector<float> getNormalizedVector(Point point1, Point point2);
@@ -104,6 +98,11 @@ checkForAnyCollisions();
 
 private:
     std::vector<CollidableObject*> collidableObjects;
+
+    int isIntersection(const AABB *aabb1, const AABB *aabb2);
+    int isIntersection(const Sphere *sphere1, const Sphere *sphere2);
+    int isIntersection(const AABB *aabb, const Sphere *sphere);
+    int isIntersection(const AABB *aabb, const Capsule *capsule);
 
     penetration_t getPenetrationVector(const Sphere *sphere1, const Sphere *sphere2);
     penetration_t getPenetrationVector(const AABB *aabb1, const AABB *aabb2);
