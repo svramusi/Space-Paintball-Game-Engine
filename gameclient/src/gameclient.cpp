@@ -195,12 +195,11 @@ void SendInputToServer( int input )
 	///////////////////////////////////////////////////////////////////
 	bool sent = clientSocket.Send( (void *) packet, size );
 
-	//if( sent )
-	//{
+	if( sent )
+	{
 		// Reclaim memory.
-		//delete packet;
-		//delete payload;
-	//}
+		delete packet;
+	}
 	///////////////////////////////////////////////////////////////////
 }
 
