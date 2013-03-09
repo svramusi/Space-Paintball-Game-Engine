@@ -10,7 +10,7 @@
 GameEngine::GameEngine() {
     printf("Game Engine Initialized\n");
 
-    physics = new PhysicsEngine();
+    physics = new PhysicsEngine(-9.8f, 0.0f);
 
     CollidableObject *stationary_sphere;
     CollidableObject *bouncing_sphere;
@@ -54,7 +54,7 @@ GameEngine::GameEngine() {
     physics->insertPhysicsObject(stationary_sphere, 10, zeroVel, zeroForce, zeroVel, zeroForce, zeroPoint);
     physics->insertPhysicsObject(bouncing_sphere, 10, ballVel, zeroForce, zeroVel, zeroForce, zeroPoint);
 
-    for(int i=0; i<1000; i++)
+    for(float i=0.0f; i<10.0f; i=i+0.1f)
         physics->updateWorld(i);
 }
 

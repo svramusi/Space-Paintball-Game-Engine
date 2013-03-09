@@ -26,14 +26,14 @@ AABBSphereTest::testNoCollision(void)
     radii[1] = 1.0f;
     radii[2] = 1.0f;
 
-    AABB *aabb = new AABB(1, point1, radii);
+    AABB *aabb = new AABB(1, point1, radii, true);
 
     point2.x = 10;
     point2.y = 10;
     point2.z = 10;
 
 
-    Sphere *sphere = new Sphere(2, point2, 1.0f);
+    Sphere *sphere = new Sphere(2, point2, 1.0f, true);
 
     CPPUNIT_ASSERT(0 == cd->isIntersection(aabb, sphere));
 
@@ -56,13 +56,13 @@ AABBSphereTest::testCollision(void)
     radii[1] = 1.0f;
     radii[2] = 1.0f;
 
-    AABB *aabb = new AABB(1, point1, radii);
+    AABB *aabb = new AABB(1, point1, radii, true);
 
     point2.x = 2;
     point2.y = 2;
     point2.z = 2;
 
-    Sphere *sphere = new Sphere(2, point2, 1.0f);
+    Sphere *sphere = new Sphere(2, point2, 1.0f, true);
 
     CPPUNIT_ASSERT(1 == cd->isIntersection(aabb, sphere));
 

@@ -13,9 +13,19 @@
 
 struct collision_info_t;
 
+struct penetration_t {
+    float x;
+    float y;
+    float z;
+};
+
 struct collision_info_t {
     int ID; //id of the object that collides with the ID specified in collisions_t
-    //std::vector<float> p; //penetration vector that you'll use to resolve the collision
+
+    //grrrrrrrr
+    //std::vector<float> penetration; //penetration vector that you'll use to resolve the collision
+    penetration_t penetration;
+
     collision_info_t *next;
 };
 
@@ -48,7 +58,10 @@ public:
 
     float getPenetrationDistance(float dist_between_centers, float radiusSum);
     std::vector<float> getNormalizedVector(Point point1, Point point2);
-    std::vector<float> getPenetrationVector(const Sphere *sphere1, const Sphere *sphere2);
+
+
+    penetration_t getPenetrationVector(const CollidableObject *obj1, const CollidableObject *obj2);
+    penetration_t getPenetrationVector(const Sphere *sphere1, const Sphere *sphere2);
 
     std::vector<float> getDiffVectorAbs(Point point1, Point point2);
     std::vector<float> getDiffVector(Point point1, Point point2);
