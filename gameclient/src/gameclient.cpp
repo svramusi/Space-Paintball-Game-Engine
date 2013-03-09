@@ -1,46 +1,59 @@
-#include <iostream>
 #include <fstream>
 #include <string>
 #include <vector>
+#include <iomanip>
+#include <sstream>
+#include <errno.h>
+#include <arpa/inet.h>
+
+#include <unistd.h>
+#include <iostream>
+
+#include <google/protobuf/message.h>
+#include <google/protobuf/descriptor.h>
+#include <google/protobuf/io/zero_copy_stream_impl.h>
+#include <google/protobuf/io/coded_stream.h>
+#include <google/protobuf/io/zero_copy_stream_impl_lite.h>
 
 #include "SDL-1.2.15/include/SDL.h"
 
 #include "net/Net.h"
-#include "net/Connection.h"
+#include "net/Constants.hpp"
 #include "net/NetUtils.h"
-#include "net/ClientConnection.h"
+#include "net/ClientSocket.h"
+#include "net/GameEngine.pb.h"
+#include "net/GameEngine.pb.cc"
+
 #include "GameEngine.h"
 #include "TestCollectGameState.h"
+//#include "Point.h"
 
 using namespace std;
-using namespace net;
+using namespace google::protobuf::io;
 
-const int ServerMasterPort = 30000;
-const int ClientPort = 30001;
-const int ProtocolId = 0x99887766;
-const float DeltaTime = 0.25f;
-const float SendRate = 0.25f;
-const float TimeOut = 10.0f;
 // One frame each 20 milliseconds (i.e. 50 frames per second)
 const Uint32 RedrawingPeriod = 20;
 const int MaxFrameSkip = 10;
 
-ClientConnection* clientConnection;
-
 int PollForOSMessages(bool* quit);
-int ConnectToGameMasterServer();
 int GetInput(bool* quit);
 void SendInputToServer(int input);
 int GetUpdateFromServer();
 bool TimeForRendering();
 void UpdateStatistics();
 void FPSControl();
+net::GameEngine* GetGameEnginePayload();
+void SetPhysicsInfo( net::PhysicsInfo* physicsInfo, float value );
+
+net::ClientSocket clientSocket;
 
 int main( int argc, char * argv[] )
 {
-    GameEngine *ge = new GameEngine();
+	GOOGLE_PROTOBUF_VERIFY_VERSION;
+
+	GameEngine *ge = new GameEngine();
     delete ge;
-    return 0;
+    //return 0;
 
 	TestCollectGameState* test = new TestCollectGameState();
 	test->PrintGameState();
@@ -51,27 +64,12 @@ int main( int argc, char * argv[] )
 	Uint32 time = SDL_GetTicks();
 	bool needToRedraw = true;
 
-	int theClientPort = 0;
-	// Loop through each argument and print its number and value
-	for (int nArg=0; nArg < argc; nArg++)
-	{
-	    theClientPort = atoi(argv[nArg]);
-	}
+	///////////////////////////////////////////////////////////////////
+	// Initialize socket and connect with server.
+	///////////////////////////////////////////////////////////////////
+	clientSocket.Connect( net::HOST_NAME, net::MASTER_SOCKET_PORT );
+	///////////////////////////////////////////////////////////////////
 
-	if(theClientPort == 0)
-	{
-		theClientPort = ClientPort;
-	}
-
-	// Initialize the client connection
-	Address* clientAddress = new Address(127,0,0,1, theClientPort);
-	clientConnection = new ClientConnection(clientAddress);
-
-	// Connect the client to the server.
-	Address* serverMasterAddress = new Address(127,0,0,1, ServerMasterPort);
-	clientConnection->Connect(serverMasterAddress);
-
-//	ConnectToGameMasterServer();
 	// Client Game Loop
 	while(!quit)
 	{
@@ -110,7 +108,7 @@ int main( int argc, char * argv[] )
 			actualTime = SDL_GetTicks();
 			needToRedraw = true;
 			frames++;
-		}
+		} // End inner while loop.
 
 		if(time < actualTime)
 		{
@@ -131,6 +129,9 @@ int main( int argc, char * argv[] )
 		}
 
 		int input = GetInput(&quit);
+
+		// now you can write buf.data() to the socket
+		///////////////////////////////////////////////////////////
 
 		SendInputToServer(input);
 
@@ -163,53 +164,157 @@ int main( int argc, char * argv[] )
 		 * Play nice with the OS, and give
 		 * some CPU for another process.
 		 */
-		SDL_Delay(1);
+		//SDL_Delay(1);
+
+		net::NetUtils::wait( net::DELTA_TIME );
 	} // End Client Game Loop
 
-	//delete clientAddress;
-	//delete serverMasterAddress;
-	//delete clientConnection;
-
-	return 0;
+	clientSocket.Close();
+	// Delete all global objects allocated by libprotobuf.
+	google::protobuf::ShutdownProtobufLibrary();
 }
 
 int GetUpdateFromServer()
 {
-	// Get the update from server.
-	// TODO: Fix this
-	//int input = getUpdateFromServer();
-	int input = 0;
+	return 0;
+}
 
-	if (clientConnection->IsConnected() )
+void SendInputToServer( int input )
+{
+	///////////////////////////////////////////////////////////////////
+	// Initialize payload
+	///////////////////////////////////////////////////////////////////
+	net::GameEngine* payload = GetGameEnginePayload();
+
+	printf( "Size after serilizing is %d\n", payload->ByteSize() );
+	int size = payload->ByteSize() + 4;
+	char *packet = new char [size];
+	google::protobuf::io::ArrayOutputStream aos(packet,size);
+	CodedOutputStream *coded_output = new CodedOutputStream(&aos);
+	coded_output->WriteVarint32(payload->ByteSize());
+	payload->SerializeToCodedStream(coded_output);
+	///////////////////////////////////////////////////////////////////
+
+	///////////////////////////////////////////////////////////////////
+	// Client socket work - send payload to server
+	///////////////////////////////////////////////////////////////////
+	bool sent = clientSocket.Send( (void *) packet, size );
+
+	if( sent )
 	{
-		printf( "client connected to server\n" );
+		// Reclaim memory.
+		delete packet;
 	}
+	///////////////////////////////////////////////////////////////////
+}
 
-	if ( clientConnection->ConnectFailed() )
-	{
-		printf( "connection failed\n" );
-	}
+/**
+ * Dummy function to generate fake message object.
+ */
+net::GameEngine* GetGameEnginePayload()
+{
+	net::GameEngine* gameEnginePayload = new net::GameEngine();
 
-	unsigned char packet[] = "client to server: player1 pressed up arrow";
-	GamePacket* gamePacket = new GamePacket(packet, sizeof( packet ));
-	clientConnection->Send( gamePacket );
-	delete gamePacket;
+	/*
+	 * Add physics object to Game Engine object.
+	 */
+	net::PhysicsInfo* physicsInfo1 = gameEnginePayload->add_physicsinfo();
+	net::PhysicsInfo* physicsInfo2 = gameEnginePayload->add_physicsinfo();
 
-	while ( true )
-	{
-		unsigned char packet[256];
-		GamePacket* gamePacket = clientConnection->Receive();
-		if ( gamePacket == NULL )
-		{
-			break;
-		}
-		printf( "received packet from server\n" );
-	}
+	SetPhysicsInfo( physicsInfo1, 1.0f );
+	SetPhysicsInfo( physicsInfo2, 2.0f );
 
-	clientConnection->Update( DeltaTime );
-	NetUtils::wait( DeltaTime );
+	return gameEnginePayload;
+}
 
-	return input;
+/*
+ * Dummy function to generate fake PhysicsInfo message.
+ */
+void SetPhysicsInfo( net::PhysicsInfo* physicsInfo, float value )
+{
+	physicsInfo->set_mass( value );
+
+	/*
+	 * Aaab object.
+	 */
+	net::Aabb* aabbObject = new net::Aabb();
+	aabbObject->add_radii( value );
+	aabbObject->add_radii( value );
+	aabbObject->add_radii( value );
+
+	net::Point* center1 = new net::Point();
+	center1->set_x( value );
+	center1->set_y( value );
+	center1->set_z( value );
+
+	aabbObject->set_allocated_center( center1 );
+
+	physicsInfo->set_allocated_aabbobject( aabbObject );
+
+	/*
+	 * Sphere object.
+	 */
+	net::Sphere* sphereObject = new net::Sphere();
+	sphereObject->set_radius( value );
+
+	net::Point* center2 = new net::Point();
+	center2->set_x( value );
+	center2->set_y( value );
+	center2->set_z( value );
+
+	sphereObject->set_allocated_center( center2 );
+
+	physicsInfo->set_allocated_sphereobject( sphereObject );
+
+	/*
+	 * Linear Velocity.
+	 */
+	net::Velocity* linearVelocity = new net::Velocity();
+	linearVelocity->set_x( value );
+	linearVelocity->set_y( value );
+	linearVelocity->set_z( value );
+
+	physicsInfo->set_allocated_linearvelocity( linearVelocity );
+
+	/*
+	 * Angular Velocity.
+	 */
+	net::Velocity* angularVelocity = new net::Velocity();
+	angularVelocity->set_x( value );
+	angularVelocity->set_y( value );
+	angularVelocity->set_z( value );
+
+	physicsInfo->set_allocated_angularvelocity( angularVelocity );
+
+	/*
+	 * Angular Position.
+	 */
+	net::Point* angularPosition = new net::Point();
+	angularPosition->set_x( value );
+	angularPosition->set_y( value );
+	angularPosition->set_z( value );
+
+	physicsInfo->set_allocated_angularposition( angularPosition );
+
+	/*
+	 * Linear Force.
+	 */
+	net::Force* linearForce = new net::Force();
+	linearForce->set_x( value );
+	linearForce->set_y( value );
+	linearForce->set_z( value );
+
+	physicsInfo->set_allocated_linearforce( linearForce );
+
+	/*
+	 * Angular Force.
+	 */
+	net::Force* angularForce = new net::Force();
+	angularForce->set_x( value );
+	angularForce->set_y( value );
+	angularForce->set_z( value );
+
+	physicsInfo->set_allocated_angularforce( angularForce );
 }
 
 void FPSControl()
@@ -260,58 +365,6 @@ int PollForOSMessages(bool* quit)
 	*/
 
 	return 0;
-}
-
-int ConnectToGameMasterServer()
-{
-	Connection connection( ProtocolId, TimeOut );
-
-	if ( !connection.Start( ClientPort ) )
-	{
-		printf( "could not start connection on port %d\n", ClientPort );
-		return 1;
-	}
-
-	connection.Connect( Address(127,0,0,1,ServerMasterPort ) );
-
-	bool connected = false;
-
-	while ( true )
-	{
-		if ( !connected && connection.IsConnected() )
-		{
-			printf( "client connected to server\n" );
-			connected = true;
-		}
-
-		if ( !connected && connection.ConnectFailed() )
-		{
-			printf( "connection failed\n" );
-			break;
-		}
-
-		unsigned char packet[] = "client to server";
-		connection.SendPacket( packet, sizeof( packet ) );
-
-		while ( true )
-		{
-			unsigned char packet[256];
-			int bytes_read = connection.ReceivePacket( packet, sizeof(packet) );
-			if ( bytes_read == 0 )
-				break;
-			printf( "received packet from server\n" );
-		}
-
-		connection.Update( DeltaTime );
-		NetUtils::wait( DeltaTime );
-	}
-
-	return 0;
-}
-
-void SendInputToServer(int input)
-{
-	//TODO: Send input to server
 }
 
 int GetInput(bool* quit)

@@ -8,13 +8,12 @@
 #ifndef NET_H_
 #define NET_H_
 
-#include <sys/socket.h>
 #include <netinet/in.h>
 #include <fcntl.h>
 #include <string.h>
 #include <stdio.h>
-
 #include <assert.h>
+
 #include <vector>
 #include <map>
 #include <stack>

@@ -79,4 +79,15 @@ namespace net
 		else
 			return port < other.port;
 	}
+
+	string Address::ToString()
+	{
+		string result;
+		ostringstream convert;
+		convert << (int)GetA() << "." << (int)GetB() << "." << (int)GetC() << "." << (int)GetD() << ":" << (int)GetPort();
+
+		result = convert.str();
+
+		return result;
+	}
 }

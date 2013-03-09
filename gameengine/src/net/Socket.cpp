@@ -9,52 +9,38 @@
 
 namespace net
 {
-	Socket::Socket() {
+	Socket::Socket()
+	{
 		socket = 0;
-
 	}
 
-	Socket::~Socket() {
+	Socket::~Socket()
+	{
 		Close();
 	}
 
-	bool Socket::Open( unsigned short port )
+	bool Socket::Setup()
 	{
 		assert( !IsOpen() );
 
 		// create socket
 
-		socket = ::socket( AF_INET, SOCK_DGRAM, IPPROTO_UDP );
+		socket = ::socket( AF_INET, SOCK_STREAM, 0 );
 
 		if ( socket <= 0 )
 		{
-			printf( "failed to create socket\n" );
+			printf("Error initializing socket %d\n", errno);
 			socket = 0;
 			return false;
 		}
 
-		// bind to port
-
-		sockaddr_in address;
-		address.sin_family = AF_INET;
-		address.sin_addr.s_addr = INADDR_ANY;
-		address.sin_port = htons( (unsigned short) port );
-
-		if ( bind( socket, (const sockaddr*) &address, sizeof(sockaddr_in) ) < 0 )
+		// set socket options.
+		int on = 1;
+		if( (setsockopt(socket, SOL_SOCKET, SO_REUSEADDR, &on, sizeof(int)) == -1 ) ||
+			(setsockopt(socket, SOL_SOCKET, SO_KEEPALIVE, &on, sizeof(int)) == -1 ) )
 		{
-			printf( "failed to bind socket\n" );
-			Close();
-			return false;
-		}
-
-		// set non-blocking io
-
-		int nonBlocking = 1;
-		if ( fcntl( socket, F_SETFL, O_NONBLOCK, nonBlocking ) == -1 )
-		{
-			printf( "failed to set non-blocking socket\n" );
-			Close();
-			return false;
+			printf("Error setting options %d\n", errno);
+			socket = 0;
 		}
 
 		return true;
@@ -74,7 +60,7 @@ namespace net
 		return socket != 0;
 	}
 
-	bool Socket::Send( const Address & destination, const void * data, int size )
+	bool Socket::Send( const void * data, int size )
 	{
 		assert( data );
 		assert( size > 0 );
@@ -82,20 +68,20 @@ namespace net
 		if ( socket == 0 )
 			return false;
 
-		assert( destination.GetAddress() != 0 );
-		assert( destination.GetPort() != 0 );
+		int send_bytes = 0;
 
-		sockaddr_in address;
-		address.sin_family = AF_INET;
-		address.sin_addr.s_addr = htonl( destination.GetAddress() );
-		address.sin_port = htons( (unsigned short) destination.GetPort() );
+		if( (send_bytes = send( socket, (const char*)data, size, 0 ) ) == -1)
+		{
+			fprintf( stderr, "Error sending data %d\n", errno );
+			return false;
+		}
 
-		int sent_bytes = sendto( socket, (const char*)data, size, 0, (sockaddr*)&address, sizeof(sockaddr_in) );
+		printf( "Sent bytes %d\n", send_bytes );
 
-		return sent_bytes == size;
+		return send_bytes == size;
 	}
 
-	int Socket::Receive( Address & sender, void * data, int size )
+	int Socket::Receive( void * data, int size )
 	{
 		assert( data );
 		assert( size > 0 );
@@ -103,44 +89,76 @@ namespace net
 		if ( socket == 0 )
 			return false;
 
-		sockaddr_in from;
-		socklen_t fromLength = sizeof( from );
+		int received_bytes;
 
-		int received_bytes = recvfrom( socket, (char*)data, size, 0, (sockaddr*)&from, &fromLength );
+		if( ( received_bytes = recv( socket, (char*)data, size, 0 ) ) == -1 )
+		{
+			fprintf( stderr, "Error receiving data %d\n", errno );
+		}
 
 		if ( received_bytes <= 0 )
 			return 0;
 
-		unsigned int address = ntohl( from.sin_addr.s_addr );
-		unsigned short port = ntohs( from.sin_port );
+		return received_bytes;
+	}
 
-		sender = Address( address, port );
+	int Socket::ReceiveWaitAll( void * data, int size )
+	{
+		assert( data );
+		assert( size > 0 );
+
+		if ( socket == 0 )
+			return false;
+
+		int received_bytes;
+
+		if( ( received_bytes = recv( socket, (char*)data, size, MSG_WAITALL ) ) == -1 )
+		{
+			fprintf( stderr, "Error receiving data %d\n", errno );
+		}
+
+		if ( received_bytes <= 0 )
+			return 0;
 
 		return received_bytes;
 	}
 
 	bool Socket::HasData() const
 	{
-		// Determine if the socket has data.
-	    bool            result;
-	    fd_set          sready;
-	    struct timeval  nowait;
+		int timeOut = 100; //ms
+		fd_set socketReadSet;
+		FD_ZERO(&socketReadSet);
+		FD_SET(socket,&socketReadSet);
+		struct timeval tv;
+		if (timeOut) {
+			tv.tv_sec  = timeOut / 1000;
+			tv.tv_usec = (timeOut % 1000) * 1000;
+		} else {
+			tv.tv_sec  = 0;
+			tv.tv_usec = 0;
+		} // if
 
-	    FD_ZERO(&sready);
-	    FD_SET((unsigned int)this->socket,&sready);
-	    //bzero((char *)&nowait,sizeof(nowait));
-	    memset((char *)&nowait,0,sizeof(nowait));
+		if (select(socket+1,&socketReadSet,0,0,&tv) == -1) {
+			perror("select()\n");
+			return false;
+		} // if
+		int res = FD_ISSET(socket,&socketReadSet);
 
-	    result = select(this->socket+1,&sready,NULL,NULL,&nowait);
-	    if( FD_ISSET(this->socket,&sready) )
-	    {
-	    	result = true;
-	    }
-	    else
-	    {
-	        result = false;
-	    }
+		return res != 0;
+	}
 
-	    return result;
+	int Socket::Peek( void * buffer, int size )
+	{
+		int bytecount = 0;
+
+		// Peek into the socket and get the packet size.
+		if( ( bytecount = recv( socket, (char *) buffer, size, MSG_PEEK ) ) == -1 )
+		{
+			fprintf( stderr, "Error peeking at received data %d\n", errno );
+		}
+
+		printf( "Peek(): First read byte count is %d\n", bytecount );
+
+		return bytecount;
 	}
 }

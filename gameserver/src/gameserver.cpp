@@ -1,48 +1,61 @@
-#include <iostream>
 #include <fstream>
 #include <string>
 #include <vector>
+#include <iomanip>
+#include <sstream>
+#include <map>
+#include <errno.h>
+#include <arpa/inet.h>
 
 #include "SDL-1.2.15/include/SDL.h"
 
 #include "net/Net.h"
-#include "net/Connection.h"
+#include "net/Constants.hpp"
 #include "net/NetUtils.h"
-#include "net/ServerMasterConnection.h"
+#include "net/Address.h"
+#include "net/ServerMasterSocket.h"
+#include "net/ServerSocket.h"
+#include "net/GameEngine.pb.h"
+#include "net/GameEngine.pb.cc"
+
 #include "utils/gun_utils.h"
 #include "physicsengine.h"
 #include "GameEngine.h"
 #include "TestCollectGameState.h"
 
+#include <iostream>
+#include <google/protobuf/io/coded_stream.h>
+#include <google/protobuf/io/zero_copy_stream_impl.h>
+
+using namespace google::protobuf::io;
+
 using namespace std;
-using namespace net;
 
-const int ServerMasterPort = 30000;
-const int ClientPort = 30001;
-const int ProtocolId = 0x99887766;
-const float DeltaTime = 0.25f;
-const float SendRate = 0.25f;
-const float TimeOut = 10.0f;
-
-ServerMasterConnection* serverMasterConnection;
-
-int StartGameMasterServer();
 int PollForOSMessages(bool* quit);
 int GetInputFromClient(bool* quit);
-int GetInputFromOneClient();
+void SendUpdateToClient();
 bool TimeForRendering();
 void UpdateStatistics();
 void FPSControl();
+bool ClientHasAlreadyConnected( net::Address& clientAddress );
+void* SocketHandler( void* );
+google::protobuf::uint32 ReadHeader( char *buf );
+void ReadBody( net::ServerSocket* serverSocket, google::protobuf::uint32 size );
+void ShutdownGameServer();
+
+map<net::Address, net::ServerSocket*> serverConnections;
 
 int main( int argc, char * argv[] )
 {
-	TestCollectGameState* test = new TestCollectGameState();
-	test->PrintGameState();
-	delete test;
+	GOOGLE_PROTOBUF_VERIFY_VERSION;
 
-	GunUtils *guns = new GunUtils("example.xml");
-	guns->print_guns();
-	delete guns;
+	//TestCollectGameState* test = new TestCollectGameState();
+	//test->PrintGameState();
+	//delete test;
+
+	//GunUtils *guns = new GunUtils("example.xml");
+	//guns->print_guns();
+	//delete guns;
 
 //	PhysicsEngine *physics_engine = new PhysicsEngine();
 //	physics_engine->updateWorld();
@@ -55,54 +68,37 @@ int main( int argc, char * argv[] )
 	Uint32 time = SDL_GetTicks();
 	bool needToRedraw = true;
 
-	// Initialize the server master connection
-	Address* serverMasterAddress = new Address(127,0,0,1, ServerMasterPort);
-	serverMasterConnection = new ServerMasterConnection(serverMasterAddress);
-	if ( !serverMasterConnection->Init() )
-	{
-		printf( "could not start connection to server master on port %d\n", serverMasterAddress->GetPort() );
-		return 1;
-	}
+	/////////////////////////////////////////////////////////////////
+	// Setup and listen to server socket
+	/////////////////////////////////////////////////////////////////
+	net::ServerMasterSocket serverMasterSocket;
 
-	//StartGameMasterServer();
-	// Server Game Loop
+	serverMasterSocket.Open( net::MASTER_SOCKET_PORT );
+	/////////////////////////////////////////////////////////////////
+
+	pthread_t thread_id = 0;
+
+ 	// Server Game Loop
 	while(!quit)
 	{
-		/*
-		 * Poll for OS Events/Messages; this is
-		 * the event pump.
-		 */
-		PollForOSMessages(&quit);
+		if( serverMasterSocket.HasData() )
+		{
+			net::Address clientAddress;
+			net::ServerSocket* serverSocket = serverMasterSocket.Accept( clientAddress );
 
-		//int input = GetInputFromClient(&quit);
-		GetInputFromOneClient();
+			if( !ClientHasAlreadyConnected( clientAddress ) )
+			{
+				serverConnections.insert( make_pair( clientAddress, serverSocket ) );
 
-		///////////////////////////////////////////////////////////
-		//Update Game State
-		//gameEngine.UpdateGameState(input);
-		///////////////////////////////////////////////////////////
-
-		/*
-		 * Get information from the game engine to update
-		 * the player score, health, etc. (since typically
-		 * the HUD is not rendered by the game engine, but
-		 * separately).
-		 */
-		//UpdateStatistics();
-
-		FPSControl();
-
-		/*
-		 * Play nice with the OS, and give
-		 * some CPU for another process.
-		 */
-		SDL_Delay(1);
+				printf( "---------------------\nReceived connection from %s\n", clientAddress.ToString().c_str() );
+				pthread_create( &thread_id, 0, &SocketHandler, (void*)serverSocket );
+				pthread_detach(thread_id);
+			}
+		}
 	} // End Server Game Loop
 
-	//delete serverMasterAddress;
-	//delete serverMasterConnection;
-
-	return 0;
+	// Reclaim memory.
+	ShutdownGameServer();
 }
 
 void FPSControl()
@@ -155,28 +151,6 @@ int PollForOSMessages(bool* quit)
 	return 0;
 }
 
-int GetInputFromOneClient()
-{
-	unsigned char packet[] = "server to client: player1 pressed up arrow";
-	GamePacket* gamePacket = new GamePacket(packet, sizeof( packet ));
-	serverMasterConnection->Send( gamePacket );
-	delete gamePacket;
-
-	while ( true )
-	{
-		unsigned char packet[256];
-		GamePacket* gamePacket = serverMasterConnection->Receive();
-		if ( gamePacket == NULL )
-		{
-			break;
-		}
-		printf( "received packet from sclient\n" );
-	}
-
-	serverMasterConnection->Update( DeltaTime );
-	NetUtils::wait( DeltaTime );
-}
-
 /*
  * Check the keyboard/mouse state and identify any user
  * input. Also, if there are players over the network,
@@ -184,75 +158,157 @@ int GetInputFromOneClient()
  */
 int GetInputFromClient(bool* quit)
 {
-	if(!quit)
-	{
-		map<Address*, ServerConnection*>* connections = serverMasterConnection->GetConnections();
+	int input = 0;
 
-		map<Address*, ServerConnection*>::iterator iter;
-
-        for (iter = connections->begin(); iter != connections->end(); iter++) {
-        	Address* address = iter->first;
-        	ServerConnection* serverConnection = iter->second;
-
-        	if ( serverConnection->IsConnected() )
-			{
-        		unsigned char packet[] = "server to client";
-        		serverConnection->Send(new GamePacket(packet, sizeof(packet)));
-			}
-        	if( serverConnection->HasData() )
-        	{
-				while ( true )
-				{
-					GamePacket* gamePacket = serverConnection->Receive();
-					if ( gamePacket == NULL )
-					{
-						break;
-					}
-					printf( "received packet from client\n" );
-				}
-        	}
-
-            serverConnection->Update( DeltaTime );
-     		NetUtils::wait( DeltaTime );
-        }
-	}
-
-	return 0;
+	return input;
 }
 
-int StartGameMasterServer()
+void SendUpdateToClient()
 {
-	Connection connection( ProtocolId, TimeOut );
+}
 
-	if ( !connection.Start( ServerMasterPort ) )
+google::protobuf::uint32 ReadHeader( char *buf )
+{
+  google::protobuf::uint32 size;
+  google::protobuf::io::ArrayInputStream ais( buf,4 );
+  CodedInputStream coded_input( &ais );
+  coded_input.ReadVarint32( &size );//Decode the HDR and get the size
+  printf( "Size of payload is %d\n", size );
+
+  return size;
+}
+
+void ReadBody( net::ServerSocket* serverSocket, google::protobuf::uint32 size )
+{
+  int bytecount;
+  net::GameEngine payload;
+  char buffer [ size + 4 ];//size of the payload and hdr
+  //Read the entire buffer including the hdr
+  bytecount = serverSocket->ReceiveWaitAll( (void *)buffer, 4 + size );
+
+  printf( "Second read byte count is %d\n", bytecount );
+
+  //Assign ArrayInputStream with enough memory
+  google::protobuf::io::ArrayInputStream ais( buffer, size + 4 );
+  CodedInputStream coded_input( &ais );
+  //Read an unsigned integer with Varint encoding, truncating to 32 bits.
+  coded_input.ReadVarint32( &size );
+  //After the message's length is read, PushLimit() is used to prevent the CodedInputStream
+  //from reading beyond that length.Limits are used when parsing length-delimited
+  //embedded messages
+  google::protobuf::io::CodedInputStream::Limit msgLimit = coded_input.PushLimit( size );
+  //De-Serialize
+  payload.ParseFromCodedStream( &coded_input );
+  //Once the embedded message has been parsed, PopLimit() is called to undo the limit
+  coded_input.PopLimit( msgLimit );
+  //Print the message
+  printf( "Message is %s\n", payload.DebugString().c_str() );
+}
+
+
+bool ClientHasAlreadyConnected( net::Address & clientAddress )
+{
+	bool clientHasAlreadyConnected = false;
+
+	map<net::Address, net::ServerSocket*>::iterator itr = serverConnections.find( clientAddress );
+
+	if( itr != serverConnections.end() )
 	{
-		printf( "could not start connection on port %d\n", ServerMasterPort );
-		//Throw exception.
-		return 1;
+		clientHasAlreadyConnected = true;
+		printf( "The client %s has already connected\n", clientAddress.ToString().c_str() );
 	}
 
-	connection.Listen();
+	return clientHasAlreadyConnected;
+}
 
-	while ( true )
+void ShutdownGameServer()
+{
+	for(map<net::Address, net::ServerSocket*>::iterator ii = serverConnections.begin(); ii != serverConnections.end(); ++ii)
 	{
-		if ( connection.IsConnected() )
-		{
-			unsigned char packet[] = "server to client";
-			connection.SendPacket( packet, sizeof( packet ) );
-		}
+		net::ServerSocket * serverSocket = ii->second;
+
+		delete serverSocket;
+	}
+
+	// Delete all global objects allocated by libprotobuf.
+	google::protobuf::ShutdownProtobufLibrary();
+}
+
+void* SocketHandler(void* lp)
+{
+	net::ServerSocket* serverSocket = (net::ServerSocket*) lp;
+
+	char buffer[ 4 ];
+
+	memset(buffer, '\0', 4);
+
+	bool quit = false;
+
+	// Game loop for each client connection.
+	while (!quit)
+	{
+		/*
+		 * Poll for OS Events/Messages; this is
+		 * the event pump.
+		 */
+		PollForOSMessages(&quit);
+
+		// send and receive packets
+
+		///////////////////////////////////////////////////////////
+		// Get data
+		///////////////////////////////////////////////////////////
+		char buffer[ 4 ];
+		int bytecount = 0;
+
+		memset( buffer, '\0', 4 );
 
 		while ( true )
 		{
-			unsigned char packet[256];
-			int bytes_read = connection.ReceivePacket( packet, sizeof(packet) );
-			if ( bytes_read == 0 )
-				break;
-			printf( "received packet from client\n" );
-		}
+			bytecount = serverSocket->Peek( buffer, 4 );
 
-		connection.Update( DeltaTime );
-		NetUtils::wait( DeltaTime );
-	}
+			if( bytecount == 0 )
+			{
+				// Quit reading data from the socket, if there is nothing to read.
+				break;
+			}
+
+			ReadBody( serverSocket, ReadHeader( buffer ) );
+		}
+		///////////////////////////////////////////////////////////
+
+		SendUpdateToClient();
+
+		int input = GetInputFromClient(&quit);
+
+		printf( "Input is %d\n", input );
+
+		///////////////////////////////////////////////////////////
+		// Update Game State
+		//gameEngine.UpdateGameState(input);
+		///////////////////////////////////////////////////////////
+
+		/*
+		 * Get information from the game engine to update
+		 * the player score, health, etc. (since typically
+		 * the HUD is not rendered by the game engine, but
+		 * separately).
+		 */
+		//UpdateStatistics();
+
+		FPSControl();
+
+		/*
+		 * Play nice with the OS, and give
+		 * some CPU for another process.
+		 */
+		//SDL_Delay(1);
+
+		net::NetUtils::wait( net::DELTA_TIME );
+	} // End game loop
+
+	serverSocket->Close();
+	delete serverSocket;
 
 	return 0;
 }
