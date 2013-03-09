@@ -11,9 +11,13 @@
 #include "CSurface.h"
 #include "graphicsinfo.h"
 
-#define SCREENW 640
-#define SCREENL 480
-#define SCREEND 1000
+#define XMAX 1000
+#define XMIN -1000
+#define YMAX 1000
+#define YMIN -1000
+#define ZMAX 1000
+#define ZMIN 1
+
 
 class CApp : public CEvent {
     private:
@@ -23,7 +27,7 @@ class CApp : public CEvent {
  
         SDL_Surface*    Surf_Test;
         int 			LocX, LocY, LocZ;
-        int				pLocX, pLocY, pLocZ;
+        float				pLocX, pLocY, pLocZ;
         int 			latestID;
         std::vector<graphicsInfo> graphicsObjects;
  
@@ -38,7 +42,7 @@ class CApp : public CEvent {
 
 
         void setCamPos(int x, int y,int z);
-        void setPlayerPos(int x, int y,int z);
+        void setPlayerPos(float x, float y,float z);
         bool OnInit();
  
         void OnEvent(SDL_Event* Event);
@@ -50,6 +54,7 @@ class CApp : public CEvent {
         void OnClear();
 
         void OnCleanup();
+        void Fire();
 
 	void OnExit();
 	void OnMouseMove(int mX, int mY, int relX, int relY, bool Left,bool Right,bool Middle);

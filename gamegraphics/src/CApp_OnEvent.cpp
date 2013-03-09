@@ -27,19 +27,19 @@ void CApp::OnLButtonDown(int mX, int mY)
 void CApp::OnKeyDown(SDLKey sym, SDLMod mod, Uint16 unicode) {
 	switch(sym) {
 	        case SDLK_UP: {
-	        	setPos(LocX,--LocY,0);
+	        //	setPos(LocX,--LocY,0);
 	        break;
 	        }
 	        case SDLK_DOWN: {
-	        	setPos(LocX,++LocY,0);
+	        //	setPos(LocX,++LocY,0);
 	        	        break;
 	        }
 	        case SDLK_LEFT: {
-	        	setPos(--LocX,LocY,0);
+	        	//setPos(--LocX,LocY,0);
 	        	        break;
 	        }
 	        case SDLK_RIGHT: {
-	        	setPos(++LocX,LocY,0);
+	        //	setPos(++LocX,LocY,0);
 	        	        break;
 	        }
 	        default: {

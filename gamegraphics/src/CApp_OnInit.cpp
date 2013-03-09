@@ -41,7 +41,7 @@ bool CApp::OnInit() {
     glMatrixMode(GL_MODELVIEW);
 
     glEnable(GL_TEXTURE_2D);
-
+    glDisable(GL_CULL_FACE);
     glLoadIdentity();
  
     return true;

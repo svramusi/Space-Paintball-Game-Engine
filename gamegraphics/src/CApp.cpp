@@ -16,7 +16,7 @@ CApp::CApp() {
     pLocY= 0;
     pLocZ= 0;
 }
-CApp::CApp(int playerX, int playerZ) {
+/*CApp::CApp(int playerX, int playerZ) {
 
     Surf_Test = NULL;
     Surf_Display = NULL;
@@ -29,7 +29,7 @@ CApp::CApp(int playerX, int playerZ) {
     pLocX = playerX;
     pLocY= 0;
     pLocZ= playerZ;
-}
+}*/
 
 void CApp::Fire()
 {
@@ -43,35 +43,34 @@ void CApp::Fire()
 void CApp::setCamPos(int xP, int yP, int yZ) //Cam Position
 {
 	LocX+=  xP;
-	LocX %= 360;
+	//LocX %= 360;
 	LocY +=yP;
-	LocY %= 360;
+	//LocY %= 360;
 	//LocZ +=yZ; //Z is left button
 }
 
-void CApp::setPlayerPos(int xP, int yP, int yZ) //PLayer Position
+void CApp::setPlayerPos(float xP, float yP, float yZ) //PLayer Position
 {
-	int xrange = SCREENW/2;
-	int zrange = SCREEND;
-	pLocX+=  xP;
-	if(pLocX > xrange)
-			pLocX = xrange;
-	if(pLocX < -xrange)
-				pLocX = -xrange;
+
+	pLocX+=  (xP*.02);
+	if(pLocX > XMAX)
+			pLocX = XMAX;
+	if(pLocX < XMIN)
+				pLocX = XMIN;
 
 	/* May be needed y always independant
 
 	LocX+=  xP;
 	LocX %= 360; */
 
-	pLocZ +=yZ; //Z is left button
-	if(pLocZ > zrange){
-				pLocX = zrange;
-				LocX = zrange;  //adjust Z location with player
+	pLocZ +=(yZ *.02); //Z is left button
+	if(pLocZ > ZMAX){
+				pLocZ = ZMAX;
+				LocZ = ZMAX;  //adjust Z location with player
 	}
-		if(LocZ < 1){
-				pLocZ = 1;
-				LocX = 1;
+		if(LocZ < ZMIN){
+				pLocZ = ZMIN;
+				LocZ = ZMIN;
 		}
 
 		//CALL Update player Position
