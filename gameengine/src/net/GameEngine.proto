@@ -18,7 +18,7 @@ message Point {
   	required float z = 3;
 }
 
-message Aaab {
+message Aabb {
 	required Point center = 1;
 	repeated float radii = 2;
 }
@@ -30,7 +30,7 @@ message Sphere {
 
 message PhysicsInfo {
 	required float mass = 1;
-	required Aaab aabbObject = 2;
+	required Aabb aabbObject = 2;
 	required Sphere sphereObject = 3;
 	required Velocity linearVelocity = 4;
 	required Velocity angularVelocity = 5;

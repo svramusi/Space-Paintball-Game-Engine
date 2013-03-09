@@ -42,6 +42,10 @@ int GetUpdateFromServer();
 bool TimeForRendering();
 void UpdateStatistics();
 void FPSControl();
+net::GameEngine* GetGameEnginePayload();
+void SetPhysicsInfo( net::PhysicsInfo* physicsInfo, float value );
+
+net::ClientSocket clientSocket;
 
 int main( int argc, char * argv[] )
 {
@@ -56,26 +60,8 @@ int main( int argc, char * argv[] )
 	bool needToRedraw = true;
 
 	///////////////////////////////////////////////////////////////////
-	// Initialize payload
-	///////////////////////////////////////////////////////////////////
-	net::Point payload;
-	payload.set_x(10.0f);
-	payload.set_y(22.0f);
-	payload.set_z(345.0f);
-
-	printf( "Size after serilizing is %d\n", payload.ByteSize() );
-	int size = payload.ByteSize() + 4;
-	char *packet = new char [size];
-	google::protobuf::io::ArrayOutputStream aos(packet,size);
-	CodedOutputStream *coded_output = new CodedOutputStream(&aos);
-	coded_output->WriteVarint32(payload.ByteSize());
-	payload.SerializeToCodedStream(coded_output);
-	///////////////////////////////////////////////////////////////////
-
-	///////////////////////////////////////////////////////////////////
 	// Initialize socket and connect with server.
 	///////////////////////////////////////////////////////////////////
-	net::ClientSocket clientSocket;
 	clientSocket.Connect( net::HOST_NAME, net::MASTER_SOCKET_PORT );
 	///////////////////////////////////////////////////////////////////
 
@@ -139,12 +125,6 @@ int main( int argc, char * argv[] )
 
 		int input = GetInput(&quit);
 
-		///////////////////////////////////////////////////////////
-		// Client socket work
-		///////////////////////////////////////////////////////////
-
-		clientSocket.Send( (void * ) packet, size );
-
 		// now you can write buf.data() to the socket
 		///////////////////////////////////////////////////////////
 
@@ -184,7 +164,6 @@ int main( int argc, char * argv[] )
 		net::NetUtils::wait( net::DELTA_TIME );
 	} // End Client Game Loop
 
-	delete packet;
 	clientSocket.Close();
 	// Delete all global objects allocated by libprotobuf.
 	google::protobuf::ShutdownProtobufLibrary();
@@ -195,9 +174,143 @@ int GetUpdateFromServer()
 	return 0;
 }
 
-void SendInputToServer(int input)
+void SendInputToServer( int input )
 {
+	///////////////////////////////////////////////////////////////////
+	// Initialize payload
+	///////////////////////////////////////////////////////////////////
+	net::GameEngine* payload = GetGameEnginePayload();
 
+	printf( "Size after serilizing is %d\n", payload->ByteSize() );
+	int size = payload->ByteSize() + 4;
+	char *packet = new char [size];
+	google::protobuf::io::ArrayOutputStream aos(packet,size);
+	CodedOutputStream *coded_output = new CodedOutputStream(&aos);
+	coded_output->WriteVarint32(payload->ByteSize());
+	payload->SerializeToCodedStream(coded_output);
+	///////////////////////////////////////////////////////////////////
+
+	///////////////////////////////////////////////////////////////////
+	// Client socket work - send payload to server
+	///////////////////////////////////////////////////////////////////
+	bool sent = clientSocket.Send( (void *) packet, size );
+
+	//if( sent )
+	//{
+		// Reclaim memory.
+		//delete packet;
+		//delete payload;
+	//}
+	///////////////////////////////////////////////////////////////////
+}
+
+/**
+ * Dummy function to generate fake message object.
+ */
+net::GameEngine* GetGameEnginePayload()
+{
+	net::GameEngine* gameEnginePayload = new net::GameEngine();
+
+	/*
+	 * Add physics object to Game Engine object.
+	 */
+	net::PhysicsInfo* physicsInfo1 = gameEnginePayload->add_physicsinfo();
+	net::PhysicsInfo* physicsInfo2 = gameEnginePayload->add_physicsinfo();
+
+	SetPhysicsInfo( physicsInfo1, 1.0f );
+	SetPhysicsInfo( physicsInfo2, 2.0f );
+
+	return gameEnginePayload;
+}
+
+/*
+ * Dummy function to generate fake PhysicsInfo message.
+ */
+void SetPhysicsInfo( net::PhysicsInfo* physicsInfo, float value )
+{
+	physicsInfo->set_mass( value );
+
+	/*
+	 * Aaab object.
+	 */
+	net::Aabb* aabbObject = new net::Aabb();
+	aabbObject->add_radii( value );
+	aabbObject->add_radii( value );
+	aabbObject->add_radii( value );
+
+	net::Point* center1 = new net::Point();
+	center1->set_x( value );
+	center1->set_y( value );
+	center1->set_z( value );
+
+	aabbObject->set_allocated_center( center1 );
+
+	physicsInfo->set_allocated_aabbobject( aabbObject );
+
+	/*
+	 * Sphere object.
+	 */
+	net::Sphere* sphereObject = new net::Sphere();
+	sphereObject->set_radius( value );
+
+	net::Point* center2 = new net::Point();
+	center2->set_x( value );
+	center2->set_y( value );
+	center2->set_z( value );
+
+	sphereObject->set_allocated_center( center2 );
+
+	physicsInfo->set_allocated_sphereobject( sphereObject );
+
+	/*
+	 * Linear Velocity.
+	 */
+	net::Velocity* linearVelocity = new net::Velocity();
+	linearVelocity->set_x( value );
+	linearVelocity->set_y( value );
+	linearVelocity->set_z( value );
+
+	physicsInfo->set_allocated_linearvelocity( linearVelocity );
+
+	/*
+	 * Angular Velocity.
+	 */
+	net::Velocity* angularVelocity = new net::Velocity();
+	angularVelocity->set_x( value );
+	angularVelocity->set_y( value );
+	angularVelocity->set_z( value );
+
+	physicsInfo->set_allocated_angularvelocity( angularVelocity );
+
+	/*
+	 * Angular Position.
+	 */
+	net::Point* angularPosition = new net::Point();
+	angularPosition->set_x( value );
+	angularPosition->set_y( value );
+	angularPosition->set_z( value );
+
+	physicsInfo->set_allocated_angularposition( angularPosition );
+
+	/*
+	 * Linear Force.
+	 */
+	net::Force* linearForce = new net::Force();
+	linearForce->set_x( value );
+	linearForce->set_y( value );
+	linearForce->set_z( value );
+
+	physicsInfo->set_allocated_linearforce( linearForce );
+
+	/*
+	 * Angular Force.
+	 */
+	net::Force* angularForce = new net::Force();
+	angularForce->set_x( value );
+	angularForce->set_y( value );
+	angularForce->set_z( value );
+
+	physicsInfo->set_allocated_angularforce( angularForce );
 }
 
 void FPSControl()

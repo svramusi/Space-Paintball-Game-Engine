@@ -181,7 +181,7 @@ google::protobuf::uint32 ReadHeader( char *buf )
 void ReadBody( net::ServerSocket* serverSocket, google::protobuf::uint32 size )
 {
   int bytecount;
-  net::Point payload;
+  net::GameEngine payload;
   char buffer [ size + 4 ];//size of the payload and hdr
   //Read the entire buffer including the hdr
   bytecount = serverSocket->ReceiveWaitAll( (void *)buffer, 4 + size );

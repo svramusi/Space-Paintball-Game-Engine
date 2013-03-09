@@ -36,7 +36,7 @@ void protobuf_ShutdownFile_GameEngine_2eproto();
 class Velocity;
 class Force;
 class Point;
-class Aaab;
+class Aabb;
 class Sphere;
 class PhysicsInfo;
 class GameEngine;
@@ -349,14 +349,14 @@ class Point : public ::google::protobuf::Message {
 };
 // -------------------------------------------------------------------
 
-class Aaab : public ::google::protobuf::Message {
+class Aabb : public ::google::protobuf::Message {
  public:
-  Aaab();
-  virtual ~Aaab();
+  Aabb();
+  virtual ~Aabb();
 
-  Aaab(const Aaab& from);
+  Aabb(const Aabb& from);
 
-  inline Aaab& operator=(const Aaab& from) {
+  inline Aabb& operator=(const Aabb& from) {
     CopyFrom(from);
     return *this;
   }
@@ -370,17 +370,17 @@ class Aaab : public ::google::protobuf::Message {
   }
 
   static const ::google::protobuf::Descriptor* descriptor();
-  static const Aaab& default_instance();
+  static const Aabb& default_instance();
 
-  void Swap(Aaab* other);
+  void Swap(Aabb* other);
 
   // implements Message ----------------------------------------------
 
-  Aaab* New() const;
+  Aabb* New() const;
   void CopyFrom(const ::google::protobuf::Message& from);
   void MergeFrom(const ::google::protobuf::Message& from);
-  void CopyFrom(const Aaab& from);
-  void MergeFrom(const Aaab& from);
+  void CopyFrom(const Aabb& from);
+  void MergeFrom(const Aabb& from);
   void Clear();
   bool IsInitialized() const;
 
@@ -424,7 +424,7 @@ class Aaab : public ::google::protobuf::Message {
   inline ::google::protobuf::RepeatedField< float >*
       mutable_radii();
 
-  // @@protoc_insertion_point(class_scope:net.Aaab)
+  // @@protoc_insertion_point(class_scope:net.Aabb)
  private:
   inline void set_has_center();
   inline void clear_has_center();
@@ -442,7 +442,7 @@ class Aaab : public ::google::protobuf::Message {
   friend void protobuf_ShutdownFile_GameEngine_2eproto();
 
   void InitAsDefaultInstance();
-  static Aaab* default_instance_;
+  static Aabb* default_instance_;
 };
 // -------------------------------------------------------------------
 
@@ -601,14 +601,14 @@ class PhysicsInfo : public ::google::protobuf::Message {
   inline float mass() const;
   inline void set_mass(float value);
 
-  // required .net.Aaab aabbObject = 2;
+  // required .net.Aabb aabbObject = 2;
   inline bool has_aabbobject() const;
   inline void clear_aabbobject();
   static const int kAabbObjectFieldNumber = 2;
-  inline const ::net::Aaab& aabbobject() const;
-  inline ::net::Aaab* mutable_aabbobject();
-  inline ::net::Aaab* release_aabbobject();
-  inline void set_allocated_aabbobject(::net::Aaab* aabbobject);
+  inline const ::net::Aabb& aabbobject() const;
+  inline ::net::Aabb* mutable_aabbobject();
+  inline ::net::Aabb* release_aabbobject();
+  inline void set_allocated_aabbobject(::net::Aabb* aabbobject);
 
   // required .net.Sphere sphereObject = 3;
   inline bool has_sphereobject() const;
@@ -685,7 +685,7 @@ class PhysicsInfo : public ::google::protobuf::Message {
 
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
 
-  ::net::Aaab* aabbobject_;
+  ::net::Aabb* aabbobject_;
   ::net::Sphere* sphereobject_;
   ::net::Velocity* linearvelocity_;
   ::net::Velocity* angularvelocity_;
@@ -1004,37 +1004,37 @@ inline void Point::set_z(float value) {
 
 // -------------------------------------------------------------------
 
-// Aaab
+// Aabb
 
 // required .net.Point center = 1;
-inline bool Aaab::has_center() const {
+inline bool Aabb::has_center() const {
   return (_has_bits_[0] & 0x00000001u) != 0;
 }
-inline void Aaab::set_has_center() {
+inline void Aabb::set_has_center() {
   _has_bits_[0] |= 0x00000001u;
 }
-inline void Aaab::clear_has_center() {
+inline void Aabb::clear_has_center() {
   _has_bits_[0] &= ~0x00000001u;
 }
-inline void Aaab::clear_center() {
+inline void Aabb::clear_center() {
   if (center_ != NULL) center_->::net::Point::Clear();
   clear_has_center();
 }
-inline const ::net::Point& Aaab::center() const {
+inline const ::net::Point& Aabb::center() const {
   return center_ != NULL ? *center_ : *default_instance_->center_;
 }
-inline ::net::Point* Aaab::mutable_center() {
+inline ::net::Point* Aabb::mutable_center() {
   set_has_center();
   if (center_ == NULL) center_ = new ::net::Point;
   return center_;
 }
-inline ::net::Point* Aaab::release_center() {
+inline ::net::Point* Aabb::release_center() {
   clear_has_center();
   ::net::Point* temp = center_;
   center_ = NULL;
   return temp;
 }
-inline void Aaab::set_allocated_center(::net::Point* center) {
+inline void Aabb::set_allocated_center(::net::Point* center) {
   delete center_;
   center_ = center;
   if (center) {
@@ -1045,27 +1045,27 @@ inline void Aaab::set_allocated_center(::net::Point* center) {
 }
 
 // repeated float radii = 2;
-inline int Aaab::radii_size() const {
+inline int Aabb::radii_size() const {
   return radii_.size();
 }
-inline void Aaab::clear_radii() {
+inline void Aabb::clear_radii() {
   radii_.Clear();
 }
-inline float Aaab::radii(int index) const {
+inline float Aabb::radii(int index) const {
   return radii_.Get(index);
 }
-inline void Aaab::set_radii(int index, float value) {
+inline void Aabb::set_radii(int index, float value) {
   radii_.Set(index, value);
 }
-inline void Aaab::add_radii(float value) {
+inline void Aabb::add_radii(float value) {
   radii_.Add(value);
 }
 inline const ::google::protobuf::RepeatedField< float >&
-Aaab::radii() const {
+Aabb::radii() const {
   return radii_;
 }
 inline ::google::protobuf::RepeatedField< float >*
-Aaab::mutable_radii() {
+Aabb::mutable_radii() {
   return &radii_;
 }
 
@@ -1159,7 +1159,7 @@ inline void PhysicsInfo::set_mass(float value) {
   mass_ = value;
 }
 
-// required .net.Aaab aabbObject = 2;
+// required .net.Aabb aabbObject = 2;
 inline bool PhysicsInfo::has_aabbobject() const {
   return (_has_bits_[0] & 0x00000002u) != 0;
 }
@@ -1170,24 +1170,24 @@ inline void PhysicsInfo::clear_has_aabbobject() {
   _has_bits_[0] &= ~0x00000002u;
 }
 inline void PhysicsInfo::clear_aabbobject() {
-  if (aabbobject_ != NULL) aabbobject_->::net::Aaab::Clear();
+  if (aabbobject_ != NULL) aabbobject_->::net::Aabb::Clear();
   clear_has_aabbobject();
 }
-inline const ::net::Aaab& PhysicsInfo::aabbobject() const {
+inline const ::net::Aabb& PhysicsInfo::aabbobject() const {
   return aabbobject_ != NULL ? *aabbobject_ : *default_instance_->aabbobject_;
 }
-inline ::net::Aaab* PhysicsInfo::mutable_aabbobject() {
+inline ::net::Aabb* PhysicsInfo::mutable_aabbobject() {
   set_has_aabbobject();
-  if (aabbobject_ == NULL) aabbobject_ = new ::net::Aaab;
+  if (aabbobject_ == NULL) aabbobject_ = new ::net::Aabb;
   return aabbobject_;
 }
-inline ::net::Aaab* PhysicsInfo::release_aabbobject() {
+inline ::net::Aabb* PhysicsInfo::release_aabbobject() {
   clear_has_aabbobject();
-  ::net::Aaab* temp = aabbobject_;
+  ::net::Aabb* temp = aabbobject_;
   aabbobject_ = NULL;
   return temp;
 }
-inline void PhysicsInfo::set_allocated_aabbobject(::net::Aaab* aabbobject) {
+inline void PhysicsInfo::set_allocated_aabbobject(::net::Aabb* aabbobject) {
   delete aabbobject_;
   aabbobject_ = aabbobject;
   if (aabbobject) {
