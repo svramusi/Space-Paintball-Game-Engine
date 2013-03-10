@@ -170,7 +170,6 @@ net::GameEngine* GetInputFromClient( bool* quit, net::ServerSocket* serverSocket
 			break;
 		}
 
-		//net::NetUtils netUtils;
 		input = net::NetUtils::ReadBody( serverSocket, net::NetUtils::ReadHeader( buffer ) );
 	}
 	///////////////////////////////////////////////////////////

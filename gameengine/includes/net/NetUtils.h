@@ -32,7 +32,7 @@ namespace net
 		NetUtils();
 		virtual ~NetUtils();
 		static void Wait( float seconds );
-		void Send( net::GameEngine& input, net::Socket& socket );
+		static void Send( net::GameEngine* input, net::Socket* socket );
 		static google::protobuf::uint32 ReadHeader( char *buf );
 		static net::GameEngine* ReadBody( net::Socket* serverSocket, google::protobuf::uint32 size );
 		static net::GameEngine* GetGameEnginePayload();

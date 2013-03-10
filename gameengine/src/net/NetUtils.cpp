@@ -22,25 +22,25 @@ namespace net
 		usleep( (int) ( seconds * 1000000.0f ) );
 	}
 
-	void NetUtils::Send( net::GameEngine& input, net::Socket& socket )
+	void NetUtils::Send( net::GameEngine* input, net::Socket* socket )
 	{
 		///////////////////////////////////////////////////////////////////
 		// Initialize payload
 		///////////////////////////////////////////////////////////////////
 
-		printf( "Size after serilizing is %d\n", input.ByteSize() );
-		int size = input.ByteSize() + 4;
+		printf( "Size after serilizing is %d\n", input->ByteSize() );
+		int size = input->ByteSize() + 4;
 		char *packet = new char [size];
 		google::protobuf::io::ArrayOutputStream aos(packet,size);
 		CodedOutputStream *coded_output = new CodedOutputStream(&aos);
-		coded_output->WriteVarint32(input.ByteSize());
-		input.SerializeToCodedStream(coded_output);
+		coded_output->WriteVarint32(input->ByteSize());
+		input->SerializeToCodedStream(coded_output);
 		///////////////////////////////////////////////////////////////////
 
 		///////////////////////////////////////////////////////////////////
 		// Client socket work - send payload to server
 		///////////////////////////////////////////////////////////////////
-		bool sent = socket.Send( (void *) packet, size );
+		bool sent = socket->Send( (void *) packet, size );
 
 		if( sent )
 		{
