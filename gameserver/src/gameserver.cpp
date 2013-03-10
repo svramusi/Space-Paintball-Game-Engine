@@ -31,16 +31,16 @@ using namespace google::protobuf::io;
 
 using namespace std;
 
-int PollForOSMessages(bool* quit);
-int GetInputFromClient(bool* quit);
-void SendUpdateToClient();
+int PollForOSMessages( bool* quit );
+net::GameEngine& GetInputFromClient( bool* quit, net::ServerSocket* serverSocket );
+void SendUpdateToClients( net::GameEngine& input );
 bool TimeForRendering();
 void UpdateStatistics();
 void FPSControl();
 bool ClientHasAlreadyConnected( net::Address& clientAddress );
 void* SocketHandler( void* );
 google::protobuf::uint32 ReadHeader( char *buf );
-void ReadBody( net::ServerSocket* serverSocket, google::protobuf::uint32 size );
+net::GameEngine& ReadBody( net::ServerSocket* serverSocket, google::protobuf::uint32 size );
 void ShutdownGameServer();
 
 map<net::Address, net::ServerSocket*> serverConnections;
@@ -108,7 +108,6 @@ void FPSControl()
 
 void UpdateStatistics()
 {
-
 }
 
 /*
@@ -156,15 +155,38 @@ int PollForOSMessages(bool* quit)
  * input. Also, if there are players over the network,
  * get their inputs.
  */
-int GetInputFromClient(bool* quit)
+net::GameEngine& GetInputFromClient( bool* quit, net::ServerSocket* serverSocket )
 {
-	int input = 0;
+	net::GameEngine input;
+
+	///////////////////////////////////////////////////////////
+	// Get data
+	///////////////////////////////////////////////////////////
+	char buffer[ 4 ];
+	int bytecount = 0;
+
+	memset( buffer, '\0', 4 );
+
+	while ( true )
+	{
+		bytecount = serverSocket->Peek( buffer, 4 );
+
+		if( bytecount == 0 )
+		{
+			// Quit reading data from the socket, if there is nothing to read.
+			break;
+		}
+
+		input = ReadBody( serverSocket, ReadHeader( buffer ) );
+	}
+	///////////////////////////////////////////////////////////
 
 	return input;
 }
 
-void SendUpdateToClient()
+void SendUpdateToClients( net::GameEngine& input )
 {
+
 }
 
 google::protobuf::uint32 ReadHeader( char *buf )
@@ -178,7 +200,7 @@ google::protobuf::uint32 ReadHeader( char *buf )
   return size;
 }
 
-void ReadBody( net::ServerSocket* serverSocket, google::protobuf::uint32 size )
+net::GameEngine& ReadBody( net::ServerSocket* serverSocket, google::protobuf::uint32 size )
 {
   int bytecount;
   net::GameEngine payload;
@@ -194,7 +216,7 @@ void ReadBody( net::ServerSocket* serverSocket, google::protobuf::uint32 size )
   //Read an unsigned integer with Varint encoding, truncating to 32 bits.
   coded_input.ReadVarint32( &size );
   //After the message's length is read, PushLimit() is used to prevent the CodedInputStream
-  //from reading beyond that length.Limits are used when parsing length-delimited
+  //from reading beyond that length. Limits are used when parsing length-delimited
   //embedded messages
   google::protobuf::io::CodedInputStream::Limit msgLimit = coded_input.PushLimit( size );
   //De-Serialize
@@ -206,6 +228,8 @@ void ReadBody( net::ServerSocket* serverSocket, google::protobuf::uint32 size )
   printf( "Message from %s\n", senderAddress.ToString().c_str() );
   //Print the message
   printf( "Message is %s\n", payload.DebugString().c_str() );
+
+  return payload;
 }
 
 
@@ -258,33 +282,11 @@ void* SocketHandler(void* lp)
 
 		// send and receive packets
 
-		///////////////////////////////////////////////////////////
-		// Get data
-		///////////////////////////////////////////////////////////
-		char buffer[ 4 ];
-		int bytecount = 0;
+		net::GameEngine input = GetInputFromClient( &quit, serverSocket );
 
-		memset( buffer, '\0', 4 );
+		//printf( "Input is %d\n", input );
 
-		while ( true )
-		{
-			bytecount = serverSocket->Peek( buffer, 4 );
-
-			if( bytecount == 0 )
-			{
-				// Quit reading data from the socket, if there is nothing to read.
-				break;
-			}
-
-			ReadBody( serverSocket, ReadHeader( buffer ) );
-		}
-		///////////////////////////////////////////////////////////
-
-		SendUpdateToClient();
-
-		int input = GetInputFromClient(&quit);
-
-		printf( "Input is %d\n", input );
+		SendUpdateToClients( input );
 
 		///////////////////////////////////////////////////////////
 		// Update Game State
