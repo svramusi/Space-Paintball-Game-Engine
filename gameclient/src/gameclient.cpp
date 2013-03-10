@@ -29,7 +29,7 @@ const int MaxFrameSkip = 10;
 int PollForOSMessages(bool* quit);
 int GetInput(bool* quit);
 void SendInputToServer(int input);
-int GetUpdateFromServer();
+net::GameEngine* GetUpdateFromServer();
 bool TimeForRendering();
 void UpdateStatistics();
 void FPSControl();
@@ -126,7 +126,7 @@ int main( int argc, char * argv[] )
 
 		///////////////////////////////////////////////////////////
 		//Update Game State Copy
-		int inputFromServer = GetUpdateFromServer();
+		net::GameEngine* gameEngineState = GetUpdateFromServer();
 		// Update local game state (or game state copy).
 		//gameEngine.UpdateGameState(inputFromServer);
 		///////////////////////////////////////////////////////////
@@ -163,9 +163,33 @@ int main( int argc, char * argv[] )
 	google::protobuf::ShutdownProtobufLibrary();
 }
 
-int GetUpdateFromServer()
+net::GameEngine* GetUpdateFromServer()
 {
-	return 0;
+	net::GameEngine* input;
+
+	///////////////////////////////////////////////////////////
+	// Get data
+	///////////////////////////////////////////////////////////
+	char buffer[ 4 ];
+	int bytecount = 0;
+
+	memset( buffer, '\0', 4 );
+
+	while ( clientSocket.HasData() )
+	{
+		bytecount = clientSocket.Peek( buffer, 4 );
+
+		if( bytecount == 0 )
+		{
+			// Quit reading data from the socket, if there is nothing to read.
+			break;
+		}
+
+		input = net::NetUtils::ReadBody( &clientSocket, net::NetUtils::ReadHeader( buffer ) );
+	}
+	///////////////////////////////////////////////////////////
+
+	return input;
 }
 
 void SendInputToServer( int input )

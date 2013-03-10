@@ -43,6 +43,17 @@ namespace net
 			socket = 0;
 		}
 
+
+		// set non-blocking io
+
+//		int nonBlocking = 1;
+//		if ( fcntl( socket, F_SETFL, O_NONBLOCK, nonBlocking ) == -1 )
+//		{
+//			printf( "failed to set non-blocking socket\n" );
+//			Close();
+//			return false;
+//		}
+
 		return true;
 	}
 
@@ -127,22 +138,26 @@ namespace net
 	{
 		int timeOut = 100; //ms
 		fd_set socketReadSet;
-		FD_ZERO(&socketReadSet);
-		FD_SET(socket,&socketReadSet);
+		FD_ZERO( &socketReadSet );
+		FD_SET( socket, &socketReadSet );
 		struct timeval tv;
-		if (timeOut) {
+		if ( timeOut )
+		{
 			tv.tv_sec  = timeOut / 1000;
-			tv.tv_usec = (timeOut % 1000) * 1000;
-		} else {
+			tv.tv_usec = ( timeOut % 1000 ) * 1000;
+		} else
+		{
 			tv.tv_sec  = 0;
 			tv.tv_usec = 0;
 		} // if
 
-		if (select(socket+1,&socketReadSet,0,0,&tv) == -1) {
-			perror("select()\n");
+		if( select( socket + 1, &socketReadSet, 0, 0, &tv ) == -1 )
+		{
+			perror( "select()\n" );
 			return false;
 		} // if
-		int res = FD_ISSET(socket,&socketReadSet);
+
+		int res = FD_ISSET( socket, &socketReadSet );
 
 		return res != 0;
 	}

@@ -160,7 +160,7 @@ net::GameEngine* GetInputFromClient( bool* quit, net::ServerSocket* serverSocket
 
 	memset( buffer, '\0', 4 );
 
-	while ( true )
+	while ( serverSocket->HasData() )
 	{
 		bytecount = serverSocket->Peek( buffer, 4 );
 
@@ -183,7 +183,7 @@ void SendUpdateToClients( net::GameEngine* input )
 	{
 		net::ServerSocket* serverSocket = ii->second;
 
-
+		net::NetUtils::Send( input, serverSocket );
 	}
 }
 
@@ -236,11 +236,14 @@ void* SocketHandler(void* lp)
 
 		// send and receive packets
 
-		net::GameEngine* input = GetInputFromClient( &quit, serverSocket );
+		if( serverSocket->HasData() )
+		{
+			net::GameEngine* input = GetInputFromClient( &quit, serverSocket );
 
-		//printf( "Input is %d\n", input );
+			//printf( "Input is %d\n", input );
 
-		SendUpdateToClients( input );
+			SendUpdateToClients( input );
+		}
 
 		///////////////////////////////////////////////////////////
 		// Update Game State
