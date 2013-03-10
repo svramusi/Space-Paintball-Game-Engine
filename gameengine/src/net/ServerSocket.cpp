@@ -22,4 +22,14 @@ namespace net
 	{
 		Close();
 	}
+
+	Address& ServerSocket::GetClientAddress()
+	{
+		return clientAddress;
+	}
+
+	void ServerSocket::SetClientAddress( Address& theClientAddress )
+	{
+		clientAddress = theClientAddress;
+	}
 }

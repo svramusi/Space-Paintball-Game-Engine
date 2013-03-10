@@ -201,6 +201,9 @@ void ReadBody( net::ServerSocket* serverSocket, google::protobuf::uint32 size )
   payload.ParseFromCodedStream( &coded_input );
   //Once the embedded message has been parsed, PopLimit() is called to undo the limit
   coded_input.PopLimit( msgLimit );
+  //Print sender of message
+  net::Address senderAddress = serverSocket->GetClientAddress();
+  printf( "Message from %s\n", senderAddress.ToString().c_str() );
   //Print the message
   printf( "Message is %s\n", payload.DebugString().c_str() );
 }

@@ -9,6 +9,7 @@
 #define SERVERSOCKET_H_
 
 #include "net/Socket.h"
+#include "net/Address.h"
 
 namespace net
 {
@@ -17,6 +18,12 @@ namespace net
 		ServerSocket();
 		ServerSocket( int theSocket );
 		virtual ~ServerSocket();
+
+		Address& GetClientAddress();
+		void SetClientAddress( Address& theClientAddress );
+
+	private:
+		Address clientAddress;
 	};
 }
 #endif /* SERVERSOCKET_H_ */

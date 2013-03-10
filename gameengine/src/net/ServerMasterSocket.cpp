@@ -59,6 +59,7 @@ namespace net
 
 			sender = Address( address, port );
 			serverSocket = new ServerSocket( sock );
+			serverSocket->SetClientAddress( sender );
 		}
 		else
 		{
@@ -68,30 +69,4 @@ namespace net
 		printf( "New server socket: %s\n", sender.ToString().c_str() );
 		return serverSocket;
 	}
-
-	/*
-	void* ServerMasterSocket::SocketHandler( void* lp )
-	{
-	    int *csock = (int*)lp;
-
-		char buffer[ 4 ];
-		int bytecount = 0;
-		string output, pl;
-
-		memset( buffer, '\0', 4 );
-
-		while ( 1 ) {
-			if( HasData() )
-			{
-				Read();
-			}
-
-			usleep(1);
-		}
-
-		FINISH:
-	        free(csock);
-	    return 0;
-	}
-	*/
 }
