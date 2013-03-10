@@ -2,7 +2,7 @@
 // source: GameEngine.proto
 
 #define INTERNAL_SUPPRESS_PROTOBUF_FIELD_DEPRECATION
-#include "GameEngine.pb.h"
+#include "net/GameEngine.pb.h"
 
 #include <algorithm>
 

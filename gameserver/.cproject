@@ -56,6 +56,7 @@
 								</option>
 								<option id="gnu.cpp.link.option.libs.1480884417" name="Libraries (-l)" superClass="gnu.cpp.link.option.libs" valueType="libs">
 									<listOptionValue builtIn="false" value="SDL"/>
+									<listOptionValue builtIn="false" srcPrefixMapping="" srcRootPath="" value="pthread"/>
 									<listOptionValue builtIn="false" value="protobuf"/>
 									<listOptionValue builtIn="false" value="gameengine"/>
 									<listOptionValue builtIn="false" value="gameassets"/>
@@ -137,6 +138,7 @@
 									<listOptionValue builtIn="false" srcPrefixMapping="" srcRootPath="" value="armadillo"/>
 									<listOptionValue builtIn="false" srcPrefixMapping="" srcRootPath="" value="&quot;${workspace_loc:/thirdparty/armadillo-3.6.2/libarmadillo.so.3}&quot;"/>
 									<listOptionValue builtIn="false" srcPrefixMapping="" srcRootPath="" value="&quot;${workspace_loc:/thirdparty/armadillo-3.6.2/libarmadillo.so.3.6.2}&quot;"/>
+									<listOptionValue builtIn="false" srcPrefixMapping="" srcRootPath="" value="pthread"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.linker.input.43336924" superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>

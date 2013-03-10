@@ -16,31 +16,22 @@
 #include "net/ServerMasterSocket.h"
 #include "net/ServerSocket.h"
 #include "net/GameEngine.pb.h"
-#include "net/GameEngine.pb.cc"
 
 #include "utils/gun_utils.h"
 #include "physicsengine.h"
 #include "GameEngine.h"
 #include "TestCollectGameState.h"
 
-#include <iostream>
-#include <google/protobuf/io/coded_stream.h>
-#include <google/protobuf/io/zero_copy_stream_impl.h>
-
-using namespace google::protobuf::io;
-
 using namespace std;
 
 int PollForOSMessages( bool* quit );
-net::GameEngine& GetInputFromClient( bool* quit, net::ServerSocket* serverSocket );
-void SendUpdateToClients( net::GameEngine& input );
+net::GameEngine* GetInputFromClient( bool* quit, net::ServerSocket* serverSocket );
+void SendUpdateToClients( net::GameEngine* input );
 bool TimeForRendering();
 void UpdateStatistics();
 void FPSControl();
 bool ClientHasAlreadyConnected( net::Address& clientAddress );
 void* SocketHandler( void* );
-google::protobuf::uint32 ReadHeader( char *buf );
-net::GameEngine& ReadBody( net::ServerSocket* serverSocket, google::protobuf::uint32 size );
 void ShutdownGameServer();
 
 map<net::Address, net::ServerSocket*> serverConnections;
@@ -155,9 +146,9 @@ int PollForOSMessages(bool* quit)
  * input. Also, if there are players over the network,
  * get their inputs.
  */
-net::GameEngine& GetInputFromClient( bool* quit, net::ServerSocket* serverSocket )
+net::GameEngine* GetInputFromClient( bool* quit, net::ServerSocket* serverSocket )
 {
-	net::GameEngine input;
+	net::GameEngine* input;
 
 	///////////////////////////////////////////////////////////
 	// Get data
@@ -177,61 +168,23 @@ net::GameEngine& GetInputFromClient( bool* quit, net::ServerSocket* serverSocket
 			break;
 		}
 
-		input = ReadBody( serverSocket, ReadHeader( buffer ) );
+		net::NetUtils netUtils;
+		input = netUtils.ReadBody( serverSocket, netUtils.ReadHeader( buffer ) );
 	}
 	///////////////////////////////////////////////////////////
 
 	return input;
 }
 
-void SendUpdateToClients( net::GameEngine& input )
+void SendUpdateToClients( net::GameEngine* input )
 {
+	for(map<net::Address, net::ServerSocket*>::iterator ii = serverConnections.begin(); ii != serverConnections.end(); ++ii)
+	{
+		net::ServerSocket* serverSocket = ii->second;
 
+
+	}
 }
-
-google::protobuf::uint32 ReadHeader( char *buf )
-{
-  google::protobuf::uint32 size;
-  google::protobuf::io::ArrayInputStream ais( buf,4 );
-  CodedInputStream coded_input( &ais );
-  coded_input.ReadVarint32( &size );//Decode the HDR and get the size
-  printf( "Size of payload is %d\n", size );
-
-  return size;
-}
-
-net::GameEngine& ReadBody( net::ServerSocket* serverSocket, google::protobuf::uint32 size )
-{
-  int bytecount;
-  net::GameEngine payload;
-  char buffer [ size + 4 ];//size of the payload and hdr
-  //Read the entire buffer including the hdr
-  bytecount = serverSocket->ReceiveWaitAll( (void *)buffer, 4 + size );
-
-  printf( "Second read byte count is %d\n", bytecount );
-
-  //Assign ArrayInputStream with enough memory
-  google::protobuf::io::ArrayInputStream ais( buffer, size + 4 );
-  CodedInputStream coded_input( &ais );
-  //Read an unsigned integer with Varint encoding, truncating to 32 bits.
-  coded_input.ReadVarint32( &size );
-  //After the message's length is read, PushLimit() is used to prevent the CodedInputStream
-  //from reading beyond that length. Limits are used when parsing length-delimited
-  //embedded messages
-  google::protobuf::io::CodedInputStream::Limit msgLimit = coded_input.PushLimit( size );
-  //De-Serialize
-  payload.ParseFromCodedStream( &coded_input );
-  //Once the embedded message has been parsed, PopLimit() is called to undo the limit
-  coded_input.PopLimit( msgLimit );
-  //Print sender of message
-  net::Address senderAddress = serverSocket->GetClientAddress();
-  printf( "Message from %s\n", senderAddress.ToString().c_str() );
-  //Print the message
-  printf( "Message is %s\n", payload.DebugString().c_str() );
-
-  return payload;
-}
-
 
 bool ClientHasAlreadyConnected( net::Address & clientAddress )
 {
@@ -282,7 +235,7 @@ void* SocketHandler(void* lp)
 
 		// send and receive packets
 
-		net::GameEngine input = GetInputFromClient( &quit, serverSocket );
+		net::GameEngine* input = GetInputFromClient( &quit, serverSocket );
 
 		//printf( "Input is %d\n", input );
 
@@ -309,7 +262,7 @@ void* SocketHandler(void* lp)
 		 */
 		//SDL_Delay(1);
 
-		net::NetUtils::wait( net::DELTA_TIME );
+		net::NetUtils::Wait( net::DELTA_TIME );
 	} // End game loop
 
 	serverSocket->Close();
