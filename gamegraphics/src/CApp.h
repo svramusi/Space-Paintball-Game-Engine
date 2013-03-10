@@ -10,7 +10,9 @@
 #include "CEvent.h"
 #include "CSurface.h"
 #include "graphicsinfo.h"
-#include ""
+#include "CollidableObject.h"
+#include "AABBClass.h"
+#include "SphereClass.h"
 
 #define XMAX 1000
 #define XMIN -1000
@@ -44,7 +46,7 @@ class CApp : public CEvent {
         CApp();
  
         int OnExecute();
-        void UpdateGraphicsObject(int id, int x, int y, int z);
+        void UpdateGraphicsObject(int id, Point newCenter;);
         void InsertGraphicsObject(int x, int y, int z, char* file);
         graphicsInfo* getObject(int ID);
 
@@ -58,7 +60,9 @@ class CApp : public CEvent {
         void OnEvent(SDL_Event* Event);
  
         void OnLoop();
- 
+        void RenderIt(CollidableObject *obj);
+        void UpdateWall(int l, int w, int wx,int wy, int wz);
+        void UpdatePlayer();
         void OnRender();
         void OnRender(int x, int y);
         void OnClear();

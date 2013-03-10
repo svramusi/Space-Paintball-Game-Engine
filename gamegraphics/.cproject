@@ -31,6 +31,7 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/thirdparty}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/thirdparty/SDL-1.2.15/include}&quot;"/>
 									<listOptionValue builtIn="false" value="/usr/include/GL"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/gameengine/includes}&quot;"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.1294462087" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 							</tool>

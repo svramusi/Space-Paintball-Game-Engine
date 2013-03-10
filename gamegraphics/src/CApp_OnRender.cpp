@@ -30,6 +30,35 @@ void CApp::drawCircle(float radius, int x, int y, int z)
 	glEnd();
 	glFlush();
 }
+void CApp::RenderIt(CollidableObject *obj)
+{
+	 int cx = obj->center->x;
+	 int cy = obj->center->y;
+	 int cz = obj->center->z;
+	if(typeid(AABB) == typeid(obj))
+	    {
+	        AABB *tempAABB = dynamic_cast<AABB*>(obj);
+	         int xr= tempAABB->getXRadius()/2;
+	         int yr = tempAABB->getYRadius()/2;
+
+	         glBegin(GL_QUADS);        // Draw The Cube Using quads
+	         	 //may need to figure colore dif for walls /player
+	         	     glColor3f(1.0f,0.0f,0.0f);    // Color Red
+	         	     	      glVertex3f( cx+xr, cy+yr, cz);    // Top Right Of The Quad (Front)
+	         	     	      glVertex3f(cx-xr, cy+yr, cz);    // Top Left Of The Quad (Front)
+	         	     	      glVertex3f(cx-xr,cy-yr, cz);    // Bottom Left Of The Quad (Front)
+	         	     	      glVertex3f(cx+xr,cy-yr,cz);    // Bottom Right Of The Quad (Front)
+
+	         	      glEnd();
+	    }
+	    else if(typeid(Sphere) == typeid(collidableObject))
+	    {
+	        Sphere *sphere = dynamic_cast<Sphere*>(collidableObject);
+	        float radius = sphere->getRadius();
+	        drawCircle(radius,cx,cy,cz);
+	    }
+
+}
 
 void CApp::OnRender() {
 

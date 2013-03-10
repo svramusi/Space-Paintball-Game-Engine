@@ -31,13 +31,53 @@ CApp::CApp() {
     pLocZ= playerZ;
 }*/
 
+
+//THIS MAY NEED WORK
+int CApp::CalcVel(int dir, float force)
+{
+	return 0l
+
+
+}
+
+void CApp:AddWalls()
+{
+	srand(time(0));
+	int xl = rand()%(XMAX-XMIN)+XMIN;
+	int yl = rand()%(YMAX-YMIN)+YMIN;
+	int zl = rand()%(ZMAX-ZMIN)+ZMIN;
+	for(int x= 0; x <10; x++)
+	{
+
+		UpdateWall(rand() % 10,rand() % 10,xl,yl,zl);
+	}
+
+}
+
 void CApp::Fire()
 {
+	//100 m/s
+	//.5 g
 	//Need a call in client
 	/*position = px,y,z
 	vector = cx,y,z
 	rest filled in on client*/
+	//Radius, Position X,Y,Z, Angle X,Y,Z, mass, movable , no angular velocity
 
+	//Client.addObject(5,pLocX, pLocY, pLocZ, 0, 100,0,.5, true,0,0,0);
+
+}
+
+void CApp::UpdateWall(int l, int w, int wx,int wy, int wz)
+{//assume 70 kg person
+	//height,width Position X,Y,Z, Angle X,Y,Z, mass, movable , no angular velocity
+	//Client.addObject(l,w,wy, wy, wz, 0, 0,0,70, false,0,0,0);
+}
+
+void CApp::UpdatePlayer()
+{//assume 70 kg person
+	//height,width Position X,Y,Z, Angle X,Y,Z, mass, movable , no angular velocity
+//	Client.addObject(200,100,pLocX, pLocY, pLocZ, 0, 0,0,70, false,0,0,0);
 }
 
 void CApp::setCamPos(int xP, int yP, int yZ) //Cam Position
@@ -53,6 +93,7 @@ void CApp::setCamPos(int xP, int yP, int yZ) //Cam Position
 			LocY -= 360.0;
 	//LocZ +=yZ; //Z is left button
 }
+
 
 void CApp::setPlayerPos(float xP, float yP, float yZ) //PLayer Position
 {
@@ -78,7 +119,7 @@ void CApp::setPlayerPos(float xP, float yP, float yZ) //PLayer Position
 				LocZ = ZMIN;
 		}
 
-		//CALL Update player Position
+	UpdatePlayer();
 }
 
 int CApp::OnExecute() {
@@ -119,33 +160,32 @@ graphicsInfo* CApp::getObject(int ID)
 	return NULL;
 }
 
-void CApp::InsertGraphicsObject(int x, int y, int z, char* file){
+void CApp::InsertGraphicsObject(CollidableOnject *obj){
 		graphicsInfo newItem;
 
-	    newItem.ID = latestID;
-	    newItem.x= x;
-	    newItem.y= y;
-	    newItem.z = z;
-	    newItem.File = file;
+		newItem.ID = latestID;
+		newItem.collidableObject = obj;
 
 	    graphicsObjects.push_back(newItem);
 	    latestID++;
 }
-void CApp::InsertGraphicsObject(int ID)
-{
-	for (std::vector<graphicsInfo>::iterator it = graphicsObjects.begin(); it != graphicsObjects.end(); ++it)
-		{
-			if((*it).ID == ID)
-				return &(*it);
-		}
 
 }
-void CApp::UpdateGraphicsObject(int id, int x, int y, int z){
+void CApp::UpdateGraphicsObject(int id,Point newCenter;{
 		graphicsInfo *newItem = getObject(id);
-	    newItem->x= x;
-	    newItem->y= y;
-	    newItem->z = z;
+	    newItem->CollidableObject.
+	    newItem->collidableObject->setCenter(newCenter);
+}
 
+void CApp::DeleteObject(int ID)
+{
+	int cnt =0;
+	for (std::vector<graphicsInfo>::iterator it = graphicsObjects.begin(); it != graphicsObjects.end(); ++it)
+			{
+				cnt++;
+				if((*it).ID == ID)
+					graphicsObjects.erase(it);
+			}
 }
 
 int main(int argc, char* argv[]) {
