@@ -6,22 +6,27 @@
 #include "collisioninfo.h"
 #include "collisiondetection.h"
 
+#include "CollidableObject.h"
+
 class PhysicsEngine {
 
 public:
-    float gravity;
-    float airfriction;
     PhysicsEngine();
     PhysicsEngine(float grav, float air);
     void SetWorldParams(float grav, float air);
     ~PhysicsEngine();
     void updateWorld(float timeStep);
-    physicsInfo insertPhysicsObject(aabb_t obj, float mass, Velocity linVel, Force linAcc, Velocity angVel, Force angAcc, Point angPos);
-    physicsInfo insertPhysicsObject(sphere_t obj, float mass, Velocity linVel, Force linAcc, Velocity angVel, Force angAcc, Point angPos);
+
+    void insertPhysicsObject(CollidableObject *obj, float mass, Velocity linVel, Force linAcc, Velocity angVel, Force angAcc, Point angPos);
 private:
     CollisionDetection *cd;
 
+    float gravity;
+    float airFriction;
+
     int latestID;
+
+    float lastTimeStep;
 
     std::vector<physicsInfo> physicsObjects;
     physicsInfo* getObject(int ID);
@@ -29,7 +34,7 @@ private:
     void processCollsion(collisions_t* col);
     void calculatePosition(physicsInfo *item, float deltaT);
     void calculateLinearVelocity(physicsInfo *item, float deltaT);
-    void calculateLinearAcceleration(physicsInfo *item, float deltaT);
+    void calculateLinearForce(physicsInfo *item, float deltaT);
     void calculateAngularPosition(physicsInfo *item, float deltaT);
     void calculateAngularVelocity(physicsInfo *item, float deltaT);
     void calculateAngularAcceleration(physicsInfo *item, float deltaT);
@@ -38,6 +43,7 @@ private:
 
     float calculateAngle(Point POI, Point Center, Point p3);
 
+    void resolveCollisions();
 
     //V2 ALWAYS NEEDS TO BE THE MIDDLE VERTEX
     float GetAngleBetweenVerticese(Point v1, Point v2, Point v3);

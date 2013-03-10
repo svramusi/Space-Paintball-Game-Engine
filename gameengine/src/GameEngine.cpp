@@ -10,54 +10,63 @@
 GameEngine::GameEngine() {
     printf("Game Engine Initialized\n");
 
-    physics = new PhysicsEngine();
+    physics = new PhysicsEngine(-9.8f, 0.0f);
 
-    Point rect_center;
-    rect_center.x = 4;
-    rect_center.y = 3;
-    rect_center.z = 0;
+    CollidableObject *stationary_sphere;
+    CollidableObject *bouncing_sphere;
 
-    aabb_t rect;
-    rect.center = rect_center;
-    rect.radii[0] = 2;
-    rect.radii[1] = 1;
-    rect.radii[2] = 0;
+    float radii[3];
+
+    Point stationary_center;
+    stationary_center.x = 4.0f;
+    stationary_center.y = 3.0f;
+    stationary_center.z = 0.0f;
+
+    radii[0] = 1;
+    radii[1] = 1;
+    radii[2] = 1;
+
+    stationary_sphere = new Sphere(-1, stationary_center, 1.0f, false);
 
 
-    Point block_center;
-    block_center.x = 4;
-    block_center.y = 8;
-    block_center.z = 0;
+    Point bouncing_center;
+    bouncing_center.x = 4.0f;
+    bouncing_center.y = 8.0f;
+    bouncing_center.z = 0.0f;
 
-    aabb_t block;
-    block.center = block_center;
-    block.radii[0] = 1;
-    block.radii[1] = 1;
-    block.radii[2] = 1;
+    radii[0] = 2;
+    radii[1] = 1;
+    radii[2] = 0;
+
+    bouncing_sphere = new AABB(-1, bouncing_center, radii, true);
 
 
     Velocity zeroVel;
-    zeroVel.x = 0;
-    zeroVel.y = 0;
-    zeroVel.z = 0;
+    zeroVel.x = 0.0f;
+    zeroVel.y = 0.0f;
+    zeroVel.z = 0.0f;
 
     Velocity ballVel;
-    ballVel.x = 0;
-    ballVel.y = -9.8;
-    ballVel.z = 0;
+    ballVel.x = 0.0f;
+    ballVel.y = -9.8f;
+    ballVel.z = 0.0f;
 
     Force zeroForce;
-    zeroForce.x = 0;
-    zeroForce.y = 0;
-    zeroForce.z = 0;
+    zeroForce.x = 0.0f;
+    zeroForce.y = 0.0f;
+    zeroForce.z = 0.0f;
 
     Point zeroPoint;
-    zeroPoint.x = 0;
-    zeroPoint.y = 0;
-    zeroPoint.z = 0;
+    zeroPoint.x = 0.0f;
+    zeroPoint.y = 0.0f;
+    zeroPoint.z = 0.0f;
 
-    physics->insertPhysicsObject(rect, 10, zeroVel, zeroForce, zeroVel, zeroForce, zeroPoint);
-    physics->insertPhysicsObject(block, 10, ballVel, zeroForce, zeroVel, zeroForce, zeroPoint);
+    physics->insertPhysicsObject(stationary_sphere, 10, zeroVel, zeroForce, zeroVel, zeroForce, zeroPoint);
+    physics->insertPhysicsObject(bouncing_sphere, 10, ballVel, zeroForce, zeroVel, zeroForce, zeroPoint);
+
+    //for(float i=0.0f; i<10.0f; i=i+0.1f)
+    for(int i=0; i<200; i++)
+        physics->updateWorld(i);
 }
 
 GameEngine::~GameEngine() {

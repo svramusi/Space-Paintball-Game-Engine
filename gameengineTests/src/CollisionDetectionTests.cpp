@@ -14,29 +14,33 @@ void CollisionDetectionTest::tearDown(void)
 void
 CollisionDetectionTest::testNoCollision(void)
 {
+    CollidableObject *aabb1;
+    CollidableObject *aabb2;
+
+    float radii[3];
+
     Point point1;
+    Point point2;
+
     point1.x = 0;
     point1.y = 0;
     point1.z = 0;
 
-    aabb_t aabb1;
-    aabb1.ID = 1;
-    aabb1.center = point1;
-    aabb1.radii[0] = 1.0;
-    aabb1.radii[1] = 1.0;
-    aabb1.radii[2] = 1.0;
+    radii[0] = 1.0f;
+    radii[1] = 1.0f;
+    radii[2] = 1.0f;
 
-    Point point2;
+    aabb1 = new AABB(1, point1, radii, true);
+
     point2.x = 10;
     point2.y = 10;
     point2.z = 10;
 
-    aabb_t aabb2;
-    aabb2.ID = 2;
-    aabb2.center = point2;
-    aabb2.radii[0] = 1.0;
-    aabb2.radii[1] = 1.0;
-    aabb2.radii[2] = 1.0;
+    radii[0] = 1.0f;
+    radii[1] = 1.0f;
+    radii[2] = 1.0f;
+
+    aabb2 = new AABB(2, point2, radii, true);
 
     CPPUNIT_ASSERT(0 == cd->isIntersection(aabb1, aabb2));
 
@@ -47,34 +51,41 @@ CollisionDetectionTest::testNoCollision(void)
     CPPUNIT_ASSERT(NULL == collisions);
 
     cd->freeCollisions(collisions);
+
+    delete aabb1;
+    delete aabb2;
 }
 
 void
 CollisionDetectionTest::testCollision(void)
 {
+    CollidableObject *aabb1;
+    CollidableObject *aabb2;
+
+    float radii[3];
+
     Point point1;
+    Point point2;
+
     point1.x = 0;
     point1.y = 0;
     point1.z = 0;
 
-    aabb_t aabb1;
-    aabb1.ID = 1;
-    aabb1.center = point1;
-    aabb1.radii[0] = 1.0;
-    aabb1.radii[1] = 1.0;
-    aabb1.radii[2] = 1.0;
+    radii[0] = 1.0f;
+    radii[1] = 1.0f;
+    radii[2] = 1.0f;
 
-    Point point2;
+    aabb1 = new AABB(1, point1, radii, true);
+
     point2.x = 1;
     point2.y = 1;
     point2.z = 1;
 
-    aabb_t aabb2;
-    aabb2.ID = 2;
-    aabb2.center = point2;
-    aabb2.radii[0] = 2.0;
-    aabb2.radii[1] = 2.0;
-    aabb2.radii[2] = 2.0;
+    radii[0] = 2.0f;
+    radii[1] = 2.0f;
+    radii[2] = 2.0f;
+
+    aabb2 = new AABB(2, point2, radii, true);
 
     CPPUNIT_ASSERT(1 == cd->isIntersection(aabb1, aabb2));
 
@@ -88,4 +99,7 @@ CollisionDetectionTest::testCollision(void)
     CPPUNIT_ASSERT_EQUAL(2, collisions->info->ID);
 
     cd->freeCollisions(collisions);
+
+    delete aabb1;
+    delete aabb2;
 }

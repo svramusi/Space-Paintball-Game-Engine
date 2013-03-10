@@ -2,18 +2,30 @@
 #define COLLISION_DETECTION_H
 
 #include "collisioninfo.h"
-#include "AABB.h"
-#include "Sphere.h"
+#include "AABBClass.h"
+#include "SphereClass.h"
 #include "Capsule.h"
+#include "Point.h"
 
 #include <armadillo>
 #include <cmath>
+#include <typeinfo>
 
 struct collision_info_t;
 
+struct penetration_t {
+    float x;
+    float y;
+    float z;
+};
+
 struct collision_info_t {
     int ID; //id of the object that collides with the ID specified in collisions_t
-    Point p; //penetration vector that you'll use to resolve the collision
+
+    //grrrrrrrr
+    //std::vector<float> penetration; //penetration vector that you'll use to resolve the collision
+    penetration_t penetration;
+
     collision_info_t *next;
 };
 
@@ -30,21 +42,19 @@ public:
     void updatePosition(int ID, Point newCenter);
     void freeCollisions(collisions_t *collisions);
 
-    //collisionDetection* detect_collision(detectCollision* collidableObject);
+    void addObject(CollidableObject *collidableObject);
+    void updateObject(int ID, Point newCenter);
+    void removeObject(int ID);
 
-    void addObject(aabb_t aabb);
-    void addObject(sphere_t sphere);
+    int isIntersection(const CollidableObject *obj1, const CollidableObject *obj2);
 
-    int isIntersection(aabb_t aabb1, aabb_t aabb2);
-    int isIntersection(sphere_t sphere1, sphere_t sphere2);
-    int isIntersection(aabb_t aabb, sphere_t sphere);
-    int isIntersection(sphere_t sphere, capsule_t capsule);
+    float getSquareDistanceBetweenLineAndVertex(Point startPoint, Point endPoint, Point vertex);
 
-    float getDistanceBetweenLineAndVertex(Point startPoint, Point endPoint, Point vertex);
-
-    float getPenetrationDistance(float dist_between_centers, float radiusSum);
+    float getPenetrationDistance(const Sphere *sphere1, const Sphere *sphere2);
     std::vector<float> getNormalizedVector(Point point1, Point point2);
-    std::vector<float> getPenetrationVector(sphere_t sphere1, sphere_t sphere2);
+
+
+    penetration_t getPenetrationVector(const CollidableObject *obj1, const CollidableObject *obj2);
 
     std::vector<float> getDiffVectorAbs(Point point1, Point point2);
     std::vector<float> getDiffVector(Point point1, Point point2);
@@ -87,8 +97,16 @@ checkForAnyCollisions();
 
 
 private:
-    std::vector<aabb_t> aabbs;
-    std::vector<sphere_t> spheres;
+    std::vector<CollidableObject*> collidableObjects;
+
+    int isIntersection(const AABB *aabb1, const AABB *aabb2);
+    int isIntersection(const Sphere *sphere1, const Sphere *sphere2);
+    int isIntersection(const AABB *aabb, const Sphere *sphere);
+    int isIntersection(const AABB *aabb, const Capsule *capsule);
+
+    penetration_t getPenetrationVector(const Sphere *sphere1, const Sphere *sphere2);
+    penetration_t getPenetrationVector(const AABB *aabb1, const AABB *aabb2);
+    penetration_t getPenetrationVector(const AABB *aabb, const Sphere *sphere);
 
 };
 #endif

@@ -1,8 +1,7 @@
 #ifndef PHYSICS_INFO_H
 #define PHYSICS_INFO_H
 
-#include "AABB.h"
-#include "Sphere.h"
+#include "CollidableObject.h"
 #include "Point.h"
 
 //Shape, position, rotation, mass, moment of inertia, linear and angular velocities
@@ -16,8 +15,7 @@ Angular velocity
 Angular acceleration*/
 typedef struct physics_info_t { //all units MKS: meters, kilograms, seconds
     int ID;
-    aabb_t *aabbObject;   //one will always be NULL
-    sphere_t *sphereObject; //.center for Position
+    CollidableObject *collidableObject;
     //Point oldPosition;
     Velocity linearVelocity;
     float mass;
@@ -25,6 +23,8 @@ typedef struct physics_info_t { //all units MKS: meters, kilograms, seconds
     Velocity angularVelocity; //One value will always be 0, only 2d ANgular velocity
     Force linearForce;//force actual acc = force/mass
     Force angularForce;//One value will always be 0, only 2d ANgular velocity
+
+    int movable;
 
 } physicsInfo;
 #endif

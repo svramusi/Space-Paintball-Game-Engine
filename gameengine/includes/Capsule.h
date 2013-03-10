@@ -1,9 +1,18 @@
-#ifndef CAPSULE_H
-#define CAPSULE_H
+#ifndef CAPSULE_CLASS_H
+#define CAPSULE_CLASS_H
 
-#include "Point.h"
+#include "CollidableObject.h"
 
-struct capsule_t {
+class Capsule : public CollidableObject {
+public:
+    Capsule(int ID, Point _startCenter, Point _endCenter, float _radius);
+    ~Capsule();
+
+    Point getStart() const;
+    Point getEnd() const;
+    float getRadius() const;
+
+private:
     Point startCenter;
     Point endCenter;
     float radius;
