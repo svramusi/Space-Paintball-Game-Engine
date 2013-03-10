@@ -1,6 +1,11 @@
 #include "CApp.h"
-#include "AABBClass.h""
+#include "AABBClass.h"
 #include <math.h>
+#include "CollidableObject.h"
+#include "AABBClass.h"
+#include "SphereClass.h"
+
+
  #define red {0xff, 0x00, 0x00}
 #define yellow {0xff, 0xff, 0x00}
 #define magenta {0xff, 0, 0xff}
@@ -33,9 +38,9 @@ void CApp::drawCircle(float radius, int x, int y, int z)
 }
 void CApp::RenderIt(CollidableObject *obj)
 {
-	 int cx = obj->center.x;
-	 int cy = obj->center.y;
-	 int cz = obj->center.z;
+	 int cx = obj->getCenter().x;
+	 int cy = obj->getCenter().y;
+	 int cz =obj->getCenter().z;
 	if(typeid(AABB) == typeid(obj))
 	    {
 	        AABB *tempAABB = dynamic_cast<AABB*>(obj);
@@ -135,7 +140,7 @@ void CApp::OnRender() {
 	      //render game objects
 	      for (std::vector<graphicsInfo>::iterator it = graphicsObjects.begin(); it != graphicsObjects.end(); ++it)
 	      {
-	    	  if((*it).)
+
 	    	  glBegin(GL_QUADS); //2D RENDERING
 	    	      				glColor3f(1, 0, 0); glVertex3f((*it).x, (*it).y, (*it).z);
 	    	      		        glColor3f(1, 1, 0); glVertex3f(100+(*it).x, (*it).y, (*it).z);
