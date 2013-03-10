@@ -8,6 +8,7 @@ using namespace arma;
 
 CollisionDetection::CollisionDetection()
 {
+    latestID = 0;
 }
 
 CollisionDetection::~CollisionDetection()
@@ -38,9 +39,16 @@ CollisionDetection::freeCollisions(collisions_t *collisions)
     }
 }
 
+int
+CollisionDetection::getNextID()
+{
+    return latestID + 1;
+}
+
 void
 CollisionDetection::addObject(CollidableObject *collidableObject)
 {
+    latestID = collidableObject->getID();
     collidableObjects.push_back(collidableObject);
 }
 
@@ -52,6 +60,34 @@ CollisionDetection::updateObject(int ID, Point newCenter)
             ++it) {
 
         if((*it)->getID() == ID) {
+            if(typeid(Sphere) == typeid(*(*it)))
+            {
+                Sphere *tempSphere =
+                    dynamic_cast<Sphere*>((*it));
+
+                CollidableObject *capsule = new
+                        Capsule(getNextID(),
+                        tempSphere->getCenter(),
+                        newCenter,
+                        tempSphere->getRadius());
+/*
+            cout << endl << "id: " << capsule->getID() << endl;
+
+            cout << endl
+                << "temp sphere x: " << tempSphere->getCenter().x
+                << " temp sphere y: " << tempSphere->getCenter().y
+                << " new center x: " << newCenter.x
+                << " new center y: " << newCenter.y << endl;
+
+            cout << endl
+                << "new cap start: " << capsule->getStart().x
+                << "," << capsule->getStart().y
+                << " new cap end: " << capsule->getEnd().x
+                << "," << capsule->getEnd().y << endl;
+*/
+
+                addObject(capsule);
+            }
             (*it)->setCenter(newCenter);
             break;
         }
@@ -95,8 +131,18 @@ CollisionDetection::checkForAnyCollisions()
                 collision_info_t *collision_info;
                 collision_info = (collision_info_t*)malloc(sizeof(collision_info_t));
 
+
+                if(typeid(Capsule) == typeid(*(*it1)))
+                {
+                    Capsule *c = dynamic_cast<Capsule*>((*it1));
+
+                    cout << endl << "cap start: " << c->getStart().x
+                        << "," << c->getStart().y
+                        << " cap end: " << c->getEnd().x
+                        << "," << c->getEnd().y << endl;
+                }
+
 //cout << endl << "found an intersection between: " << (*it1).ID << " and " << (*it2).ID << endl;
-//cout << endl << "found a collision and mallocing!!!" << endl;
 
                 collision_info->ID = (*it2)->getID();
                 collision_info->penetration = getPenetrationVector((*it1), (*it2));
@@ -123,7 +169,33 @@ CollisionDetection::checkForAnyCollisions()
         }
     }
 
+    removeAllCapsules();
+
     return collisions;
+}
+
+void
+CollisionDetection::removeAllCapsules()
+{
+    std::vector<int> IDsToRemove;
+
+    for(std::vector<CollidableObject*>::iterator it = collidableObjects.begin();
+        it != collidableObjects.end();
+        ++it)
+    {
+        if(typeid(Capsule) == typeid(*(*it)))
+        {
+            //Can't hose the iterator by deleting it here!
+            IDsToRemove.push_back((*it)->getID());
+        }
+    }
+
+    for(std::vector<int>::iterator it = IDsToRemove.begin();
+            it != IDsToRemove.end();
+            ++it)
+    {
+        removeObject(*it);
+    }
 }
 
 float
@@ -292,7 +364,7 @@ CollisionDetection::isIntersection(const CollidableObject *obj1, const Collidabl
     }
     else
     {
-        return -1;
+        return 0;
     }
 }
 

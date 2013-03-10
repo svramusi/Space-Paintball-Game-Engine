@@ -109,8 +109,8 @@ PhysicsEngine::resolveCollisions()
                 newCenter.y = currentCenter.y + penetration.y;
                 newCenter.z = currentCenter.z + penetration.z;
 
-                tempInfo->collidableObject->setCenter(newCenter);
-                cd->updateObject(tempInfo->ID, tempInfo->collidableObject->getCenter());
+                //tempInfo->collidableObject->setCenter(newCenter);
+                cd->updateObject(tempInfo->ID, newCenter);
             }
         }
     }
@@ -287,7 +287,8 @@ void PhysicsEngine::calculateLinearVelocity(physicsInfo *item, float deltaT)
     newCenter.y = currentCenter.y + yAccel + yVel;
     newCenter.z = currentCenter.z + zAccel + zVel;
 
-    item->collidableObject->setCenter(newCenter);
+    //item->collidableObject->setCenter(newCenter);
+    cd->updateObject(item->collidableObject->getID(), newCenter);
  }
 
 void PhysicsEngine::insertPhysicsObject(CollidableObject *obj, float m, Velocity linVel, Force linFrc, Velocity angVel, Force angFrc, Point angPos)

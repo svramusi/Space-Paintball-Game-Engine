@@ -2,10 +2,11 @@
 #define COLLISION_DETECTION_H
 
 #include "collisioninfo.h"
+
+#include "Point.h"
 #include "AABBClass.h"
 #include "SphereClass.h"
 #include "Capsule.h"
-#include "Point.h"
 
 #include <armadillo>
 #include <cmath>
@@ -107,6 +108,11 @@ private:
     penetration_t getPenetrationVector(const Sphere *sphere1, const Sphere *sphere2);
     penetration_t getPenetrationVector(const AABB *aabb1, const AABB *aabb2);
     penetration_t getPenetrationVector(const AABB *aabb, const Sphere *sphere);
+
+    int getNextID();
+    void removeAllCapsules();
+
+    int latestID;
 
 };
 #endif
