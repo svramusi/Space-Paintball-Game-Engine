@@ -54,6 +54,67 @@ SweptSphereTest::testDistanceBetweenLineAndVertex(void)
 }
 
 void
+SweptSphereTest::testClosestPoint(void)
+{
+    AABB *aabb;
+    Sphere *sphere;
+
+    float radii[3];
+
+    Point point1;
+    Point point2;
+
+    point1.x = 0;
+    point1.y = 0;
+    point1.z = 0;
+
+    radii[0] = 1.0f;
+    radii[1] = 1.0f;
+    radii[2] = 1.0f;
+
+    aabb = new AABB(1, point1, radii, true);
+
+    point2.x = 0;
+    point2.y = 5;
+    point2.z = 0;
+    sphere = new Sphere(1, point2, 1.0f, true);
+
+    Point closestPoint = cd->getClosestPoint(aabb, sphere->getCenter());
+
+    CPPUNIT_ASSERT_EQUAL(0.0f, closestPoint.x);
+    CPPUNIT_ASSERT_EQUAL(1.0f, closestPoint.y);
+    CPPUNIT_ASSERT_EQUAL(0.0f, closestPoint.z);
+
+    delete aabb;
+    delete sphere;
+
+
+    point1.x = 0;
+    point1.y = 0;
+    point1.z = 0;
+
+    radii[0] = 1.0f;
+    radii[1] = 1.0f;
+    radii[2] = 1.0f;
+
+    aabb = new AABB(1, point1, radii, true);
+
+    point2.x = 5;
+    point2.y = 5;
+    point2.z = 0;
+    sphere = new Sphere(1, point2, 1.0f, true);
+
+    closestPoint = cd->getClosestPoint(aabb, sphere->getCenter());
+
+    CPPUNIT_ASSERT_EQUAL(1.0f, closestPoint.x);
+    CPPUNIT_ASSERT_EQUAL(1.0f, closestPoint.y);
+    CPPUNIT_ASSERT_EQUAL(0.0f, closestPoint.z);
+
+    delete aabb;
+    delete sphere;
+}
+
+void
 SweptSphereTest::testNoCollisionAABB(void)
 {
     CollidableObject *aabb;
@@ -211,19 +272,26 @@ SweptSphereTest::testPassThroughCollisionAABB(void)
     aabb = new AABB(1, point1, radii, true);
 
 
+    //Fall down
     Point startCenter;
     startCenter.x = 0;
-    startCenter.y = 10;
+    startCenter.y = 20;
     startCenter.z = 0;
 
     Point endCenter;
     endCenter.x = 0;
-    endCenter.y = 20;
+    endCenter.y = 10;
     endCenter.z = 0;
 
     capsule = new Capsule(1, startCenter, endCenter, 1.0f);
 
     CPPUNIT_ASSERT(1 == cd->isIntersection(aabb, capsule));
+
+    penetration_t penetrationVector = cd->getPenetrationVector(aabb, capsule);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(-1.0f, penetrationVector.x, 0.01);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(3.0f, penetrationVector.y, 0.01);
+    CPPUNIT_ASSERT_EQUAL(-1.0f, penetrationVector.z );
+
 
     delete aabb;
     delete capsule;

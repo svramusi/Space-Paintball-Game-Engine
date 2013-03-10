@@ -247,13 +247,29 @@ penetration_t
 CollisionDetection::getPenetrationVector(const CollidableObject *obj1, const CollidableObject *obj2)
 {
     if((typeid(AABB) == typeid(*obj1)) && (typeid(AABB) == typeid(*obj2)))
+    {
         return getPenetrationVector(dynamic_cast<const AABB*>(obj1), dynamic_cast<const AABB*>(obj2));
+    }
     else if((typeid(Sphere) == typeid(*obj1)) && (typeid(Sphere) == typeid(*obj2)))
+    {
         return getPenetrationVector(dynamic_cast<const Sphere*>(obj1), dynamic_cast<const Sphere*>(obj2));
+    }
     else if((typeid(AABB) == typeid(*obj1)) && (typeid(Sphere) == typeid(*obj2)))
+    {
         return getPenetrationVector(dynamic_cast<const AABB*>(obj1), dynamic_cast<const Sphere*>(obj2));
+    }
     else if((typeid(Sphere) == typeid(*obj1)) && (typeid(AABB) == typeid(*obj2)))
+    {
         return getPenetrationVector(dynamic_cast<const AABB*>(obj2), dynamic_cast<const Sphere*>(obj1));
+    }
+    else if((typeid(AABB) == typeid(*obj1)) && (typeid(Capsule) == typeid(*obj2)))
+    {
+        return getPenetrationVector(dynamic_cast<const AABB*>(obj1), dynamic_cast<const Capsule*>(obj2));
+    }
+    else if((typeid(Capsule) == typeid(*obj1)) && (typeid(AABB) == typeid(*obj2)))
+    {
+        return getPenetrationVector(dynamic_cast<const AABB*>(obj2), dynamic_cast<const Capsule*>(obj1));
+    }
     else
     {
         penetration_t penetration;
@@ -309,6 +325,26 @@ CollisionDetection::getPenetrationVector(const AABB *aabb, const Sphere *sphere)
 
     penetrationVector.z = (aabb->getZRadius() + sphere->getRadius())
                             - abs(aabb->getCenter().z - sphere->getCenter().z);
+
+    return penetrationVector;
+}
+
+penetration_t
+CollisionDetection::getPenetrationVector(const AABB *aabb, const Capsule *capsule)
+{
+
+    Point startingPoint = capsule->getStart();
+    Point closestPoint = getClosestPoint(aabb, startingPoint);
+
+    Point targetPoint;
+    targetPoint.x = closestPoint.x + capsule->getRadius();
+    targetPoint.y = closestPoint.y + capsule->getRadius();
+    targetPoint.z = closestPoint.z + capsule->getRadius();
+
+    penetration_t penetrationVector;
+    penetrationVector.x = startingPoint.x - targetPoint.x;
+    penetrationVector.y = startingPoint.y - targetPoint.y;
+    penetrationVector.z = startingPoint.z - targetPoint.z;
 
     return penetrationVector;
 }
@@ -483,4 +519,39 @@ CollisionDetection::getSquareDistanceBetweenLineAndVertex(Point startPoint, Poin
     }
 
     return dot(cv_ac, cv_ac) - e * e / f;
+}
+
+Point
+CollisionDetection::getClosestPoint(const AABB *aabb, const Point vertex)
+{
+    Point retVal;
+
+    float vX = vertex.x;
+    if(vX < aabb->getMinX())
+        vX = aabb->getMinX();
+
+    if(vX > aabb->getMaxX())
+        vX = aabb->getMaxX();
+
+    retVal.x = vX;
+
+    float vY = vertex.y;
+    if(vY < aabb->getMinY())
+        vY = aabb->getMinY();
+
+    if(vY > aabb->getMaxY())
+        vY = aabb->getMaxY();
+
+    retVal.y = vY;
+
+    float vZ = vertex.z;
+    if(vZ < aabb->getMinZ())
+        vZ = aabb->getMinZ();
+
+    if(vZ > aabb->getMaxZ())
+        vZ = aabb->getMaxZ();
+
+    retVal.z = vZ;
+
+    return retVal;
 }

@@ -16,6 +16,7 @@ class SweptSphereTest : public CppUnit::TestFixture
 {
     CPPUNIT_TEST_SUITE(SweptSphereTest);
     CPPUNIT_TEST(testDistanceBetweenLineAndVertex);
+    CPPUNIT_TEST(testClosestPoint);
     CPPUNIT_TEST(testNoCollisionAABB);
     CPPUNIT_TEST(testTipCollisionAABB);
     CPPUNIT_TEST(testEndCollisionAABB);
@@ -27,6 +28,7 @@ public:
     void tearDown(void);
 
     void testDistanceBetweenLineAndVertex(void);
+    void testClosestPoint(void);
     void testNoCollisionAABB(void);
     void testTipCollisionAABB(void);
     void testEndCollisionAABB(void);

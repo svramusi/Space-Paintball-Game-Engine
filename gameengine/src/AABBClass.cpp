@@ -28,3 +28,41 @@ AABB::getZRadius() const
 {
     return radiusZ;
 }
+
+
+float
+AABB::getMinX() const
+{
+    return  getCenter().x - getXRadius();
+}
+
+float
+AABB::getMinY() const
+{
+    return  getCenter().y - getYRadius();
+}
+
+float
+AABB::getMinZ() const
+{
+    return  getCenter().z - getZRadius();
+}
+
+
+float
+AABB::getMaxX() const
+{
+    return  getCenter().x + getXRadius();
+}
+
+float
+AABB::getMaxY() const
+{
+    return  getCenter().y + getYRadius();
+}
+
+float
+AABB::getMaxZ() const
+{
+    return  getCenter().z + getZRadius();
+}

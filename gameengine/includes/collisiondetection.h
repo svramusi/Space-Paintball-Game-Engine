@@ -60,6 +60,8 @@ public:
     std::vector<float> getDiffVectorAbs(Point point1, Point point2);
     std::vector<float> getDiffVector(Point point1, Point point2);
 
+    Point getClosestPoint(const AABB *aabb, const Point vertex);
+
 
     collisions_t* checkForAnyCollisions();
 
@@ -108,6 +110,7 @@ private:
     penetration_t getPenetrationVector(const Sphere *sphere1, const Sphere *sphere2);
     penetration_t getPenetrationVector(const AABB *aabb1, const AABB *aabb2);
     penetration_t getPenetrationVector(const AABB *aabb, const Sphere *sphere);
+    penetration_t getPenetrationVector(const AABB *aabb, const Capsule *capsule);
 
     int getNextID();
     void removeAllCapsules();
