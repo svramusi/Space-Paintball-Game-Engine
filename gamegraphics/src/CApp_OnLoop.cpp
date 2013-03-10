@@ -5,9 +5,9 @@
 
 void CApp::OnLoop() {
 
-	srand(time(0));
+	/*srand(time(0));
 
-	  /* generate secret number between 1 and 10: */
+	was for testing only
 
 
 	for (std::vector<graphicsInfo>::iterator it = graphicsObjects.begin(); it != graphicsObjects.end(); ++it)
@@ -19,5 +19,5 @@ void CApp::OnLoop() {
 				y-= 100;
 				z = rand()%400;
 				UpdateGraphicsObject((*it).ID , x,y,z);
-	    	}
+	    	}*/
 }

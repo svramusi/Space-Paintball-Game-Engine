@@ -46,10 +46,11 @@ class CApp : public CEvent {
         CApp();
  
         int OnExecute();
-        void UpdateGraphicsObject(int id, Point newCenter;);
-        void InsertGraphicsObject(int x, int y, int z, char* file);
+        void UpdateGraphicsObject(int id, Point newCenter);
+     void   DeleteObject(int ID);
+        int CalcVel(int dir, float force);
         graphicsInfo* getObject(int ID);
-
+        void AddWalls();
         void drawCircle(float radius, int x, int y, int z);
 
 
@@ -66,7 +67,7 @@ class CApp : public CEvent {
         void OnRender();
         void OnRender(int x, int y);
         void OnClear();
-
+        void InsertGraphicsObject(CollidableObject *obj);
         void OnCleanup();
         void Fire();
 

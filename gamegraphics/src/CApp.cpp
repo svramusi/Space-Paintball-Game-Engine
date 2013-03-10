@@ -1,5 +1,7 @@
 #include "CApp.h"
 #include <stdio.h>
+#include <stdlib.h>     /* srand, rand */
+#include <time.h>       /* time */
 
 
 CApp::CApp() {
@@ -35,12 +37,12 @@ CApp::CApp() {
 //THIS MAY NEED WORK
 int CApp::CalcVel(int dir, float force)
 {
-	return 0l
+	return 0;
 
 
 }
 
-void CApp:AddWalls()
+void CApp::AddWalls()
 {
 	srand(time(0));
 	int xl = rand()%(XMAX-XMIN)+XMIN;
@@ -160,21 +162,21 @@ graphicsInfo* CApp::getObject(int ID)
 	return NULL;
 }
 
-void CApp::InsertGraphicsObject(CollidableOnject *obj){
+void CApp::InsertGraphicsObject(CollidableObject *obj){
 		graphicsInfo newItem;
 
 		newItem.ID = latestID;
-		newItem.collidableObject = obj;
+		newItem.obj = obj;
 
 	    graphicsObjects.push_back(newItem);
 	    latestID++;
 }
 
-}
-void CApp::UpdateGraphicsObject(int id,Point newCenter;{
+
+void CApp::UpdateGraphicsObject(int id,Point newCenter){
 		graphicsInfo *newItem = getObject(id);
-	    newItem->CollidableObject.
-	    newItem->collidableObject->setCenter(newCenter);
+
+	    newItem->obj->setCenter(newCenter);
 }
 
 void CApp::DeleteObject(int ID)
@@ -190,9 +192,6 @@ void CApp::DeleteObject(int ID)
 
 int main(int argc, char* argv[]) {
     CApp theApp;
-    theApp.InsertGraphicsObject(1,1,1,"");
-    theApp.InsertGraphicsObject(10,10,10,"");
-    theApp.InsertGraphicsObject(100,100,100,"");
-    theApp.InsertGraphicsObject(500,500,1,"");
+
     return theApp.OnExecute();
 }

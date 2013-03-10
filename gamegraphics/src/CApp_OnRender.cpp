@@ -1,4 +1,5 @@
 #include "CApp.h"
+#include "AABBClass.h""
 #include <math.h>
  #define red {0xff, 0x00, 0x00}
 #define yellow {0xff, 0xff, 0x00}
@@ -32,9 +33,9 @@ void CApp::drawCircle(float radius, int x, int y, int z)
 }
 void CApp::RenderIt(CollidableObject *obj)
 {
-	 int cx = obj->center->x;
-	 int cy = obj->center->y;
-	 int cz = obj->center->z;
+	 int cx = obj->center.x;
+	 int cy = obj->center.y;
+	 int cz = obj->center.z;
 	if(typeid(AABB) == typeid(obj))
 	    {
 	        AABB *tempAABB = dynamic_cast<AABB*>(obj);
@@ -51,9 +52,9 @@ void CApp::RenderIt(CollidableObject *obj)
 
 	         	      glEnd();
 	    }
-	    else if(typeid(Sphere) == typeid(collidableObject))
+	    else if(typeid(Sphere) == typeid(obj))
 	    {
-	        Sphere *sphere = dynamic_cast<Sphere*>(collidableObject);
+	        Sphere *sphere = dynamic_cast<Sphere*>(obj);
 	        float radius = sphere->getRadius();
 	        drawCircle(radius,cx,cy,cz);
 	    }

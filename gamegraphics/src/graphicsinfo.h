@@ -1,4 +1,5 @@
 #include "CApp.h"
+#include "CollidableObject.h"
 #ifndef GRAPHICS_INFO_H
 #define GRAPHICS_INFO_H
 
