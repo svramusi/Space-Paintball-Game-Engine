@@ -161,4 +161,14 @@ namespace net
 
 		return bytecount;
 	}
+
+	void Socket::SetSenderAddress( Address& theSenderAddress )
+	{
+		senderAddress = theSenderAddress;
+	}
+
+	Address& Socket::GetSenderAddress()
+	{
+		return senderAddress;
+	}
 }

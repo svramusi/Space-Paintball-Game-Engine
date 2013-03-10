@@ -13,6 +13,7 @@
 #include <unistd.h>
 
 #include "Net.h"
+#include "Address.h"
 
 namespace net
 {
@@ -30,10 +31,14 @@ namespace net
 		int Receive( void * data, int size );
 		int ReceiveWaitAll( void * data, int size );
 		int Read();
+		void SetSenderAddress( Address& theSenderAddress );
+		Address& GetSenderAddress();
 
 	protected:
 		int socket;
 		int err;
+	private:
+		Address senderAddress;
 	};
 }
 #endif /* SOCKET_H_ */

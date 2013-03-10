@@ -81,6 +81,8 @@ int main( int argc, char * argv[] )
 			{
 				serverConnections.insert( make_pair( clientAddress, serverSocket ) );
 
+				serverSocket->SetSenderAddress( clientAddress );
+
 				printf( "---------------------\nReceived connection from %s\n", clientAddress.ToString().c_str() );
 				pthread_create( &thread_id, 0, &SocketHandler, (void*)serverSocket );
 				pthread_detach(thread_id);
@@ -168,8 +170,8 @@ net::GameEngine* GetInputFromClient( bool* quit, net::ServerSocket* serverSocket
 			break;
 		}
 
-		net::NetUtils netUtils;
-		input = netUtils.ReadBody( serverSocket, netUtils.ReadHeader( buffer ) );
+		//net::NetUtils netUtils;
+		input = net::NetUtils::ReadBody( serverSocket, net::NetUtils::ReadHeader( buffer ) );
 	}
 	///////////////////////////////////////////////////////////
 

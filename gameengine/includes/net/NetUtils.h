@@ -33,8 +33,8 @@ namespace net
 		virtual ~NetUtils();
 		static void Wait( float seconds );
 		void Send( net::GameEngine& input, net::Socket& socket );
-		google::protobuf::uint32 ReadHeader( char *buf );
-		net::GameEngine* ReadBody( net::Socket* serverSocket, google::protobuf::uint32 size );
+		static google::protobuf::uint32 ReadHeader( char *buf );
+		static net::GameEngine* ReadBody( net::Socket* serverSocket, google::protobuf::uint32 size );
 		static net::GameEngine* GetGameEnginePayload();
 		static void SetPhysicsInfo( net::PhysicsInfo* physicsInfo, float value );
 	};
