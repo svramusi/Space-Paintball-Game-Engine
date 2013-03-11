@@ -14,7 +14,11 @@ CollisionDetection::CollisionDetection()
 CollisionDetection::~CollisionDetection()
 {
 }
-
+void
+CollisionDetection::updatePosition(int ID, Point newCenter)
+{
+	//INSERT CODE TO HANDLE THE UPDATED INFO
+}
 void
 CollisionDetection::freeCollisions(collisions_t *collisions)
 {

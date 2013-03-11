@@ -40,7 +40,7 @@ class CollisionDetection {
 public:
     CollisionDetection();
     ~CollisionDetection();
-
+    void updatePosition(int ID, Point newCenter);
     void freeCollisions(collisions_t *collisions);
 
     void addObject(CollidableObject *collidableObject);

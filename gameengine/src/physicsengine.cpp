@@ -7,6 +7,7 @@
 #include "physicsengine.h"
 
 #define PI 3.14159265
+#define ELASTIC .98
 
 using namespace std;
 
@@ -50,7 +51,7 @@ PhysicsEngine::updateWorld(float timeStep)
     4) For each collision detected, execute the physics code that determines their velocities after the collision (i.e. the formulas in slide 57).
     5) Execute the collision fixer*/
 
-cout << endl << "updating world.  current time is: " << timeStep << endl << endl;
+cout << endl << "updating world. current time is: " << timeStep << endl << endl;
 
     float delta = timeStep - lastTimeStep;
     lastTimeStep = timeStep;
@@ -64,13 +65,11 @@ cout << endl << "updating world.  current time is: " << timeStep << endl << endl
             calculateAngularVelocity(&(*it), delta);
             calculateAngularPosition(&(*it), delta); //NEEDS CALCULATE POI UPDATED TO WORK
 
-
             cout << endl << "updating object. id:" << (*it).ID;
             cout << endl << "center X:" << (*it).collidableObject->getCenter().x;
             cout << endl << "center Y:" << (*it).collidableObject->getCenter().y;
             cout << endl << "center Z:" << (*it).collidableObject->getCenter().z;
             cout << endl << endl;
-
 
             cd->updateObject((*it).ID, (*it).collidableObject->getCenter());
 
@@ -80,6 +79,59 @@ cout << endl << "updating world.  current time is: " << timeStep << endl << endl
 
     resolveCollisions();
 }
+
+
+/*
+int PhysicsEngine::processCollisionID(collisions_t col)
+{
+	Force P;
+	collision_info_t* current;
+	collision_info_t* next;
+	physicsInfo *cur, *cur2;
+	current = col.info;
+    cur = getObject(col.ID);
+
+
+	while(current != NULL)
+	{
+		next = current->next;
+
+		cur2 = getObject(current->ID);
+		P.x = (ELASTIC+1) * ((cur2->angularVelocity.x * current->p.x - cur->angularVelocity.x * current->p.x )/((1/cur->mass)+(1/cur2->mass))* (current->p.x));
+
+		P.y = (ELASTIC+1) * ((cur2->angularVelocity.y * current->p.y - cur->angularVelocity.y * current->p.y )/((1/cur->mass)+(1/cur2->mass))* (current->p.y));
+
+		P.z = (ELASTIC+1) * ((cur2->angularVelocity.z * current->p.z - cur->angularVelocity.z *current->p.z )/((1/cur->mass)+(1/cur2->mass))* (current->p.z));
+
+		cur->angularVelocity.x = cur->angularVelocity.x + (P.x/cur->mass);
+		cur->angularVelocity.y = cur->angularVelocity.y + (P.y/cur->mass);
+		cur->angularVelocity.z = cur->angularVelocity.z + (P.z/cur->mass);
+
+		cur2->angularVelocity.x = cur2->angularVelocity.x + (P.x/cur2->mass);
+		cur2->angularVelocity.y = cur2->angularVelocity.y + (P.y/cur2->mass);
+		cur2->angularVelocity.z = cur2->angularVelocity.z + (P.z/cur2->mass);
+		current = next;
+	}
+	return (col.ID);
+}
+
+void PhysicsEngine::processCollsion(collisions_t* col)
+{
+	std::vector<int> processed;
+	collisions_t* current;
+	collisions_t* next;
+
+	current = col;
+
+	while(current != NULL)
+	    {
+	        next = current->next;
+	        processed.push_back(processCollisionID(*current));
+	        current = next;
+	    }
+
+}
+*/
 
 void
 PhysicsEngine::resolveCollisions()

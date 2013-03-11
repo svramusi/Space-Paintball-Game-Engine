@@ -29,7 +29,9 @@ private:
     float lastTimeStep;
 
     std::vector<physicsInfo> physicsObjects;
-
+    physicsInfo* getObject(int ID);
+    int processCollisionID(collisions_t col);
+    void processCollsion(collisions_t* col);
     void calculatePosition(physicsInfo *item, float deltaT);
     void calculateLinearVelocity(physicsInfo *item, float deltaT);
     void calculateLinearForce(physicsInfo *item, float deltaT);

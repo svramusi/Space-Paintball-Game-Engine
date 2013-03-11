@@ -68,8 +68,8 @@ GameEngine::GameEngine() {
     for(int i=0; i<200; i++)
         physics->updateWorld(i);
 
-    delete stationary_sphere;
-    delete bouncing_sphere;
+    //delete stationary_sphere;
+    //delete bouncing_sphere;
 }
 
 GameEngine::~GameEngine() {
