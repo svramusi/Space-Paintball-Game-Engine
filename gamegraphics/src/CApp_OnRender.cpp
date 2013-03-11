@@ -5,6 +5,8 @@
 #include "AABBClass.h"
 #include "SphereClass.h"
 
+#include <typeinfo>
+
 
  #define red {0xff, 0x00, 0x00}
 #define yellow {0xff, 0xff, 0x00}
