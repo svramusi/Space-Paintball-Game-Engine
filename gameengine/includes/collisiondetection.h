@@ -44,8 +44,13 @@ public:
     void freeCollisions(collisions_t *collisions);
 
     void addObject(CollidableObject *collidableObject);
-    void updateObject(int ID, Point newCenter);
     void removeObject(int ID);
+
+    void updateObject(int ID, Point newCenter);
+
+    //Don't create a capsule for this
+    //This is after the physics engine has resolved a collision
+    void fixObject(int ID, Point newCenter);
 
     int isIntersection(const CollidableObject *obj1, const CollidableObject *obj2);
 

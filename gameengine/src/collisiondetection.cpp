@@ -67,6 +67,7 @@ CollisionDetection::updateObject(int ID, Point newCenter)
 
                 CollidableObject *capsule = new
                         Capsule(getNextID(),
+                        tempSphere->getID(),
                         tempSphere->getCenter(),
                         newCenter,
                         tempSphere->getRadius());
@@ -88,6 +89,22 @@ CollisionDetection::updateObject(int ID, Point newCenter)
 
                 addObject(capsule);
             }
+            (*it)->setCenter(newCenter);
+            break;
+        }
+    }
+}
+
+//Don't create a capsule for this
+//This is after the physics engine has resolved a collision
+void
+CollisionDetection::fixObject(int ID, Point newCenter)
+{
+    for(std::vector<CollidableObject*>::iterator it = collidableObjects.begin();
+            it != collidableObjects.end();
+            ++it) {
+
+        if((*it)->getID() == ID) {
             (*it)->setCenter(newCenter);
             break;
         }
@@ -132,9 +149,25 @@ CollisionDetection::checkForAnyCollisions()
                 collision_info = (collision_info_t*)malloc(sizeof(collision_info_t));
 
 
+                int capsuleID1 = -1;
+                int capsuleID2 = -1;
+
                 if(typeid(Capsule) == typeid(*(*it1)))
                 {
                     Capsule *c = dynamic_cast<Capsule*>((*it1));
+
+                    capsuleID1 = c->getSphereID();
+
+                    cout << endl << "cap start: " << c->getStart().x
+                        << "," << c->getStart().y
+                        << " cap end: " << c->getEnd().x
+                        << "," << c->getEnd().y << endl;
+                }
+                else if(typeid(Capsule) == typeid(*(*it2)))
+                {
+                    Capsule *c = dynamic_cast<Capsule*>((*it2));
+
+                    capsuleID2 = c->getSphereID();
 
                     cout << endl << "cap start: " << c->getStart().x
                         << "," << c->getStart().y
@@ -144,13 +177,22 @@ CollisionDetection::checkForAnyCollisions()
 
 //cout << endl << "found an intersection between: " << (*it1).ID << " and " << (*it2).ID << endl;
 
-                collision_info->ID = (*it2)->getID();
+                if(capsuleID2 != -1)
+                    collision_info->ID = capsuleID2;
+                else
+                    collision_info->ID = (*it2)->getID();
+
                 collision_info->penetration = getPenetrationVector((*it1), (*it2));
                 collision_info->next = NULL;
 
                 if(collisions == NULL) {
                     collisions = (collisions_t*)malloc(sizeof(collisions_t));
-                    collisions->ID = (*it1)->getID();
+
+                    if(capsuleID1 != -1)
+                        collisions->ID = capsuleID1;
+                    else
+                        collisions->ID = (*it1)->getID();
+
                     collisions->info = collision_info;
                     collisions->next = NULL;
 
@@ -341,10 +383,13 @@ CollisionDetection::getPenetrationVector(const AABB *aabb, const Capsule *capsul
     targetPoint.y = closestPoint.y + capsule->getRadius();
     targetPoint.z = closestPoint.z + capsule->getRadius();
 
+    //Need to move the ending point back...
+    Point endPoint = capsule->getEnd();
+
     penetration_t penetrationVector;
-    penetrationVector.x = startingPoint.x - targetPoint.x;
-    penetrationVector.y = startingPoint.y - targetPoint.y;
-    penetrationVector.z = startingPoint.z - targetPoint.z;
+    penetrationVector.x = targetPoint.x - endPoint.x;
+    penetrationVector.y = targetPoint.y - endPoint.y;
+    penetrationVector.z = targetPoint.z - endPoint.z;
 
     return penetrationVector;
 }
