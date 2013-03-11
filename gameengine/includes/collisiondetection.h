@@ -2,10 +2,11 @@
 #define COLLISION_DETECTION_H
 
 #include "collisioninfo.h"
+
+#include "Point.h"
 #include "AABBClass.h"
 #include "SphereClass.h"
 #include "Capsule.h"
-#include "Point.h"
 
 #include <armadillo>
 #include <cmath>
@@ -42,29 +43,29 @@ public:
 
     void freeCollisions(collisions_t *collisions);
 
-    //collisionDetection* detect_collision(detectCollision* collidableObject);
-
     void addObject(CollidableObject *collidableObject);
-    void updateObject(int ID, Point newCenter);
     void removeObject(int ID);
 
+    void updateObject(int ID, Point newCenter);
+
+    //Don't create a capsule for this
+    //This is after the physics engine has resolved a collision
+    void fixObject(int ID, Point newCenter);
+
     int isIntersection(const CollidableObject *obj1, const CollidableObject *obj2);
-    int isIntersection(const AABB *aabb1, const AABB *aabb2);
-    int isIntersection(const Sphere *sphere1, const Sphere *sphere2);
-    int isIntersection(const AABB *aabb, const Sphere *sphere);
-    int isIntersection(Sphere sphere, capsule_t capsule);
 
-    float getDistanceBetweenLineAndVertex(Point startPoint, Point endPoint, Point vertex);
+    float getSquareDistanceBetweenLineAndVertex(Point startPoint, Point endPoint, Point vertex);
 
-    float getPenetrationDistance(float dist_between_centers, float radiusSum);
+    float getPenetrationDistance(const Sphere *sphere1, const Sphere *sphere2);
     std::vector<float> getNormalizedVector(Point point1, Point point2);
 
 
     penetration_t getPenetrationVector(const CollidableObject *obj1, const CollidableObject *obj2);
-    penetration_t getPenetrationVector(const Sphere *sphere1, const Sphere *sphere2);
 
     std::vector<float> getDiffVectorAbs(Point point1, Point point2);
     std::vector<float> getDiffVector(Point point1, Point point2);
+
+    Point getClosestPoint(const AABB *aabb, const Point vertex);
 
 
     collisions_t* checkForAnyCollisions();
@@ -105,6 +106,21 @@ checkForAnyCollisions();
 
 private:
     std::vector<CollidableObject*> collidableObjects;
+
+    int isIntersection(const AABB *aabb1, const AABB *aabb2);
+    int isIntersection(const Sphere *sphere1, const Sphere *sphere2);
+    int isIntersection(const AABB *aabb, const Sphere *sphere);
+    int isIntersection(const AABB *aabb, const Capsule *capsule);
+
+    penetration_t getPenetrationVector(const Sphere *sphere1, const Sphere *sphere2);
+    penetration_t getPenetrationVector(const AABB *aabb1, const AABB *aabb2);
+    penetration_t getPenetrationVector(const AABB *aabb, const Sphere *sphere);
+    penetration_t getPenetrationVector(const AABB *aabb, const Capsule *capsule);
+
+    int getNextID();
+    void removeAllCapsules();
+
+    int latestID;
 
 };
 #endif

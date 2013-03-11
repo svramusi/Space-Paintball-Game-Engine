@@ -12,23 +12,33 @@ GameEngine::GameEngine() {
 
     physics = new PhysicsEngine(-9.8f, 0.0f);
 
-    CollidableObject *stationary_sphere;
-    CollidableObject *bouncing_sphere;
+    CollidableObject *stationary_object;
+    CollidableObject *moving_object;
+
+    float radii[3];
 
     Point stationary_center;
     stationary_center.x = 4.0f;
     stationary_center.y = 3.0f;
     stationary_center.z = 0.0f;
 
-    stationary_sphere = new Sphere(-1, stationary_center, 2.0f, false);
+    radii[0] = 1;
+    radii[1] = 1;
+    radii[2] = 1;
+
+    stationary_object = new AABB(-1, stationary_center, radii, false);
 
 
-    Point bouncing_center;
-    bouncing_center.x = 4.0f;
-    bouncing_center.y = 8.0f;
-    bouncing_center.z = 0.0f;
+    Point moving_center;
+    moving_center.x = 4.0f;
+    moving_center.y = 8.0f;
+    moving_center.z = 0.0f;
 
-    bouncing_sphere = new Sphere(-1, bouncing_center, 1.0f, true);
+    radii[0] = 2;
+    radii[1] = 1;
+    radii[2] = 0;
+
+    moving_object = new Sphere(-1, moving_center, 2.0f, true);
 
 
     Velocity zeroVel;
@@ -51,10 +61,11 @@ GameEngine::GameEngine() {
     zeroPoint.y = 0.0f;
     zeroPoint.z = 0.0f;
 
-    physics->insertPhysicsObject(stationary_sphere, 10, zeroVel, zeroForce, zeroVel, zeroForce, zeroPoint);
-    physics->insertPhysicsObject(bouncing_sphere, 10, ballVel, zeroForce, zeroVel, zeroForce, zeroPoint);
+    physics->insertPhysicsObject(stationary_object, 10, zeroVel, zeroForce, zeroVel, zeroForce, zeroPoint);
+    physics->insertPhysicsObject(moving_object, 10, ballVel, zeroForce, zeroVel, zeroForce, zeroPoint);
 
-    for(float i=0.0f; i<10.0f; i=i+0.1f)
+    //for(float i=0.0f; i<10.0f; i=i+0.1f)
+    for(int i=0; i<200; i++)
         physics->updateWorld(i);
 
     delete stationary_sphere;
@@ -62,8 +73,6 @@ GameEngine::GameEngine() {
 }
 
 GameEngine::~GameEngine() {
-    // TODO Auto-generated destructor stub
-
     if(physics)
         delete physics;
 }

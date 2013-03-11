@@ -18,8 +18,8 @@ void SphereTest::tearDown(void)
 void
 SphereTest::testNoCollision(void)
 {
-    Sphere *sphere1;
-    Sphere *sphere2;
+    CollidableObject *sphere1;
+    CollidableObject *sphere2;
 
     Point point1;
     point1.x = 0;
@@ -44,8 +44,8 @@ SphereTest::testNoCollision(void)
 void
 SphereTest::testCollision(void)
 {
-    Sphere *sphere1;
-    Sphere *sphere2;
+    CollidableObject *sphere1;
+    CollidableObject *sphere2;
 
     Point point1;
     point1.x = 0;
@@ -82,16 +82,7 @@ SphereTest::testCollision(void)
 
     CPPUNIT_ASSERT(1 == cd->isIntersection(sphere1, sphere2));
 
-
-    std::vector<float> diff_vector = cd->getDiffVector(sphere1->getCenter(), sphere2->getCenter());
-
-    colvec d = conv_to< colvec >::from(diff_vector);
-    float dist_between_centers = dot(d, d);
-
-    float radiusSum = sphere1->getRadius() + sphere2->getRadius();
-    float radiusSumSq = radiusSum * radiusSum;
-
-    float p = cd->getPenetrationDistance(dist_between_centers, radiusSumSq);
+    float p = cd->getPenetrationDistance(dynamic_cast<const Sphere*>(sphere1), dynamic_cast<const Sphere*>(sphere2));
     CPPUNIT_ASSERT_DOUBLES_EQUAL(-1.585f, p, 0.01);
 
     std::vector<float> normalized = cd->getNormalizedVector(sphere1->getCenter(), sphere2->getCenter());
@@ -130,8 +121,8 @@ SphereTest::testCollision(void)
 void
 SphereTest::testVeryCloseCollision(void)
 {
-    Sphere *sphere1;
-    Sphere *sphere2;
+    CollidableObject *sphere1;
+    CollidableObject *sphere2;
 
     Point point1;
     Point point2;

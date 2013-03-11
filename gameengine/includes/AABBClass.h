@@ -13,6 +13,14 @@ public:
     float getYRadius() const;
     float getZRadius() const;
 
+    float getMinX() const;
+    float getMinY() const;
+    float getMinZ() const;
+
+    float getMaxX() const;
+    float getMaxY() const;
+    float getMaxZ() const;
+
 private:
     float radiusX;
     float radiusY;

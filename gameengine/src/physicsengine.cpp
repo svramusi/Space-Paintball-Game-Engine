@@ -59,22 +59,18 @@ cout << endl << "updating world.  current time is: " << timeStep << endl << endl
     {
         if((*it).movable) {
             calculateLinearForce(&(*it), delta);
-
             calculateLinearVelocity(&(*it), delta);
-
             calculatePosition(&(*it), delta);
+            calculateAngularVelocity(&(*it), delta);
+            calculateAngularPosition(&(*it), delta); //NEEDS CALCULATE POI UPDATED TO WORK
 
-            calculateAngularVelocity(&(*it),timeStep);
 
-            calculateAngularPosition(&(*it),timeStep); //NEEDS CALCULATE POI UPDATED TO WORK
-
-/*
             cout << endl << "updating object. id:" << (*it).ID;
             cout << endl << "center X:" << (*it).collidableObject->getCenter().x;
             cout << endl << "center Y:" << (*it).collidableObject->getCenter().y;
             cout << endl << "center Z:" << (*it).collidableObject->getCenter().z;
             cout << endl << endl;
-*/
+
 
             cd->updateObject((*it).ID, (*it).collidableObject->getCenter());
 
@@ -103,14 +99,23 @@ PhysicsEngine::resolveCollisions()
             {
                 penetration_t penetration = collisions->info->penetration;
 
-                Point currentCenter = tempInfo->collidableObject->getCenter();
-                Point newCenter;
-                newCenter.x = currentCenter.x + penetration.x;
-                newCenter.y = currentCenter.y + penetration.y;
-                newCenter.z = currentCenter.z + penetration.z;
+/*
+cout << endl << "object to move id: " << tempInfo->collidableObject->getID() << endl;
+cout << endl << "pen x: " << penetration.x
+        << " pen y: " << penetration.y
+        << " pen z: " << penetration.z << endl;
+*/
 
-                tempInfo->collidableObject->setCenter(newCenter);
-                cd->updateObject(tempInfo->ID, tempInfo->collidableObject->getCenter());
+                Point currentCenter = tempInfo->collidableObject->getCenter();
+
+                Point newCenter;
+                newCenter.x = currentCenter.x; //+ penetration.x; //FIX ME!!!!
+                newCenter.y = currentCenter.y + penetration.y;
+                newCenter.z = currentCenter.z; //+ penetration.z; //FIX ME!!!!
+
+                cd->fixObject(tempInfo->ID, newCenter);
+                //Dirty hack... MUST BE AFTER cd->updateObject!!!!
+                //(*it).collidableObject->setCenter(newCenter);
             }
         }
     }
@@ -271,7 +276,9 @@ void PhysicsEngine::calculateLinearVelocity(physicsInfo *item, float deltaT)
     newCenter.y = currentCenter.y + yAccel + yVel;
     newCenter.z = currentCenter.z + zAccel + zVel;
 
-    item->collidableObject->setCenter(newCenter);
+    cd->updateObject(item->collidableObject->getID(), newCenter);
+    //Dirty hack... MUST BE AFTER cd->updateObject!!!!
+    //item->collidableObject->setCenter(newCenter);
  }
 
 void PhysicsEngine::insertPhysicsObject(CollidableObject *obj, float m, Velocity linVel, Force linFrc, Velocity angVel, Force angFrc, Point angPos)
