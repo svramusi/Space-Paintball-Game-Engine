@@ -14,41 +14,40 @@ void CEvent::OnEvent(SDL_Event* Event) {
             switch(Event->active.state) {
                 case SDL_APPMOUSEFOCUS: {
                     if ( Event->active.gain )    OnMouseFocus();
-                    else                OnMouseBlur();
- 
+                    else OnMouseBlur();
                     break;
                 }
                 case SDL_APPINPUTFOCUS: {
                     if ( Event->active.gain )    OnInputFocus();
-                    else                OnInputBlur();
- 
+                    else OnInputBlur();
+
                     break;
                 }
                 case SDL_APPACTIVE:    {
                     if ( Event->active.gain )    OnRestore();
-                    else                OnMinimize();
- 
+                    else OnMinimize();
+
                     break;
                 }
             }
             break;
         }
- 
+
         case SDL_KEYDOWN: {
             OnKeyDown(Event->key.keysym.sym,Event->key.keysym.mod,Event->key.keysym.unicode);
             break;
         }
- 
+
         case SDL_KEYUP: {
             OnKeyUp(Event->key.keysym.sym,Event->key.keysym.mod,Event->key.keysym.unicode);
             break;
         }
- 
+
         case SDL_MOUSEMOTION: {
             OnMouseMove(Event->motion.x,Event->motion.y,Event->motion.xrel,Event->motion.yrel,(Event->motion.state&SDL_BUTTON(SDL_BUTTON_LEFT))!=0,(Event->motion.state&SDL_BUTTON(SDL_BUTTON_RIGHT))!=0,(Event->motion.state&SDL_BUTTON(SDL_BUTTON_MIDDLE))!=0);
             break;
         }
- 
+
         case SDL_MOUSEBUTTONDOWN: {
             switch(Event->button.button) {
                 case SDL_BUTTON_LEFT: {
@@ -66,7 +65,7 @@ void CEvent::OnEvent(SDL_Event* Event) {
             }
             break;
         }
- 
+
         case SDL_MOUSEBUTTONUP:    {
             switch(Event->button.button) {
                 case SDL_BUTTON_LEFT: {

@@ -20,12 +20,11 @@ bool CApp::OnInit() {
     SDL_GL_SetAttribute(SDL_GL_ACCUM_ALPHA_SIZE,8);
 
     /*SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS,1);
-
     SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES,2);*/
 
     if((Surf_Display = SDL_SetVideoMode(SCREENX, SCREENY, 32, SDL_OPENGL| SDL_HWSURFACE |  SDL_GL_DOUBLEBUFFER )) == NULL) {
         printf("Failed");
-    	return false;
+        return false;
     }
 
     glClearColor(0, 0, 0, 0);
@@ -43,7 +42,7 @@ bool CApp::OnInit() {
     glEnable(GL_TEXTURE_2D);
     glDisable(GL_CULL_FACE);
     glLoadIdentity();
- 
+
     return true;
 }
 
