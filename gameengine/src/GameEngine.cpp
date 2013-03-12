@@ -137,8 +137,9 @@ GameEngine::GameEngine() {
     rightWallCO = new AABB(-1, rightWallCenter, radii, false);
 
 
+
     Point bottomCenter;
-    bottomCenter.x = 137.5f;
+    bottomCenter.x = 175.0f;
     bottomCenter.y = SDL_START_HEIGHT - 260.0f;
     bottomCenter.z = 0.0f;
 
@@ -155,8 +156,8 @@ GameEngine::GameEngine() {
     movingCenter1.y = SDL_START_HEIGHT - 55.0f;
     movingCenter1.z = 0.0f;
 
-    radii[0] = 5;
-    radii[1] = 5;
+    radii[0] = 10;
+    radii[1] = 10;
     radii[2] = 0;
 
     moving1CO = new AABB(-1, movingCenter1, radii, true);
@@ -167,8 +168,8 @@ GameEngine::GameEngine() {
     movingCenter2.y = SDL_START_HEIGHT - 80.0f;
     movingCenter2.z = 0.0f;
 
-    radii[0] = 5;
-    radii[1] = 5;
+    radii[0] = 10;
+    radii[1] = 10;
     radii[2] = 0;
 
     moving2CO = new AABB(-1, movingCenter2, radii, true);
@@ -208,14 +209,15 @@ GameEngine::GameEngine() {
     {
         physics->updateWorld(i);
 
-        SDL_FillRect( screen, &screen->clip_rect, SDL_MapRGB( screen->format, 0x00, 0x00, 0x00 ) );
+        //Clear the screen
+        SDL_FillRect(screen, &screen->clip_rect, SDL_MapRGB(screen->format, 0x00, 0x00, 0x00));
 
 
-        moving1.x = moving1CO->getCenter().x;
-        moving1.y = SDL_START_HEIGHT - moving1CO->getCenter().y;
+        moving1.x = moving2CO->getCenter().x;
+        moving1.y = SDL_START_HEIGHT - moving2CO->getCenter().y;
 
-        moving2.x = moving2CO->getCenter().x;
-        moving2.y = SDL_START_HEIGHT - moving2CO->getCenter().y;
+        moving2.x = moving1CO->getCenter().x;
+        moving2.y = SDL_START_HEIGHT - moving1CO->getCenter().y;
 
 
         SDL_FillRect(screen,&leftWall,color);
