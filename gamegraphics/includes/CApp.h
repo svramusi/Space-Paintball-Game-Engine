@@ -18,10 +18,11 @@
 #define XMIN -1000
 #define YMAX 100
 #define YMIN 0
-#define ZMAX2 -1000
-#define ZMIN2 -1
 #define ZMAX 1000
 #define ZMIN -100
+
+#define ZMAX2 -1000
+#define ZMIN2 -1
 
 #define MINYANG 25
 #define MAXYANG 140

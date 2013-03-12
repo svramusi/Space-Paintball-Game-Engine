@@ -8,7 +8,7 @@
 #include <typeinfo>
 
 
- #define red {0xff, 0x00, 0x00}
+#define red {0xff, 0x00, 0x00}
 #define yellow {0xff, 0xff, 0x00}
 #define magenta {0xff, 0, 0xff}
 GLubyte texture[][3] = {
@@ -44,12 +44,13 @@ void CApp::RenderIt(CollidableObject *obj)
 {
     int cx = obj->getCenter().x;
     int cy = obj->getCenter().y;
-    int cz =obj->getCenter().z;
+    int cz = obj->getCenter().z;
 
+//this might need to be if(typeid(AABB) == typeid(*(obj)))
     if(typeid(AABB) == typeid(obj))
     {
         AABB *tempAABB = dynamic_cast<AABB*>(obj);
-        int xr= tempAABB->getXRadius()/2;
+        int xr = tempAABB->getXRadius()/2;
         int yr = tempAABB->getYRadius()/2;
 
         glBegin(GL_QUADS);        // Draw The Cube Using quads
@@ -63,7 +64,7 @@ void CApp::RenderIt(CollidableObject *obj)
 
         glEnd();
     }
-    else if(typeid(Sphere) == typeid(obj))
+    else if(typeid(Sphere) == typeid(obj)) //same comment here as for if statement
     {
         Sphere *sphere = dynamic_cast<Sphere*>(obj);
         float radius = sphere->getRadius();
@@ -84,11 +85,31 @@ void CApp::OnRender() {
 
     glClearColor(0,0,0,0);
 
-    glLoadIdentity();
-    glTranslatef(pLocX, -1, -20-pLocZ);
-    glRotatef(LocX,1.0,0.0,0.0);
-    // rotation about Y axis
-    glRotatef(LocY,0.0,1.0,0.0);
+    //glLoadIdentity();
+
+
+/*
+    xtrans = -xpos;
+    ztrans = -zpos;
+    ytrans = -walkbias-0.25f;
+    sceneroty = 360.0f - yrot;
+
+
+    glRotatef(lookupdown, 1.0f, 0, 0);
+    glRotatef(sceneroty, 0, 1.0f, 0);
+
+    glTranslatef(xtrans, ytrans, ztrans);
+*/
+
+
+
+    glTranslatef(pLocX, -1, -1);
+
+    glRotatef(LocX, 1.0, 0.0, 0.0);
+    glRotatef(LocY, 0.0, 1.0, 0.0); // rotation about Y axis
+
+
+
 
     // rotation about Z axis
     // glRotatef(0,0.0,0.0,1.0);
@@ -107,47 +128,137 @@ void CApp::OnRender() {
           glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
           glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 */
-        drawCircle(20,0,0,0);
-        glBegin(GL_QUADS);        // Draw The Cube Using quads
-        glColor3f(0.0f,1.0f,0.0f);    // Color Blue
-        glVertex3f( XMAX, YMAX,ZMIN);    // Top Right Of The Quad (Top)
-        glVertex3f(XMIN, YMAX,ZMIN);    // Top Left Of The Quad (Top)
-        glVertex3f(XMIN, YMAX, ZMAX);    // Bottom Left Of The Quad (Top)
-        glVertex3f( XMAX, YMAX, ZMAX);    // Bottom Right Of The Quad (Top)
 
-        glColor3f(1, 0, 0);glVertex3f( XMAX,YMIN, ZMAX);    // Top Right Of The Quad (Bottom)
-        glColor3f(1, 1, 0);glVertex3f(XMIN,YMIN, ZMAX);    // Top Left Of The Quad (Bottom)
-        glColor3f(1, 0, 1);glVertex3f(XMIN,YMIN,ZMIN);    // Bottom Left Of The Quad (Bottom)
-        glColor3f(1, 1, 1);glVertex3f( XMAX,YMIN,ZMIN);    // Bottom Right Of The Quad (Bottom)*/
-        glColor3f(1.0f,0.0f,0.0f);    // Color Red
-        glVertex3f( XMAX, YMAX, ZMAX);    // Top Right Of The Quad (Front)
-        glVertex3f(XMIN, YMAX, ZMAX);    // Top Left Of The Quad (Front)
-        glVertex3f(XMIN,YMIN, ZMAX);    // Bottom Left Of The Quad (Front)
-        glVertex3f(XMAX,YMIN,ZMAX);    // Bottom Right Of The Quad (Front)
+
+        //drawCircle(20,0,0,0);
+
+
+
+
+
+glBegin(GL_QUADS);
+// Floor *-/
+glVertex3f(-1,-1,-1);
+glVertex3f(1,-1,-1);
+glVertex3f(1,-1,1);
+glVertex3f(-1,-1,1);
+// Ceiling *-/
+glVertex3f(-1,1,-1);
+glVertex3f(1,1,-1);
+glVertex3f(1,1,1);
+glVertex3f(-1,1,1);
+// Walls *-/
+
+glVertex3f(-1,-1,1);
+glVertex3f(1,-1,1);
+glVertex3f(1,1,1);
+glVertex3f(-1,1,1);
+
+
+/*
+glVertex3f(-1,-1,-1);
+glVertex3f(1,-1,-1);
+glVertex3f(1,1,-1);
+glVertex3f(-1,1,-1);
+
+glVertex3f(1,1,1);
+glVertex3f(1,-1,1);
+glVertex3f(1,-1,-1);
+glVertex3f(1,1,-1);
+
+glVertex3f(-1,1,1);
+glVertex3f(-1,-1,1);
+glVertex3f(-1,-1,-1);
+glVertex3f(-1,1,-1);
+*/
+
+
+glEnd(); 
+
+
+
+
+
+        glBegin(GL_QUADS);
+        //glNormal3f( 0.0f, 0.0f, 1.0f);
+
+
+/*
+        //DRAW THE CEILING
+        glColor3f(0.0f,1.0f,0.0f);    // Color Green
+        glVertex3f(XMIN, YMAX, ZMIN);    // Top Right Of The Quad (Top)
+        glVertex3f(XMAX, YMAX, ZMIN);    // Top Left Of The Quad (Top)
+        glVertex3f(XMAX, YMAX, ZMAX);    // Bottom Left Of The Quad (Top)
+        glVertex3f(XMIN, YMAX, ZMAX);    // Bottom Right Of The Quad (Top)
+
+        //DRAW THE FLOOR
+        //glColor3f(1, 0, 0);
+        glVertex3f(XMIN, YMIN, ZMIN);    // Top Right Of The Quad (Bottom)
+        glVertex3f(XMAX, YMIN, ZMIN);    // Top Left Of The Quad (Bottom)
+        glVertex3f(XMAX, YMIN, ZMAX);    // Bottom Left Of The Quad (Bottom)
+        glVertex3f(XMIN, YMIN, ZMAX);    // Bottom Right Of The Quad (Bottom)
+*/
+
+
+        //Should be the wall we look at at the start
+
+        glColor3f(1.0f, 0.0f, 0.0f);    // Color Red
+        glVertex3f(-10, -10, 10);    // Top Right Of The Quad (Front)
+        glVertex3f(10, -10, 10);    // Top Left Of The Quad (Front)
+        glVertex3f(10, 10, 10);    // Bottom Left Of The Quad (Front)
+        glVertex3f(-10, 10, 10);    // Bottom Right Of The Quad (Front)
+
+
+/*
+        //both walls?
         glColor3f(1.0f,1.0f,0.0f);    // Color Yellow
         glVertex3f( XMAX,YMIN,ZMIN);    // Top Right Of The Quad (Back)
         glVertex3f(XMIN,YMIN,ZMIN);    // Top Left Of The Quad (Back)
         glVertex3f(XMIN, YMAX,ZMIN);    // Bottom Left Of The Quad (Back)
         glVertex3f(XMAX, YMAX,ZMIN);    // Bottom Right Of The Quad (Back)
+*/
+
+
+
+/*
+        //Nothing?
         glColor3f(0.0f,0.0f,1.0f);    // Color Blue
         glVertex3f(XMIN, YMAX, ZMAX);    // Top Right Of The Quad (Left)
         glVertex3f(XMIN, YMAX,ZMIN);    // Top Left Of The Quad (Left)
         glVertex3f(XMIN,YMIN,ZMIN);    // Bottom Left Of The Quad (Left)
         glVertex3f(XMIN,YMIN, ZMAX);    // Bottom Right Of The Quad (Left)
+*/
+
+
+/*
+
+        //Nothing?
         glColor3f(1.0f,0.0f,1.0f);    // Color Violet
         glVertex3f( XMAX, YMAX,ZMIN);    // Top Right Of The Quad (Right)
         glVertex3f( XMAX, YMAX, ZMAX);    // Top Left Of The Quad (Right)
         glVertex3f( XMAX,YMIN, ZMAX);    // Bottom Left Of The Quad (Right)
         glVertex3f( XMAX,YMIN,ZMIN);    // Bottom Right Of The Quad (Right)
+*/
+
+
 
         //render game objects
         for (std::vector<graphicsInfo>::iterator it = graphicsObjects.begin(); it != graphicsObjects.end(); ++it)
         {
             glBegin(GL_QUADS); //2D RENDERING
-            glColor3f(1, 0, 0); glVertex3f((*it).x, (*it).y, (*it).z);
-            glColor3f(1, 1, 0); glVertex3f(100+(*it).x, (*it).y, (*it).z);
-            glColor3f(1, 0, 1); glVertex3f(100+(*it).x, 100+(*it).y, (*it).z);
-            glColor3f(1, 1, 1); glVertex3f((*it).x, 100+(*it).y, (*it).z);
+
+            glColor3f(1, 0, 0);
+            glVertex3f((*it).x, (*it).y, (*it).z); //left
+
+            glColor3f(1, 1, 0);
+            glVertex3f(100+(*it).x, (*it).y, (*it).z); //right
+
+            glColor3f(1, 0, 1);
+            glVertex3f(100+(*it).x, 100+(*it).y, (*it).z);
+
+            glColor3f(1, 1, 1);
+            glVertex3f((*it).x, 100+(*it).y, (*it).z);
+
             glEnd();
         }
 
