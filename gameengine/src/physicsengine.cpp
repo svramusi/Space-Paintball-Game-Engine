@@ -57,6 +57,12 @@ cout << endl << "updating world.  current time is: " << timeStep << endl << endl
 
     for (std::vector<physicsInfo>::iterator it = physicsObjects.begin(); it != physicsObjects.end(); ++it)
     {
+
+cout << endl << "object id: " << (*it).ID
+        << " x: " << (*it).collidableObject->getCenter().x
+        << " y: " << (*it).collidableObject->getCenter().y
+        << " z: " << (*it).collidableObject->getCenter().z << endl;
+
         if((*it).movable) {
             calculateLinearForce(&(*it), delta);
             calculateLinearVelocity(&(*it), delta);
@@ -112,6 +118,12 @@ cout << endl << "pen x: " << penetration.x
                 newCenter.x = currentCenter.x; //+ penetration.x; //FIX ME!!!!
                 newCenter.y = currentCenter.y + penetration.y;
                 newCenter.z = currentCenter.z; //+ penetration.z; //FIX ME!!!!
+
+cout << endl << "new center: "
+        << " x: " << newCenter.x
+        << " y: " << newCenter.y
+        << " z: " << newCenter.z << endl;
+
 
                 cd->fixObject(tempInfo->ID, newCenter);
                 //Dirty hack... MUST BE AFTER cd->updateObject!!!!
