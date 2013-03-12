@@ -10,12 +10,7 @@
 
 #include <stdio.h>
 
-
-#include "AABB.h"
-#include "Sphere.h"
-
 #include "SphereClass.h"
-
 #include "physicsengine.h"
 
 
