@@ -180,7 +180,7 @@ GameEngine::GameEngine() {
     radii[1] = 10;
     radii[2] = 0;
 
-    moving2CO = new AABB(-1, movingCenter2, radii, false);//FIX ME!!!!!!!!!
+    moving2CO = new AABB(-1, movingCenter2, radii, true);
 
     Point movingCenter3;
     movingCenter3.x = 160.0f;

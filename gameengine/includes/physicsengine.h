@@ -52,7 +52,10 @@ private:
     void freeCollisions(collisionDetection* collisions);
 
     bool isMoving(const physicsInfo *item);
-    void moveItem(physicsInfo *item, penetration_t penetration);
+
+    //Returns original location to make the hack work
+    Point moveItem(physicsInfo *item, penetration_t penetration);
+    void moveItem(physicsInfo *item, Point origCenter);
 
     physicsInfo* findItem(int ID);
 

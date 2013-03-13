@@ -100,7 +100,9 @@ PhysicsEngine::isMoving(const physicsInfo *physics_info)
     return false;
 }
 
-void
+//Return original location before the item was moved...
+//Hack!
+Point
 PhysicsEngine::moveItem(physicsInfo *item, penetration_t penetration)
 {
 /*
@@ -110,19 +112,19 @@ cout << endl << "pen x: " << penetration.x
         << " pen z: " << penetration.z << endl;
 */
 
-    Point currentCenter = item->collidableObject->getCenter();
+    Point origCenter = item->collidableObject->getCenter();
 
     Point newCenter;
-    newCenter.x = currentCenter.x;
-    newCenter.y = currentCenter.y;
-    newCenter.z = currentCenter.z;
+    newCenter.x = origCenter.x;
+    newCenter.y = origCenter.y;
+    newCenter.z = origCenter.z;
 
     if(item->linearVelocity.x != 0) {
         newCenter.x += penetration.x;
     }
 
     if(item->linearVelocity.y != 0) {
-        newCenter.y += penetration.y;
+        newCenter.y += penetration.y + 0.1f; //FIX ME!!!
     }
 
     if(item->linearVelocity.z != 0) {
@@ -148,6 +150,20 @@ cout << endl << "new center: "
 
     //Dirty hack... MUST BE AFTER cd->updateObject!!!!
     //(*it).collidableObject->setCenter(newCenter);
+
+    return origCenter;
+}
+
+//Hack!
+void
+PhysicsEngine::moveItem(physicsInfo *item, Point origCenter)
+{
+    Point newCenter;
+    newCenter.x = origCenter.x;
+    newCenter.y = origCenter.y;
+    newCenter.z = origCenter.z;
+
+    cd->fixObject(item->ID, newCenter);
 }
 
 physicsInfo*
@@ -187,11 +203,101 @@ PhysicsEngine::resolveCollisions()
 
             penetration_t penetration = objectCollisionInfo->penetration;
 
+/*
             if(isMoving(baseCollision))
                 moveItem(baseCollision, penetration);
 
             if(isMoving(objectCollision))
                 moveItem(objectCollision, penetration);
+*/
+
+            //Nasty dirty hack...
+            Point origBase;
+            Point origObj;
+
+
+            if(baseCollision->collidableObject->isMovable())
+            {
+cout << "moving orig" << endl;
+                origBase = moveItem(baseCollision, penetration);
+            }
+
+            if(objectCollision->collidableObject->isMovable())
+            {
+cout << "moving obj" << endl;
+                origObj = moveItem(objectCollision, penetration);
+            }
+
+
+cout << endl << "base center: "
+    << " x: " << baseCollision->collidableObject->getCenter().x
+    << " y: " << baseCollision->collidableObject->getCenter().y
+    << " z: " << baseCollision->collidableObject->getCenter().z << endl;
+cout << endl << "obj center: "
+    << " x: " << objectCollision->collidableObject->getCenter().x
+    << " y: " << objectCollision->collidableObject->getCenter().y
+    << " z: " << objectCollision->collidableObject->getCenter().z << endl;
+
+            if(! cd->isIntersection(baseCollision->collidableObject, objectCollision->collidableObject))
+                goto resolved;
+
+            //Reset to orig location
+            moveItem(baseCollision, origBase);
+            moveItem(objectCollision, origObj);
+
+
+            //Only try to move base
+            if(baseCollision->collidableObject->isMovable())
+            {
+cout << "moving orig" << endl;
+                origBase = moveItem(baseCollision, penetration);
+            }
+
+
+cout << endl << "base center: "
+    << " x: " << baseCollision->collidableObject->getCenter().x
+    << " y: " << baseCollision->collidableObject->getCenter().y
+    << " z: " << baseCollision->collidableObject->getCenter().z << endl;
+cout << endl << "obj center: "
+    << " x: " << objectCollision->collidableObject->getCenter().x
+    << " y: " << objectCollision->collidableObject->getCenter().y
+    << " z: " << objectCollision->collidableObject->getCenter().z << endl;
+
+            if(! cd->isIntersection(baseCollision->collidableObject, objectCollision->collidableObject))
+                goto resolved;
+
+            //Reset to orig location
+            moveItem(baseCollision, origBase);
+            moveItem(objectCollision, origObj);
+
+
+            //Only try to move object
+            if(objectCollision->collidableObject->isMovable())
+            {
+cout << "moving obj" << endl;
+                origObj = moveItem(objectCollision, penetration);
+            }
+
+
+cout << endl << "base center: "
+    << " x: " << baseCollision->collidableObject->getCenter().x
+    << " y: " << baseCollision->collidableObject->getCenter().y
+    << " z: " << baseCollision->collidableObject->getCenter().z << endl;
+cout << endl << "obj center: "
+    << " x: " << objectCollision->collidableObject->getCenter().x
+    << " y: " << objectCollision->collidableObject->getCenter().y
+    << " z: " << objectCollision->collidableObject->getCenter().z << endl;
+
+            if(! cd->isIntersection(baseCollision->collidableObject, objectCollision->collidableObject))
+                goto resolved;
+
+            //Reset to orig location
+            moveItem(baseCollision, origBase);
+            moveItem(objectCollision, origObj);
+
+            //Oh no...
+            cout << endl << "we're in trouble...." << endl;
+resolved:
 
             objectCollisionInfo = objectCollisionInfo->next;
         }
