@@ -39,6 +39,7 @@
 									<listOptionValue builtIn="false" value="/usr/include/c++/4.7/backward"/>
 									<listOptionValue builtIn="false" value="/usr/local/include"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/thirdparty}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/thirdparty/SDL-1.2.15/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/thirdparty/armadillo-3.6.2/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/thirdparty/protobuf-2.5.0/src}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/gameengine/includes}&quot;"/>
