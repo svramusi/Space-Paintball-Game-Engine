@@ -169,11 +169,14 @@ sendGraphicObjectsToServer()
     radii[1] = 10;
     radii[2] = 0;
 
+    moving2CO = new Sphere(-1, movingCenter2, 10.0f, true);
+/*
 #ifdef SWEPT_SHAPES_MODE
     moving2CO = new Sphere(-1, movingCenter2, 10.0f, true);
 #else
     moving2CO = new AABB(-1, movingCenter2, radii, true);
 #endif
+*/
 
     Point movingCenter3;
     movingCenter3.x = 160.0f;
@@ -232,11 +235,13 @@ sendGraphicObjectsToServer()
         net::NetUtils::GetPhysicsInfo(moving2CO, 10, ballVel, zeroForce, zeroVel, zeroForce, zeroPoint)
     );
 
+/*
 #ifndef SWEPT_SHAPES_MODE
     physicsInfos.push_back(
         net::NetUtils::GetPhysicsInfo(moving3CO, 10, ballVel, zeroForce, zeroVel, zeroForce, zeroPoint)
     );
 #endif
+*/
 
 
     net::GameEngineMessage* payload = net::NetUtils::GetGameEngineCreateMessage( physicsInfos );
@@ -437,7 +442,7 @@ redraw()
 
     SDL_FillRect(screen,&moving1,color2);
     SDL_FillRect(screen,&moving2,color2);
-    SDL_FillRect(screen,&moving3,color2);
+    //SDL_FillRect(screen,&moving3,color2);
 
     SDL_Flip(screen);
     if(1000/FPS > SDL_GetTicks())

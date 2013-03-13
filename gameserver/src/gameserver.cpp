@@ -33,6 +33,7 @@ void FPSControl();
 bool ClientHasAlreadyConnected( net::Address& clientAddress );
 void* SocketHandler( void* );
 void ShutdownGameServer();
+void informClientOfUpdates();
 
 map<net::Address, net::ServerSocket*> serverConnections;
 
@@ -81,16 +82,9 @@ int main( int argc, char * argv[] )
             }
         }
 
-
         gameEngine->UpdatePhysics(time);
 
-        std::vector<physicsInfo> updatedObjects = gameEngine->getUpdatedObjects();
-        if(updatedObjects.size() > 0)
-        {
-            net::GameEngineMessage* payload = net::NetUtils::GetGameEngineCreateMessage(updatedObjects);
-            SendUpdateToClients(payload);
-        }
-
+        informClientOfUpdates();
     } // End Server Game Loop
 
     // Reclaim memory.
@@ -98,6 +92,17 @@ int main( int argc, char * argv[] )
 
     if(gameEngine)
         delete gameEngine;
+}
+
+void
+informClientOfUpdates()
+{
+    std::vector<physicsInfo> updatedObjects = gameEngine->getUpdatedObjects();
+    if(updatedObjects.size() > 0)
+    {
+        net::GameEngineMessage* payload = net::NetUtils::GetGameEngineCreateMessage(updatedObjects);
+        SendUpdateToClients(payload);
+    }
 }
 
 void FPSControl()
