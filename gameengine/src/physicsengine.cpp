@@ -244,8 +244,10 @@ PhysicsEngine::resolveCollisions()
                 goto resolved;
 
             //Reset to orig location
-            moveItem(baseCollision, origBase);
-            moveItem(objectCollision, origObj);
+            if(baseID != -1)
+                moveItem(baseCollision, origBase);
+            if(objID != -1)
+                moveItem(objectCollision, origObj);
 
             baseID = -1;
             objID = -1;
@@ -264,8 +266,10 @@ PhysicsEngine::resolveCollisions()
                 goto resolved;
 
             //Reset to orig location
-            moveItem(baseCollision, origBase);
-            moveItem(objectCollision, origObj);
+            if(baseID != -1)
+                moveItem(baseCollision, origBase);
+            if(objID != -1)
+                moveItem(objectCollision, origObj);
 
             baseID = -1;
             objID = -1;
@@ -284,8 +288,10 @@ PhysicsEngine::resolveCollisions()
                 goto resolved;
 
             //Reset to orig location
-            moveItem(baseCollision, origBase);
-            moveItem(objectCollision, origObj);
+            if(baseID != -1)
+                moveItem(baseCollision, origBase);
+            if(objID != -1)
+                moveItem(objectCollision, origObj);
 
             baseID = -1;
             objID = -1;
@@ -481,8 +487,6 @@ void PhysicsEngine::calculateLinearVelocity(physicsInfo *item, float deltaT)
     newCenter.z = currentCenter.z + zAccel + zVel;
 
     cd->updateObject(item->collidableObject->getID(), newCenter);
-    //Dirty hack... MUST BE AFTER cd->updateObject!!!!
-    //item->collidableObject->setCenter(newCenter);
  }
 
 void PhysicsEngine::insertPhysicsObject(CollidableObject *obj, float m, Velocity linVel, Force linFrc, Velocity angVel, Force angFrc, Point angPos)
