@@ -122,27 +122,36 @@ namespace net
 		return gameEnginePayload;
 	}
 
-	GameEngineMessage* NetUtils::GetUpdateObjectMsg( int ID, Point position )
+	GameEngineMessage* NetUtils::GetUpdateObjectMsg( map<int, Point> updateObjMap )
 	{
 		GameEngineMessage* gameEnginePayload = new GameEngineMessage();
 		gameEnginePayload->set_messagetype( GameEngineMessage::UPDATE );
 
-		UpdateObjectMessage* updateObjectMsg = gameEnginePayload->add_updateobject();
+		for( map<int, Point>::iterator it = updateObjMap.begin(); it != updateObjMap.end(); ++it )
+		{
+			int ID = it->first;
+			Point position = it->second;
 
-		updateObjectMsg->set_id( ID );
-		updateObjectMsg->set_allocated_position( GetPointMsg( position) );
+			UpdateObjectMessage* updateObjectMsg = gameEnginePayload->add_updateobject();
+
+			updateObjectMsg->set_id( ID );
+			updateObjectMsg->set_allocated_position( GetPointMsg( position) );
+		}
 
 		return gameEnginePayload;
 	}
 
-	GameEngineMessage* NetUtils::GetDeleteObjectMsg( int ID )
+	GameEngineMessage* NetUtils::GetDeleteObjectMsg( vector<int> deleteObjVector )
 	{
 		GameEngineMessage* gameEnginePayload = new GameEngineMessage();
 		gameEnginePayload->set_messagetype( GameEngineMessage::DELETE );
 
-		DeleteObjectMessage* deleteObjectMsg = gameEnginePayload->add_deleteobject();
+		for( int i = 0; i < deleteObjVector.size(); i++ )
+		{
+			DeleteObjectMessage* deleteObjectMsg = gameEnginePayload->add_deleteobject();
 
-		deleteObjectMsg->set_id( ID );
+			deleteObjectMsg->set_id( deleteObjVector[ i ] );
+		}
 
 		return gameEnginePayload;
 	}
@@ -330,7 +339,12 @@ namespace net
 		return thePhysicsInfo;
 	}
 
-	vector<physicsInfo> NetUtils::GetPhysicsInfoObj( GameEngineMessage* gameEngineMsg )
+	vector<physicsInfo> NetUtils::GetGameEngineCreateObj( GameEngineMessage* gameEngineMsg )
+	{
+		return GetGameEngineRetrieveObj( gameEngineMsg );
+	}
+
+	vector<physicsInfo> NetUtils::GetGameEngineRetrieveObj( GameEngineMessage* gameEngineMsg )
 	{
 		vector<physicsInfo> physicsInfos;
 
@@ -341,34 +355,11 @@ namespace net
 
 			if( physicsInfoMsg.has_aabbobject() )
 			{
-				AabbMessage aabbObjectMsg = physicsInfoMsg.aabbobject();
-				CollidableObjectMessage collidableObjectMsg = aabbObjectMsg.collidableobject();
-
-				int ID = collidableObjectMsg.id();
-				Point center = GetPointObj( collidableObjectMsg.center() );
-				float radii[3] = {0.0f, 0.0f, 0.0f};
-				radii[0] = aabbObjectMsg.radiusx();
-				radii[1] = aabbObjectMsg.radiusy();
-				radii[2] = aabbObjectMsg.radiusz();
-				int movable = collidableObjectMsg.movable();
-
-				AABB* aabbObject = new AABB( ID, center, radii, movable  );
-
-				thePhysicsInfo.collidableObject = aabbObject;
+				thePhysicsInfo.collidableObject = GetAABBObj( physicsInfoMsg.aabbobject() );
 			}
 			else if( physicsInfoMsg.has_sphereobject() )
 			{
-				SphereMessage sphereObjectMsg = physicsInfoMsg.sphereobject();
-				CollidableObjectMessage collidableObjectMsg = sphereObjectMsg.collidableobject();
-
-				int ID = collidableObjectMsg.id();
-				Point center = GetPointObj( collidableObjectMsg.center() );
-				float radius = sphereObjectMsg.radius();
-				int movable = collidableObjectMsg.movable();
-
-				Sphere* sphereObject = new Sphere( ID, center, radius, movable );
-
-				thePhysicsInfo.collidableObject = sphereObject;
+				thePhysicsInfo.collidableObject = GetSphereObj( physicsInfoMsg.sphereobject() );
 			}
 
 			thePhysicsInfo.mass = physicsInfoMsg.mass();
@@ -383,6 +374,69 @@ namespace net
 		}
 
 		return physicsInfos;
+	}
+
+	map<int, Point> NetUtils::GetUpdateObj( GameEngineMessage* gameEngineMsg )
+	{
+		map<int, Point> updateObjMap;
+
+		for( int i = 0; i < gameEngineMsg->updateobject_size(); i++ )
+		{
+			UpdateObjectMessage updateObjMsg = gameEngineMsg->updateobject( i );
+			int ID = updateObjMsg.id();
+			Point position = GetPointObj( updateObjMsg.position() );
+
+			updateObjMap.insert( pair<int, Point>( ID, position ) );
+		}
+
+		return updateObjMap;
+	}
+
+	vector<int> NetUtils::GetDeleteObj( GameEngineMessage* gameEngineMsg )
+	{
+		vector<int> deleteObjVector;
+
+		for( int i = 0; i < gameEngineMsg->deleteobject_size(); i++ )
+		{
+			DeleteObjectMessage deleteObjMsg = gameEngineMsg->deleteobject( i );
+
+			int ID = deleteObjMsg.id();
+
+			deleteObjVector.push_back( ID );
+		}
+
+		return deleteObjVector;
+	}
+
+	AABB* NetUtils::GetAABBObj( const AabbMessage& aabbObjectMsg )
+	{
+		CollidableObjectMessage collidableObjectMsg = aabbObjectMsg.collidableobject();
+
+		int ID = collidableObjectMsg.id();
+		Point center = GetPointObj( collidableObjectMsg.center() );
+		float radii[3] = {0.0f, 0.0f, 0.0f};
+		radii[0] = aabbObjectMsg.radiusx();
+		radii[1] = aabbObjectMsg.radiusy();
+		radii[2] = aabbObjectMsg.radiusz();
+		int movable = collidableObjectMsg.movable();
+
+		AABB* aabbObject = new AABB( ID, center, radii, movable  );
+
+		return aabbObject;
+	}
+
+	Sphere* NetUtils::GetSphereObj( const SphereMessage& sphereObjectMsg )
+	{
+		CollidableObjectMessage collidableObjectMsg = sphereObjectMsg.collidableobject();
+
+		int ID = collidableObjectMsg.id();
+		Point center = GetPointObj( collidableObjectMsg.center() );
+		float radius = sphereObjectMsg.radius();
+		int movable = collidableObjectMsg.movable();
+
+		Sphere* sphereObject = new Sphere( ID, center, radius, movable );
+
+		return sphereObject;
 	}
 
 	Point NetUtils::GetPointObj( const PointMessage& pointMsg )

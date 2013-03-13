@@ -15,6 +15,7 @@
 #include <errno.h>
 #include <arpa/inet.h>
 #include <vector>
+#include <map>
 
 #include <unistd.h>
 #include <google/protobuf/io/coded_stream.h>
@@ -44,10 +45,14 @@ namespace net
 		static GameEngineMessage* ReadBody( net::Socket* serverSocket, google::protobuf::uint32 size );
 		static GameEngineMessage* GetGameEnginePayload();
 		static physicsInfo GetPhysicsInfo( float value );
+
+		/*
+		 * Functions that convert from game objects to game messages.
+		 */
 		static GameEngineMessage* GetGameEngineCreateMessage( vector<physicsInfo> physicsInfos );
 		static GameEngineMessage* GetGameEngineRetrieveMessage( vector<physicsInfo> physicsInfos );
-		static GameEngineMessage* GetUpdateObjectMsg( int ID, Point position );
-		static GameEngineMessage* GetDeleteObjectMsg( int ID );
+		static GameEngineMessage* GetUpdateObjectMsg( map<int, Point> updateObjMap );
+		static GameEngineMessage* GetDeleteObjectMsg( vector<int> deleteObjVector );
 		static void SetPhysicsInfoMessage( physicsInfo thePhysicsInfo, PhysicsInfoMessage* physicsInfoMsg );
 		static AabbMessage* GetAabbObjectMsg( AABB* aabbObject );
 		static SphereMessage* GetSphereObjectMsg( Sphere* sphereObject );
@@ -56,7 +61,15 @@ namespace net
 		static VelocityMessage* GetVelocityMsg( Velocity velocity );
 		static ForceMessage* GetForceMsg( Force force );
 
-		static vector<physicsInfo> GetPhysicsInfoObj( GameEngineMessage* gameEngineMsg );
+		/*
+		 * Functions that convert from game messages to game object.
+		 */
+		static vector<physicsInfo> GetGameEngineCreateObj( GameEngineMessage* gameEngineMsg );
+		static vector<physicsInfo> GetGameEngineRetrieveObj( GameEngineMessage* gameEngineMsg );
+		static map<int, Point> GetUpdateObj( GameEngineMessage* gameEngineMsg );
+		static vector<int> GetDeleteObj( GameEngineMessage* gameEngineMsg );
+		static AABB* GetAABBObj( const AabbMessage& aabbObjectMsg );
+		static Sphere* GetSphereObj( const SphereMessage& sphereOjbectMsg );
 		static Point GetPointObj( const PointMessage& pointMsg );
 		static Velocity GetVelocityObj( const VelocityMessage& velocityMsg );
 		static Force GetForceObj( const ForceMessage& forceMsg );
