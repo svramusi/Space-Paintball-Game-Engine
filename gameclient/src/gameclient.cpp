@@ -271,7 +271,7 @@ int main( int argc, char * argv[] )
     sendGraphicObjectsToServer();
 
     // Client Game Loop
-    while(!quit)
+    while( !quit )
     {
         /*
          * Poll for OS Events/Messages; this is
@@ -445,7 +445,7 @@ bool TimeForRendering()
  * Event pump method; polling method for
  * OS messages.
  */
-int PollForOSMessages(bool& quit)
+int PollForOSMessages( bool& quit )
 {
 	SDL_Event event;
 

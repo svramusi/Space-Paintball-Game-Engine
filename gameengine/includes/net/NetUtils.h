@@ -49,6 +49,7 @@ namespace net
         /*
          * Functions that convert from game objects to game messages.
          */
+        static GameEngineMessage* GetClientQuitStateMessage();
         static GameEngineMessage* GetGameEngineCreateMessage( vector<physicsInfo> physicsInfos );
         static GameEngineMessage* GetGameEngineRetrieveMessage( vector<physicsInfo> physicsInfos );
         static GameEngineMessage* GetUpdateObjectMsg( map<int, Point> updateObjMap );
@@ -64,6 +65,7 @@ namespace net
         /*
          * Functions that convert from game messages to game object.
          */
+        static bool GetClientQuitState( GameEngineMessage* gameEngineMsg );
         static vector<physicsInfo> GetGameEngineCreateObj( GameEngineMessage* gameEngineMsg );
         static vector<physicsInfo> GetGameEngineRetrieveObj( GameEngineMessage* gameEngineMsg );
         static map<int, Point> GetUpdateObj( GameEngineMessage* gameEngineMsg );

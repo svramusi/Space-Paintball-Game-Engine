@@ -234,7 +234,7 @@ void* SocketHandler(void* lp)
     bool quit = false;
 
     // Game loop for each client connection.
-    while (!quit)
+    while ( !quit )
     {
         /*
          * Poll for OS Events/Messages; this is

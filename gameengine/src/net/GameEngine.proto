@@ -68,6 +68,7 @@ message GameEngineMessage {
 	   RETRIEVE = 1;
 	   UPDATE = 2;
 	   DELETE = 3;
+	   QUIT = 4;
 	}
 	
 	required GameEngineMessageType messageType = 1;
