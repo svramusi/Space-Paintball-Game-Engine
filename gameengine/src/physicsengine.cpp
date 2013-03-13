@@ -119,11 +119,6 @@ PhysicsEngine::moveItem(physicsInfo *item, penetration_t penetration)
         newCenter.z += penetration.z;
     }
 
-cout << endl << "new center: "
-        << " x: " << newCenter.x
-        << " y: " << newCenter.y
-        << " z: " << newCenter.z << endl;
-
     cd->fixObject(item->ID, newCenter);
 
     return origCenter;
@@ -190,13 +185,6 @@ PhysicsEngine::resolveCollisions()
             int objectCollisionID = objectCollisionInfo->ID;
             physicsInfo* objectCollision = findItem(objectCollisionID);
 
-/*
-cout << endl << "the folling id's have been involved in a colision this turn:";
-for( std::vector<int>::iterator it = objectsMovedThisTurn.begin(); it != objectsMovedThisTurn.end(); ++it) {
-    cout << (*it) << endl;
-}
-*/
-
             penetration_t penetration;
             //If either has been in a collision, need to get new, readjusted penetration vector
             if(hasObjectBeenInCollision(baseCollisionID) || hasObjectBeenInCollision(objectCollisionID))
@@ -209,14 +197,6 @@ for( std::vector<int>::iterator it = objectsMovedThisTurn.begin(); it != objects
                 penetration = objectCollisionInfo->penetration;
             }
 
-/*
-            if(isMoving(baseCollision))
-                moveItem(baseCollision, penetration);
-
-            if(isMoving(objectCollision))
-                moveItem(objectCollision, penetration);
-*/
-
             //Nasty dirty hack...
             Point origBase;
             Point origObj;
@@ -227,26 +207,16 @@ for( std::vector<int>::iterator it = objectsMovedThisTurn.begin(); it != objects
 
             if(baseCollision->collidableObject->isMovable())
             {
-cout << "moving orig" << endl;
                 origBase = moveItem(baseCollision, penetration);
                 baseID = baseCollision->collidableObject->getID();
             }
 
             if(objectCollision->collidableObject->isMovable())
             {
-cout << "moving obj" << endl;
                 origObj = moveItem(objectCollision, penetration);
                 objID = objectCollision->collidableObject->getID();
             }
 
-cout << endl << "base center: "
-    << " x: " << baseCollision->collidableObject->getCenter().x
-    << " y: " << baseCollision->collidableObject->getCenter().y
-    << " z: " << baseCollision->collidableObject->getCenter().z << endl;
-cout << endl << "obj center: "
-    << " x: " << objectCollision->collidableObject->getCenter().x
-    << " y: " << objectCollision->collidableObject->getCenter().y
-    << " z: " << objectCollision->collidableObject->getCenter().z << endl;
 
             if(! cd->isIntersection(baseCollision->collidableObject, objectCollision->collidableObject))
                 goto resolved;
@@ -257,25 +227,16 @@ cout << endl << "obj center: "
 
             baseID = -1;
             objID = -1;
+
+
 
 
             //Only try to move base
             if(baseCollision->collidableObject->isMovable())
             {
-cout << "moving orig" << endl;
                 origBase = moveItem(baseCollision, penetration);
                 baseID = baseCollision->collidableObject->getID();
             }
-
-
-cout << endl << "base center: "
-    << " x: " << baseCollision->collidableObject->getCenter().x
-    << " y: " << baseCollision->collidableObject->getCenter().y
-    << " z: " << baseCollision->collidableObject->getCenter().z << endl;
-cout << endl << "obj center: "
-    << " x: " << objectCollision->collidableObject->getCenter().x
-    << " y: " << objectCollision->collidableObject->getCenter().y
-    << " z: " << objectCollision->collidableObject->getCenter().z << endl;
 
             if(! cd->isIntersection(baseCollision->collidableObject, objectCollision->collidableObject))
                 goto resolved;
@@ -288,23 +249,14 @@ cout << endl << "obj center: "
             objID = -1;
 
 
+
+
             //Only try to move object
             if(objectCollision->collidableObject->isMovable())
             {
-cout << "moving obj" << endl;
                 origObj = moveItem(objectCollision, penetration);
                 objID = objectCollision->collidableObject->getID();
             }
-
-
-cout << endl << "base center: "
-    << " x: " << baseCollision->collidableObject->getCenter().x
-    << " y: " << baseCollision->collidableObject->getCenter().y
-    << " z: " << baseCollision->collidableObject->getCenter().z << endl;
-cout << endl << "obj center: "
-    << " x: " << objectCollision->collidableObject->getCenter().x
-    << " y: " << objectCollision->collidableObject->getCenter().y
-    << " z: " << objectCollision->collidableObject->getCenter().z << endl;
 
             if(! cd->isIntersection(baseCollision->collidableObject, objectCollision->collidableObject))
                 goto resolved;
@@ -319,6 +271,8 @@ cout << endl << "obj center: "
 
             //Oh no...
             cout << endl << "we're in trouble...." << endl;
+
+
 
 resolved:
             if(baseID != -1)
