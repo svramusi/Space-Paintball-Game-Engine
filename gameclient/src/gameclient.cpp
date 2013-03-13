@@ -34,6 +34,9 @@ bool TimeForRendering();
 void UpdateStatistics();
 void FPSControl();
 
+void checkForUpdatesFromServer();
+void redraw();
+
 net::ClientSocket clientSocket;
 
 SDL_Rect leftWall;
@@ -42,6 +45,14 @@ SDL_Rect bottom;
 SDL_Rect moving1;
 SDL_Rect moving2;
 SDL_Rect moving3;
+
+CollidableObject *leftWallCO;
+CollidableObject *rightWallCO;
+CollidableObject *bottomCO;
+
+CollidableObject *moving1CO;
+CollidableObject *moving2CO;
+CollidableObject *moving3CO;
 
 SDL_Surface* screen;
 
@@ -96,14 +107,6 @@ initGraphics()
 void
 sendGraphicObjectsToServer()
 {
-    CollidableObject *leftWallCO;
-    CollidableObject *rightWallCO;
-    CollidableObject *bottomCO;
-
-    CollidableObject *moving1CO;
-    CollidableObject *moving2CO;
-    CollidableObject *moving3CO;
-
     float radii[3];
 
     Point leftWallCenter;
@@ -258,7 +261,6 @@ int main( int argc, char * argv[] )
 */
 
     bool quit = false;
-    GameEngine gameEngine(1);
     Uint32 time = SDL_GetTicks();
     bool needToRedraw = true;
 
@@ -337,7 +339,8 @@ int main( int argc, char * argv[] )
 
         ///////////////////////////////////////////////////////////
         //Update Game State Copy
-        net::GameEngineMessage* gameEngineState = GetUpdateFromServer();
+        checkForUpdatesFromServer();
+
         // Update local game state (or game state copy).
         //gameEngine.UpdateGameState(inputFromServer);
         ///////////////////////////////////////////////////////////
@@ -352,11 +355,9 @@ int main( int argc, char * argv[] )
 
         if(TimeForRendering())
         {
-            /*
-             * Redraw the game.
-             */
-            //gameEngine.Render();
         }
+
+        redraw();
 
         FPSControl();
 
@@ -374,9 +375,62 @@ int main( int argc, char * argv[] )
     google::protobuf::ShutdownProtobufLibrary();
 }
 
+void
+checkForUpdatesFromServer()
+{
+    net::GameEngineMessage* gameEngineUpdates = GetUpdateFromServer();
+    if(gameEngineUpdates == NULL)
+        return;
+
+    vector<physicsInfo> updatedObjects = net::NetUtils::GetGameEngineRetrieveObj(gameEngineUpdates);
+
+    if(updatedObjects.size() > 0) {
+        for(int i=0; i < updatedObjects.size(); i++) {
+            physicsInfo info = updatedObjects[i];
+
+            if(info.collidableObject->getID() == 3)
+                moving1CO = info.collidableObject;
+            else if(info.collidableObject->getID() == 4)
+                moving2CO = info.collidableObject;
+            else if(info.collidableObject->getID() == 5)
+                moving3CO = info.collidableObject;
+        }
+    }
+}
+
+
+void
+redraw()
+{
+    //Clear the screen
+    SDL_FillRect(screen, &screen->clip_rect, SDL_MapRGB(screen->format, 0x00, 0x00, 0x00));
+
+    moving1.x = moving1CO->getCenter().x;
+    moving1.y = SDL_START_HEIGHT - moving1CO->getCenter().y;
+
+    moving2.x = moving2CO->getCenter().x;
+    moving2.y = SDL_START_HEIGHT - moving2CO->getCenter().y;
+
+    moving3.x = moving3CO->getCenter().x;
+    moving3.y = SDL_START_HEIGHT - moving3CO->getCenter().y;
+
+
+    SDL_FillRect(screen,&leftWall,color);
+    SDL_FillRect(screen,&rightWall,color);
+    SDL_FillRect(screen,&bottom,color);
+
+    SDL_FillRect(screen,&moving1,color2);
+    SDL_FillRect(screen,&moving2,color2);
+    SDL_FillRect(screen,&moving3,color2);
+
+    SDL_Flip(screen);
+    if(1000/FPS > SDL_GetTicks())
+        SDL_Delay(1000/FPS - (SDL_GetTicks()));
+}
+
 net::GameEngineMessage* GetUpdateFromServer()
 {
-    net::GameEngineMessage* input;
+    net::GameEngineMessage* input = NULL;
 
     ///////////////////////////////////////////////////////////
     // Get data
