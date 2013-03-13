@@ -59,7 +59,7 @@ int main( int argc, char * argv[] )
     pthread_t thread_id = 0;
 
     // Server Game Loop
-    while(!quit)
+    while( !quit )
     {
 
 usleep(500000);
@@ -248,21 +248,29 @@ void* SocketHandler(void* lp)
         {
             net::GameEngineMessage* input = GetInputFromClient( &quit, serverSocket );
 
-            vector<physicsInfo> physicsInfoList = net::NetUtils::GetGameEngineRetrieveObj(input);
-
-            for(int i=0; i < physicsInfoList.size(); i++ ) {
-                physicsInfo info = physicsInfoList[i];
-
-cout << endl << "in server and adding object: "
-        << " x: " << info.collidableObject->getCenter().x
-        << " y: " << info.collidableObject->getCenter().y
-        << " z: " << info.collidableObject->getCenter().z << endl;
-
-                gameEngine->insertPhysicsObject( info.collidableObject, info.mass, info.linearVelocity,
-                    info.linearForce, info.angularVelocity, info.angularForce, info.angularPosition);
+            if( net::NetUtils::GetClientQuitState( input ) )
+            {
+            	quit = true;
             }
+            else
+            {
+				vector<physicsInfo> physicsInfoList = net::NetUtils::GetGameEngineRetrieveObj(input);
 
-            //SendUpdateToClients( input );
+				for(int i=0; i < physicsInfoList.size(); i++ )
+				{
+					physicsInfo info = physicsInfoList[i];
+
+	cout << endl << "in server and adding object: "
+			<< " x: " << info.collidableObject->getCenter().x
+			<< " y: " << info.collidableObject->getCenter().y
+			<< " z: " << info.collidableObject->getCenter().z << endl;
+
+					gameEngine->insertPhysicsObject( info.collidableObject, info.mass, info.linearVelocity,
+						info.linearForce, info.angularVelocity, info.angularForce, info.angularPosition);
+				}
+
+				//SendUpdateToClients( input );
+            }
         }
 
         ///////////////////////////////////////////////////////////
