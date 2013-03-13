@@ -26,8 +26,8 @@ using namespace std;
 const Uint32 RedrawingPeriod = 20;
 const int MaxFrameSkip = 10;
 
-int PollForOSMessages(bool* quit);
-int GetInput(bool* quit);
+int PollForOSMessages(bool& quit);
+int GetInput(bool& quit);
 void SendInputToServer(int input);
 net::GameEngineMessage* GetUpdateFromServer();
 bool TimeForRendering();
@@ -258,7 +258,7 @@ int main( int argc, char * argv[] )
 */
 
     bool quit = false;
-    GameEngine gameEngine;
+    GameEngine gameEngine(1);
     Uint32 time = SDL_GetTicks();
     bool needToRedraw = true;
 
@@ -277,7 +277,7 @@ int main( int argc, char * argv[] )
          * Poll for OS Events/Messages; this is
          * the event pump.
          */
-        PollForOSMessages(&quit);
+        PollForOSMessages( quit );
 
         Uint32 actualTime = SDL_GetTicks();
         int frames = 0;
@@ -328,7 +328,7 @@ int main( int argc, char * argv[] )
             needToRedraw = false;
         }
 
-        int input = GetInput(&quit);
+        int input = GetInput( quit );
 
         // now you can write buf.data() to the socket
         ///////////////////////////////////////////////////////////
@@ -445,15 +445,17 @@ bool TimeForRendering()
  * Event pump method; polling method for
  * OS messages.
  */
-int PollForOSMessages(bool* quit)
+int PollForOSMessages(bool& quit)
 {
-/*
-    while(SDL_PollEvent(&event))
+	SDL_Event event;
+
+    while( SDL_PollEvent( &event ) )
     {
-        switch(eventType)
+        switch( event.type )
         {
+/*
             case SDL_KEYDOWN:
-                if(event.key.keysym.sym == SDLK_F12)
+            	if(event.key.keysym.sym == SDLK_F12)
                 {
                     quit = true;
                 }
@@ -462,18 +464,17 @@ int PollForOSMessages(bool* quit)
             case SDL_MOUSEBUTTONDOWN:
                 gameEngine->MouseClick(event.button.x, event.button.y);
                 break;
-
+*/
             case SDL_QUIT:
                 quit = true;
                 break;
         } // End Switch
     }
-    */
 
     return 0;
 }
 
-int GetInput(bool* quit)
+int GetInput(bool& quit)
 {
     return 0;
 }
