@@ -88,11 +88,6 @@ cout << endl << "object id: " << (*it).ID
 bool
 PhysicsEngine::isMoving(const physicsInfo *physics_info)
 {
-    cout << endl << "linear velocity for id: " << physics_info->collidableObject->getID()
-        << " x: " << physics_info->linearVelocity.x
-        << " y: " << physics_info->linearVelocity.y
-        << " z: " << physics_info->linearVelocity.z << endl;
-
     if(physics_info->linearVelocity.x != 0) return true;
     if(physics_info->linearVelocity.y != 0) return true;
     if(physics_info->linearVelocity.z != 0) return true;
@@ -117,7 +112,7 @@ PhysicsEngine::moveItem(physicsInfo *item, penetration_t penetration)
     }
 
     if(item->linearVelocity.y != 0) {
-        newCenter.y += penetration.y;// + 0.1f; //FIX ME!!!
+        newCenter.y += penetration.y;
     }
 
     if(item->linearVelocity.z != 0) {
@@ -324,6 +319,7 @@ cout << endl << "obj center: "
 
             //Oh no...
             cout << endl << "we're in trouble...." << endl;
+
 resolved:
             if(baseID != -1)
                 objectsMovedThisTurn.push_back(baseID);

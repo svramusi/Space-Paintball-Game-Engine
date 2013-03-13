@@ -145,8 +145,6 @@ CollisionDetection::checkForAnyCollisions()
                     capsuleID2 = capsule2->getSphereID();
                 }
 
-//cout << endl << "found an intersection between: " << (obj1)->getID() << " and " << (obj2)->getID() << endl;
-
                 if(capsuleID2 != -1)
                     collision_info->ID = capsuleID2;
                 else

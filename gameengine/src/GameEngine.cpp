@@ -6,22 +6,14 @@
  */
 
 #include "GameEngine.h"
-
 #include "SDL.h"
-
 #include <unistd.h>
-
-const int WINDOW_WIDTH = 640;
-const int WINDOW_HEIGHT = 480;
-const char* WINDOW_TITLE = "SDL Start";
 
 const int SDL_START_HEIGHT = 1000;
 
+//#define SWEPT_SHAPES_MODE
+
 GameEngine::GameEngine() {
-    printf("Game Engine Initialized\n");
-
-
-
     SDL_Init(SDL_INIT_EVERYTHING);
     SDL_Surface* screen = SDL_SetVideoMode(640,480,32,SDL_SWSURFACE);
 
@@ -65,43 +57,8 @@ GameEngine::GameEngine() {
     moving3.w=10;
     moving3.h=10;
 
-
-
     Uint32 color = SDL_MapRGB(screen->format,0xff,0xff,0xff);
     Uint32 color2 = SDL_MapRGB(screen->format,0xff,0x00,0xff);
-
-/*
-    while(running) {
-        start = SDL_GetTicks();
-        SDL_Event event;
-
-        while(SDL_PollEvent(&event)) {
-            switch(event.type) {
-                case SDL_QUIT:
-                    running = false;
-                    break;
-            }
-        }
-
-
-
-        SDL_FillRect( screen, &screen->clip_rect, SDL_MapRGB( screen->format, 0x00, 0x00, 0x00 ) );
-
-        SDL_FillRect(screen,&leftWall,color);
-        SDL_FillRect(screen,&rightWall,color);
-        SDL_FillRect(screen,&bottom,color);
-
-        SDL_FillRect(screen,&moving1,color2);
-        SDL_FillRect(screen,&moving2,color2);
-
-        SDL_Flip(screen);
-        if(1000/FPS > SDL_GetTicks()-start)
-            SDL_Delay(1000/FPS - (SDL_GetTicks() - start));
-    }
-    SDL_Quit();
-*/
-
-
 
 
 
@@ -180,7 +137,11 @@ GameEngine::GameEngine() {
     radii[1] = 10;
     radii[2] = 0;
 
+#ifdef SWEPT_SHAPES_MODE
+    moving2CO = new Sphere(-1, movingCenter2, 10.0f, true);
+#else
     moving2CO = new AABB(-1, movingCenter2, radii, true);
+#endif
 
     Point movingCenter3;
     movingCenter3.x = 160.0f;
@@ -220,13 +181,17 @@ GameEngine::GameEngine() {
     physics->insertPhysicsObject(bottomCO, 10, zeroVel, zeroForce, zeroVel, zeroForce, zeroPoint);
     physics->insertPhysicsObject(rightWallCO, 10, zeroVel, zeroForce, zeroVel, zeroForce, zeroPoint);
 
-//    physics->insertPhysicsObject(moving1CO, 10, ballVel, zeroForce, zeroVel, zeroForce, zeroPoint);
-//    physics->insertPhysicsObject(moving2CO, 10, ballVel, zeroForce, zeroVel, zeroForce, zeroPoint);
-    physics->insertPhysicsObject(moving2CO, 10, zeroVel, zeroForce, zeroVel, zeroForce, zeroPoint);
+    physics->insertPhysicsObject(moving1CO, 10, ballVel, zeroForce, zeroVel, zeroForce, zeroPoint);
+    physics->insertPhysicsObject(moving2CO, 10, ballVel, zeroForce, zeroVel, zeroForce, zeroPoint);
+#ifndef SWEPT_SHAPES_MODE
     physics->insertPhysicsObject(moving3CO, 10, ballVel, zeroForce, zeroVel, zeroForce, zeroPoint);
+#endif
 
+#ifdef SWEPT_SHAPES_MODE
+    for(int i=0; i<200; i++)
+#else
     for(float i=0.0f; i<10.0f; i=i+0.03f)
-    //for(int i=0; i<200; i++)
+#endif
     {
         physics->updateWorld(i);
 
@@ -255,7 +220,11 @@ GameEngine::GameEngine() {
         if(1000/FPS > SDL_GetTicks()-start)
             SDL_Delay(1000/FPS - (SDL_GetTicks() - start));
 
+#ifdef SWEPT_SHAPES_MODE
+        usleep(500000);
+#else
         usleep(50000);
+#endif
     }
 
 
