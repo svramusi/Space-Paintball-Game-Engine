@@ -58,6 +58,8 @@ namespace net
 
 		static vector<physicsInfo> GetPhysicsInfoObj( GameEngineMessage* gameEngineMsg );
 		static Point GetPointObj( const PointMessage& pointMsg );
+		static Velocity GetVelocityObj( const VelocityMessage& velocityMsg );
+		static Force GetForceObj( const ForceMessage& forceMsg );
 	};
 }
 #endif /* NETUTILS_H_ */

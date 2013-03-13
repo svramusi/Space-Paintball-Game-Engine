@@ -379,7 +379,7 @@ namespace net
 		return physicsInfos;
 	}
 
-	Point GetPointObj( const PointMessage& pointMsg )
+	Point NetUtils::GetPointObj( const PointMessage& pointMsg )
 	{
 		Point center;
 
@@ -388,5 +388,27 @@ namespace net
 		center.z = pointMsg.z();
 
 		return center;
+	}
+
+	Velocity NetUtils::GetVelocityObj( const VelocityMessage& velocityMsg )
+	{
+		Velocity velocity;
+
+		velocity.x = velocityMsg.x();
+		velocity.y = velocityMsg.y();
+		velocity.z = velocityMsg.z();
+
+		return velocity;
+	}
+
+	Force NetUtils::GetForceObj( const ForceMessage& forceMsg )
+	{
+		Force force;
+
+		force.x = forceMsg.x();
+		force.y = forceMsg.y();
+		force.z = forceMsg.z();
+
+		return force;
 	}
 }
