@@ -61,9 +61,7 @@ int main( int argc, char * argv[] )
     // Server Game Loop
     while(!quit)
     {
-
-usleep(500000);
-
+        usleep(50000);
         time = SDL_GetTicks();
 
         if( serverMasterSocket.HasData() )

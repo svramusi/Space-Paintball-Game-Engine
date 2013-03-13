@@ -300,6 +300,17 @@ PhysicsEngine::resolveCollisions()
             //Oh no...
             cout << endl << "we're in trouble...." << endl;
 
+            if(baseCollision->collidableObject->isMovable())
+            {
+                moveItem(baseCollision, penetration);
+                baseID = baseCollision->collidableObject->getID();
+            }
+
+            if(objectCollision->collidableObject->isMovable())
+            {
+                moveItem(objectCollision, penetration);
+                objID = objectCollision->collidableObject->getID();
+            }
 
 
 resolved:
