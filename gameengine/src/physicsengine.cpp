@@ -44,14 +44,12 @@ PhysicsEngine::getUpdatedObjects()
 {
     std::vector<physicsInfo> objectsUpdated;
 
-    for (std::vector<physicsInfo>::iterator it = physicsObjects.begin();
-        it != physicsObjects.end();
+    for (std::vector<int>::iterator it = objectsUpdatedID.begin();
+        it != objectsUpdatedID.end();
         ++it
     ) {
-        if(hasObjectBeenInCollision((*it).ID))
-        {
-            objectsUpdated.push_back(*it);
-        }
+        physicsInfo *info = findItem(*it);
+        objectsUpdated.push_back(*info);
     }
 
     return objectsUpdated;
@@ -72,6 +70,8 @@ PhysicsEngine::updateWorld(unsigned int timeStep)
     float delta = (timeStep - lastTimeStep)/1000;
     lastTimeStep = timeStep;
 
+    objectsUpdatedID.clear();
+
 cout << endl << "updating world.  current time is: " << timeStep << endl << endl;
 cout << endl << "delta time is: " << delta << endl << endl;
 
@@ -89,6 +89,8 @@ cout << endl << "object id: " << (*it).ID
             calculatePosition(&(*it), delta);
             calculateAngularVelocity(&(*it), delta);
             calculateAngularPosition(&(*it), delta); //NEEDS CALCULATE POI UPDATED TO WORK
+
+            objectsUpdatedID.push_back((*it).ID);
 
             cout << endl << "updating object. id:" << (*it).ID;
             cout << endl << "center X:" << (*it).collidableObject->getCenter().x;

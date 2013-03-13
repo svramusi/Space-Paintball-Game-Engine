@@ -32,6 +32,7 @@ private:
     float lastTimeStep;
 
     std::vector<physicsInfo> physicsObjects;
+    std::vector<int> objectsUpdatedID;
 
     void calculatePosition(physicsInfo *item, float deltaT);
     void calculateLinearVelocity(physicsInfo *item, float deltaT);
