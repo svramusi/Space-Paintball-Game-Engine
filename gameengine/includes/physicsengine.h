@@ -50,5 +50,15 @@ private:
     float RadiansToDegrees(float rad);
     float GetDistanceBetweenVertices(Point v1, Point v2);
 
+    bool isMoving(const physicsInfo *item);
+
+    //Returns original location to make the hack work
+    Point moveItem(physicsInfo *item, penetration_t penetration);
+    void moveItem(physicsInfo *item, Point origCenter);
+
+    physicsInfo* findItem(int ID);
+
+    std::vector<int> objectsMovedThisTurn;
+    bool hasObjectBeenInCollision(int ID);
 };
 #endif

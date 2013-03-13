@@ -57,6 +57,12 @@ cout << endl << "updating world.  current time is: " << timeStep << endl << endl
 
     for (std::vector<physicsInfo>::iterator it = physicsObjects.begin(); it != physicsObjects.end(); ++it)
     {
+
+cout << endl << "object id: " << (*it).ID
+        << " x: " << (*it).collidableObject->getCenter().x
+        << " y: " << (*it).collidableObject->getCenter().y
+        << " z: " << (*it).collidableObject->getCenter().z << endl;
+
         if((*it).movable) {
             calculateLinearForce(&(*it), delta);
             calculateLinearVelocity(&(*it), delta);
@@ -64,13 +70,11 @@ cout << endl << "updating world.  current time is: " << timeStep << endl << endl
             calculateAngularVelocity(&(*it), delta);
             calculateAngularPosition(&(*it), delta); //NEEDS CALCULATE POI UPDATED TO WORK
 
-
             cout << endl << "updating object. id:" << (*it).ID;
             cout << endl << "center X:" << (*it).collidableObject->getCenter().x;
             cout << endl << "center Y:" << (*it).collidableObject->getCenter().y;
             cout << endl << "center Z:" << (*it).collidableObject->getCenter().z;
             cout << endl << endl;
-
 
             cd->updateObject((*it).ID, (*it).collidableObject->getCenter());
 
@@ -81,43 +85,205 @@ cout << endl << "updating world.  current time is: " << timeStep << endl << endl
     resolveCollisions();
 }
 
+bool
+PhysicsEngine::isMoving(const physicsInfo *physics_info)
+{
+    if(physics_info->linearVelocity.x != 0) return true;
+    if(physics_info->linearVelocity.y != 0) return true;
+    if(physics_info->linearVelocity.z != 0) return true;
+
+    return false;
+}
+
+//Return original location before the item was moved...
+//Hack!
+Point
+PhysicsEngine::moveItem(physicsInfo *item, penetration_t penetration)
+{
+    Point origCenter = item->collidableObject->getCenter();
+
+    Point newCenter;
+    newCenter.x = origCenter.x;
+    newCenter.y = origCenter.y;
+    newCenter.z = origCenter.z;
+
+    if(item->linearVelocity.x != 0) {
+        newCenter.x += penetration.x;
+    }
+
+    if(item->linearVelocity.y != 0) {
+        newCenter.y += penetration.y;
+    }
+
+    if(item->linearVelocity.z != 0) {
+        newCenter.z += penetration.z;
+    }
+
+    cd->fixObject(item->ID, newCenter);
+
+    return origCenter;
+}
+
+//Hack!
+void
+PhysicsEngine::moveItem(physicsInfo *item, Point origCenter)
+{
+    Point newCenter;
+    newCenter.x = origCenter.x;
+    newCenter.y = origCenter.y;
+    newCenter.z = origCenter.z;
+
+    cd->fixObject(item->ID, newCenter);
+}
+
+physicsInfo*
+PhysicsEngine::findItem(int ID)
+{
+    for (std::vector<physicsInfo>::iterator it = physicsObjects.begin(); it != physicsObjects.end(); ++it)
+    {
+        if((*it).ID == ID)
+            return &(*it);
+    }
+
+    return NULL;
+}
+
+bool
+PhysicsEngine::hasObjectBeenInCollision(int ID)
+{
+    for( std::vector<int>::iterator it = objectsMovedThisTurn.begin();
+            it != objectsMovedThisTurn.end();
+            ++it
+       ) {
+        if((*it) == ID) return true;
+    }
+
+    return false;
+}
+
 void
 PhysicsEngine::resolveCollisions()
 {
+    objectsMovedThisTurn.clear();
+
     collisions_t *collisions = cd->checkForAnyCollisions();
+    collisions_t *currentCollision = collisions;
 
-    if(collisions != NULL)
+    while(currentCollision != NULL)
     {
-        cout << endl << "There is a collision between object ID: " << collisions->ID
-                << " and object ID: " << collisions->info->ID << endl << endl;
+        cout << endl << "There is a collision between object ID: " << currentCollision->ID
+                << " and object ID: " << currentCollision->info->ID << endl << endl;
 
-        for (std::vector<physicsInfo>::iterator it = physicsObjects.begin(); it != physicsObjects.end(); ++it)
+        //physicsInfo* tempInfo = &(*it);
+        int baseCollisionID = currentCollision->ID;
+        physicsInfo* baseCollision = findItem(baseCollisionID);
+
+        collision_info_t *objectCollisionInfo = currentCollision->info;
+
+        while(objectCollisionInfo != NULL)
         {
-            physicsInfo* tempInfo = &(*it);
+            int objectCollisionID = objectCollisionInfo->ID;
+            physicsInfo* objectCollision = findItem(objectCollisionID);
 
-            if((tempInfo->ID == collisions->ID || tempInfo->ID == collisions->info->ID) && tempInfo->movable)
+            penetration_t penetration;
+            //If either has been in a collision, need to get new, readjusted penetration vector
+            if(hasObjectBeenInCollision(baseCollisionID) || hasObjectBeenInCollision(objectCollisionID))
             {
-                penetration_t penetration = collisions->info->penetration;
-
-/*
-cout << endl << "object to move id: " << tempInfo->collidableObject->getID() << endl;
-cout << endl << "pen x: " << penetration.x
-        << " pen y: " << penetration.y
-        << " pen z: " << penetration.z << endl;
-*/
-
-                Point currentCenter = tempInfo->collidableObject->getCenter();
-
-                Point newCenter;
-                newCenter.x = currentCenter.x; //+ penetration.x; //FIX ME!!!!
-                newCenter.y = currentCenter.y + penetration.y;
-                newCenter.z = currentCenter.z; //+ penetration.z; //FIX ME!!!!
-
-                cd->fixObject(tempInfo->ID, newCenter);
-                //Dirty hack... MUST BE AFTER cd->updateObject!!!!
-                //(*it).collidableObject->setCenter(newCenter);
+                penetration = cd->getPenetrationVector(baseCollision->collidableObject,
+                    objectCollision->collidableObject);
             }
+            else
+            {
+                penetration = objectCollisionInfo->penetration;
+            }
+
+            //Nasty dirty hack...
+            Point origBase;
+            Point origObj;
+
+            int baseID = -1;
+            int objID = -1;
+
+
+            if(baseCollision->collidableObject->isMovable())
+            {
+                origBase = moveItem(baseCollision, penetration);
+                baseID = baseCollision->collidableObject->getID();
+            }
+
+            if(objectCollision->collidableObject->isMovable())
+            {
+                origObj = moveItem(objectCollision, penetration);
+                objID = objectCollision->collidableObject->getID();
+            }
+
+
+            if(! cd->isIntersection(baseCollision->collidableObject, objectCollision->collidableObject))
+                goto resolved;
+
+            //Reset to orig location
+            moveItem(baseCollision, origBase);
+            moveItem(objectCollision, origObj);
+
+            baseID = -1;
+            objID = -1;
+
+
+
+
+            //Only try to move base
+            if(baseCollision->collidableObject->isMovable())
+            {
+                origBase = moveItem(baseCollision, penetration);
+                baseID = baseCollision->collidableObject->getID();
+            }
+
+            if(! cd->isIntersection(baseCollision->collidableObject, objectCollision->collidableObject))
+                goto resolved;
+
+            //Reset to orig location
+            moveItem(baseCollision, origBase);
+            moveItem(objectCollision, origObj);
+
+            baseID = -1;
+            objID = -1;
+
+
+
+
+            //Only try to move object
+            if(objectCollision->collidableObject->isMovable())
+            {
+                origObj = moveItem(objectCollision, penetration);
+                objID = objectCollision->collidableObject->getID();
+            }
+
+            if(! cd->isIntersection(baseCollision->collidableObject, objectCollision->collidableObject))
+                goto resolved;
+
+            //Reset to orig location
+            moveItem(baseCollision, origBase);
+            moveItem(objectCollision, origObj);
+
+            baseID = -1;
+            objID = -1;
+
+
+            //Oh no...
+            cout << endl << "we're in trouble...." << endl;
+
+
+
+resolved:
+            if(baseID != -1)
+                objectsMovedThisTurn.push_back(baseID);
+            if(objID != -1)
+                objectsMovedThisTurn.push_back(objID);
+
+            objectCollisionInfo = objectCollisionInfo->next;
         }
+
+        currentCollision = currentCollision->next;
     }
 
     cd->freeCollisions(collisions);

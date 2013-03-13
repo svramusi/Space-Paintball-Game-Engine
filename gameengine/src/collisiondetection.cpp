@@ -71,21 +71,6 @@ CollisionDetection::updateObject(int ID, Point newCenter)
                         tempSphere->getCenter(),
                         newCenter,
                         tempSphere->getRadius());
-/*
-            cout << endl << "id: " << capsule->getID() << endl;
-
-            cout << endl
-                << "temp sphere x: " << tempSphere->getCenter().x
-                << " temp sphere y: " << tempSphere->getCenter().y
-                << " new center x: " << newCenter.x
-                << " new center y: " << newCenter.y << endl;
-
-            cout << endl
-                << "new cap start: " << capsule->getStart().x
-                << "," << capsule->getStart().y
-                << " new cap end: " << capsule->getEnd().x
-                << "," << capsule->getEnd().y << endl;
-*/
 
                 addObject(capsule);
             }
@@ -137,52 +122,35 @@ CollisionDetection::checkForAnyCollisions()
     collisions = NULL;
     current = NULL;
 
-    //THIS IS BEYOND TERRIBLE!!
-    //MUST FIX!!!!
-    for(std::vector<CollidableObject*>::iterator it1 = collidableObjects.begin(); it1 != collidableObjects.end(); ++it1) {
-        for(std::vector<CollidableObject*>::iterator it2 = collidableObjects.begin(); it2 != collidableObjects.end(); ++it2) {
-            if((*it1)->getID() == (*it2)->getID())
-                continue;
+    for(int i = 0; i < collidableObjects.size(); i++) {
+        for(int j = i + 1; j < collidableObjects.size(); j++) {
+            CollidableObject *obj1 = collidableObjects[i];
+            CollidableObject *obj2 = collidableObjects[j];
 
-            if(isIntersection(*it1, *it2)) {
+            if(isIntersection(obj1, obj2)) {
                 collision_info_t *collision_info;
                 collision_info = (collision_info_t*)malloc(sizeof(collision_info_t));
-
 
                 int capsuleID1 = -1;
                 int capsuleID2 = -1;
 
-                if(typeid(Capsule) == typeid(*(*it1)))
+                if(typeid(Capsule) == typeid(*obj1))
                 {
-                    Capsule *c = dynamic_cast<Capsule*>((*it1));
-
-                    capsuleID1 = c->getSphereID();
-
-                    cout << endl << "cap start: " << c->getStart().x
-                        << "," << c->getStart().y
-                        << " cap end: " << c->getEnd().x
-                        << "," << c->getEnd().y << endl;
+                    Capsule *capsule1 = dynamic_cast<Capsule*>(obj1);
+                    capsuleID1 = capsule1->getSphereID();
                 }
-                else if(typeid(Capsule) == typeid(*(*it2)))
+                else if(typeid(Capsule) == typeid(*obj2))
                 {
-                    Capsule *c = dynamic_cast<Capsule*>((*it2));
-
-                    capsuleID2 = c->getSphereID();
-
-                    cout << endl << "cap start: " << c->getStart().x
-                        << "," << c->getStart().y
-                        << " cap end: " << c->getEnd().x
-                        << "," << c->getEnd().y << endl;
+                    Capsule *capsule2 = dynamic_cast<Capsule*>(obj2);
+                    capsuleID2 = capsule2->getSphereID();
                 }
-
-//cout << endl << "found an intersection between: " << (*it1).ID << " and " << (*it2).ID << endl;
 
                 if(capsuleID2 != -1)
                     collision_info->ID = capsuleID2;
                 else
-                    collision_info->ID = (*it2)->getID();
+                    collision_info->ID = (obj2)->getID();
 
-                collision_info->penetration = getPenetrationVector((*it1), (*it2));
+                collision_info->penetration = getPenetrationVector(obj1, obj2);
                 collision_info->next = NULL;
 
                 if(collisions == NULL) {
@@ -191,7 +159,7 @@ CollisionDetection::checkForAnyCollisions()
                     if(capsuleID1 != -1)
                         collisions->ID = capsuleID1;
                     else
-                        collisions->ID = (*it1)->getID();
+                        collisions->ID = (obj1)->getID();
 
                     collisions->info = collision_info;
                     collisions->next = NULL;
@@ -200,7 +168,7 @@ CollisionDetection::checkForAnyCollisions()
                 }
                 else {
                     collisions_t *newCollision = (collisions_t*)malloc(sizeof(collisions_t));
-                    newCollision->ID = (*it1)->getID();
+                    newCollision->ID = (obj1)->getID();
                     newCollision->info = collision_info;
                     newCollision->next = NULL;
 
@@ -329,13 +297,13 @@ CollisionDetection::getPenetrationVector(const AABB *aabb1, const AABB *aabb2)
     penetration_t penetrationVector;
 
     penetrationVector.x = (aabb1->getXRadius() + aabb2->getXRadius())
-                            - abs(aabb1->getCenter().x - aabb2->getCenter().x);
+                            - fabs(aabb1->getCenter().x - aabb2->getCenter().x) + EPSILON;
 
     penetrationVector.y = (aabb1->getYRadius() + aabb2->getYRadius())
-                            - abs(aabb1->getCenter().y - aabb2->getCenter().y);
+                            - fabs(aabb1->getCenter().y - aabb2->getCenter().y) + EPSILON;
 
     penetrationVector.z = (aabb1->getZRadius() + aabb2->getZRadius())
-                            - abs(aabb1->getCenter().z - aabb2->getCenter().z);
+                            - fabs(aabb1->getCenter().z - aabb2->getCenter().z) + EPSILON;
 
     return penetrationVector;
 }
@@ -347,9 +315,9 @@ CollisionDetection::getPenetrationVector(const Sphere *sphere1, const Sphere *sp
     std::vector<float> normalized = getNormalizedVector(sphere1->getCenter(), sphere2->getCenter());
 
     penetration_t penetrationVector;
-    penetrationVector.x = normalized[0] * penetration;
-    penetrationVector.y = normalized[1] * penetration;
-    penetrationVector.z = normalized[2] * penetration;
+    penetrationVector.x = (normalized[0] * penetration) + EPSILON;
+    penetrationVector.y = (normalized[1] * penetration) + EPSILON;
+    penetrationVector.z = (normalized[2] * penetration) + EPSILON;
 
     return penetrationVector;
 }
@@ -360,13 +328,13 @@ CollisionDetection::getPenetrationVector(const AABB *aabb, const Sphere *sphere)
     penetration_t penetrationVector;
 
     penetrationVector.x = (aabb->getXRadius() + sphere->getRadius())
-                            - abs(aabb->getCenter().x - sphere->getCenter().x);
+                            - fabs(aabb->getCenter().x - sphere->getCenter().x) + EPSILON;
 
     penetrationVector.y = (aabb->getYRadius() + sphere->getRadius())
-                            - abs(aabb->getCenter().y - sphere->getCenter().y);
+                            - fabs(aabb->getCenter().y - sphere->getCenter().y) + EPSILON;
 
     penetrationVector.z = (aabb->getZRadius() + sphere->getRadius())
-                            - abs(aabb->getCenter().z - sphere->getCenter().z);
+                            - fabs(aabb->getCenter().z - sphere->getCenter().z) + EPSILON;
 
     return penetrationVector;
 }
@@ -374,7 +342,6 @@ CollisionDetection::getPenetrationVector(const AABB *aabb, const Sphere *sphere)
 penetration_t
 CollisionDetection::getPenetrationVector(const AABB *aabb, const Capsule *capsule)
 {
-
     Point startingPoint = capsule->getStart();
     Point closestPoint = getClosestPoint(aabb, startingPoint);
 
@@ -387,9 +354,9 @@ CollisionDetection::getPenetrationVector(const AABB *aabb, const Capsule *capsul
     Point endPoint = capsule->getEnd();
 
     penetration_t penetrationVector;
-    penetrationVector.x = targetPoint.x - endPoint.x;
-    penetrationVector.y = targetPoint.y - endPoint.y;
-    penetrationVector.z = targetPoint.z - endPoint.z;
+    penetrationVector.x = targetPoint.x - endPoint.x + EPSILON;
+    penetrationVector.y = targetPoint.y - endPoint.y + EPSILON;
+    penetrationVector.z = targetPoint.z - endPoint.z + EPSILON;
 
     return penetrationVector;
 }
@@ -398,9 +365,9 @@ std::vector<float>
 CollisionDetection::getDiffVectorAbs(Point point1, Point point2)
 {
     std::vector<float> diff_vector(3);
-    diff_vector[0] = abs(point1.x - point2.x);
-    diff_vector[1] = abs(point1.y - point2.y);
-    diff_vector[2] = abs(point1.z - point2.z);
+    diff_vector[0] = fabs(point1.x - point2.x);
+    diff_vector[1] = fabs(point1.y - point2.y);
+    diff_vector[2] = fabs(point1.z - point2.z);
 
     return diff_vector;
 }
@@ -452,15 +419,15 @@ CollisionDetection::isIntersection(const CollidableObject *obj1, const Collidabl
 int
 CollisionDetection::isIntersection(const AABB *aabb1, const AABB *aabb2)
 {
-    if(abs(aabb1->getCenter().x - aabb2->getCenter().x) >
+    if(fabs(aabb1->getCenter().x - aabb2->getCenter().x) >
                 (aabb1->getXRadius() + aabb2->getXRadius()))
         return 0;
 
-    if(abs(aabb1->getCenter().y - aabb2->getCenter().y) >
+    if(fabs(aabb1->getCenter().y - aabb2->getCenter().y) >
                 (aabb1->getYRadius() + aabb2->getYRadius()))
         return 0;
 
-    if(abs(aabb1->getCenter().z - aabb2->getCenter().z) >
+    if(fabs(aabb1->getCenter().z - aabb2->getCenter().z) >
                 (aabb1->getZRadius() + aabb2->getZRadius()))
         return 0;
 
@@ -483,15 +450,15 @@ CollisionDetection::isIntersection(const Sphere *sphere1, const Sphere *sphere2)
 int
 CollisionDetection::isIntersection(const AABB *aabb, const Sphere *sphere)
 {
-    if(abs(aabb->getCenter().x - sphere->getCenter().x) >
+    if(fabs(aabb->getCenter().x - sphere->getCenter().x) >
                 (aabb->getXRadius() + sphere->getRadius()))
         return 0;
 
-    if(abs(aabb->getCenter().y - sphere->getCenter().y) >
+    if(fabs(aabb->getCenter().y - sphere->getCenter().y) >
                 (aabb->getYRadius() + sphere->getRadius()))
         return 0;
 
-    if(abs(aabb->getCenter().z - sphere->getCenter().z) >
+    if(fabs(aabb->getCenter().z - sphere->getCenter().z) >
                 (aabb->getZRadius() + sphere->getRadius()))
         return 0;
 

@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?fileVersion 4.0.0?><cproject storage_type_id="org.eclipse.cdt.core.XmlProjectDescriptionStorage">
+<?fileVersion 4.0.0?>
+
+<cproject storage_type_id="org.eclipse.cdt.core.XmlProjectDescriptionStorage">
 	<storageModule moduleId="org.eclipse.cdt.core.settings">
 		<cconfiguration id="cdt.managedbuild.config.gnu.exe.debug.1640147703">
 			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="cdt.managedbuild.config.gnu.exe.debug.1640147703" moduleId="org.eclipse.cdt.core.settings" name="Debug">
@@ -55,6 +57,9 @@
 							<tool id="cdt.managedbuild.tool.gnu.cpp.linker.exe.debug.164737132" name="GCC C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.exe.debug">
 								<option id="gnu.cpp.link.option.paths.1400410636" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths" valueType="libPaths">
 									<listOptionValue builtIn="false" value="/usr/lib/i386-linux-gnu"/>
+									<listOptionValue builtIn="false" value="&quot;${/usr/local/lib}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${/usr/lib/compiz/}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${/usr/lib/x86_64-linux-gnu/}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/gameengine/Debug}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/gameassets/Debug}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/thirdparty/SDL-1.2.15}&quot;"/>
