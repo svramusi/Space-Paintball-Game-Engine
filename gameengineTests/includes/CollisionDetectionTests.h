@@ -5,8 +5,6 @@
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 
-#include "AABB.h"
-#include "Sphere.h"
 #include "collisiondetection.h"
 
 using namespace CppUnit;

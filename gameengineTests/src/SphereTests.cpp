@@ -93,7 +93,7 @@ SphereTest::testCollision(void)
     penetration_t penetrationVector = cd->getPenetrationVector(sphere1, sphere2);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.58579f, penetrationVector.x, 0.01);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.58579f, penetrationVector.y, 0.01);
-    CPPUNIT_ASSERT_EQUAL( 0.0f, penetrationVector.z );
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0f, penetrationVector.z, 0.01);
 
     delete sphere1;
     delete sphere2;
