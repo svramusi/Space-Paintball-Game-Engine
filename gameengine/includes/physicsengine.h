@@ -50,6 +50,7 @@ private:
     //V2 ALWAYS NEEDS TO BE THE MIDDLE VERTEX
     float GetAngleBetweenVerticese(Point v1, Point v2, Point v3);
 
+    void freeCollisions(collisionDetection* collisions);
 
     float RadiansToDegrees(float rad);
     float GetDistanceBetweenVertices(Point v1, Point v2);

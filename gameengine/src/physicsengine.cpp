@@ -355,6 +355,22 @@ void PhysicsEngine::calculateAngularVelocity(physicsInfo *item, float deltaT)
     item->angularVelocity = newV;
 }
 
+void
+PhysicsEngine::freeCollisions(collisionDetection* collisions)
+{
+    collisionDetection* current;
+    collisionDetection* next;
+
+    current = collisions;
+
+    while(current != NULL)
+    {
+        next = current->next;
+        free(current);
+        current = next;
+    }
+}
+
 //WE NEED TO FIGURE THIS OUT, NOT SURE HOW TO DO IT
 Point PhysicsEngine::calculatePointofImapct(physicsInfo *item, float deltaT)
 {
