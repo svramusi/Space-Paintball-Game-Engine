@@ -373,6 +373,12 @@ namespace net
 
 			thePhysicsInfo.mass = physicsInfoMsg.mass();
 
+			thePhysicsInfo.linearVelocity = GetVelocityObj( physicsInfoMsg.linearvelocity() );
+			thePhysicsInfo.linearForce = GetForceObj( physicsInfoMsg.linearforce() );
+			thePhysicsInfo.angularVelocity = GetVelocityObj( physicsInfoMsg.angularvelocity() );
+			thePhysicsInfo.angularForce = GetForceObj( physicsInfoMsg.angularforce() );
+			thePhysicsInfo.angularPosition = GetPointObj( physicsInfoMsg.angularposition() );
+
 			physicsInfos.push_back( thePhysicsInfo );
 		}
 
