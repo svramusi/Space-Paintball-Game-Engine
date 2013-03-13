@@ -44,6 +44,9 @@ namespace net
 		static GameEngineMessage* GetGameEnginePayload();
 		static physicsInfo GetPhysicsInfo( float value );
 		static GameEngineMessage* GetGameEngineCreateMessage( vector<physicsInfo> physicsInfos );
+		static GameEngineMessage* GetGameEngineRetrieveMessage( vector<physicsInfo> physicsInfos );
+		static GameEngineMessage* GetUpdateObjectMsg( int ID, Point position );
+		static GameEngineMessage* GetDeleteObjectMsg( int ID );
 		static void SetPhysicsInfoMessage( physicsInfo thePhysicsInfo, PhysicsInfoMessage* physicsInfoMsg );
 		static AabbMessage* GetAabbObjectMsg( AABB* aabbObject );
 		static SphereMessage* GetSphereObjectMsg( Sphere* sphereObject );
@@ -51,8 +54,6 @@ namespace net
 		static PointMessage* GetPointMsg( Point point );
 		static VelocityMessage* GetVelocityMsg( Velocity velocity );
 		static ForceMessage* GetForceMsg( Force force );
-		static UpdateObjectMessage* GetUpdateObjectMsg( int ID, Point position );
-		static DeleteObjectMessage* GetUpdateObjectMsg( int ID );
 	};
 }
 #endif /* NETUTILS_H_ */

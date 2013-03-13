@@ -107,6 +107,46 @@ namespace net
 		return gameEnginePayload;
 	}
 
+	GameEngineMessage* NetUtils::GetGameEngineRetrieveMessage( vector<physicsInfo> physicsInfos )
+	{
+		GameEngineMessage* gameEnginePayload = new GameEngineMessage();
+		gameEnginePayload->set_messagetype( GameEngineMessage::RETRIEVE );
+
+		for( int i = 0; i < physicsInfos.size(); i++ )
+		{
+			physicsInfo thePhysicsInfo = physicsInfos[i];
+			PhysicsInfoMessage* physicsInfoMsg = gameEnginePayload->add_physicsinfo();
+			SetPhysicsInfoMessage( thePhysicsInfo, physicsInfoMsg );
+		}
+
+		return gameEnginePayload;
+	}
+
+	GameEngineMessage* NetUtils::GetUpdateObjectMsg( int ID, Point position )
+	{
+		GameEngineMessage* gameEnginePayload = new GameEngineMessage();
+		gameEnginePayload->set_messagetype( GameEngineMessage::UPDATE );
+
+		UpdateObjectMessage* updateObjectMsg = gameEnginePayload->add_updateobject();
+
+		updateObjectMsg->set_id( ID );
+		updateObjectMsg->set_allocated_position( GetPointMsg( position) );
+
+		return gameEnginePayload;
+	}
+
+	GameEngineMessage* NetUtils::GetDeleteObjectMsg( int ID )
+	{
+		GameEngineMessage* gameEnginePayload = new GameEngineMessage();
+		gameEnginePayload->set_messagetype( GameEngineMessage::DELETE );
+
+		DeleteObjectMessage* deleteObjectMsg = gameEnginePayload->add_deleteobject();
+
+		deleteObjectMsg->set_id( ID );
+
+		return gameEnginePayload;
+	}
+
 	void NetUtils::SetPhysicsInfoMessage( physicsInfo thePhysicsInfo, PhysicsInfoMessage* physicsInfoMsg )
 	{
 		AABB* aabbObject = dynamic_cast<AABB*>( thePhysicsInfo.collidableObject );
@@ -201,25 +241,6 @@ namespace net
 		return forceMsg;
 	}
 
-	UpdateObjectMessage* NetUtils::GetUpdateObjectMsg( int ID, Point position )
-	{
-		UpdateObjectMessage* updateObjectMsg = new UpdateObjectMessage();
-
-		updateObjectMsg->set_id( ID );
-		updateObjectMsg->set_allocated_position( GetPointMsg( position) );
-
-		return updateObjectMsg;
-	}
-
-	DeleteObjectMessage* NetUtils::GetUpdateObjectMsg( int ID )
-	{
-		DeleteObjectMessage* deleteObjectMsg = new DeleteObjectMessage();
-
-		deleteObjectMsg->set_id( ID );
-
-		return deleteObjectMsg;
-	}
-
 	/*
 	 * Dummy function to generate fake PhysicsInfo object.
 	 */
@@ -308,4 +329,19 @@ namespace net
 
 		return thePhysicsInfo;
 	}
+
+/*
+	vector<physicsInfo> NetUtils::GetPhysicsInfoObj( GameEngineMessage* gameEngineMsg )
+	{
+
+
+		for( int i = 0; i < physicsInfos.size(); i++ )
+		{
+			physicsInfo thePhysicsInfo = physicsInfos[i];
+			PhysicsInfoMessage* physicsInfoMsg = gameEnginePayload->add_physicsinfo();
+			SetPhysicsInfoMessage( thePhysicsInfo, physicsInfoMsg );
+		}
+
+		return gameEnginePayload;
+	}*/
 }
