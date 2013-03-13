@@ -13,7 +13,8 @@ const int SDL_START_HEIGHT = 1000;
 
 //#define SWEPT_SHAPES_MODE
 
-GameEngine::GameEngine() {
+GameEngine::GameEngine(unsigned int startTime) {
+/*
     SDL_Init(SDL_INIT_EVERYTHING);
     SDL_Surface* screen = SDL_SetVideoMode(640,480,32,SDL_SWSURFACE);
 
@@ -62,7 +63,6 @@ GameEngine::GameEngine() {
 
 
 
-    physics = new PhysicsEngine(-9.8f, 0.0f);
 
     CollidableObject *leftWallCO;
     CollidableObject *rightWallCO;
@@ -236,6 +236,8 @@ GameEngine::GameEngine() {
     delete bottomCO;
     delete moving1CO;
     delete moving2CO;
+*/
+    physics = new PhysicsEngine(-9.8f, 0.0f, startTime);
 }
 
 GameEngine::~GameEngine() {
@@ -264,10 +266,22 @@ void GameEngine::UpdateAI(int input) {
     printf("Game Engine AI Updated\n");
 }
 
-void GameEngine::UpdatePhysics(int input) {
-    printf("Game Engine Physics Updated\n");
-    //Physics need to be class variable ?
-    //physics.updateWorld( timeStep)
+void
+GameEngine::insertPhysicsObject(
+    CollidableObject *obj, float mass, Velocity linVel, Force linForce,
+    Velocity angVel, Force angForce, Point angPos
+) {
+    physics->insertPhysicsObject(obj, mass, linVel, linForce, angVel, 
+        angForce, angPos);
+}
+
+void GameEngine::UpdatePhysics(unsigned int timeStep) {
+    physics->updateWorld(timeStep);
+}
+
+std::vector<physicsInfo>
+GameEngine::getUpdatedObjects() {
+    return physics->getUpdatedObjects();
 }
 
 void GameEngine::UpdateGameState(int input) {

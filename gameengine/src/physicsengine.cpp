@@ -13,13 +13,13 @@ using namespace std;
 PhysicsEngine::PhysicsEngine()
 {
     cd = new CollisionDetection();
-    SetWorldParams(9.81, 1.225);
+    SetWorldParams(9.81f, 1.225f, 0.0f);
 }
 
-PhysicsEngine::PhysicsEngine(float grav, float air)
+PhysicsEngine::PhysicsEngine(float grav, float air, unsigned int startTime)
 {
     cd = new CollisionDetection();
-    SetWorldParams(grav,air);
+    SetWorldParams(grav,air, startTime);
 }
 
 PhysicsEngine::~PhysicsEngine()
@@ -29,18 +29,36 @@ PhysicsEngine::~PhysicsEngine()
 }
 
 void
-PhysicsEngine::SetWorldParams(float grav, float air)
+PhysicsEngine::SetWorldParams(float grav, float air, unsigned int startTime)
 {
     gravity = grav;
     airFriction = air;
 
     latestID = 0;
 
-    lastTimeStep = 0.0f;
+    lastTimeStep = startTime;
+}
+
+std::vector<physicsInfo>
+PhysicsEngine::getUpdatedObjects()
+{
+    std::vector<physicsInfo> objectsUpdated;
+
+    for (std::vector<physicsInfo>::iterator it = physicsObjects.begin();
+        it != physicsObjects.end();
+        ++it
+    ) {
+        if(hasObjectBeenInCollision((*it).ID))
+        {
+            objectsUpdated.push_back(*it);
+        }
+    }
+
+    return objectsUpdated;
 }
 
 void
-PhysicsEngine::updateWorld(float timeStep)
+PhysicsEngine::updateWorld(unsigned int timeStep)
 {
     //NEED DELTAT
 
@@ -50,10 +68,12 @@ PhysicsEngine::updateWorld(float timeStep)
     4) For each collision detected, execute the physics code that determines their velocities after the collision (i.e. the formulas in slide 57).
     5) Execute the collision fixer*/
 
-cout << endl << "updating world.  current time is: " << timeStep << endl << endl;
 
-    float delta = timeStep - lastTimeStep;
+    float delta = (timeStep - lastTimeStep)/1000;
     lastTimeStep = timeStep;
+
+cout << endl << "updating world.  current time is: " << timeStep << endl << endl;
+cout << endl << "delta time is: " << delta << endl << endl;
 
     for (std::vector<physicsInfo>::iterator it = physicsObjects.begin(); it != physicsObjects.end(); ++it)
     {

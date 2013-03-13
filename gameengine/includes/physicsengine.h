@@ -6,18 +6,21 @@
 #include "collisioninfo.h"
 #include "collisiondetection.h"
 
-#include "CollidableObject.h"
-
 class PhysicsEngine {
 
 public:
     PhysicsEngine();
-    PhysicsEngine(float grav, float air);
-    void SetWorldParams(float grav, float air);
+    PhysicsEngine(float grav, float air, unsigned int startTime);
     ~PhysicsEngine();
-    void updateWorld(float timeStep);
+
+    void SetWorldParams(float grav, float air, unsigned int startTime);
+
+    void updateWorld(unsigned int timeStep);
 
     void insertPhysicsObject(CollidableObject *obj, float mass, Velocity linVel, Force linAcc, Velocity angVel, Force angAcc, Point angPos);
+
+
+    std::vector<physicsInfo> getUpdatedObjects();
 private:
     CollisionDetection *cd;
 

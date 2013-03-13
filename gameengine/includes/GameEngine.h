@@ -18,15 +18,22 @@ using namespace std;
 
 class GameEngine {
 public:
-	GameEngine();
-	virtual ~GameEngine();
+    GameEngine(unsigned int startTime);
+    virtual ~GameEngine();
 
-	bool TimeForUpdatingAI();
-	bool TimeForUpdatingPhysics();
-	void UpdateAI(int imput);
-	void UpdatePhysics(int input);
-	void UpdateGameState(int input);
-	void Render();
+    void insertPhysicsObject(
+        CollidableObject *obj, float mass, Velocity linVel, Force linForce,
+        Velocity angVel, Force angForce, Point angPos
+    );
+
+    std::vector<physicsInfo> getUpdatedObjects();
+
+    bool TimeForUpdatingAI();
+    bool TimeForUpdatingPhysics();
+    void UpdateAI(int imput);
+    void UpdatePhysics(unsigned int timeStep);
+    void UpdateGameState(int input);
+    void Render();
 
 private:
     PhysicsEngine *physics;

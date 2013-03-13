@@ -36,178 +36,391 @@ void FPSControl();
 
 net::ClientSocket clientSocket;
 
+SDL_Rect leftWall;
+SDL_Rect rightWall;
+SDL_Rect bottom;
+SDL_Rect moving1;
+SDL_Rect moving2;
+SDL_Rect moving3;
+
+SDL_Surface* screen;
+
+const int FPS = 30;
+const int SDL_START_HEIGHT = 1000;
+
+Uint32 color;
+Uint32 color2;
+
+void
+initGraphics()
+{
+    SDL_Init(SDL_INIT_EVERYTHING);
+    screen = SDL_SetVideoMode(640,480,32,SDL_SWSURFACE);
+    color = SDL_MapRGB(screen->format,0xff,0xff,0xff);
+    color2 = SDL_MapRGB(screen->format,0xff,0x00,0xff);
+
+
+    Uint32 start;
+
+    leftWall.x=10;
+    leftWall.y=100;
+    leftWall.w=20;
+    leftWall.h=200;
+
+    rightWall.x=300;
+    rightWall.y=100;
+    rightWall.w=20;
+    rightWall.h=200;
+
+    bottom.x=75;
+    bottom.y=250;
+    bottom.w=200;
+    bottom.h=20;
+
+    moving1.x=50;
+    moving1.y=50;
+    moving1.w=10;
+    moving1.h=10;
+
+    moving2.x=150;
+    moving2.y=75;
+    moving2.w=10;
+    moving2.h=10;
+
+    moving3.x=155;
+    moving3.y=100;
+    moving3.w=10;
+    moving3.h=10;
+}
+
+void
+sendGraphicObjectsToServer()
+{
+    CollidableObject *leftWallCO;
+    CollidableObject *rightWallCO;
+    CollidableObject *bottomCO;
+
+    CollidableObject *moving1CO;
+    CollidableObject *moving2CO;
+    CollidableObject *moving3CO;
+
+    float radii[3];
+
+    Point leftWallCenter;
+    leftWallCenter.x = 20.0f;
+    leftWallCenter.y = SDL_START_HEIGHT - 200.0f;
+    leftWallCenter.z = 0.0f;
+
+    radii[0] = 10;
+    radii[1] = 100;
+    radii[2] = 0;
+
+    leftWallCO = new AABB(-1, leftWallCenter, radii, false);
+
+
+
+    Point rightWallCenter;
+    rightWallCenter.x = 310.0f;
+    rightWallCenter.y = SDL_START_HEIGHT - 200.0f;
+    rightWallCenter.z = 0.0f;
+
+    radii[0] = 10;
+    radii[1] = 100;
+    radii[2] = 0;
+
+    rightWallCO = new AABB(-1, rightWallCenter, radii, false);
+
+
+
+    Point bottomCenter;
+    bottomCenter.x = 175.0f;
+    bottomCenter.y = SDL_START_HEIGHT - 260.0f;
+    bottomCenter.z = 0.0f;
+
+    radii[0] = 100;
+    radii[1] = 10;
+    radii[2] = 0;
+
+    bottomCO = new AABB(-1, bottomCenter, radii, false);
+
+
+
+    Point movingCenter1;
+    movingCenter1.x = 55.0f;
+    movingCenter1.y = SDL_START_HEIGHT - 55.0f;
+    movingCenter1.z = 0.0f;
+
+    radii[0] = 10;
+    radii[1] = 10;
+    radii[2] = 0;
+
+    moving1CO = new AABB(-1, movingCenter1, radii, true);
+
+
+    Point movingCenter2;
+    movingCenter2.x = 155.0f;
+    movingCenter2.y = SDL_START_HEIGHT - 80.0f;
+    movingCenter2.z = 0.0f;
+
+    radii[0] = 10;
+    radii[1] = 10;
+    radii[2] = 0;
+
+#ifdef SWEPT_SHAPES_MODE
+    moving2CO = new Sphere(-1, movingCenter2, 10.0f, true);
+#else
+    moving2CO = new AABB(-1, movingCenter2, radii, true);
+#endif
+
+    Point movingCenter3;
+    movingCenter3.x = 160.0f;
+    movingCenter3.y = SDL_START_HEIGHT - 55.0f;
+    movingCenter3.z = 0.0f;
+
+    radii[0] = 10;
+    radii[1] = 10;
+    radii[2] = 0;
+
+    moving3CO = new AABB(-1, movingCenter3, radii, true);
+
+
+
+    Velocity zeroVel;
+    zeroVel.x = 0.0f;
+    zeroVel.y = 0.0f;
+    zeroVel.z = 0.0f;
+
+    Velocity ballVel;
+    ballVel.x = 0.0f;
+    ballVel.y = -9.8f;
+    ballVel.z = 0.0f;
+
+    Force zeroForce;
+    zeroForce.x = 0.0f;
+    zeroForce.y = 0.0f;
+    zeroForce.z = 0.0f;
+
+    Point zeroPoint;
+    zeroPoint.x = 0.0f;
+    zeroPoint.y = 0.0f;
+    zeroPoint.z = 0.0f;
+
+
+
+    vector<physicsInfo> physicsInfos;
+
+    physicsInfos.push_back(
+        net::NetUtils::GetPhysicsInfo(leftWallCO, 10, zeroVel, zeroForce, zeroVel, zeroForce, zeroPoint)
+    );
+
+    physicsInfos.push_back(
+        net::NetUtils::GetPhysicsInfo(bottomCO, 10, zeroVel, zeroForce, zeroVel, zeroForce, zeroPoint)
+    );
+
+    physicsInfos.push_back(
+        net::NetUtils::GetPhysicsInfo(rightWallCO, 10, zeroVel, zeroForce, zeroVel, zeroForce, zeroPoint)
+    );
+
+    physicsInfos.push_back(
+        net::NetUtils::GetPhysicsInfo(moving1CO, 10, ballVel, zeroForce, zeroVel, zeroForce, zeroPoint)
+    );
+
+    physicsInfos.push_back(
+        net::NetUtils::GetPhysicsInfo(moving2CO, 10, ballVel, zeroForce, zeroVel, zeroForce, zeroPoint)
+    );
+
+#ifndef SWEPT_SHAPES_MODE
+    physicsInfos.push_back(
+        net::NetUtils::GetPhysicsInfo(moving3CO, 10, ballVel, zeroForce, zeroVel, zeroForce, zeroPoint)
+    );
+#endif
+
+
+    net::GameEngineMessage* payload = net::NetUtils::GetGameEngineCreateMessage( physicsInfos );
+    net::NetUtils::Send( payload, &clientSocket );
+}
+
 int main( int argc, char * argv[] )
 {
-	GOOGLE_PROTOBUF_VERIFY_VERSION;
+    GOOGLE_PROTOBUF_VERIFY_VERSION;
 
-	GameEngine *ge = new GameEngine();
-    delete ge;
+    initGraphics();
+
+    //GameEngine *ge = new GameEngine();
+    //delete ge;
     //return 0;
 
-	TestCollectGameState* test = new TestCollectGameState();
-	test->PrintGameState();
-	delete test;
 
-	bool quit = false;
-	GameEngine gameEngine;
-	Uint32 time = SDL_GetTicks();
-	bool needToRedraw = true;
+/*
+    TestCollectGameState* test = new TestCollectGameState();
+    test->PrintGameState();
+    delete test;
+*/
 
-	///////////////////////////////////////////////////////////////////
-	// Initialize socket and connect with server.
-	///////////////////////////////////////////////////////////////////
-	clientSocket.Connect( net::HOST_NAME, net::MASTER_SOCKET_PORT );
-	///////////////////////////////////////////////////////////////////
+    bool quit = false;
+    GameEngine gameEngine;
+    Uint32 time = SDL_GetTicks();
+    bool needToRedraw = true;
 
-	// Client Game Loop
-	while(!quit)
-	{
-		/*
-		 * Poll for OS Events/Messages; this is
-		 * the event pump.
-		 */
-		PollForOSMessages(&quit);
+    ///////////////////////////////////////////////////////////////////
+    // Initialize socket and connect with server.
+    ///////////////////////////////////////////////////////////////////
+    clientSocket.Connect( net::HOST_NAME, net::MASTER_SOCKET_PORT );
+    ///////////////////////////////////////////////////////////////////
 
-		Uint32 actualTime = SDL_GetTicks();
-		int frames = 0;
+    sendGraphicObjectsToServer();
 
-		while(actualTime >= RedrawingPeriod && frames < MaxFrameSkip)
-		{
-			/*
-			 * If the computer is too slow to run at
-			 * the desired FPS, try to execute more than
-			 * one update per redrawing frame (i.e.,
-			 * skip frames).
-			 */
+    // Client Game Loop
+    while(!quit)
+    {
+        /*
+         * Poll for OS Events/Messages; this is
+         * the event pump.
+         */
+        PollForOSMessages(&quit);
 
-			/*
-			 * If 20 ms have passed since the last time
-			 * we ran a game cycle, then run another
-			 * cycle.
-			 */
-			time += RedrawingPeriod;
+        Uint32 actualTime = SDL_GetTicks();
+        int frames = 0;
 
-			//TODO: fix this
-			//keyboard->cycle();
-			//if(!gameEngine->cycle(k))
-			//{
-			//	quit = true;
-			//}
+        while(actualTime >= RedrawingPeriod && frames < MaxFrameSkip)
+        {
+            /*
+             * If the computer is too slow to run at
+             * the desired FPS, try to execute more than
+             * one update per redrawing frame (i.e.,
+             * skip frames).
+             */
 
-			actualTime = SDL_GetTicks();
-			needToRedraw = true;
-			frames++;
-		} // End inner while loop.
+            /*
+             * If 20 ms have passed since the last time
+             * we ran a game cycle, then run another
+             * cycle.
+             */
+            time += RedrawingPeriod;
 
-		if(time < actualTime)
-		{
-			/*
-			 * If after skipping the maximum number
-			 * of frames, we have not yet caught up,
-			 * it may be game lost focus or something;
-			 * so, don't try to catch up.
-			 */
-			time = actualTime;
-		}
+            //TODO: fix this
+            //keyboard->cycle();
+            //if(!gameEngine->cycle(k))
+            //{
+            //  quit = true;
+            //}
 
-		if(needToRedraw)
-		{
-			//TODO: fix this
-			//game->draw();
-			needToRedraw = false;
-		}
+            actualTime = SDL_GetTicks();
+            needToRedraw = true;
+            frames++;
+        } // End inner while loop.
 
-		int input = GetInput(&quit);
+        if(time < actualTime)
+        {
+            /*
+             * If after skipping the maximum number
+             * of frames, we have not yet caught up,
+             * it may be game lost focus or something;
+             * so, don't try to catch up.
+             */
+            time = actualTime;
+        }
 
-		// now you can write buf.data() to the socket
-		///////////////////////////////////////////////////////////
+        if(needToRedraw)
+        {
+            //TODO: fix this
+            //game->draw();
+            needToRedraw = false;
+        }
 
-		SendInputToServer(input);
+        int input = GetInput(&quit);
 
-		///////////////////////////////////////////////////////////
-		//Update Game State Copy
-		net::GameEngineMessage* gameEngineState = GetUpdateFromServer();
-		// Update local game state (or game state copy).
-		//gameEngine.UpdateGameState(inputFromServer);
-		///////////////////////////////////////////////////////////
+        // now you can write buf.data() to the socket
+        ///////////////////////////////////////////////////////////
 
-		/*
-		 * Get information from the game engine to update
-		 * the player score, health, etc. (since typically
-		 * the HUD is not rendered by the game engine, but
-		 * separately).
-		 */
-		//UpdateStatistics();
+        //SendInputToServer(input);
 
-		if(TimeForRendering())
-		{
-			/*
-			 * Redraw the game.
-			 */
-			//gameEngine.Render();
-		}
+        ///////////////////////////////////////////////////////////
+        //Update Game State Copy
+        net::GameEngineMessage* gameEngineState = GetUpdateFromServer();
+        // Update local game state (or game state copy).
+        //gameEngine.UpdateGameState(inputFromServer);
+        ///////////////////////////////////////////////////////////
 
-		FPSControl();
+        /*
+         * Get information from the game engine to update
+         * the player score, health, etc. (since typically
+         * the HUD is not rendered by the game engine, but
+         * separately).
+         */
+        //UpdateStatistics();
 
-		/*
-		 * Play nice with the OS, and give
-		 * some CPU for another process.
-		 */
-		//SDL_Delay(1);
+        if(TimeForRendering())
+        {
+            /*
+             * Redraw the game.
+             */
+            //gameEngine.Render();
+        }
 
-		net::NetUtils::Wait( net::DELTA_TIME );
-	} // End Client Game Loop
+        FPSControl();
 
-	clientSocket.Close();
-	// Delete all global objects allocated by libprotobuf.
-	google::protobuf::ShutdownProtobufLibrary();
+        /*
+         * Play nice with the OS, and give
+         * some CPU for another process.
+         */
+        //SDL_Delay(1);
+
+        net::NetUtils::Wait( net::DELTA_TIME );
+    } // End Client Game Loop
+
+    clientSocket.Close();
+    // Delete all global objects allocated by libprotobuf.
+    google::protobuf::ShutdownProtobufLibrary();
 }
 
 net::GameEngineMessage* GetUpdateFromServer()
 {
-	net::GameEngineMessage* input;
+    net::GameEngineMessage* input;
 
-	///////////////////////////////////////////////////////////
-	// Get data
-	///////////////////////////////////////////////////////////
-	char buffer[ 4 ];
-	int bytecount = 0;
+    ///////////////////////////////////////////////////////////
+    // Get data
+    ///////////////////////////////////////////////////////////
+    char buffer[ 4 ];
+    int bytecount = 0;
 
-	memset( buffer, '\0', 4 );
+    memset( buffer, '\0', 4 );
 
-	while ( clientSocket.HasData() )
-	{
-		bytecount = clientSocket.Peek( buffer, 4 );
+    while ( clientSocket.HasData() )
+    {
+        bytecount = clientSocket.Peek( buffer, 4 );
 
-		if( bytecount == 0 )
-		{
-			// Quit reading data from the socket, if there is nothing to read.
-			break;
-		}
+        if( bytecount == 0 )
+        {
+            // Quit reading data from the socket, if there is nothing to read.
+            break;
+        }
 
-		input = net::NetUtils::ReadBody( &clientSocket, net::NetUtils::ReadHeader( buffer ) );
-	}
-	///////////////////////////////////////////////////////////
+        input = net::NetUtils::ReadBody( &clientSocket, net::NetUtils::ReadHeader( buffer ) );
+    }
+    ///////////////////////////////////////////////////////////
 
-	return input;
+    return input;
 }
 
 void SendInputToServer( int input )
 {
-	///////////////////////////////////////////////////////////////////
-	// Initialize payload
-	///////////////////////////////////////////////////////////////////
-	vector<physicsInfo> physicsInfos;
-	physicsInfos.push_back( net::NetUtils::GetPhysicsInfo( 1.0f ) );
-	physicsInfos.push_back( net::NetUtils::GetPhysicsInfo( 2.0f ) );
-	net::GameEngineMessage* payload = net::NetUtils::GetGameEngineCreateMessage( physicsInfos );
-	///////////////////////////////////////////////////////////////////
+/*
+    ///////////////////////////////////////////////////////////////////
+    // Initialize payload
+    ///////////////////////////////////////////////////////////////////
+    vector<physicsInfo> physicsInfos;
+    physicsInfos.push_back( net::NetUtils::GetPhysicsInfo( 1.0f ) );
+    physicsInfos.push_back( net::NetUtils::GetPhysicsInfo( 2.0f ) );
+    net::GameEngineMessage* payload = net::NetUtils::GetGameEngineCreateMessage( physicsInfos );
+    ///////////////////////////////////////////////////////////////////
 
-	///////////////////////////////////////////////////////////////////
-	// Client socket work - send payload to server
-	///////////////////////////////////////////////////////////////////
-	net::NetUtils::Send( payload, &clientSocket );
-	///////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////
+    // Client socket work - send payload to server
+    ///////////////////////////////////////////////////////////////////
+    net::NetUtils::Send( payload, &clientSocket );
+    ///////////////////////////////////////////////////////////////////
+*/
 }
 
 void FPSControl()
@@ -225,7 +438,7 @@ void UpdateStatistics()
  */
 bool TimeForRendering()
 {
-	return true;
+    return true;
 }
 
 /*
@@ -235,32 +448,32 @@ bool TimeForRendering()
 int PollForOSMessages(bool* quit)
 {
 /*
-	while(SDL_PollEvent(&event))
-	{
-		switch(eventType)
-		{
-			case SDL_KEYDOWN:
-				if(event.key.keysym.sym == SDLK_F12)
-				{
-					quit = true;
-				}
-				break;
+    while(SDL_PollEvent(&event))
+    {
+        switch(eventType)
+        {
+            case SDL_KEYDOWN:
+                if(event.key.keysym.sym == SDLK_F12)
+                {
+                    quit = true;
+                }
+                break;
 
-			case SDL_MOUSEBUTTONDOWN:
-				gameEngine->MouseClick(event.button.x, event.button.y);
-				break;
+            case SDL_MOUSEBUTTONDOWN:
+                gameEngine->MouseClick(event.button.x, event.button.y);
+                break;
 
-			case SDL_QUIT:
-				quit = true;
-				break;
-		} // End Switch
-	}
-	*/
+            case SDL_QUIT:
+                quit = true;
+                break;
+        } // End Switch
+    }
+    */
 
-	return 0;
+    return 0;
 }
 
 int GetInput(bool* quit)
 {
-	return 0;
+    return 0;
 }
