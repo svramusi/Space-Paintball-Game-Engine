@@ -14,6 +14,7 @@
 #include <sstream>
 #include <errno.h>
 #include <arpa/inet.h>
+#include <vector>
 
 #include <unistd.h>
 #include <google/protobuf/io/coded_stream.h>
@@ -54,6 +55,9 @@ namespace net
 		static PointMessage* GetPointMsg( Point point );
 		static VelocityMessage* GetVelocityMsg( Velocity velocity );
 		static ForceMessage* GetForceMsg( Force force );
+
+		static vector<physicsInfo> GetPhysicsInfoObj( GameEngineMessage* gameEngineMsg );
+		static Point GetPointObj( const PointMessage& pointMsg );
 	};
 }
 #endif /* NETUTILS_H_ */

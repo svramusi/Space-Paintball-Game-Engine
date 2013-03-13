@@ -330,18 +330,63 @@ namespace net
 		return thePhysicsInfo;
 	}
 
-/*
 	vector<physicsInfo> NetUtils::GetPhysicsInfoObj( GameEngineMessage* gameEngineMsg )
 	{
+		vector<physicsInfo> physicsInfos;
 
-
-		for( int i = 0; i < physicsInfos.size(); i++ )
+		for( int i = 0; i < gameEngineMsg->physicsinfo_size(); i++ )
 		{
-			physicsInfo thePhysicsInfo = physicsInfos[i];
-			PhysicsInfoMessage* physicsInfoMsg = gameEnginePayload->add_physicsinfo();
-			SetPhysicsInfoMessage( thePhysicsInfo, physicsInfoMsg );
+			physicsInfo thePhysicsInfo;
+			PhysicsInfoMessage physicsInfoMsg = gameEngineMsg->physicsinfo(i);
+
+			if( physicsInfoMsg.has_aabbobject() )
+			{
+				AabbMessage aabbObjectMsg = physicsInfoMsg.aabbobject();
+				CollidableObjectMessage collidableObjectMsg = aabbObjectMsg.collidableobject();
+
+				int ID = collidableObjectMsg.id();
+				Point center = GetPointObj( collidableObjectMsg.center() );
+				float radii[3] = {0.0f, 0.0f, 0.0f};
+				radii[0] = aabbObjectMsg.radiusx();
+				radii[1] = aabbObjectMsg.radiusy();
+				radii[2] = aabbObjectMsg.radiusz();
+				int movable = collidableObjectMsg.movable();
+
+				AABB* aabbObject = new AABB( ID, center, radii, movable  );
+
+				thePhysicsInfo.collidableObject = aabbObject;
+			}
+			else if( physicsInfoMsg.has_sphereobject() )
+			{
+				SphereMessage sphereObjectMsg = physicsInfoMsg.sphereobject();
+				CollidableObjectMessage collidableObjectMsg = sphereObjectMsg.collidableobject();
+
+				int ID = collidableObjectMsg.id();
+				Point center = GetPointObj( collidableObjectMsg.center() );
+				float radius = sphereObjectMsg.radius();
+				int movable = collidableObjectMsg.movable();
+
+				Sphere* sphereObject = new Sphere( ID, center, radius, movable );
+
+				thePhysicsInfo.collidableObject = sphereObject;
+			}
+
+			thePhysicsInfo.mass = physicsInfoMsg.mass();
+
+			physicsInfos.push_back( thePhysicsInfo );
 		}
 
-		return gameEnginePayload;
-	}*/
+		return physicsInfos;
+	}
+
+	Point GetPointObj( const PointMessage& pointMsg )
+	{
+		Point center;
+
+		center.x = pointMsg.x();
+		center.y = pointMsg.y();
+		center.z = pointMsg.z();
+
+		return center;
+	}
 }
