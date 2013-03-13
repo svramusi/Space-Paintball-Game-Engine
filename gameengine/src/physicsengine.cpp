@@ -70,13 +70,11 @@ cout << endl << "object id: " << (*it).ID
             calculateAngularVelocity(&(*it), delta);
             calculateAngularPosition(&(*it), delta); //NEEDS CALCULATE POI UPDATED TO WORK
 
-
             cout << endl << "updating object. id:" << (*it).ID;
             cout << endl << "center X:" << (*it).collidableObject->getCenter().x;
             cout << endl << "center Y:" << (*it).collidableObject->getCenter().y;
             cout << endl << "center Z:" << (*it).collidableObject->getCenter().z;
             cout << endl << endl;
-
 
             cd->updateObject((*it).ID, (*it).collidableObject->getCenter());
 
@@ -87,24 +85,24 @@ cout << endl << "object id: " << (*it).ID
     resolveCollisions();
 }
 
-void
-PhysicsEngine::resolveCollisions()
+bool
+PhysicsEngine::isMoving(const physicsInfo *physics_info)
 {
-    collisions_t *collisions = cd->checkForAnyCollisions();
+    cout << endl << "linear velocity for id: " << physics_info->collidableObject->getID()
+        << " x: " << physics_info->linearVelocity.x
+        << " y: " << physics_info->linearVelocity.y
+        << " z: " << physics_info->linearVelocity.z << endl;
 
-    if(collisions != NULL)
-    {
-        cout << endl << "There is a collision between object ID: " << collisions->ID
-                << " and object ID: " << collisions->info->ID << endl << endl;
+    if(physics_info->linearVelocity.x != 0) return true;
+    if(physics_info->linearVelocity.y != 0) return true;
+    if(physics_info->linearVelocity.z != 0) return true;
 
-        for (std::vector<physicsInfo>::iterator it = physicsObjects.begin(); it != physicsObjects.end(); ++it)
-        {
-            physicsInfo* tempInfo = &(*it);
+    return false;
+}
 
-            if((tempInfo->ID == collisions->ID || tempInfo->ID == collisions->info->ID) && tempInfo->movable)
-            {
-                penetration_t penetration = collisions->info->penetration;
-
+void
+PhysicsEngine::moveItem(physicsInfo *item, penetration_t penetration)
+{
 /*
 cout << endl << "object to move id: " << tempInfo->collidableObject->getID() << endl;
 cout << endl << "pen x: " << penetration.x
@@ -112,12 +110,33 @@ cout << endl << "pen x: " << penetration.x
         << " pen z: " << penetration.z << endl;
 */
 
-                Point currentCenter = tempInfo->collidableObject->getCenter();
+    Point currentCenter = item->collidableObject->getCenter();
 
-                Point newCenter;
-                newCenter.x = currentCenter.x; //+ penetration.x; //FIX ME!!!!
-                newCenter.y = currentCenter.y + penetration.y;
-                newCenter.z = currentCenter.z; //+ penetration.z; //FIX ME!!!!
+    Point newCenter;
+    newCenter.x = currentCenter.x;
+    newCenter.y = currentCenter.y;
+    newCenter.z = currentCenter.z;
+
+    if(item->linearVelocity.x != 0) {
+        newCenter.x += penetration.x;
+    }
+
+    if(item->linearVelocity.y != 0) {
+        newCenter.y += penetration.y;
+    }
+
+    if(item->linearVelocity.z != 0) {
+        newCenter.z += penetration.z;
+    }
+
+
+/*
+cout << endl << "linear velocity: "
+        << " x: " << tempInfo->linearVelocity.x
+        << " y: " << tempInfo->linearVelocity.y
+        << " z: " << tempInfo->linearVelocity.z << endl;
+*/
+
 
 cout << endl << "new center: "
         << " x: " << newCenter.x
@@ -125,11 +144,59 @@ cout << endl << "new center: "
         << " z: " << newCenter.z << endl;
 
 
-                cd->fixObject(tempInfo->ID, newCenter);
-                //Dirty hack... MUST BE AFTER cd->updateObject!!!!
-                //(*it).collidableObject->setCenter(newCenter);
-            }
+    cd->fixObject(item->ID, newCenter);
+
+    //Dirty hack... MUST BE AFTER cd->updateObject!!!!
+    //(*it).collidableObject->setCenter(newCenter);
+}
+
+physicsInfo*
+PhysicsEngine::findItem(int ID)
+{
+    for (std::vector<physicsInfo>::iterator it = physicsObjects.begin(); it != physicsObjects.end(); ++it)
+    {
+        if((*it).ID == ID)
+            return &(*it);
+    }
+
+    return NULL;
+}
+
+void
+PhysicsEngine::resolveCollisions()
+{
+    collisions_t *collisions = cd->checkForAnyCollisions();
+
+    collisions_t *currentCollision = collisions;
+
+    while(currentCollision != NULL)
+    {
+        cout << endl << "There is a collision between object ID: " << currentCollision->ID
+                << " and object ID: " << currentCollision->info->ID << endl << endl;
+
+        //physicsInfo* tempInfo = &(*it);
+        physicsInfo* baseCollision = findItem(currentCollision->ID);
+        collision_info_t *objectCollisionInfo = currentCollision->info;
+
+        while(objectCollisionInfo != NULL)
+        {
+            physicsInfo* objectCollision = findItem(objectCollisionInfo->ID);
+
+            if(baseCollision == NULL)
+                continue; //I dunno...
+
+            penetration_t penetration = objectCollisionInfo->penetration;
+
+            if(isMoving(baseCollision))
+                moveItem(baseCollision, penetration);
+
+            if(isMoving(objectCollision))
+                moveItem(objectCollision, penetration);
+
+            objectCollisionInfo = objectCollisionInfo->next;
         }
+
+        currentCollision = currentCollision->next;
     }
 
     cd->freeCollisions(collisions);

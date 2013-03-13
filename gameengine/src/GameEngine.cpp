@@ -8,7 +8,8 @@
 #include "GameEngine.h"
 
 #include "SDL.h"
-//#include "SDL_gfxPrimitives.h"
+
+#include <unistd.h>
 
 const int WINDOW_WIDTH = 640;
 const int WINDOW_HEIGHT = 480;
@@ -58,6 +59,12 @@ GameEngine::GameEngine() {
     moving2.w=10;
     moving2.h=10;
 
+    SDL_Rect moving3;
+    moving3.x=155;
+    moving3.y=100;
+    moving3.w=10;
+    moving3.h=10;
+
 
 
     Uint32 color = SDL_MapRGB(screen->format,0xff,0xff,0xff);
@@ -106,6 +113,7 @@ GameEngine::GameEngine() {
 
     CollidableObject *moving1CO;
     CollidableObject *moving2CO;
+    CollidableObject *moving3CO;
 
 
     float radii[3];
@@ -172,7 +180,18 @@ GameEngine::GameEngine() {
     radii[1] = 10;
     radii[2] = 0;
 
-    moving2CO = new AABB(-1, movingCenter2, radii, true);
+    moving2CO = new AABB(-1, movingCenter2, radii, false);//FIX ME!!!!!!!!!
+
+    Point movingCenter3;
+    movingCenter3.x = 160.0f;
+    movingCenter3.y = SDL_START_HEIGHT - 55.0f;
+    movingCenter3.z = 0.0f;
+
+    radii[0] = 10;
+    radii[1] = 10;
+    radii[2] = 0;
+
+    moving3CO = new AABB(-1, movingCenter3, radii, true);
 
 
 
@@ -201,8 +220,10 @@ GameEngine::GameEngine() {
     physics->insertPhysicsObject(bottomCO, 10, zeroVel, zeroForce, zeroVel, zeroForce, zeroPoint);
     physics->insertPhysicsObject(rightWallCO, 10, zeroVel, zeroForce, zeroVel, zeroForce, zeroPoint);
 
-    physics->insertPhysicsObject(moving1CO, 10, ballVel, zeroForce, zeroVel, zeroForce, zeroPoint);
-    physics->insertPhysicsObject(moving2CO, 10, ballVel, zeroForce, zeroVel, zeroForce, zeroPoint);
+//    physics->insertPhysicsObject(moving1CO, 10, ballVel, zeroForce, zeroVel, zeroForce, zeroPoint);
+//    physics->insertPhysicsObject(moving2CO, 10, ballVel, zeroForce, zeroVel, zeroForce, zeroPoint);
+    physics->insertPhysicsObject(moving2CO, 10, zeroVel, zeroForce, zeroVel, zeroForce, zeroPoint);
+    physics->insertPhysicsObject(moving3CO, 10, ballVel, zeroForce, zeroVel, zeroForce, zeroPoint);
 
     for(float i=0.0f; i<10.0f; i=i+0.03f)
     //for(int i=0; i<200; i++)
@@ -212,12 +233,22 @@ GameEngine::GameEngine() {
         //Clear the screen
         SDL_FillRect(screen, &screen->clip_rect, SDL_MapRGB(screen->format, 0x00, 0x00, 0x00));
 
+        moving1.x = moving1CO->getCenter().x;
+        moving1.y = SDL_START_HEIGHT - moving1CO->getCenter().y;
 
+        moving2.x = moving2CO->getCenter().x;
+        moving2.y = SDL_START_HEIGHT - moving2CO->getCenter().y;
+
+/*
         moving1.x = moving2CO->getCenter().x;
         moving1.y = SDL_START_HEIGHT - moving2CO->getCenter().y;
 
         moving2.x = moving1CO->getCenter().x;
         moving2.y = SDL_START_HEIGHT - moving1CO->getCenter().y;
+*/
+
+        moving3.x = moving3CO->getCenter().x;
+        moving3.y = SDL_START_HEIGHT - moving3CO->getCenter().y;
 
 
         SDL_FillRect(screen,&leftWall,color);
@@ -226,10 +257,13 @@ GameEngine::GameEngine() {
 
         SDL_FillRect(screen,&moving1,color2);
         SDL_FillRect(screen,&moving2,color2);
+        SDL_FillRect(screen,&moving3,color2);
 
         SDL_Flip(screen);
         if(1000/FPS > SDL_GetTicks()-start)
             SDL_Delay(1000/FPS - (SDL_GetTicks() - start));
+
+        usleep(50000);
     }
 
 

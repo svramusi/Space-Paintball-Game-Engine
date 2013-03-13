@@ -139,22 +139,24 @@ CollisionDetection::checkForAnyCollisions()
 
     //THIS IS BEYOND TERRIBLE!!
     //MUST FIX!!!!
-    for(std::vector<CollidableObject*>::iterator it1 = collidableObjects.begin(); it1 != collidableObjects.end(); ++it1) {
-        for(std::vector<CollidableObject*>::iterator it2 = collidableObjects.begin(); it2 != collidableObjects.end(); ++it2) {
-            if((*it1)->getID() == (*it2)->getID())
-                continue;
+    for(int i = 0; i < collidableObjects.size(); i++) {
+        for(int j = i + 1; j < collidableObjects.size(); j++) {
+            //if((*it1)->getID() == (*it2)->getID())
+                //continue;
 
-            if(isIntersection(*it1, *it2)) {
+            CollidableObject *obj1 = collidableObjects[i];
+            CollidableObject *obj2 = collidableObjects[j];
+
+            if(isIntersection(obj1, obj2)) {
                 collision_info_t *collision_info;
                 collision_info = (collision_info_t*)malloc(sizeof(collision_info_t));
-
 
                 int capsuleID1 = -1;
                 int capsuleID2 = -1;
 
-                if(typeid(Capsule) == typeid(*(*it1)))
+                if(typeid(Capsule) == typeid(obj1))
                 {
-                    Capsule *c = dynamic_cast<Capsule*>((*it1));
+                    Capsule *c = dynamic_cast<Capsule*>(obj1);
 
                     capsuleID1 = c->getSphereID();
 
@@ -163,9 +165,9 @@ CollisionDetection::checkForAnyCollisions()
                         << " cap end: " << c->getEnd().x
                         << "," << c->getEnd().y << endl;
                 }
-                else if(typeid(Capsule) == typeid(*(*it2)))
+                else if(typeid(Capsule) == typeid(obj2))
                 {
-                    Capsule *c = dynamic_cast<Capsule*>((*it2));
+                    Capsule *c = dynamic_cast<Capsule*>(obj2);
 
                     capsuleID2 = c->getSphereID();
 
@@ -175,14 +177,14 @@ CollisionDetection::checkForAnyCollisions()
                         << "," << c->getEnd().y << endl;
                 }
 
-//cout << endl << "found an intersection between: " << (*it1).ID << " and " << (*it2).ID << endl;
+//cout << endl << "found an intersection between: " << (obj1)->getID() << " and " << (obj2)->getID() << endl;
 
                 if(capsuleID2 != -1)
                     collision_info->ID = capsuleID2;
                 else
-                    collision_info->ID = (*it2)->getID();
+                    collision_info->ID = (obj2)->getID();
 
-                collision_info->penetration = getPenetrationVector((*it1), (*it2));
+                collision_info->penetration = getPenetrationVector(obj1, obj2);
                 collision_info->next = NULL;
 
                 if(collisions == NULL) {
@@ -191,7 +193,7 @@ CollisionDetection::checkForAnyCollisions()
                     if(capsuleID1 != -1)
                         collisions->ID = capsuleID1;
                     else
-                        collisions->ID = (*it1)->getID();
+                        collisions->ID = (obj1)->getID();
 
                     collisions->info = collision_info;
                     collisions->next = NULL;
@@ -200,7 +202,7 @@ CollisionDetection::checkForAnyCollisions()
                 }
                 else {
                     collisions_t *newCollision = (collisions_t*)malloc(sizeof(collisions_t));
-                    newCollision->ID = (*it1)->getID();
+                    newCollision->ID = (obj1)->getID();
                     newCollision->info = collision_info;
                     newCollision->next = NULL;
 

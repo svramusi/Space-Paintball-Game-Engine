@@ -51,5 +51,10 @@ private:
     float GetDistanceBetweenVertices(Point v1, Point v2);
     void freeCollisions(collisionDetection* collisions);
 
+    bool isMoving(const physicsInfo *item);
+    void moveItem(physicsInfo *item, penetration_t penetration);
+
+    physicsInfo* findItem(int ID);
+
 };
 #endif
