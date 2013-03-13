@@ -71,21 +71,6 @@ CollisionDetection::updateObject(int ID, Point newCenter)
                         tempSphere->getCenter(),
                         newCenter,
                         tempSphere->getRadius());
-/*
-            cout << endl << "id: " << capsule->getID() << endl;
-
-            cout << endl
-                << "temp sphere x: " << tempSphere->getCenter().x
-                << " temp sphere y: " << tempSphere->getCenter().y
-                << " new center x: " << newCenter.x
-                << " new center y: " << newCenter.y << endl;
-
-            cout << endl
-                << "new cap start: " << capsule->getStart().x
-                << "," << capsule->getStart().y
-                << " new cap end: " << capsule->getEnd().x
-                << "," << capsule->getEnd().y << endl;
-*/
 
                 addObject(capsule);
             }
@@ -137,13 +122,8 @@ CollisionDetection::checkForAnyCollisions()
     collisions = NULL;
     current = NULL;
 
-    //THIS IS BEYOND TERRIBLE!!
-    //MUST FIX!!!!
     for(int i = 0; i < collidableObjects.size(); i++) {
         for(int j = i + 1; j < collidableObjects.size(); j++) {
-            //if((*it1)->getID() == (*it2)->getID())
-                //continue;
-
             CollidableObject *obj1 = collidableObjects[i];
             CollidableObject *obj2 = collidableObjects[j];
 
@@ -154,27 +134,15 @@ CollisionDetection::checkForAnyCollisions()
                 int capsuleID1 = -1;
                 int capsuleID2 = -1;
 
-                if(typeid(Capsule) == typeid(obj1))
+                if(typeid(Capsule) == typeid(*obj1))
                 {
-                    Capsule *c = dynamic_cast<Capsule*>(obj1);
-
-                    capsuleID1 = c->getSphereID();
-
-                    cout << endl << "cap start: " << c->getStart().x
-                        << "," << c->getStart().y
-                        << " cap end: " << c->getEnd().x
-                        << "," << c->getEnd().y << endl;
+                    Capsule *capsule1 = dynamic_cast<Capsule*>(obj1);
+                    capsuleID1 = capsule1->getSphereID();
                 }
-                else if(typeid(Capsule) == typeid(obj2))
+                else if(typeid(Capsule) == typeid(*obj2))
                 {
-                    Capsule *c = dynamic_cast<Capsule*>(obj2);
-
-                    capsuleID2 = c->getSphereID();
-
-                    cout << endl << "cap start: " << c->getStart().x
-                        << "," << c->getStart().y
-                        << " cap end: " << c->getEnd().x
-                        << "," << c->getEnd().y << endl;
+                    Capsule *capsule2 = dynamic_cast<Capsule*>(obj2);
+                    capsuleID2 = capsule2->getSphereID();
                 }
 
 //cout << endl << "found an intersection between: " << (obj1)->getID() << " and " << (obj2)->getID() << endl;
@@ -331,13 +299,13 @@ CollisionDetection::getPenetrationVector(const AABB *aabb1, const AABB *aabb2)
     penetration_t penetrationVector;
 
     penetrationVector.x = (aabb1->getXRadius() + aabb2->getXRadius())
-                            - fabs(aabb1->getCenter().x - aabb2->getCenter().x);
+                            - fabs(aabb1->getCenter().x - aabb2->getCenter().x) + EPSILON;
 
     penetrationVector.y = (aabb1->getYRadius() + aabb2->getYRadius())
                             - fabs(aabb1->getCenter().y - aabb2->getCenter().y) + EPSILON;
 
     penetrationVector.z = (aabb1->getZRadius() + aabb2->getZRadius())
-                            - fabs(aabb1->getCenter().z - aabb2->getCenter().z);
+                            - fabs(aabb1->getCenter().z - aabb2->getCenter().z) + EPSILON;
 
     return penetrationVector;
 }
@@ -349,9 +317,9 @@ CollisionDetection::getPenetrationVector(const Sphere *sphere1, const Sphere *sp
     std::vector<float> normalized = getNormalizedVector(sphere1->getCenter(), sphere2->getCenter());
 
     penetration_t penetrationVector;
-    penetrationVector.x = normalized[0] * penetration;
-    penetrationVector.y = normalized[1] * penetration;
-    penetrationVector.z = normalized[2] * penetration;
+    penetrationVector.x = (normalized[0] * penetration) + EPSILON;
+    penetrationVector.y = (normalized[1] * penetration) + EPSILON;
+    penetrationVector.z = (normalized[2] * penetration) + EPSILON;
 
     return penetrationVector;
 }
@@ -362,13 +330,13 @@ CollisionDetection::getPenetrationVector(const AABB *aabb, const Sphere *sphere)
     penetration_t penetrationVector;
 
     penetrationVector.x = (aabb->getXRadius() + sphere->getRadius())
-                            - fabs(aabb->getCenter().x - sphere->getCenter().x);
+                            - fabs(aabb->getCenter().x - sphere->getCenter().x) + EPSILON;
 
     penetrationVector.y = (aabb->getYRadius() + sphere->getRadius())
-                            - fabs(aabb->getCenter().y - sphere->getCenter().y);
+                            - fabs(aabb->getCenter().y - sphere->getCenter().y) + EPSILON;
 
     penetrationVector.z = (aabb->getZRadius() + sphere->getRadius())
-                            - fabs(aabb->getCenter().z - sphere->getCenter().z);
+                            - fabs(aabb->getCenter().z - sphere->getCenter().z) + EPSILON;
 
     return penetrationVector;
 }
@@ -376,7 +344,6 @@ CollisionDetection::getPenetrationVector(const AABB *aabb, const Sphere *sphere)
 penetration_t
 CollisionDetection::getPenetrationVector(const AABB *aabb, const Capsule *capsule)
 {
-
     Point startingPoint = capsule->getStart();
     Point closestPoint = getClosestPoint(aabb, startingPoint);
 
@@ -389,9 +356,9 @@ CollisionDetection::getPenetrationVector(const AABB *aabb, const Capsule *capsul
     Point endPoint = capsule->getEnd();
 
     penetration_t penetrationVector;
-    penetrationVector.x = targetPoint.x - endPoint.x;
-    penetrationVector.y = targetPoint.y - endPoint.y;
-    penetrationVector.z = targetPoint.z - endPoint.z;
+    penetrationVector.x = targetPoint.x - endPoint.x + EPSILON;
+    penetrationVector.y = targetPoint.y - endPoint.y + EPSILON;
+    penetrationVector.z = targetPoint.z - endPoint.z + EPSILON;
 
     return penetrationVector;
 }

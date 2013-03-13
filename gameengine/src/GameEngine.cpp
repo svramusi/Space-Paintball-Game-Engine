@@ -239,14 +239,6 @@ GameEngine::GameEngine() {
         moving2.x = moving2CO->getCenter().x;
         moving2.y = SDL_START_HEIGHT - moving2CO->getCenter().y;
 
-/*
-        moving1.x = moving2CO->getCenter().x;
-        moving1.y = SDL_START_HEIGHT - moving2CO->getCenter().y;
-
-        moving2.x = moving1CO->getCenter().x;
-        moving2.y = SDL_START_HEIGHT - moving1CO->getCenter().y;
-*/
-
         moving3.x = moving3CO->getCenter().x;
         moving3.y = SDL_START_HEIGHT - moving3CO->getCenter().y;
 
