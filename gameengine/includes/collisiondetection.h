@@ -36,6 +36,8 @@ struct collisions_t {
     collisions_t *next;
 };
 
+const float EPSILON = 0.01f;
+
 class CollisionDetection {
 public:
     CollisionDetection();

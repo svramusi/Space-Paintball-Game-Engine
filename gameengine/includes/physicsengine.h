@@ -59,5 +59,7 @@ private:
 
     physicsInfo* findItem(int ID);
 
+    std::vector<int> objectsMovedThisTurn;
+    bool hasObjectBeenInCollision(int ID);
 };
 #endif

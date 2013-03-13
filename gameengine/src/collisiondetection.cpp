@@ -331,13 +331,13 @@ CollisionDetection::getPenetrationVector(const AABB *aabb1, const AABB *aabb2)
     penetration_t penetrationVector;
 
     penetrationVector.x = (aabb1->getXRadius() + aabb2->getXRadius())
-                            - abs(aabb1->getCenter().x - aabb2->getCenter().x);
+                            - fabs(aabb1->getCenter().x - aabb2->getCenter().x);
 
     penetrationVector.y = (aabb1->getYRadius() + aabb2->getYRadius())
-                            - abs(aabb1->getCenter().y - aabb2->getCenter().y);
+                            - fabs(aabb1->getCenter().y - aabb2->getCenter().y) + EPSILON;
 
     penetrationVector.z = (aabb1->getZRadius() + aabb2->getZRadius())
-                            - abs(aabb1->getCenter().z - aabb2->getCenter().z);
+                            - fabs(aabb1->getCenter().z - aabb2->getCenter().z);
 
     return penetrationVector;
 }
@@ -362,13 +362,13 @@ CollisionDetection::getPenetrationVector(const AABB *aabb, const Sphere *sphere)
     penetration_t penetrationVector;
 
     penetrationVector.x = (aabb->getXRadius() + sphere->getRadius())
-                            - abs(aabb->getCenter().x - sphere->getCenter().x);
+                            - fabs(aabb->getCenter().x - sphere->getCenter().x);
 
     penetrationVector.y = (aabb->getYRadius() + sphere->getRadius())
-                            - abs(aabb->getCenter().y - sphere->getCenter().y);
+                            - fabs(aabb->getCenter().y - sphere->getCenter().y);
 
     penetrationVector.z = (aabb->getZRadius() + sphere->getRadius())
-                            - abs(aabb->getCenter().z - sphere->getCenter().z);
+                            - fabs(aabb->getCenter().z - sphere->getCenter().z);
 
     return penetrationVector;
 }
@@ -400,9 +400,9 @@ std::vector<float>
 CollisionDetection::getDiffVectorAbs(Point point1, Point point2)
 {
     std::vector<float> diff_vector(3);
-    diff_vector[0] = abs(point1.x - point2.x);
-    diff_vector[1] = abs(point1.y - point2.y);
-    diff_vector[2] = abs(point1.z - point2.z);
+    diff_vector[0] = fabs(point1.x - point2.x);
+    diff_vector[1] = fabs(point1.y - point2.y);
+    diff_vector[2] = fabs(point1.z - point2.z);
 
     return diff_vector;
 }
@@ -454,15 +454,15 @@ CollisionDetection::isIntersection(const CollidableObject *obj1, const Collidabl
 int
 CollisionDetection::isIntersection(const AABB *aabb1, const AABB *aabb2)
 {
-    if(abs(aabb1->getCenter().x - aabb2->getCenter().x) >
+    if(fabs(aabb1->getCenter().x - aabb2->getCenter().x) >
                 (aabb1->getXRadius() + aabb2->getXRadius()))
         return 0;
 
-    if(abs(aabb1->getCenter().y - aabb2->getCenter().y) >
+    if(fabs(aabb1->getCenter().y - aabb2->getCenter().y) >
                 (aabb1->getYRadius() + aabb2->getYRadius()))
         return 0;
 
-    if(abs(aabb1->getCenter().z - aabb2->getCenter().z) >
+    if(fabs(aabb1->getCenter().z - aabb2->getCenter().z) >
                 (aabb1->getZRadius() + aabb2->getZRadius()))
         return 0;
 
@@ -485,15 +485,15 @@ CollisionDetection::isIntersection(const Sphere *sphere1, const Sphere *sphere2)
 int
 CollisionDetection::isIntersection(const AABB *aabb, const Sphere *sphere)
 {
-    if(abs(aabb->getCenter().x - sphere->getCenter().x) >
+    if(fabs(aabb->getCenter().x - sphere->getCenter().x) >
                 (aabb->getXRadius() + sphere->getRadius()))
         return 0;
 
-    if(abs(aabb->getCenter().y - sphere->getCenter().y) >
+    if(fabs(aabb->getCenter().y - sphere->getCenter().y) >
                 (aabb->getYRadius() + sphere->getRadius()))
         return 0;
 
-    if(abs(aabb->getCenter().z - sphere->getCenter().z) >
+    if(fabs(aabb->getCenter().z - sphere->getCenter().z) >
                 (aabb->getZRadius() + sphere->getRadius()))
         return 0;
 
