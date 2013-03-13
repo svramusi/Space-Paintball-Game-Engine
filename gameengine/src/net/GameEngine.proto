@@ -1,44 +1,77 @@
 package net;
 
-message Velocity {
+message VelocityMessage {
 	required float x = 1;
   	required float y = 2;
   	required float z = 3;
 }
 
-message Force {
+message ForceMessage {
 	required float x = 1;
   	required float y = 2;
   	required float z = 3;
 }
 
-message Point {
+message PointMessage {
   	required float x = 1;
   	required float y = 2;
   	required float z = 3;
 }
 
-message Aabb {
-	required Point center = 1;
-	repeated float radii = 2;
+message CollidableObjectMessage {
+	required int32 ID = 1;
+	required PointMessage center = 2;
+	required int32 movable = 3;
 }
 
-message Sphere {
-	required Point center = 1;
+message AabbMessage {
+	required CollidableObjectMessage collidableObject = 1;
+	required float radiusX = 2;
+	required float radiusY = 3;
+	required float radiusZ = 4;
+}
+
+message SphereMessage {
+	required CollidableObjectMessage collidableObject = 1;
 	required float radius = 2;
 }
 
-message PhysicsInfo {
-	required float mass = 1;
-	required Aabb aabbObject = 2;
-	required Sphere sphereObject = 3;
-	required Velocity linearVelocity = 4;
-	required Velocity angularVelocity = 5;
-	required Point angularPosition = 6;
-	required Force linearForce = 7;
-	required Force angularForce = 8;
+message PhysicsInfoMessage {
+	enum PhysicsInfoMessageType {
+	   AABB = 0;
+	   SPHERE = 1;
+	}
+	
+	required PhysicsInfoMessageType physicsInfoMessageType = 1;
+	optional AabbMessage aabbObject = 2;
+	optional SphereMessage sphereObject = 3;
+	required float mass = 4;
+	required VelocityMessage linearVelocity = 5;
+	required ForceMessage linearForce = 6;
+	required VelocityMessage angularVelocity = 7;
+	required ForceMessage angularForce = 8;
+	required PointMessage angularPosition = 9;
 }
 
-message GameEngine {
-	repeated PhysicsInfo physicsInfo = 1;
+message UpdateObjectMessage {
+	required int32 ID = 1;
+	required PointMessage position = 2;
+}
+
+message DeleteObjectMessage {
+	required int32 ID = 1;
+}
+
+message GameEngineMessage {
+	enum GameEngineMessageType {
+	   CREATE = 0;
+	   RETRIEVE = 1;
+	   UPDATE = 3;
+	   DELETE = 2;
+	}
+	
+	required GameEngineMessageType messageType = 1;
+	repeated PhysicsInfoMessage physicsInfo = 2;
+	repeated UpdateObjectMessage updateObject = 3;
+	repeated DeleteObjectMessage deleteObject = 4;
 }

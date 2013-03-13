@@ -23,6 +23,7 @@
 #include <google/protobuf/message.h>
 #include <google/protobuf/repeated_field.h>
 #include <google/protobuf/extension_set.h>
+#include <google/protobuf/generated_enum_reflection.h>
 #include <google/protobuf/unknown_field_set.h>
 // @@protoc_insertion_point(includes)
 
@@ -33,24 +34,67 @@ void  protobuf_AddDesc_GameEngine_2eproto();
 void protobuf_AssignDesc_GameEngine_2eproto();
 void protobuf_ShutdownFile_GameEngine_2eproto();
 
-class Velocity;
-class Force;
-class Point;
-class Aabb;
-class Sphere;
-class PhysicsInfo;
-class GameEngine;
+class VelocityMessage;
+class ForceMessage;
+class PointMessage;
+class CollidableObjectMessage;
+class AabbMessage;
+class SphereMessage;
+class PhysicsInfoMessage;
+class UpdateObjectMessage;
+class DeleteObjectMessage;
+class GameEngineMessage;
 
+enum PhysicsInfoMessage_PhysicsInfoMessageType {
+  PhysicsInfoMessage_PhysicsInfoMessageType_AABB = 0,
+  PhysicsInfoMessage_PhysicsInfoMessageType_SPHERE = 1
+};
+bool PhysicsInfoMessage_PhysicsInfoMessageType_IsValid(int value);
+const PhysicsInfoMessage_PhysicsInfoMessageType PhysicsInfoMessage_PhysicsInfoMessageType_PhysicsInfoMessageType_MIN = PhysicsInfoMessage_PhysicsInfoMessageType_AABB;
+const PhysicsInfoMessage_PhysicsInfoMessageType PhysicsInfoMessage_PhysicsInfoMessageType_PhysicsInfoMessageType_MAX = PhysicsInfoMessage_PhysicsInfoMessageType_SPHERE;
+const int PhysicsInfoMessage_PhysicsInfoMessageType_PhysicsInfoMessageType_ARRAYSIZE = PhysicsInfoMessage_PhysicsInfoMessageType_PhysicsInfoMessageType_MAX + 1;
+
+const ::google::protobuf::EnumDescriptor* PhysicsInfoMessage_PhysicsInfoMessageType_descriptor();
+inline const ::std::string& PhysicsInfoMessage_PhysicsInfoMessageType_Name(PhysicsInfoMessage_PhysicsInfoMessageType value) {
+  return ::google::protobuf::internal::NameOfEnum(
+    PhysicsInfoMessage_PhysicsInfoMessageType_descriptor(), value);
+}
+inline bool PhysicsInfoMessage_PhysicsInfoMessageType_Parse(
+    const ::std::string& name, PhysicsInfoMessage_PhysicsInfoMessageType* value) {
+  return ::google::protobuf::internal::ParseNamedEnum<PhysicsInfoMessage_PhysicsInfoMessageType>(
+    PhysicsInfoMessage_PhysicsInfoMessageType_descriptor(), name, value);
+}
+enum GameEngineMessage_GameEngineMessageType {
+  GameEngineMessage_GameEngineMessageType_CREATE = 0,
+  GameEngineMessage_GameEngineMessageType_RETRIEVE = 1,
+  GameEngineMessage_GameEngineMessageType_UPDATE = 3,
+  GameEngineMessage_GameEngineMessageType_DELETE = 2
+};
+bool GameEngineMessage_GameEngineMessageType_IsValid(int value);
+const GameEngineMessage_GameEngineMessageType GameEngineMessage_GameEngineMessageType_GameEngineMessageType_MIN = GameEngineMessage_GameEngineMessageType_CREATE;
+const GameEngineMessage_GameEngineMessageType GameEngineMessage_GameEngineMessageType_GameEngineMessageType_MAX = GameEngineMessage_GameEngineMessageType_UPDATE;
+const int GameEngineMessage_GameEngineMessageType_GameEngineMessageType_ARRAYSIZE = GameEngineMessage_GameEngineMessageType_GameEngineMessageType_MAX + 1;
+
+const ::google::protobuf::EnumDescriptor* GameEngineMessage_GameEngineMessageType_descriptor();
+inline const ::std::string& GameEngineMessage_GameEngineMessageType_Name(GameEngineMessage_GameEngineMessageType value) {
+  return ::google::protobuf::internal::NameOfEnum(
+    GameEngineMessage_GameEngineMessageType_descriptor(), value);
+}
+inline bool GameEngineMessage_GameEngineMessageType_Parse(
+    const ::std::string& name, GameEngineMessage_GameEngineMessageType* value) {
+  return ::google::protobuf::internal::ParseNamedEnum<GameEngineMessage_GameEngineMessageType>(
+    GameEngineMessage_GameEngineMessageType_descriptor(), name, value);
+}
 // ===================================================================
 
-class Velocity : public ::google::protobuf::Message {
+class VelocityMessage : public ::google::protobuf::Message {
  public:
-  Velocity();
-  virtual ~Velocity();
+  VelocityMessage();
+  virtual ~VelocityMessage();
 
-  Velocity(const Velocity& from);
+  VelocityMessage(const VelocityMessage& from);
 
-  inline Velocity& operator=(const Velocity& from) {
+  inline VelocityMessage& operator=(const VelocityMessage& from) {
     CopyFrom(from);
     return *this;
   }
@@ -64,17 +108,17 @@ class Velocity : public ::google::protobuf::Message {
   }
 
   static const ::google::protobuf::Descriptor* descriptor();
-  static const Velocity& default_instance();
+  static const VelocityMessage& default_instance();
 
-  void Swap(Velocity* other);
+  void Swap(VelocityMessage* other);
 
   // implements Message ----------------------------------------------
 
-  Velocity* New() const;
+  VelocityMessage* New() const;
   void CopyFrom(const ::google::protobuf::Message& from);
   void MergeFrom(const ::google::protobuf::Message& from);
-  void CopyFrom(const Velocity& from);
-  void MergeFrom(const Velocity& from);
+  void CopyFrom(const VelocityMessage& from);
+  void MergeFrom(const VelocityMessage& from);
   void Clear();
   bool IsInitialized() const;
 
@@ -118,7 +162,7 @@ class Velocity : public ::google::protobuf::Message {
   inline float z() const;
   inline void set_z(float value);
 
-  // @@protoc_insertion_point(class_scope:net.Velocity)
+  // @@protoc_insertion_point(class_scope:net.VelocityMessage)
  private:
   inline void set_has_x();
   inline void clear_has_x();
@@ -141,18 +185,18 @@ class Velocity : public ::google::protobuf::Message {
   friend void protobuf_ShutdownFile_GameEngine_2eproto();
 
   void InitAsDefaultInstance();
-  static Velocity* default_instance_;
+  static VelocityMessage* default_instance_;
 };
 // -------------------------------------------------------------------
 
-class Force : public ::google::protobuf::Message {
+class ForceMessage : public ::google::protobuf::Message {
  public:
-  Force();
-  virtual ~Force();
+  ForceMessage();
+  virtual ~ForceMessage();
 
-  Force(const Force& from);
+  ForceMessage(const ForceMessage& from);
 
-  inline Force& operator=(const Force& from) {
+  inline ForceMessage& operator=(const ForceMessage& from) {
     CopyFrom(from);
     return *this;
   }
@@ -166,17 +210,17 @@ class Force : public ::google::protobuf::Message {
   }
 
   static const ::google::protobuf::Descriptor* descriptor();
-  static const Force& default_instance();
+  static const ForceMessage& default_instance();
 
-  void Swap(Force* other);
+  void Swap(ForceMessage* other);
 
   // implements Message ----------------------------------------------
 
-  Force* New() const;
+  ForceMessage* New() const;
   void CopyFrom(const ::google::protobuf::Message& from);
   void MergeFrom(const ::google::protobuf::Message& from);
-  void CopyFrom(const Force& from);
-  void MergeFrom(const Force& from);
+  void CopyFrom(const ForceMessage& from);
+  void MergeFrom(const ForceMessage& from);
   void Clear();
   bool IsInitialized() const;
 
@@ -220,7 +264,7 @@ class Force : public ::google::protobuf::Message {
   inline float z() const;
   inline void set_z(float value);
 
-  // @@protoc_insertion_point(class_scope:net.Force)
+  // @@protoc_insertion_point(class_scope:net.ForceMessage)
  private:
   inline void set_has_x();
   inline void clear_has_x();
@@ -243,18 +287,18 @@ class Force : public ::google::protobuf::Message {
   friend void protobuf_ShutdownFile_GameEngine_2eproto();
 
   void InitAsDefaultInstance();
-  static Force* default_instance_;
+  static ForceMessage* default_instance_;
 };
 // -------------------------------------------------------------------
 
-class Point : public ::google::protobuf::Message {
+class PointMessage : public ::google::protobuf::Message {
  public:
-  Point();
-  virtual ~Point();
+  PointMessage();
+  virtual ~PointMessage();
 
-  Point(const Point& from);
+  PointMessage(const PointMessage& from);
 
-  inline Point& operator=(const Point& from) {
+  inline PointMessage& operator=(const PointMessage& from) {
     CopyFrom(from);
     return *this;
   }
@@ -268,17 +312,17 @@ class Point : public ::google::protobuf::Message {
   }
 
   static const ::google::protobuf::Descriptor* descriptor();
-  static const Point& default_instance();
+  static const PointMessage& default_instance();
 
-  void Swap(Point* other);
+  void Swap(PointMessage* other);
 
   // implements Message ----------------------------------------------
 
-  Point* New() const;
+  PointMessage* New() const;
   void CopyFrom(const ::google::protobuf::Message& from);
   void MergeFrom(const ::google::protobuf::Message& from);
-  void CopyFrom(const Point& from);
-  void MergeFrom(const Point& from);
+  void CopyFrom(const PointMessage& from);
+  void MergeFrom(const PointMessage& from);
   void Clear();
   bool IsInitialized() const;
 
@@ -322,7 +366,7 @@ class Point : public ::google::protobuf::Message {
   inline float z() const;
   inline void set_z(float value);
 
-  // @@protoc_insertion_point(class_scope:net.Point)
+  // @@protoc_insertion_point(class_scope:net.PointMessage)
  private:
   inline void set_has_x();
   inline void clear_has_x();
@@ -345,18 +389,18 @@ class Point : public ::google::protobuf::Message {
   friend void protobuf_ShutdownFile_GameEngine_2eproto();
 
   void InitAsDefaultInstance();
-  static Point* default_instance_;
+  static PointMessage* default_instance_;
 };
 // -------------------------------------------------------------------
 
-class Aabb : public ::google::protobuf::Message {
+class CollidableObjectMessage : public ::google::protobuf::Message {
  public:
-  Aabb();
-  virtual ~Aabb();
+  CollidableObjectMessage();
+  virtual ~CollidableObjectMessage();
 
-  Aabb(const Aabb& from);
+  CollidableObjectMessage(const CollidableObjectMessage& from);
 
-  inline Aabb& operator=(const Aabb& from) {
+  inline CollidableObjectMessage& operator=(const CollidableObjectMessage& from) {
     CopyFrom(from);
     return *this;
   }
@@ -370,17 +414,17 @@ class Aabb : public ::google::protobuf::Message {
   }
 
   static const ::google::protobuf::Descriptor* descriptor();
-  static const Aabb& default_instance();
+  static const CollidableObjectMessage& default_instance();
 
-  void Swap(Aabb* other);
+  void Swap(CollidableObjectMessage* other);
 
   // implements Message ----------------------------------------------
 
-  Aabb* New() const;
+  CollidableObjectMessage* New() const;
   void CopyFrom(const ::google::protobuf::Message& from);
   void MergeFrom(const ::google::protobuf::Message& from);
-  void CopyFrom(const Aabb& from);
-  void MergeFrom(const Aabb& from);
+  void CopyFrom(const CollidableObjectMessage& from);
+  void MergeFrom(const CollidableObjectMessage& from);
   void Clear();
   bool IsInitialized() const;
 
@@ -403,57 +447,64 @@ class Aabb : public ::google::protobuf::Message {
 
   // accessors -------------------------------------------------------
 
-  // required .net.Point center = 1;
+  // required int32 ID = 1;
+  inline bool has_id() const;
+  inline void clear_id();
+  static const int kIDFieldNumber = 1;
+  inline ::google::protobuf::int32 id() const;
+  inline void set_id(::google::protobuf::int32 value);
+
+  // required .net.PointMessage center = 2;
   inline bool has_center() const;
   inline void clear_center();
-  static const int kCenterFieldNumber = 1;
-  inline const ::net::Point& center() const;
-  inline ::net::Point* mutable_center();
-  inline ::net::Point* release_center();
-  inline void set_allocated_center(::net::Point* center);
+  static const int kCenterFieldNumber = 2;
+  inline const ::net::PointMessage& center() const;
+  inline ::net::PointMessage* mutable_center();
+  inline ::net::PointMessage* release_center();
+  inline void set_allocated_center(::net::PointMessage* center);
 
-  // repeated float radii = 2;
-  inline int radii_size() const;
-  inline void clear_radii();
-  static const int kRadiiFieldNumber = 2;
-  inline float radii(int index) const;
-  inline void set_radii(int index, float value);
-  inline void add_radii(float value);
-  inline const ::google::protobuf::RepeatedField< float >&
-      radii() const;
-  inline ::google::protobuf::RepeatedField< float >*
-      mutable_radii();
+  // required int32 movable = 3;
+  inline bool has_movable() const;
+  inline void clear_movable();
+  static const int kMovableFieldNumber = 3;
+  inline ::google::protobuf::int32 movable() const;
+  inline void set_movable(::google::protobuf::int32 value);
 
-  // @@protoc_insertion_point(class_scope:net.Aabb)
+  // @@protoc_insertion_point(class_scope:net.CollidableObjectMessage)
  private:
+  inline void set_has_id();
+  inline void clear_has_id();
   inline void set_has_center();
   inline void clear_has_center();
+  inline void set_has_movable();
+  inline void clear_has_movable();
 
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
 
-  ::net::Point* center_;
-  ::google::protobuf::RepeatedField< float > radii_;
+  ::net::PointMessage* center_;
+  ::google::protobuf::int32 id_;
+  ::google::protobuf::int32 movable_;
 
   mutable int _cached_size_;
-  ::google::protobuf::uint32 _has_bits_[(2 + 31) / 32];
+  ::google::protobuf::uint32 _has_bits_[(3 + 31) / 32];
 
   friend void  protobuf_AddDesc_GameEngine_2eproto();
   friend void protobuf_AssignDesc_GameEngine_2eproto();
   friend void protobuf_ShutdownFile_GameEngine_2eproto();
 
   void InitAsDefaultInstance();
-  static Aabb* default_instance_;
+  static CollidableObjectMessage* default_instance_;
 };
 // -------------------------------------------------------------------
 
-class Sphere : public ::google::protobuf::Message {
+class AabbMessage : public ::google::protobuf::Message {
  public:
-  Sphere();
-  virtual ~Sphere();
+  AabbMessage();
+  virtual ~AabbMessage();
 
-  Sphere(const Sphere& from);
+  AabbMessage(const AabbMessage& from);
 
-  inline Sphere& operator=(const Sphere& from) {
+  inline AabbMessage& operator=(const AabbMessage& from) {
     CopyFrom(from);
     return *this;
   }
@@ -467,17 +518,17 @@ class Sphere : public ::google::protobuf::Message {
   }
 
   static const ::google::protobuf::Descriptor* descriptor();
-  static const Sphere& default_instance();
+  static const AabbMessage& default_instance();
 
-  void Swap(Sphere* other);
+  void Swap(AabbMessage* other);
 
   // implements Message ----------------------------------------------
 
-  Sphere* New() const;
+  AabbMessage* New() const;
   void CopyFrom(const ::google::protobuf::Message& from);
   void MergeFrom(const ::google::protobuf::Message& from);
-  void CopyFrom(const Sphere& from);
-  void MergeFrom(const Sphere& from);
+  void CopyFrom(const AabbMessage& from);
+  void MergeFrom(const AabbMessage& from);
   void Clear();
   bool IsInitialized() const;
 
@@ -500,14 +551,128 @@ class Sphere : public ::google::protobuf::Message {
 
   // accessors -------------------------------------------------------
 
-  // required .net.Point center = 1;
-  inline bool has_center() const;
-  inline void clear_center();
-  static const int kCenterFieldNumber = 1;
-  inline const ::net::Point& center() const;
-  inline ::net::Point* mutable_center();
-  inline ::net::Point* release_center();
-  inline void set_allocated_center(::net::Point* center);
+  // required .net.CollidableObjectMessage collidableObject = 1;
+  inline bool has_collidableobject() const;
+  inline void clear_collidableobject();
+  static const int kCollidableObjectFieldNumber = 1;
+  inline const ::net::CollidableObjectMessage& collidableobject() const;
+  inline ::net::CollidableObjectMessage* mutable_collidableobject();
+  inline ::net::CollidableObjectMessage* release_collidableobject();
+  inline void set_allocated_collidableobject(::net::CollidableObjectMessage* collidableobject);
+
+  // required float radiusX = 2;
+  inline bool has_radiusx() const;
+  inline void clear_radiusx();
+  static const int kRadiusXFieldNumber = 2;
+  inline float radiusx() const;
+  inline void set_radiusx(float value);
+
+  // required float radiusY = 3;
+  inline bool has_radiusy() const;
+  inline void clear_radiusy();
+  static const int kRadiusYFieldNumber = 3;
+  inline float radiusy() const;
+  inline void set_radiusy(float value);
+
+  // required float radiusZ = 4;
+  inline bool has_radiusz() const;
+  inline void clear_radiusz();
+  static const int kRadiusZFieldNumber = 4;
+  inline float radiusz() const;
+  inline void set_radiusz(float value);
+
+  // @@protoc_insertion_point(class_scope:net.AabbMessage)
+ private:
+  inline void set_has_collidableobject();
+  inline void clear_has_collidableobject();
+  inline void set_has_radiusx();
+  inline void clear_has_radiusx();
+  inline void set_has_radiusy();
+  inline void clear_has_radiusy();
+  inline void set_has_radiusz();
+  inline void clear_has_radiusz();
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::net::CollidableObjectMessage* collidableobject_;
+  float radiusx_;
+  float radiusy_;
+  float radiusz_;
+
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(4 + 31) / 32];
+
+  friend void  protobuf_AddDesc_GameEngine_2eproto();
+  friend void protobuf_AssignDesc_GameEngine_2eproto();
+  friend void protobuf_ShutdownFile_GameEngine_2eproto();
+
+  void InitAsDefaultInstance();
+  static AabbMessage* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class SphereMessage : public ::google::protobuf::Message {
+ public:
+  SphereMessage();
+  virtual ~SphereMessage();
+
+  SphereMessage(const SphereMessage& from);
+
+  inline SphereMessage& operator=(const SphereMessage& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const SphereMessage& default_instance();
+
+  void Swap(SphereMessage* other);
+
+  // implements Message ----------------------------------------------
+
+  SphereMessage* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const SphereMessage& from);
+  void MergeFrom(const SphereMessage& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // required .net.CollidableObjectMessage collidableObject = 1;
+  inline bool has_collidableobject() const;
+  inline void clear_collidableobject();
+  static const int kCollidableObjectFieldNumber = 1;
+  inline const ::net::CollidableObjectMessage& collidableobject() const;
+  inline ::net::CollidableObjectMessage* mutable_collidableobject();
+  inline ::net::CollidableObjectMessage* release_collidableobject();
+  inline void set_allocated_collidableobject(::net::CollidableObjectMessage* collidableobject);
 
   // required float radius = 2;
   inline bool has_radius() const;
@@ -516,16 +681,16 @@ class Sphere : public ::google::protobuf::Message {
   inline float radius() const;
   inline void set_radius(float value);
 
-  // @@protoc_insertion_point(class_scope:net.Sphere)
+  // @@protoc_insertion_point(class_scope:net.SphereMessage)
  private:
-  inline void set_has_center();
-  inline void clear_has_center();
+  inline void set_has_collidableobject();
+  inline void clear_has_collidableobject();
   inline void set_has_radius();
   inline void clear_has_radius();
 
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
 
-  ::net::Point* center_;
+  ::net::CollidableObjectMessage* collidableobject_;
   float radius_;
 
   mutable int _cached_size_;
@@ -536,18 +701,18 @@ class Sphere : public ::google::protobuf::Message {
   friend void protobuf_ShutdownFile_GameEngine_2eproto();
 
   void InitAsDefaultInstance();
-  static Sphere* default_instance_;
+  static SphereMessage* default_instance_;
 };
 // -------------------------------------------------------------------
 
-class PhysicsInfo : public ::google::protobuf::Message {
+class PhysicsInfoMessage : public ::google::protobuf::Message {
  public:
-  PhysicsInfo();
-  virtual ~PhysicsInfo();
+  PhysicsInfoMessage();
+  virtual ~PhysicsInfoMessage();
 
-  PhysicsInfo(const PhysicsInfo& from);
+  PhysicsInfoMessage(const PhysicsInfoMessage& from);
 
-  inline PhysicsInfo& operator=(const PhysicsInfo& from) {
+  inline PhysicsInfoMessage& operator=(const PhysicsInfoMessage& from) {
     CopyFrom(from);
     return *this;
   }
@@ -561,17 +726,17 @@ class PhysicsInfo : public ::google::protobuf::Message {
   }
 
   static const ::google::protobuf::Descriptor* descriptor();
-  static const PhysicsInfo& default_instance();
+  static const PhysicsInfoMessage& default_instance();
 
-  void Swap(PhysicsInfo* other);
+  void Swap(PhysicsInfoMessage* other);
 
   // implements Message ----------------------------------------------
 
-  PhysicsInfo* New() const;
+  PhysicsInfoMessage* New() const;
   void CopyFrom(const ::google::protobuf::Message& from);
   void MergeFrom(const ::google::protobuf::Message& from);
-  void CopyFrom(const PhysicsInfo& from);
-  void MergeFrom(const PhysicsInfo& from);
+  void CopyFrom(const PhysicsInfoMessage& from);
+  void MergeFrom(const PhysicsInfoMessage& from);
   void Clear();
   bool IsInitialized() const;
 
@@ -592,128 +757,162 @@ class PhysicsInfo : public ::google::protobuf::Message {
 
   // nested types ----------------------------------------------------
 
+  typedef PhysicsInfoMessage_PhysicsInfoMessageType PhysicsInfoMessageType;
+  static const PhysicsInfoMessageType AABB = PhysicsInfoMessage_PhysicsInfoMessageType_AABB;
+  static const PhysicsInfoMessageType SPHERE = PhysicsInfoMessage_PhysicsInfoMessageType_SPHERE;
+  static inline bool PhysicsInfoMessageType_IsValid(int value) {
+    return PhysicsInfoMessage_PhysicsInfoMessageType_IsValid(value);
+  }
+  static const PhysicsInfoMessageType PhysicsInfoMessageType_MIN =
+    PhysicsInfoMessage_PhysicsInfoMessageType_PhysicsInfoMessageType_MIN;
+  static const PhysicsInfoMessageType PhysicsInfoMessageType_MAX =
+    PhysicsInfoMessage_PhysicsInfoMessageType_PhysicsInfoMessageType_MAX;
+  static const int PhysicsInfoMessageType_ARRAYSIZE =
+    PhysicsInfoMessage_PhysicsInfoMessageType_PhysicsInfoMessageType_ARRAYSIZE;
+  static inline const ::google::protobuf::EnumDescriptor*
+  PhysicsInfoMessageType_descriptor() {
+    return PhysicsInfoMessage_PhysicsInfoMessageType_descriptor();
+  }
+  static inline const ::std::string& PhysicsInfoMessageType_Name(PhysicsInfoMessageType value) {
+    return PhysicsInfoMessage_PhysicsInfoMessageType_Name(value);
+  }
+  static inline bool PhysicsInfoMessageType_Parse(const ::std::string& name,
+      PhysicsInfoMessageType* value) {
+    return PhysicsInfoMessage_PhysicsInfoMessageType_Parse(name, value);
+  }
+
   // accessors -------------------------------------------------------
 
-  // required float mass = 1;
-  inline bool has_mass() const;
-  inline void clear_mass();
-  static const int kMassFieldNumber = 1;
-  inline float mass() const;
-  inline void set_mass(float value);
+  // required .net.PhysicsInfoMessage.PhysicsInfoMessageType physicsInfoMessageType = 1;
+  inline bool has_physicsinfomessagetype() const;
+  inline void clear_physicsinfomessagetype();
+  static const int kPhysicsInfoMessageTypeFieldNumber = 1;
+  inline ::net::PhysicsInfoMessage_PhysicsInfoMessageType physicsinfomessagetype() const;
+  inline void set_physicsinfomessagetype(::net::PhysicsInfoMessage_PhysicsInfoMessageType value);
 
-  // required .net.Aabb aabbObject = 2;
+  // optional .net.AabbMessage aabbObject = 2;
   inline bool has_aabbobject() const;
   inline void clear_aabbobject();
   static const int kAabbObjectFieldNumber = 2;
-  inline const ::net::Aabb& aabbobject() const;
-  inline ::net::Aabb* mutable_aabbobject();
-  inline ::net::Aabb* release_aabbobject();
-  inline void set_allocated_aabbobject(::net::Aabb* aabbobject);
+  inline const ::net::AabbMessage& aabbobject() const;
+  inline ::net::AabbMessage* mutable_aabbobject();
+  inline ::net::AabbMessage* release_aabbobject();
+  inline void set_allocated_aabbobject(::net::AabbMessage* aabbobject);
 
-  // required .net.Sphere sphereObject = 3;
+  // optional .net.SphereMessage sphereObject = 3;
   inline bool has_sphereobject() const;
   inline void clear_sphereobject();
   static const int kSphereObjectFieldNumber = 3;
-  inline const ::net::Sphere& sphereobject() const;
-  inline ::net::Sphere* mutable_sphereobject();
-  inline ::net::Sphere* release_sphereobject();
-  inline void set_allocated_sphereobject(::net::Sphere* sphereobject);
+  inline const ::net::SphereMessage& sphereobject() const;
+  inline ::net::SphereMessage* mutable_sphereobject();
+  inline ::net::SphereMessage* release_sphereobject();
+  inline void set_allocated_sphereobject(::net::SphereMessage* sphereobject);
 
-  // required .net.Velocity linearVelocity = 4;
+  // required float mass = 4;
+  inline bool has_mass() const;
+  inline void clear_mass();
+  static const int kMassFieldNumber = 4;
+  inline float mass() const;
+  inline void set_mass(float value);
+
+  // required .net.VelocityMessage linearVelocity = 5;
   inline bool has_linearvelocity() const;
   inline void clear_linearvelocity();
-  static const int kLinearVelocityFieldNumber = 4;
-  inline const ::net::Velocity& linearvelocity() const;
-  inline ::net::Velocity* mutable_linearvelocity();
-  inline ::net::Velocity* release_linearvelocity();
-  inline void set_allocated_linearvelocity(::net::Velocity* linearvelocity);
+  static const int kLinearVelocityFieldNumber = 5;
+  inline const ::net::VelocityMessage& linearvelocity() const;
+  inline ::net::VelocityMessage* mutable_linearvelocity();
+  inline ::net::VelocityMessage* release_linearvelocity();
+  inline void set_allocated_linearvelocity(::net::VelocityMessage* linearvelocity);
 
-  // required .net.Velocity angularVelocity = 5;
-  inline bool has_angularvelocity() const;
-  inline void clear_angularvelocity();
-  static const int kAngularVelocityFieldNumber = 5;
-  inline const ::net::Velocity& angularvelocity() const;
-  inline ::net::Velocity* mutable_angularvelocity();
-  inline ::net::Velocity* release_angularvelocity();
-  inline void set_allocated_angularvelocity(::net::Velocity* angularvelocity);
-
-  // required .net.Point angularPosition = 6;
-  inline bool has_angularposition() const;
-  inline void clear_angularposition();
-  static const int kAngularPositionFieldNumber = 6;
-  inline const ::net::Point& angularposition() const;
-  inline ::net::Point* mutable_angularposition();
-  inline ::net::Point* release_angularposition();
-  inline void set_allocated_angularposition(::net::Point* angularposition);
-
-  // required .net.Force linearForce = 7;
+  // required .net.ForceMessage linearForce = 6;
   inline bool has_linearforce() const;
   inline void clear_linearforce();
-  static const int kLinearForceFieldNumber = 7;
-  inline const ::net::Force& linearforce() const;
-  inline ::net::Force* mutable_linearforce();
-  inline ::net::Force* release_linearforce();
-  inline void set_allocated_linearforce(::net::Force* linearforce);
+  static const int kLinearForceFieldNumber = 6;
+  inline const ::net::ForceMessage& linearforce() const;
+  inline ::net::ForceMessage* mutable_linearforce();
+  inline ::net::ForceMessage* release_linearforce();
+  inline void set_allocated_linearforce(::net::ForceMessage* linearforce);
 
-  // required .net.Force angularForce = 8;
+  // required .net.VelocityMessage angularVelocity = 7;
+  inline bool has_angularvelocity() const;
+  inline void clear_angularvelocity();
+  static const int kAngularVelocityFieldNumber = 7;
+  inline const ::net::VelocityMessage& angularvelocity() const;
+  inline ::net::VelocityMessage* mutable_angularvelocity();
+  inline ::net::VelocityMessage* release_angularvelocity();
+  inline void set_allocated_angularvelocity(::net::VelocityMessage* angularvelocity);
+
+  // required .net.ForceMessage angularForce = 8;
   inline bool has_angularforce() const;
   inline void clear_angularforce();
   static const int kAngularForceFieldNumber = 8;
-  inline const ::net::Force& angularforce() const;
-  inline ::net::Force* mutable_angularforce();
-  inline ::net::Force* release_angularforce();
-  inline void set_allocated_angularforce(::net::Force* angularforce);
+  inline const ::net::ForceMessage& angularforce() const;
+  inline ::net::ForceMessage* mutable_angularforce();
+  inline ::net::ForceMessage* release_angularforce();
+  inline void set_allocated_angularforce(::net::ForceMessage* angularforce);
 
-  // @@protoc_insertion_point(class_scope:net.PhysicsInfo)
+  // required .net.PointMessage angularPosition = 9;
+  inline bool has_angularposition() const;
+  inline void clear_angularposition();
+  static const int kAngularPositionFieldNumber = 9;
+  inline const ::net::PointMessage& angularposition() const;
+  inline ::net::PointMessage* mutable_angularposition();
+  inline ::net::PointMessage* release_angularposition();
+  inline void set_allocated_angularposition(::net::PointMessage* angularposition);
+
+  // @@protoc_insertion_point(class_scope:net.PhysicsInfoMessage)
  private:
-  inline void set_has_mass();
-  inline void clear_has_mass();
+  inline void set_has_physicsinfomessagetype();
+  inline void clear_has_physicsinfomessagetype();
   inline void set_has_aabbobject();
   inline void clear_has_aabbobject();
   inline void set_has_sphereobject();
   inline void clear_has_sphereobject();
+  inline void set_has_mass();
+  inline void clear_has_mass();
   inline void set_has_linearvelocity();
   inline void clear_has_linearvelocity();
-  inline void set_has_angularvelocity();
-  inline void clear_has_angularvelocity();
-  inline void set_has_angularposition();
-  inline void clear_has_angularposition();
   inline void set_has_linearforce();
   inline void clear_has_linearforce();
+  inline void set_has_angularvelocity();
+  inline void clear_has_angularvelocity();
   inline void set_has_angularforce();
   inline void clear_has_angularforce();
+  inline void set_has_angularposition();
+  inline void clear_has_angularposition();
 
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
 
-  ::net::Aabb* aabbobject_;
-  ::net::Sphere* sphereobject_;
-  ::net::Velocity* linearvelocity_;
-  ::net::Velocity* angularvelocity_;
-  ::net::Point* angularposition_;
-  ::net::Force* linearforce_;
-  ::net::Force* angularforce_;
+  ::net::AabbMessage* aabbobject_;
+  int physicsinfomessagetype_;
   float mass_;
+  ::net::SphereMessage* sphereobject_;
+  ::net::VelocityMessage* linearvelocity_;
+  ::net::ForceMessage* linearforce_;
+  ::net::VelocityMessage* angularvelocity_;
+  ::net::ForceMessage* angularforce_;
+  ::net::PointMessage* angularposition_;
 
   mutable int _cached_size_;
-  ::google::protobuf::uint32 _has_bits_[(8 + 31) / 32];
+  ::google::protobuf::uint32 _has_bits_[(9 + 31) / 32];
 
   friend void  protobuf_AddDesc_GameEngine_2eproto();
   friend void protobuf_AssignDesc_GameEngine_2eproto();
   friend void protobuf_ShutdownFile_GameEngine_2eproto();
 
   void InitAsDefaultInstance();
-  static PhysicsInfo* default_instance_;
+  static PhysicsInfoMessage* default_instance_;
 };
 // -------------------------------------------------------------------
 
-class GameEngine : public ::google::protobuf::Message {
+class UpdateObjectMessage : public ::google::protobuf::Message {
  public:
-  GameEngine();
-  virtual ~GameEngine();
+  UpdateObjectMessage();
+  virtual ~UpdateObjectMessage();
 
-  GameEngine(const GameEngine& from);
+  UpdateObjectMessage(const UpdateObjectMessage& from);
 
-  inline GameEngine& operator=(const GameEngine& from) {
+  inline UpdateObjectMessage& operator=(const UpdateObjectMessage& from) {
     CopyFrom(from);
     return *this;
   }
@@ -727,17 +926,17 @@ class GameEngine : public ::google::protobuf::Message {
   }
 
   static const ::google::protobuf::Descriptor* descriptor();
-  static const GameEngine& default_instance();
+  static const UpdateObjectMessage& default_instance();
 
-  void Swap(GameEngine* other);
+  void Swap(UpdateObjectMessage* other);
 
   // implements Message ----------------------------------------------
 
-  GameEngine* New() const;
+  UpdateObjectMessage* New() const;
   void CopyFrom(const ::google::protobuf::Message& from);
   void MergeFrom(const ::google::protobuf::Message& from);
-  void CopyFrom(const GameEngine& from);
-  void MergeFrom(const GameEngine& from);
+  void CopyFrom(const UpdateObjectMessage& from);
+  void MergeFrom(const UpdateObjectMessage& from);
   void Clear();
   bool IsInitialized() const;
 
@@ -760,24 +959,115 @@ class GameEngine : public ::google::protobuf::Message {
 
   // accessors -------------------------------------------------------
 
-  // repeated .net.PhysicsInfo physicsInfo = 1;
-  inline int physicsinfo_size() const;
-  inline void clear_physicsinfo();
-  static const int kPhysicsInfoFieldNumber = 1;
-  inline const ::net::PhysicsInfo& physicsinfo(int index) const;
-  inline ::net::PhysicsInfo* mutable_physicsinfo(int index);
-  inline ::net::PhysicsInfo* add_physicsinfo();
-  inline const ::google::protobuf::RepeatedPtrField< ::net::PhysicsInfo >&
-      physicsinfo() const;
-  inline ::google::protobuf::RepeatedPtrField< ::net::PhysicsInfo >*
-      mutable_physicsinfo();
+  // required int32 ID = 1;
+  inline bool has_id() const;
+  inline void clear_id();
+  static const int kIDFieldNumber = 1;
+  inline ::google::protobuf::int32 id() const;
+  inline void set_id(::google::protobuf::int32 value);
 
-  // @@protoc_insertion_point(class_scope:net.GameEngine)
+  // required .net.PointMessage position = 2;
+  inline bool has_position() const;
+  inline void clear_position();
+  static const int kPositionFieldNumber = 2;
+  inline const ::net::PointMessage& position() const;
+  inline ::net::PointMessage* mutable_position();
+  inline ::net::PointMessage* release_position();
+  inline void set_allocated_position(::net::PointMessage* position);
+
+  // @@protoc_insertion_point(class_scope:net.UpdateObjectMessage)
  private:
+  inline void set_has_id();
+  inline void clear_has_id();
+  inline void set_has_position();
+  inline void clear_has_position();
 
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
 
-  ::google::protobuf::RepeatedPtrField< ::net::PhysicsInfo > physicsinfo_;
+  ::net::PointMessage* position_;
+  ::google::protobuf::int32 id_;
+
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(2 + 31) / 32];
+
+  friend void  protobuf_AddDesc_GameEngine_2eproto();
+  friend void protobuf_AssignDesc_GameEngine_2eproto();
+  friend void protobuf_ShutdownFile_GameEngine_2eproto();
+
+  void InitAsDefaultInstance();
+  static UpdateObjectMessage* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class DeleteObjectMessage : public ::google::protobuf::Message {
+ public:
+  DeleteObjectMessage();
+  virtual ~DeleteObjectMessage();
+
+  DeleteObjectMessage(const DeleteObjectMessage& from);
+
+  inline DeleteObjectMessage& operator=(const DeleteObjectMessage& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const DeleteObjectMessage& default_instance();
+
+  void Swap(DeleteObjectMessage* other);
+
+  // implements Message ----------------------------------------------
+
+  DeleteObjectMessage* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const DeleteObjectMessage& from);
+  void MergeFrom(const DeleteObjectMessage& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // required int32 ID = 1;
+  inline bool has_id() const;
+  inline void clear_id();
+  static const int kIDFieldNumber = 1;
+  inline ::google::protobuf::int32 id() const;
+  inline void set_id(::google::protobuf::int32 value);
+
+  // @@protoc_insertion_point(class_scope:net.DeleteObjectMessage)
+ private:
+  inline void set_has_id();
+  inline void clear_has_id();
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google::protobuf::int32 id_;
 
   mutable int _cached_size_;
   ::google::protobuf::uint32 _has_bits_[(1 + 31) / 32];
@@ -787,254 +1077,423 @@ class GameEngine : public ::google::protobuf::Message {
   friend void protobuf_ShutdownFile_GameEngine_2eproto();
 
   void InitAsDefaultInstance();
-  static GameEngine* default_instance_;
+  static DeleteObjectMessage* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class GameEngineMessage : public ::google::protobuf::Message {
+ public:
+  GameEngineMessage();
+  virtual ~GameEngineMessage();
+
+  GameEngineMessage(const GameEngineMessage& from);
+
+  inline GameEngineMessage& operator=(const GameEngineMessage& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const GameEngineMessage& default_instance();
+
+  void Swap(GameEngineMessage* other);
+
+  // implements Message ----------------------------------------------
+
+  GameEngineMessage* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const GameEngineMessage& from);
+  void MergeFrom(const GameEngineMessage& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  typedef GameEngineMessage_GameEngineMessageType GameEngineMessageType;
+  static const GameEngineMessageType CREATE = GameEngineMessage_GameEngineMessageType_CREATE;
+  static const GameEngineMessageType RETRIEVE = GameEngineMessage_GameEngineMessageType_RETRIEVE;
+  static const GameEngineMessageType UPDATE = GameEngineMessage_GameEngineMessageType_UPDATE;
+  static const GameEngineMessageType DELETE = GameEngineMessage_GameEngineMessageType_DELETE;
+  static inline bool GameEngineMessageType_IsValid(int value) {
+    return GameEngineMessage_GameEngineMessageType_IsValid(value);
+  }
+  static const GameEngineMessageType GameEngineMessageType_MIN =
+    GameEngineMessage_GameEngineMessageType_GameEngineMessageType_MIN;
+  static const GameEngineMessageType GameEngineMessageType_MAX =
+    GameEngineMessage_GameEngineMessageType_GameEngineMessageType_MAX;
+  static const int GameEngineMessageType_ARRAYSIZE =
+    GameEngineMessage_GameEngineMessageType_GameEngineMessageType_ARRAYSIZE;
+  static inline const ::google::protobuf::EnumDescriptor*
+  GameEngineMessageType_descriptor() {
+    return GameEngineMessage_GameEngineMessageType_descriptor();
+  }
+  static inline const ::std::string& GameEngineMessageType_Name(GameEngineMessageType value) {
+    return GameEngineMessage_GameEngineMessageType_Name(value);
+  }
+  static inline bool GameEngineMessageType_Parse(const ::std::string& name,
+      GameEngineMessageType* value) {
+    return GameEngineMessage_GameEngineMessageType_Parse(name, value);
+  }
+
+  // accessors -------------------------------------------------------
+
+  // required .net.GameEngineMessage.GameEngineMessageType messageType = 1;
+  inline bool has_messagetype() const;
+  inline void clear_messagetype();
+  static const int kMessageTypeFieldNumber = 1;
+  inline ::net::GameEngineMessage_GameEngineMessageType messagetype() const;
+  inline void set_messagetype(::net::GameEngineMessage_GameEngineMessageType value);
+
+  // repeated .net.PhysicsInfoMessage physicsInfo = 2;
+  inline int physicsinfo_size() const;
+  inline void clear_physicsinfo();
+  static const int kPhysicsInfoFieldNumber = 2;
+  inline const ::net::PhysicsInfoMessage& physicsinfo(int index) const;
+  inline ::net::PhysicsInfoMessage* mutable_physicsinfo(int index);
+  inline ::net::PhysicsInfoMessage* add_physicsinfo();
+  inline const ::google::protobuf::RepeatedPtrField< ::net::PhysicsInfoMessage >&
+      physicsinfo() const;
+  inline ::google::protobuf::RepeatedPtrField< ::net::PhysicsInfoMessage >*
+      mutable_physicsinfo();
+
+  // repeated .net.UpdateObjectMessage updateObject = 3;
+  inline int updateobject_size() const;
+  inline void clear_updateobject();
+  static const int kUpdateObjectFieldNumber = 3;
+  inline const ::net::UpdateObjectMessage& updateobject(int index) const;
+  inline ::net::UpdateObjectMessage* mutable_updateobject(int index);
+  inline ::net::UpdateObjectMessage* add_updateobject();
+  inline const ::google::protobuf::RepeatedPtrField< ::net::UpdateObjectMessage >&
+      updateobject() const;
+  inline ::google::protobuf::RepeatedPtrField< ::net::UpdateObjectMessage >*
+      mutable_updateobject();
+
+  // repeated .net.DeleteObjectMessage deleteObject = 4;
+  inline int deleteobject_size() const;
+  inline void clear_deleteobject();
+  static const int kDeleteObjectFieldNumber = 4;
+  inline const ::net::DeleteObjectMessage& deleteobject(int index) const;
+  inline ::net::DeleteObjectMessage* mutable_deleteobject(int index);
+  inline ::net::DeleteObjectMessage* add_deleteobject();
+  inline const ::google::protobuf::RepeatedPtrField< ::net::DeleteObjectMessage >&
+      deleteobject() const;
+  inline ::google::protobuf::RepeatedPtrField< ::net::DeleteObjectMessage >*
+      mutable_deleteobject();
+
+  // @@protoc_insertion_point(class_scope:net.GameEngineMessage)
+ private:
+  inline void set_has_messagetype();
+  inline void clear_has_messagetype();
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google::protobuf::RepeatedPtrField< ::net::PhysicsInfoMessage > physicsinfo_;
+  ::google::protobuf::RepeatedPtrField< ::net::UpdateObjectMessage > updateobject_;
+  ::google::protobuf::RepeatedPtrField< ::net::DeleteObjectMessage > deleteobject_;
+  int messagetype_;
+
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(4 + 31) / 32];
+
+  friend void  protobuf_AddDesc_GameEngine_2eproto();
+  friend void protobuf_AssignDesc_GameEngine_2eproto();
+  friend void protobuf_ShutdownFile_GameEngine_2eproto();
+
+  void InitAsDefaultInstance();
+  static GameEngineMessage* default_instance_;
 };
 // ===================================================================
 
 
 // ===================================================================
 
-// Velocity
+// VelocityMessage
 
 // required float x = 1;
-inline bool Velocity::has_x() const {
+inline bool VelocityMessage::has_x() const {
   return (_has_bits_[0] & 0x00000001u) != 0;
 }
-inline void Velocity::set_has_x() {
+inline void VelocityMessage::set_has_x() {
   _has_bits_[0] |= 0x00000001u;
 }
-inline void Velocity::clear_has_x() {
+inline void VelocityMessage::clear_has_x() {
   _has_bits_[0] &= ~0x00000001u;
 }
-inline void Velocity::clear_x() {
+inline void VelocityMessage::clear_x() {
   x_ = 0;
   clear_has_x();
 }
-inline float Velocity::x() const {
+inline float VelocityMessage::x() const {
   return x_;
 }
-inline void Velocity::set_x(float value) {
+inline void VelocityMessage::set_x(float value) {
   set_has_x();
   x_ = value;
 }
 
 // required float y = 2;
-inline bool Velocity::has_y() const {
+inline bool VelocityMessage::has_y() const {
   return (_has_bits_[0] & 0x00000002u) != 0;
 }
-inline void Velocity::set_has_y() {
+inline void VelocityMessage::set_has_y() {
   _has_bits_[0] |= 0x00000002u;
 }
-inline void Velocity::clear_has_y() {
+inline void VelocityMessage::clear_has_y() {
   _has_bits_[0] &= ~0x00000002u;
 }
-inline void Velocity::clear_y() {
+inline void VelocityMessage::clear_y() {
   y_ = 0;
   clear_has_y();
 }
-inline float Velocity::y() const {
+inline float VelocityMessage::y() const {
   return y_;
 }
-inline void Velocity::set_y(float value) {
+inline void VelocityMessage::set_y(float value) {
   set_has_y();
   y_ = value;
 }
 
 // required float z = 3;
-inline bool Velocity::has_z() const {
+inline bool VelocityMessage::has_z() const {
   return (_has_bits_[0] & 0x00000004u) != 0;
 }
-inline void Velocity::set_has_z() {
+inline void VelocityMessage::set_has_z() {
   _has_bits_[0] |= 0x00000004u;
 }
-inline void Velocity::clear_has_z() {
+inline void VelocityMessage::clear_has_z() {
   _has_bits_[0] &= ~0x00000004u;
 }
-inline void Velocity::clear_z() {
+inline void VelocityMessage::clear_z() {
   z_ = 0;
   clear_has_z();
 }
-inline float Velocity::z() const {
+inline float VelocityMessage::z() const {
   return z_;
 }
-inline void Velocity::set_z(float value) {
+inline void VelocityMessage::set_z(float value) {
   set_has_z();
   z_ = value;
 }
 
 // -------------------------------------------------------------------
 
-// Force
+// ForceMessage
 
 // required float x = 1;
-inline bool Force::has_x() const {
+inline bool ForceMessage::has_x() const {
   return (_has_bits_[0] & 0x00000001u) != 0;
 }
-inline void Force::set_has_x() {
+inline void ForceMessage::set_has_x() {
   _has_bits_[0] |= 0x00000001u;
 }
-inline void Force::clear_has_x() {
+inline void ForceMessage::clear_has_x() {
   _has_bits_[0] &= ~0x00000001u;
 }
-inline void Force::clear_x() {
+inline void ForceMessage::clear_x() {
   x_ = 0;
   clear_has_x();
 }
-inline float Force::x() const {
+inline float ForceMessage::x() const {
   return x_;
 }
-inline void Force::set_x(float value) {
+inline void ForceMessage::set_x(float value) {
   set_has_x();
   x_ = value;
 }
 
 // required float y = 2;
-inline bool Force::has_y() const {
+inline bool ForceMessage::has_y() const {
   return (_has_bits_[0] & 0x00000002u) != 0;
 }
-inline void Force::set_has_y() {
+inline void ForceMessage::set_has_y() {
   _has_bits_[0] |= 0x00000002u;
 }
-inline void Force::clear_has_y() {
+inline void ForceMessage::clear_has_y() {
   _has_bits_[0] &= ~0x00000002u;
 }
-inline void Force::clear_y() {
+inline void ForceMessage::clear_y() {
   y_ = 0;
   clear_has_y();
 }
-inline float Force::y() const {
+inline float ForceMessage::y() const {
   return y_;
 }
-inline void Force::set_y(float value) {
+inline void ForceMessage::set_y(float value) {
   set_has_y();
   y_ = value;
 }
 
 // required float z = 3;
-inline bool Force::has_z() const {
+inline bool ForceMessage::has_z() const {
   return (_has_bits_[0] & 0x00000004u) != 0;
 }
-inline void Force::set_has_z() {
+inline void ForceMessage::set_has_z() {
   _has_bits_[0] |= 0x00000004u;
 }
-inline void Force::clear_has_z() {
+inline void ForceMessage::clear_has_z() {
   _has_bits_[0] &= ~0x00000004u;
 }
-inline void Force::clear_z() {
+inline void ForceMessage::clear_z() {
   z_ = 0;
   clear_has_z();
 }
-inline float Force::z() const {
+inline float ForceMessage::z() const {
   return z_;
 }
-inline void Force::set_z(float value) {
+inline void ForceMessage::set_z(float value) {
   set_has_z();
   z_ = value;
 }
 
 // -------------------------------------------------------------------
 
-// Point
+// PointMessage
 
 // required float x = 1;
-inline bool Point::has_x() const {
+inline bool PointMessage::has_x() const {
   return (_has_bits_[0] & 0x00000001u) != 0;
 }
-inline void Point::set_has_x() {
+inline void PointMessage::set_has_x() {
   _has_bits_[0] |= 0x00000001u;
 }
-inline void Point::clear_has_x() {
+inline void PointMessage::clear_has_x() {
   _has_bits_[0] &= ~0x00000001u;
 }
-inline void Point::clear_x() {
+inline void PointMessage::clear_x() {
   x_ = 0;
   clear_has_x();
 }
-inline float Point::x() const {
+inline float PointMessage::x() const {
   return x_;
 }
-inline void Point::set_x(float value) {
+inline void PointMessage::set_x(float value) {
   set_has_x();
   x_ = value;
 }
 
 // required float y = 2;
-inline bool Point::has_y() const {
+inline bool PointMessage::has_y() const {
   return (_has_bits_[0] & 0x00000002u) != 0;
 }
-inline void Point::set_has_y() {
+inline void PointMessage::set_has_y() {
   _has_bits_[0] |= 0x00000002u;
 }
-inline void Point::clear_has_y() {
+inline void PointMessage::clear_has_y() {
   _has_bits_[0] &= ~0x00000002u;
 }
-inline void Point::clear_y() {
+inline void PointMessage::clear_y() {
   y_ = 0;
   clear_has_y();
 }
-inline float Point::y() const {
+inline float PointMessage::y() const {
   return y_;
 }
-inline void Point::set_y(float value) {
+inline void PointMessage::set_y(float value) {
   set_has_y();
   y_ = value;
 }
 
 // required float z = 3;
-inline bool Point::has_z() const {
+inline bool PointMessage::has_z() const {
   return (_has_bits_[0] & 0x00000004u) != 0;
 }
-inline void Point::set_has_z() {
+inline void PointMessage::set_has_z() {
   _has_bits_[0] |= 0x00000004u;
 }
-inline void Point::clear_has_z() {
+inline void PointMessage::clear_has_z() {
   _has_bits_[0] &= ~0x00000004u;
 }
-inline void Point::clear_z() {
+inline void PointMessage::clear_z() {
   z_ = 0;
   clear_has_z();
 }
-inline float Point::z() const {
+inline float PointMessage::z() const {
   return z_;
 }
-inline void Point::set_z(float value) {
+inline void PointMessage::set_z(float value) {
   set_has_z();
   z_ = value;
 }
 
 // -------------------------------------------------------------------
 
-// Aabb
+// CollidableObjectMessage
 
-// required .net.Point center = 1;
-inline bool Aabb::has_center() const {
+// required int32 ID = 1;
+inline bool CollidableObjectMessage::has_id() const {
   return (_has_bits_[0] & 0x00000001u) != 0;
 }
-inline void Aabb::set_has_center() {
+inline void CollidableObjectMessage::set_has_id() {
   _has_bits_[0] |= 0x00000001u;
 }
-inline void Aabb::clear_has_center() {
+inline void CollidableObjectMessage::clear_has_id() {
   _has_bits_[0] &= ~0x00000001u;
 }
-inline void Aabb::clear_center() {
-  if (center_ != NULL) center_->::net::Point::Clear();
+inline void CollidableObjectMessage::clear_id() {
+  id_ = 0;
+  clear_has_id();
+}
+inline ::google::protobuf::int32 CollidableObjectMessage::id() const {
+  return id_;
+}
+inline void CollidableObjectMessage::set_id(::google::protobuf::int32 value) {
+  set_has_id();
+  id_ = value;
+}
+
+// required .net.PointMessage center = 2;
+inline bool CollidableObjectMessage::has_center() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void CollidableObjectMessage::set_has_center() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void CollidableObjectMessage::clear_has_center() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void CollidableObjectMessage::clear_center() {
+  if (center_ != NULL) center_->::net::PointMessage::Clear();
   clear_has_center();
 }
-inline const ::net::Point& Aabb::center() const {
+inline const ::net::PointMessage& CollidableObjectMessage::center() const {
   return center_ != NULL ? *center_ : *default_instance_->center_;
 }
-inline ::net::Point* Aabb::mutable_center() {
+inline ::net::PointMessage* CollidableObjectMessage::mutable_center() {
   set_has_center();
-  if (center_ == NULL) center_ = new ::net::Point;
+  if (center_ == NULL) center_ = new ::net::PointMessage;
   return center_;
 }
-inline ::net::Point* Aabb::release_center() {
+inline ::net::PointMessage* CollidableObjectMessage::release_center() {
   clear_has_center();
-  ::net::Point* temp = center_;
+  ::net::PointMessage* temp = center_;
   center_ = NULL;
   return temp;
 }
-inline void Aabb::set_allocated_center(::net::Point* center) {
+inline void CollidableObjectMessage::set_allocated_center(::net::PointMessage* center) {
   delete center_;
   center_ = center;
   if (center) {
@@ -1044,150 +1503,256 @@ inline void Aabb::set_allocated_center(::net::Point* center) {
   }
 }
 
-// repeated float radii = 2;
-inline int Aabb::radii_size() const {
-  return radii_.size();
+// required int32 movable = 3;
+inline bool CollidableObjectMessage::has_movable() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
 }
-inline void Aabb::clear_radii() {
-  radii_.Clear();
+inline void CollidableObjectMessage::set_has_movable() {
+  _has_bits_[0] |= 0x00000004u;
 }
-inline float Aabb::radii(int index) const {
-  return radii_.Get(index);
+inline void CollidableObjectMessage::clear_has_movable() {
+  _has_bits_[0] &= ~0x00000004u;
 }
-inline void Aabb::set_radii(int index, float value) {
-  radii_.Set(index, value);
+inline void CollidableObjectMessage::clear_movable() {
+  movable_ = 0;
+  clear_has_movable();
 }
-inline void Aabb::add_radii(float value) {
-  radii_.Add(value);
+inline ::google::protobuf::int32 CollidableObjectMessage::movable() const {
+  return movable_;
 }
-inline const ::google::protobuf::RepeatedField< float >&
-Aabb::radii() const {
-  return radii_;
-}
-inline ::google::protobuf::RepeatedField< float >*
-Aabb::mutable_radii() {
-  return &radii_;
+inline void CollidableObjectMessage::set_movable(::google::protobuf::int32 value) {
+  set_has_movable();
+  movable_ = value;
 }
 
 // -------------------------------------------------------------------
 
-// Sphere
+// AabbMessage
 
-// required .net.Point center = 1;
-inline bool Sphere::has_center() const {
+// required .net.CollidableObjectMessage collidableObject = 1;
+inline bool AabbMessage::has_collidableobject() const {
   return (_has_bits_[0] & 0x00000001u) != 0;
 }
-inline void Sphere::set_has_center() {
+inline void AabbMessage::set_has_collidableobject() {
   _has_bits_[0] |= 0x00000001u;
 }
-inline void Sphere::clear_has_center() {
+inline void AabbMessage::clear_has_collidableobject() {
   _has_bits_[0] &= ~0x00000001u;
 }
-inline void Sphere::clear_center() {
-  if (center_ != NULL) center_->::net::Point::Clear();
-  clear_has_center();
+inline void AabbMessage::clear_collidableobject() {
+  if (collidableobject_ != NULL) collidableobject_->::net::CollidableObjectMessage::Clear();
+  clear_has_collidableobject();
 }
-inline const ::net::Point& Sphere::center() const {
-  return center_ != NULL ? *center_ : *default_instance_->center_;
+inline const ::net::CollidableObjectMessage& AabbMessage::collidableobject() const {
+  return collidableobject_ != NULL ? *collidableobject_ : *default_instance_->collidableobject_;
 }
-inline ::net::Point* Sphere::mutable_center() {
-  set_has_center();
-  if (center_ == NULL) center_ = new ::net::Point;
-  return center_;
+inline ::net::CollidableObjectMessage* AabbMessage::mutable_collidableobject() {
+  set_has_collidableobject();
+  if (collidableobject_ == NULL) collidableobject_ = new ::net::CollidableObjectMessage;
+  return collidableobject_;
 }
-inline ::net::Point* Sphere::release_center() {
-  clear_has_center();
-  ::net::Point* temp = center_;
-  center_ = NULL;
+inline ::net::CollidableObjectMessage* AabbMessage::release_collidableobject() {
+  clear_has_collidableobject();
+  ::net::CollidableObjectMessage* temp = collidableobject_;
+  collidableobject_ = NULL;
   return temp;
 }
-inline void Sphere::set_allocated_center(::net::Point* center) {
-  delete center_;
-  center_ = center;
-  if (center) {
-    set_has_center();
+inline void AabbMessage::set_allocated_collidableobject(::net::CollidableObjectMessage* collidableobject) {
+  delete collidableobject_;
+  collidableobject_ = collidableobject;
+  if (collidableobject) {
+    set_has_collidableobject();
   } else {
-    clear_has_center();
+    clear_has_collidableobject();
+  }
+}
+
+// required float radiusX = 2;
+inline bool AabbMessage::has_radiusx() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void AabbMessage::set_has_radiusx() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void AabbMessage::clear_has_radiusx() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void AabbMessage::clear_radiusx() {
+  radiusx_ = 0;
+  clear_has_radiusx();
+}
+inline float AabbMessage::radiusx() const {
+  return radiusx_;
+}
+inline void AabbMessage::set_radiusx(float value) {
+  set_has_radiusx();
+  radiusx_ = value;
+}
+
+// required float radiusY = 3;
+inline bool AabbMessage::has_radiusy() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void AabbMessage::set_has_radiusy() {
+  _has_bits_[0] |= 0x00000004u;
+}
+inline void AabbMessage::clear_has_radiusy() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline void AabbMessage::clear_radiusy() {
+  radiusy_ = 0;
+  clear_has_radiusy();
+}
+inline float AabbMessage::radiusy() const {
+  return radiusy_;
+}
+inline void AabbMessage::set_radiusy(float value) {
+  set_has_radiusy();
+  radiusy_ = value;
+}
+
+// required float radiusZ = 4;
+inline bool AabbMessage::has_radiusz() const {
+  return (_has_bits_[0] & 0x00000008u) != 0;
+}
+inline void AabbMessage::set_has_radiusz() {
+  _has_bits_[0] |= 0x00000008u;
+}
+inline void AabbMessage::clear_has_radiusz() {
+  _has_bits_[0] &= ~0x00000008u;
+}
+inline void AabbMessage::clear_radiusz() {
+  radiusz_ = 0;
+  clear_has_radiusz();
+}
+inline float AabbMessage::radiusz() const {
+  return radiusz_;
+}
+inline void AabbMessage::set_radiusz(float value) {
+  set_has_radiusz();
+  radiusz_ = value;
+}
+
+// -------------------------------------------------------------------
+
+// SphereMessage
+
+// required .net.CollidableObjectMessage collidableObject = 1;
+inline bool SphereMessage::has_collidableobject() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void SphereMessage::set_has_collidableobject() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void SphereMessage::clear_has_collidableobject() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void SphereMessage::clear_collidableobject() {
+  if (collidableobject_ != NULL) collidableobject_->::net::CollidableObjectMessage::Clear();
+  clear_has_collidableobject();
+}
+inline const ::net::CollidableObjectMessage& SphereMessage::collidableobject() const {
+  return collidableobject_ != NULL ? *collidableobject_ : *default_instance_->collidableobject_;
+}
+inline ::net::CollidableObjectMessage* SphereMessage::mutable_collidableobject() {
+  set_has_collidableobject();
+  if (collidableobject_ == NULL) collidableobject_ = new ::net::CollidableObjectMessage;
+  return collidableobject_;
+}
+inline ::net::CollidableObjectMessage* SphereMessage::release_collidableobject() {
+  clear_has_collidableobject();
+  ::net::CollidableObjectMessage* temp = collidableobject_;
+  collidableobject_ = NULL;
+  return temp;
+}
+inline void SphereMessage::set_allocated_collidableobject(::net::CollidableObjectMessage* collidableobject) {
+  delete collidableobject_;
+  collidableobject_ = collidableobject;
+  if (collidableobject) {
+    set_has_collidableobject();
+  } else {
+    clear_has_collidableobject();
   }
 }
 
 // required float radius = 2;
-inline bool Sphere::has_radius() const {
+inline bool SphereMessage::has_radius() const {
   return (_has_bits_[0] & 0x00000002u) != 0;
 }
-inline void Sphere::set_has_radius() {
+inline void SphereMessage::set_has_radius() {
   _has_bits_[0] |= 0x00000002u;
 }
-inline void Sphere::clear_has_radius() {
+inline void SphereMessage::clear_has_radius() {
   _has_bits_[0] &= ~0x00000002u;
 }
-inline void Sphere::clear_radius() {
+inline void SphereMessage::clear_radius() {
   radius_ = 0;
   clear_has_radius();
 }
-inline float Sphere::radius() const {
+inline float SphereMessage::radius() const {
   return radius_;
 }
-inline void Sphere::set_radius(float value) {
+inline void SphereMessage::set_radius(float value) {
   set_has_radius();
   radius_ = value;
 }
 
 // -------------------------------------------------------------------
 
-// PhysicsInfo
+// PhysicsInfoMessage
 
-// required float mass = 1;
-inline bool PhysicsInfo::has_mass() const {
+// required .net.PhysicsInfoMessage.PhysicsInfoMessageType physicsInfoMessageType = 1;
+inline bool PhysicsInfoMessage::has_physicsinfomessagetype() const {
   return (_has_bits_[0] & 0x00000001u) != 0;
 }
-inline void PhysicsInfo::set_has_mass() {
+inline void PhysicsInfoMessage::set_has_physicsinfomessagetype() {
   _has_bits_[0] |= 0x00000001u;
 }
-inline void PhysicsInfo::clear_has_mass() {
+inline void PhysicsInfoMessage::clear_has_physicsinfomessagetype() {
   _has_bits_[0] &= ~0x00000001u;
 }
-inline void PhysicsInfo::clear_mass() {
-  mass_ = 0;
-  clear_has_mass();
+inline void PhysicsInfoMessage::clear_physicsinfomessagetype() {
+  physicsinfomessagetype_ = 0;
+  clear_has_physicsinfomessagetype();
 }
-inline float PhysicsInfo::mass() const {
-  return mass_;
+inline ::net::PhysicsInfoMessage_PhysicsInfoMessageType PhysicsInfoMessage::physicsinfomessagetype() const {
+  return static_cast< ::net::PhysicsInfoMessage_PhysicsInfoMessageType >(physicsinfomessagetype_);
 }
-inline void PhysicsInfo::set_mass(float value) {
-  set_has_mass();
-  mass_ = value;
+inline void PhysicsInfoMessage::set_physicsinfomessagetype(::net::PhysicsInfoMessage_PhysicsInfoMessageType value) {
+  assert(::net::PhysicsInfoMessage_PhysicsInfoMessageType_IsValid(value));
+  set_has_physicsinfomessagetype();
+  physicsinfomessagetype_ = value;
 }
 
-// required .net.Aabb aabbObject = 2;
-inline bool PhysicsInfo::has_aabbobject() const {
+// optional .net.AabbMessage aabbObject = 2;
+inline bool PhysicsInfoMessage::has_aabbobject() const {
   return (_has_bits_[0] & 0x00000002u) != 0;
 }
-inline void PhysicsInfo::set_has_aabbobject() {
+inline void PhysicsInfoMessage::set_has_aabbobject() {
   _has_bits_[0] |= 0x00000002u;
 }
-inline void PhysicsInfo::clear_has_aabbobject() {
+inline void PhysicsInfoMessage::clear_has_aabbobject() {
   _has_bits_[0] &= ~0x00000002u;
 }
-inline void PhysicsInfo::clear_aabbobject() {
-  if (aabbobject_ != NULL) aabbobject_->::net::Aabb::Clear();
+inline void PhysicsInfoMessage::clear_aabbobject() {
+  if (aabbobject_ != NULL) aabbobject_->::net::AabbMessage::Clear();
   clear_has_aabbobject();
 }
-inline const ::net::Aabb& PhysicsInfo::aabbobject() const {
+inline const ::net::AabbMessage& PhysicsInfoMessage::aabbobject() const {
   return aabbobject_ != NULL ? *aabbobject_ : *default_instance_->aabbobject_;
 }
-inline ::net::Aabb* PhysicsInfo::mutable_aabbobject() {
+inline ::net::AabbMessage* PhysicsInfoMessage::mutable_aabbobject() {
   set_has_aabbobject();
-  if (aabbobject_ == NULL) aabbobject_ = new ::net::Aabb;
+  if (aabbobject_ == NULL) aabbobject_ = new ::net::AabbMessage;
   return aabbobject_;
 }
-inline ::net::Aabb* PhysicsInfo::release_aabbobject() {
+inline ::net::AabbMessage* PhysicsInfoMessage::release_aabbobject() {
   clear_has_aabbobject();
-  ::net::Aabb* temp = aabbobject_;
+  ::net::AabbMessage* temp = aabbobject_;
   aabbobject_ = NULL;
   return temp;
 }
-inline void PhysicsInfo::set_allocated_aabbobject(::net::Aabb* aabbobject) {
+inline void PhysicsInfoMessage::set_allocated_aabbobject(::net::AabbMessage* aabbobject) {
   delete aabbobject_;
   aabbobject_ = aabbobject;
   if (aabbobject) {
@@ -1197,35 +1762,35 @@ inline void PhysicsInfo::set_allocated_aabbobject(::net::Aabb* aabbobject) {
   }
 }
 
-// required .net.Sphere sphereObject = 3;
-inline bool PhysicsInfo::has_sphereobject() const {
+// optional .net.SphereMessage sphereObject = 3;
+inline bool PhysicsInfoMessage::has_sphereobject() const {
   return (_has_bits_[0] & 0x00000004u) != 0;
 }
-inline void PhysicsInfo::set_has_sphereobject() {
+inline void PhysicsInfoMessage::set_has_sphereobject() {
   _has_bits_[0] |= 0x00000004u;
 }
-inline void PhysicsInfo::clear_has_sphereobject() {
+inline void PhysicsInfoMessage::clear_has_sphereobject() {
   _has_bits_[0] &= ~0x00000004u;
 }
-inline void PhysicsInfo::clear_sphereobject() {
-  if (sphereobject_ != NULL) sphereobject_->::net::Sphere::Clear();
+inline void PhysicsInfoMessage::clear_sphereobject() {
+  if (sphereobject_ != NULL) sphereobject_->::net::SphereMessage::Clear();
   clear_has_sphereobject();
 }
-inline const ::net::Sphere& PhysicsInfo::sphereobject() const {
+inline const ::net::SphereMessage& PhysicsInfoMessage::sphereobject() const {
   return sphereobject_ != NULL ? *sphereobject_ : *default_instance_->sphereobject_;
 }
-inline ::net::Sphere* PhysicsInfo::mutable_sphereobject() {
+inline ::net::SphereMessage* PhysicsInfoMessage::mutable_sphereobject() {
   set_has_sphereobject();
-  if (sphereobject_ == NULL) sphereobject_ = new ::net::Sphere;
+  if (sphereobject_ == NULL) sphereobject_ = new ::net::SphereMessage;
   return sphereobject_;
 }
-inline ::net::Sphere* PhysicsInfo::release_sphereobject() {
+inline ::net::SphereMessage* PhysicsInfoMessage::release_sphereobject() {
   clear_has_sphereobject();
-  ::net::Sphere* temp = sphereobject_;
+  ::net::SphereMessage* temp = sphereobject_;
   sphereobject_ = NULL;
   return temp;
 }
-inline void PhysicsInfo::set_allocated_sphereobject(::net::Sphere* sphereobject) {
+inline void PhysicsInfoMessage::set_allocated_sphereobject(::net::SphereMessage* sphereobject) {
   delete sphereobject_;
   sphereobject_ = sphereobject;
   if (sphereobject) {
@@ -1235,35 +1800,57 @@ inline void PhysicsInfo::set_allocated_sphereobject(::net::Sphere* sphereobject)
   }
 }
 
-// required .net.Velocity linearVelocity = 4;
-inline bool PhysicsInfo::has_linearvelocity() const {
+// required float mass = 4;
+inline bool PhysicsInfoMessage::has_mass() const {
   return (_has_bits_[0] & 0x00000008u) != 0;
 }
-inline void PhysicsInfo::set_has_linearvelocity() {
+inline void PhysicsInfoMessage::set_has_mass() {
   _has_bits_[0] |= 0x00000008u;
 }
-inline void PhysicsInfo::clear_has_linearvelocity() {
+inline void PhysicsInfoMessage::clear_has_mass() {
   _has_bits_[0] &= ~0x00000008u;
 }
-inline void PhysicsInfo::clear_linearvelocity() {
-  if (linearvelocity_ != NULL) linearvelocity_->::net::Velocity::Clear();
+inline void PhysicsInfoMessage::clear_mass() {
+  mass_ = 0;
+  clear_has_mass();
+}
+inline float PhysicsInfoMessage::mass() const {
+  return mass_;
+}
+inline void PhysicsInfoMessage::set_mass(float value) {
+  set_has_mass();
+  mass_ = value;
+}
+
+// required .net.VelocityMessage linearVelocity = 5;
+inline bool PhysicsInfoMessage::has_linearvelocity() const {
+  return (_has_bits_[0] & 0x00000010u) != 0;
+}
+inline void PhysicsInfoMessage::set_has_linearvelocity() {
+  _has_bits_[0] |= 0x00000010u;
+}
+inline void PhysicsInfoMessage::clear_has_linearvelocity() {
+  _has_bits_[0] &= ~0x00000010u;
+}
+inline void PhysicsInfoMessage::clear_linearvelocity() {
+  if (linearvelocity_ != NULL) linearvelocity_->::net::VelocityMessage::Clear();
   clear_has_linearvelocity();
 }
-inline const ::net::Velocity& PhysicsInfo::linearvelocity() const {
+inline const ::net::VelocityMessage& PhysicsInfoMessage::linearvelocity() const {
   return linearvelocity_ != NULL ? *linearvelocity_ : *default_instance_->linearvelocity_;
 }
-inline ::net::Velocity* PhysicsInfo::mutable_linearvelocity() {
+inline ::net::VelocityMessage* PhysicsInfoMessage::mutable_linearvelocity() {
   set_has_linearvelocity();
-  if (linearvelocity_ == NULL) linearvelocity_ = new ::net::Velocity;
+  if (linearvelocity_ == NULL) linearvelocity_ = new ::net::VelocityMessage;
   return linearvelocity_;
 }
-inline ::net::Velocity* PhysicsInfo::release_linearvelocity() {
+inline ::net::VelocityMessage* PhysicsInfoMessage::release_linearvelocity() {
   clear_has_linearvelocity();
-  ::net::Velocity* temp = linearvelocity_;
+  ::net::VelocityMessage* temp = linearvelocity_;
   linearvelocity_ = NULL;
   return temp;
 }
-inline void PhysicsInfo::set_allocated_linearvelocity(::net::Velocity* linearvelocity) {
+inline void PhysicsInfoMessage::set_allocated_linearvelocity(::net::VelocityMessage* linearvelocity) {
   delete linearvelocity_;
   linearvelocity_ = linearvelocity;
   if (linearvelocity) {
@@ -1273,111 +1860,35 @@ inline void PhysicsInfo::set_allocated_linearvelocity(::net::Velocity* linearvel
   }
 }
 
-// required .net.Velocity angularVelocity = 5;
-inline bool PhysicsInfo::has_angularvelocity() const {
-  return (_has_bits_[0] & 0x00000010u) != 0;
-}
-inline void PhysicsInfo::set_has_angularvelocity() {
-  _has_bits_[0] |= 0x00000010u;
-}
-inline void PhysicsInfo::clear_has_angularvelocity() {
-  _has_bits_[0] &= ~0x00000010u;
-}
-inline void PhysicsInfo::clear_angularvelocity() {
-  if (angularvelocity_ != NULL) angularvelocity_->::net::Velocity::Clear();
-  clear_has_angularvelocity();
-}
-inline const ::net::Velocity& PhysicsInfo::angularvelocity() const {
-  return angularvelocity_ != NULL ? *angularvelocity_ : *default_instance_->angularvelocity_;
-}
-inline ::net::Velocity* PhysicsInfo::mutable_angularvelocity() {
-  set_has_angularvelocity();
-  if (angularvelocity_ == NULL) angularvelocity_ = new ::net::Velocity;
-  return angularvelocity_;
-}
-inline ::net::Velocity* PhysicsInfo::release_angularvelocity() {
-  clear_has_angularvelocity();
-  ::net::Velocity* temp = angularvelocity_;
-  angularvelocity_ = NULL;
-  return temp;
-}
-inline void PhysicsInfo::set_allocated_angularvelocity(::net::Velocity* angularvelocity) {
-  delete angularvelocity_;
-  angularvelocity_ = angularvelocity;
-  if (angularvelocity) {
-    set_has_angularvelocity();
-  } else {
-    clear_has_angularvelocity();
-  }
-}
-
-// required .net.Point angularPosition = 6;
-inline bool PhysicsInfo::has_angularposition() const {
+// required .net.ForceMessage linearForce = 6;
+inline bool PhysicsInfoMessage::has_linearforce() const {
   return (_has_bits_[0] & 0x00000020u) != 0;
 }
-inline void PhysicsInfo::set_has_angularposition() {
+inline void PhysicsInfoMessage::set_has_linearforce() {
   _has_bits_[0] |= 0x00000020u;
 }
-inline void PhysicsInfo::clear_has_angularposition() {
+inline void PhysicsInfoMessage::clear_has_linearforce() {
   _has_bits_[0] &= ~0x00000020u;
 }
-inline void PhysicsInfo::clear_angularposition() {
-  if (angularposition_ != NULL) angularposition_->::net::Point::Clear();
-  clear_has_angularposition();
-}
-inline const ::net::Point& PhysicsInfo::angularposition() const {
-  return angularposition_ != NULL ? *angularposition_ : *default_instance_->angularposition_;
-}
-inline ::net::Point* PhysicsInfo::mutable_angularposition() {
-  set_has_angularposition();
-  if (angularposition_ == NULL) angularposition_ = new ::net::Point;
-  return angularposition_;
-}
-inline ::net::Point* PhysicsInfo::release_angularposition() {
-  clear_has_angularposition();
-  ::net::Point* temp = angularposition_;
-  angularposition_ = NULL;
-  return temp;
-}
-inline void PhysicsInfo::set_allocated_angularposition(::net::Point* angularposition) {
-  delete angularposition_;
-  angularposition_ = angularposition;
-  if (angularposition) {
-    set_has_angularposition();
-  } else {
-    clear_has_angularposition();
-  }
-}
-
-// required .net.Force linearForce = 7;
-inline bool PhysicsInfo::has_linearforce() const {
-  return (_has_bits_[0] & 0x00000040u) != 0;
-}
-inline void PhysicsInfo::set_has_linearforce() {
-  _has_bits_[0] |= 0x00000040u;
-}
-inline void PhysicsInfo::clear_has_linearforce() {
-  _has_bits_[0] &= ~0x00000040u;
-}
-inline void PhysicsInfo::clear_linearforce() {
-  if (linearforce_ != NULL) linearforce_->::net::Force::Clear();
+inline void PhysicsInfoMessage::clear_linearforce() {
+  if (linearforce_ != NULL) linearforce_->::net::ForceMessage::Clear();
   clear_has_linearforce();
 }
-inline const ::net::Force& PhysicsInfo::linearforce() const {
+inline const ::net::ForceMessage& PhysicsInfoMessage::linearforce() const {
   return linearforce_ != NULL ? *linearforce_ : *default_instance_->linearforce_;
 }
-inline ::net::Force* PhysicsInfo::mutable_linearforce() {
+inline ::net::ForceMessage* PhysicsInfoMessage::mutable_linearforce() {
   set_has_linearforce();
-  if (linearforce_ == NULL) linearforce_ = new ::net::Force;
+  if (linearforce_ == NULL) linearforce_ = new ::net::ForceMessage;
   return linearforce_;
 }
-inline ::net::Force* PhysicsInfo::release_linearforce() {
+inline ::net::ForceMessage* PhysicsInfoMessage::release_linearforce() {
   clear_has_linearforce();
-  ::net::Force* temp = linearforce_;
+  ::net::ForceMessage* temp = linearforce_;
   linearforce_ = NULL;
   return temp;
 }
-inline void PhysicsInfo::set_allocated_linearforce(::net::Force* linearforce) {
+inline void PhysicsInfoMessage::set_allocated_linearforce(::net::ForceMessage* linearforce) {
   delete linearforce_;
   linearforce_ = linearforce;
   if (linearforce) {
@@ -1387,35 +1898,73 @@ inline void PhysicsInfo::set_allocated_linearforce(::net::Force* linearforce) {
   }
 }
 
-// required .net.Force angularForce = 8;
-inline bool PhysicsInfo::has_angularforce() const {
+// required .net.VelocityMessage angularVelocity = 7;
+inline bool PhysicsInfoMessage::has_angularvelocity() const {
+  return (_has_bits_[0] & 0x00000040u) != 0;
+}
+inline void PhysicsInfoMessage::set_has_angularvelocity() {
+  _has_bits_[0] |= 0x00000040u;
+}
+inline void PhysicsInfoMessage::clear_has_angularvelocity() {
+  _has_bits_[0] &= ~0x00000040u;
+}
+inline void PhysicsInfoMessage::clear_angularvelocity() {
+  if (angularvelocity_ != NULL) angularvelocity_->::net::VelocityMessage::Clear();
+  clear_has_angularvelocity();
+}
+inline const ::net::VelocityMessage& PhysicsInfoMessage::angularvelocity() const {
+  return angularvelocity_ != NULL ? *angularvelocity_ : *default_instance_->angularvelocity_;
+}
+inline ::net::VelocityMessage* PhysicsInfoMessage::mutable_angularvelocity() {
+  set_has_angularvelocity();
+  if (angularvelocity_ == NULL) angularvelocity_ = new ::net::VelocityMessage;
+  return angularvelocity_;
+}
+inline ::net::VelocityMessage* PhysicsInfoMessage::release_angularvelocity() {
+  clear_has_angularvelocity();
+  ::net::VelocityMessage* temp = angularvelocity_;
+  angularvelocity_ = NULL;
+  return temp;
+}
+inline void PhysicsInfoMessage::set_allocated_angularvelocity(::net::VelocityMessage* angularvelocity) {
+  delete angularvelocity_;
+  angularvelocity_ = angularvelocity;
+  if (angularvelocity) {
+    set_has_angularvelocity();
+  } else {
+    clear_has_angularvelocity();
+  }
+}
+
+// required .net.ForceMessage angularForce = 8;
+inline bool PhysicsInfoMessage::has_angularforce() const {
   return (_has_bits_[0] & 0x00000080u) != 0;
 }
-inline void PhysicsInfo::set_has_angularforce() {
+inline void PhysicsInfoMessage::set_has_angularforce() {
   _has_bits_[0] |= 0x00000080u;
 }
-inline void PhysicsInfo::clear_has_angularforce() {
+inline void PhysicsInfoMessage::clear_has_angularforce() {
   _has_bits_[0] &= ~0x00000080u;
 }
-inline void PhysicsInfo::clear_angularforce() {
-  if (angularforce_ != NULL) angularforce_->::net::Force::Clear();
+inline void PhysicsInfoMessage::clear_angularforce() {
+  if (angularforce_ != NULL) angularforce_->::net::ForceMessage::Clear();
   clear_has_angularforce();
 }
-inline const ::net::Force& PhysicsInfo::angularforce() const {
+inline const ::net::ForceMessage& PhysicsInfoMessage::angularforce() const {
   return angularforce_ != NULL ? *angularforce_ : *default_instance_->angularforce_;
 }
-inline ::net::Force* PhysicsInfo::mutable_angularforce() {
+inline ::net::ForceMessage* PhysicsInfoMessage::mutable_angularforce() {
   set_has_angularforce();
-  if (angularforce_ == NULL) angularforce_ = new ::net::Force;
+  if (angularforce_ == NULL) angularforce_ = new ::net::ForceMessage;
   return angularforce_;
 }
-inline ::net::Force* PhysicsInfo::release_angularforce() {
+inline ::net::ForceMessage* PhysicsInfoMessage::release_angularforce() {
   clear_has_angularforce();
-  ::net::Force* temp = angularforce_;
+  ::net::ForceMessage* temp = angularforce_;
   angularforce_ = NULL;
   return temp;
 }
-inline void PhysicsInfo::set_allocated_angularforce(::net::Force* angularforce) {
+inline void PhysicsInfoMessage::set_allocated_angularforce(::net::ForceMessage* angularforce) {
   delete angularforce_;
   angularforce_ = angularforce;
   if (angularforce) {
@@ -1425,33 +1974,234 @@ inline void PhysicsInfo::set_allocated_angularforce(::net::Force* angularforce) 
   }
 }
 
+// required .net.PointMessage angularPosition = 9;
+inline bool PhysicsInfoMessage::has_angularposition() const {
+  return (_has_bits_[0] & 0x00000100u) != 0;
+}
+inline void PhysicsInfoMessage::set_has_angularposition() {
+  _has_bits_[0] |= 0x00000100u;
+}
+inline void PhysicsInfoMessage::clear_has_angularposition() {
+  _has_bits_[0] &= ~0x00000100u;
+}
+inline void PhysicsInfoMessage::clear_angularposition() {
+  if (angularposition_ != NULL) angularposition_->::net::PointMessage::Clear();
+  clear_has_angularposition();
+}
+inline const ::net::PointMessage& PhysicsInfoMessage::angularposition() const {
+  return angularposition_ != NULL ? *angularposition_ : *default_instance_->angularposition_;
+}
+inline ::net::PointMessage* PhysicsInfoMessage::mutable_angularposition() {
+  set_has_angularposition();
+  if (angularposition_ == NULL) angularposition_ = new ::net::PointMessage;
+  return angularposition_;
+}
+inline ::net::PointMessage* PhysicsInfoMessage::release_angularposition() {
+  clear_has_angularposition();
+  ::net::PointMessage* temp = angularposition_;
+  angularposition_ = NULL;
+  return temp;
+}
+inline void PhysicsInfoMessage::set_allocated_angularposition(::net::PointMessage* angularposition) {
+  delete angularposition_;
+  angularposition_ = angularposition;
+  if (angularposition) {
+    set_has_angularposition();
+  } else {
+    clear_has_angularposition();
+  }
+}
+
 // -------------------------------------------------------------------
 
-// GameEngine
+// UpdateObjectMessage
 
-// repeated .net.PhysicsInfo physicsInfo = 1;
-inline int GameEngine::physicsinfo_size() const {
+// required int32 ID = 1;
+inline bool UpdateObjectMessage::has_id() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void UpdateObjectMessage::set_has_id() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void UpdateObjectMessage::clear_has_id() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void UpdateObjectMessage::clear_id() {
+  id_ = 0;
+  clear_has_id();
+}
+inline ::google::protobuf::int32 UpdateObjectMessage::id() const {
+  return id_;
+}
+inline void UpdateObjectMessage::set_id(::google::protobuf::int32 value) {
+  set_has_id();
+  id_ = value;
+}
+
+// required .net.PointMessage position = 2;
+inline bool UpdateObjectMessage::has_position() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void UpdateObjectMessage::set_has_position() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void UpdateObjectMessage::clear_has_position() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void UpdateObjectMessage::clear_position() {
+  if (position_ != NULL) position_->::net::PointMessage::Clear();
+  clear_has_position();
+}
+inline const ::net::PointMessage& UpdateObjectMessage::position() const {
+  return position_ != NULL ? *position_ : *default_instance_->position_;
+}
+inline ::net::PointMessage* UpdateObjectMessage::mutable_position() {
+  set_has_position();
+  if (position_ == NULL) position_ = new ::net::PointMessage;
+  return position_;
+}
+inline ::net::PointMessage* UpdateObjectMessage::release_position() {
+  clear_has_position();
+  ::net::PointMessage* temp = position_;
+  position_ = NULL;
+  return temp;
+}
+inline void UpdateObjectMessage::set_allocated_position(::net::PointMessage* position) {
+  delete position_;
+  position_ = position;
+  if (position) {
+    set_has_position();
+  } else {
+    clear_has_position();
+  }
+}
+
+// -------------------------------------------------------------------
+
+// DeleteObjectMessage
+
+// required int32 ID = 1;
+inline bool DeleteObjectMessage::has_id() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void DeleteObjectMessage::set_has_id() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void DeleteObjectMessage::clear_has_id() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void DeleteObjectMessage::clear_id() {
+  id_ = 0;
+  clear_has_id();
+}
+inline ::google::protobuf::int32 DeleteObjectMessage::id() const {
+  return id_;
+}
+inline void DeleteObjectMessage::set_id(::google::protobuf::int32 value) {
+  set_has_id();
+  id_ = value;
+}
+
+// -------------------------------------------------------------------
+
+// GameEngineMessage
+
+// required .net.GameEngineMessage.GameEngineMessageType messageType = 1;
+inline bool GameEngineMessage::has_messagetype() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void GameEngineMessage::set_has_messagetype() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void GameEngineMessage::clear_has_messagetype() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void GameEngineMessage::clear_messagetype() {
+  messagetype_ = 0;
+  clear_has_messagetype();
+}
+inline ::net::GameEngineMessage_GameEngineMessageType GameEngineMessage::messagetype() const {
+  return static_cast< ::net::GameEngineMessage_GameEngineMessageType >(messagetype_);
+}
+inline void GameEngineMessage::set_messagetype(::net::GameEngineMessage_GameEngineMessageType value) {
+  assert(::net::GameEngineMessage_GameEngineMessageType_IsValid(value));
+  set_has_messagetype();
+  messagetype_ = value;
+}
+
+// repeated .net.PhysicsInfoMessage physicsInfo = 2;
+inline int GameEngineMessage::physicsinfo_size() const {
   return physicsinfo_.size();
 }
-inline void GameEngine::clear_physicsinfo() {
+inline void GameEngineMessage::clear_physicsinfo() {
   physicsinfo_.Clear();
 }
-inline const ::net::PhysicsInfo& GameEngine::physicsinfo(int index) const {
+inline const ::net::PhysicsInfoMessage& GameEngineMessage::physicsinfo(int index) const {
   return physicsinfo_.Get(index);
 }
-inline ::net::PhysicsInfo* GameEngine::mutable_physicsinfo(int index) {
+inline ::net::PhysicsInfoMessage* GameEngineMessage::mutable_physicsinfo(int index) {
   return physicsinfo_.Mutable(index);
 }
-inline ::net::PhysicsInfo* GameEngine::add_physicsinfo() {
+inline ::net::PhysicsInfoMessage* GameEngineMessage::add_physicsinfo() {
   return physicsinfo_.Add();
 }
-inline const ::google::protobuf::RepeatedPtrField< ::net::PhysicsInfo >&
-GameEngine::physicsinfo() const {
+inline const ::google::protobuf::RepeatedPtrField< ::net::PhysicsInfoMessage >&
+GameEngineMessage::physicsinfo() const {
   return physicsinfo_;
 }
-inline ::google::protobuf::RepeatedPtrField< ::net::PhysicsInfo >*
-GameEngine::mutable_physicsinfo() {
+inline ::google::protobuf::RepeatedPtrField< ::net::PhysicsInfoMessage >*
+GameEngineMessage::mutable_physicsinfo() {
   return &physicsinfo_;
+}
+
+// repeated .net.UpdateObjectMessage updateObject = 3;
+inline int GameEngineMessage::updateobject_size() const {
+  return updateobject_.size();
+}
+inline void GameEngineMessage::clear_updateobject() {
+  updateobject_.Clear();
+}
+inline const ::net::UpdateObjectMessage& GameEngineMessage::updateobject(int index) const {
+  return updateobject_.Get(index);
+}
+inline ::net::UpdateObjectMessage* GameEngineMessage::mutable_updateobject(int index) {
+  return updateobject_.Mutable(index);
+}
+inline ::net::UpdateObjectMessage* GameEngineMessage::add_updateobject() {
+  return updateobject_.Add();
+}
+inline const ::google::protobuf::RepeatedPtrField< ::net::UpdateObjectMessage >&
+GameEngineMessage::updateobject() const {
+  return updateobject_;
+}
+inline ::google::protobuf::RepeatedPtrField< ::net::UpdateObjectMessage >*
+GameEngineMessage::mutable_updateobject() {
+  return &updateobject_;
+}
+
+// repeated .net.DeleteObjectMessage deleteObject = 4;
+inline int GameEngineMessage::deleteobject_size() const {
+  return deleteobject_.size();
+}
+inline void GameEngineMessage::clear_deleteobject() {
+  deleteobject_.Clear();
+}
+inline const ::net::DeleteObjectMessage& GameEngineMessage::deleteobject(int index) const {
+  return deleteobject_.Get(index);
+}
+inline ::net::DeleteObjectMessage* GameEngineMessage::mutable_deleteobject(int index) {
+  return deleteobject_.Mutable(index);
+}
+inline ::net::DeleteObjectMessage* GameEngineMessage::add_deleteobject() {
+  return deleteobject_.Add();
+}
+inline const ::google::protobuf::RepeatedPtrField< ::net::DeleteObjectMessage >&
+GameEngineMessage::deleteobject() const {
+  return deleteobject_;
+}
+inline ::google::protobuf::RepeatedPtrField< ::net::DeleteObjectMessage >*
+GameEngineMessage::mutable_deleteobject() {
+  return &deleteobject_;
 }
 
 
@@ -1463,6 +2213,14 @@ GameEngine::mutable_physicsinfo() {
 namespace google {
 namespace protobuf {
 
+template <>
+inline const EnumDescriptor* GetEnumDescriptor< ::net::PhysicsInfoMessage_PhysicsInfoMessageType>() {
+  return ::net::PhysicsInfoMessage_PhysicsInfoMessageType_descriptor();
+}
+template <>
+inline const EnumDescriptor* GetEnumDescriptor< ::net::GameEngineMessage_GameEngineMessageType>() {
+  return ::net::GameEngineMessage_GameEngineMessageType_descriptor();
+}
 
 }  // namespace google
 }  // namespace protobuf

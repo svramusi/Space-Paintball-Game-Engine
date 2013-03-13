@@ -20,27 +20,38 @@ namespace net {
 
 namespace {
 
-const ::google::protobuf::Descriptor* Velocity_descriptor_ = NULL;
+const ::google::protobuf::Descriptor* VelocityMessage_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
-  Velocity_reflection_ = NULL;
-const ::google::protobuf::Descriptor* Force_descriptor_ = NULL;
+  VelocityMessage_reflection_ = NULL;
+const ::google::protobuf::Descriptor* ForceMessage_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
-  Force_reflection_ = NULL;
-const ::google::protobuf::Descriptor* Point_descriptor_ = NULL;
+  ForceMessage_reflection_ = NULL;
+const ::google::protobuf::Descriptor* PointMessage_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
-  Point_reflection_ = NULL;
-const ::google::protobuf::Descriptor* Aabb_descriptor_ = NULL;
+  PointMessage_reflection_ = NULL;
+const ::google::protobuf::Descriptor* CollidableObjectMessage_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
-  Aabb_reflection_ = NULL;
-const ::google::protobuf::Descriptor* Sphere_descriptor_ = NULL;
+  CollidableObjectMessage_reflection_ = NULL;
+const ::google::protobuf::Descriptor* AabbMessage_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
-  Sphere_reflection_ = NULL;
-const ::google::protobuf::Descriptor* PhysicsInfo_descriptor_ = NULL;
+  AabbMessage_reflection_ = NULL;
+const ::google::protobuf::Descriptor* SphereMessage_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
-  PhysicsInfo_reflection_ = NULL;
-const ::google::protobuf::Descriptor* GameEngine_descriptor_ = NULL;
+  SphereMessage_reflection_ = NULL;
+const ::google::protobuf::Descriptor* PhysicsInfoMessage_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
-  GameEngine_reflection_ = NULL;
+  PhysicsInfoMessage_reflection_ = NULL;
+const ::google::protobuf::EnumDescriptor* PhysicsInfoMessage_PhysicsInfoMessageType_descriptor_ = NULL;
+const ::google::protobuf::Descriptor* UpdateObjectMessage_descriptor_ = NULL;
+const ::google::protobuf::internal::GeneratedMessageReflection*
+  UpdateObjectMessage_reflection_ = NULL;
+const ::google::protobuf::Descriptor* DeleteObjectMessage_descriptor_ = NULL;
+const ::google::protobuf::internal::GeneratedMessageReflection*
+  DeleteObjectMessage_reflection_ = NULL;
+const ::google::protobuf::Descriptor* GameEngineMessage_descriptor_ = NULL;
+const ::google::protobuf::internal::GeneratedMessageReflection*
+  GameEngineMessage_reflection_ = NULL;
+const ::google::protobuf::EnumDescriptor* GameEngineMessage_GameEngineMessageType_descriptor_ = NULL;
 
 }  // namespace
 
@@ -51,126 +62,182 @@ void protobuf_AssignDesc_GameEngine_2eproto() {
     ::google::protobuf::DescriptorPool::generated_pool()->FindFileByName(
       "GameEngine.proto");
   GOOGLE_CHECK(file != NULL);
-  Velocity_descriptor_ = file->message_type(0);
-  static const int Velocity_offsets_[3] = {
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Velocity, x_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Velocity, y_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Velocity, z_),
+  VelocityMessage_descriptor_ = file->message_type(0);
+  static const int VelocityMessage_offsets_[3] = {
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(VelocityMessage, x_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(VelocityMessage, y_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(VelocityMessage, z_),
   };
-  Velocity_reflection_ =
+  VelocityMessage_reflection_ =
     new ::google::protobuf::internal::GeneratedMessageReflection(
-      Velocity_descriptor_,
-      Velocity::default_instance_,
-      Velocity_offsets_,
-      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Velocity, _has_bits_[0]),
-      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Velocity, _unknown_fields_),
+      VelocityMessage_descriptor_,
+      VelocityMessage::default_instance_,
+      VelocityMessage_offsets_,
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(VelocityMessage, _has_bits_[0]),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(VelocityMessage, _unknown_fields_),
       -1,
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
-      sizeof(Velocity));
-  Force_descriptor_ = file->message_type(1);
-  static const int Force_offsets_[3] = {
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Force, x_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Force, y_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Force, z_),
+      sizeof(VelocityMessage));
+  ForceMessage_descriptor_ = file->message_type(1);
+  static const int ForceMessage_offsets_[3] = {
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ForceMessage, x_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ForceMessage, y_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ForceMessage, z_),
   };
-  Force_reflection_ =
+  ForceMessage_reflection_ =
     new ::google::protobuf::internal::GeneratedMessageReflection(
-      Force_descriptor_,
-      Force::default_instance_,
-      Force_offsets_,
-      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Force, _has_bits_[0]),
-      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Force, _unknown_fields_),
+      ForceMessage_descriptor_,
+      ForceMessage::default_instance_,
+      ForceMessage_offsets_,
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ForceMessage, _has_bits_[0]),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ForceMessage, _unknown_fields_),
       -1,
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
-      sizeof(Force));
-  Point_descriptor_ = file->message_type(2);
-  static const int Point_offsets_[3] = {
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Point, x_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Point, y_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Point, z_),
+      sizeof(ForceMessage));
+  PointMessage_descriptor_ = file->message_type(2);
+  static const int PointMessage_offsets_[3] = {
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(PointMessage, x_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(PointMessage, y_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(PointMessage, z_),
   };
-  Point_reflection_ =
+  PointMessage_reflection_ =
     new ::google::protobuf::internal::GeneratedMessageReflection(
-      Point_descriptor_,
-      Point::default_instance_,
-      Point_offsets_,
-      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Point, _has_bits_[0]),
-      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Point, _unknown_fields_),
+      PointMessage_descriptor_,
+      PointMessage::default_instance_,
+      PointMessage_offsets_,
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(PointMessage, _has_bits_[0]),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(PointMessage, _unknown_fields_),
       -1,
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
-      sizeof(Point));
-  Aabb_descriptor_ = file->message_type(3);
-  static const int Aabb_offsets_[2] = {
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Aabb, center_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Aabb, radii_),
+      sizeof(PointMessage));
+  CollidableObjectMessage_descriptor_ = file->message_type(3);
+  static const int CollidableObjectMessage_offsets_[3] = {
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(CollidableObjectMessage, id_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(CollidableObjectMessage, center_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(CollidableObjectMessage, movable_),
   };
-  Aabb_reflection_ =
+  CollidableObjectMessage_reflection_ =
     new ::google::protobuf::internal::GeneratedMessageReflection(
-      Aabb_descriptor_,
-      Aabb::default_instance_,
-      Aabb_offsets_,
-      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Aabb, _has_bits_[0]),
-      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Aabb, _unknown_fields_),
+      CollidableObjectMessage_descriptor_,
+      CollidableObjectMessage::default_instance_,
+      CollidableObjectMessage_offsets_,
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(CollidableObjectMessage, _has_bits_[0]),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(CollidableObjectMessage, _unknown_fields_),
       -1,
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
-      sizeof(Aabb));
-  Sphere_descriptor_ = file->message_type(4);
-  static const int Sphere_offsets_[2] = {
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Sphere, center_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Sphere, radius_),
+      sizeof(CollidableObjectMessage));
+  AabbMessage_descriptor_ = file->message_type(4);
+  static const int AabbMessage_offsets_[4] = {
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AabbMessage, collidableobject_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AabbMessage, radiusx_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AabbMessage, radiusy_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AabbMessage, radiusz_),
   };
-  Sphere_reflection_ =
+  AabbMessage_reflection_ =
     new ::google::protobuf::internal::GeneratedMessageReflection(
-      Sphere_descriptor_,
-      Sphere::default_instance_,
-      Sphere_offsets_,
-      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Sphere, _has_bits_[0]),
-      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Sphere, _unknown_fields_),
+      AabbMessage_descriptor_,
+      AabbMessage::default_instance_,
+      AabbMessage_offsets_,
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AabbMessage, _has_bits_[0]),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AabbMessage, _unknown_fields_),
       -1,
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
-      sizeof(Sphere));
-  PhysicsInfo_descriptor_ = file->message_type(5);
-  static const int PhysicsInfo_offsets_[8] = {
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(PhysicsInfo, mass_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(PhysicsInfo, aabbobject_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(PhysicsInfo, sphereobject_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(PhysicsInfo, linearvelocity_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(PhysicsInfo, angularvelocity_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(PhysicsInfo, angularposition_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(PhysicsInfo, linearforce_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(PhysicsInfo, angularforce_),
+      sizeof(AabbMessage));
+  SphereMessage_descriptor_ = file->message_type(5);
+  static const int SphereMessage_offsets_[2] = {
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(SphereMessage, collidableobject_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(SphereMessage, radius_),
   };
-  PhysicsInfo_reflection_ =
+  SphereMessage_reflection_ =
     new ::google::protobuf::internal::GeneratedMessageReflection(
-      PhysicsInfo_descriptor_,
-      PhysicsInfo::default_instance_,
-      PhysicsInfo_offsets_,
-      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(PhysicsInfo, _has_bits_[0]),
-      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(PhysicsInfo, _unknown_fields_),
+      SphereMessage_descriptor_,
+      SphereMessage::default_instance_,
+      SphereMessage_offsets_,
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(SphereMessage, _has_bits_[0]),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(SphereMessage, _unknown_fields_),
       -1,
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
-      sizeof(PhysicsInfo));
-  GameEngine_descriptor_ = file->message_type(6);
-  static const int GameEngine_offsets_[1] = {
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(GameEngine, physicsinfo_),
+      sizeof(SphereMessage));
+  PhysicsInfoMessage_descriptor_ = file->message_type(6);
+  static const int PhysicsInfoMessage_offsets_[9] = {
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(PhysicsInfoMessage, physicsinfomessagetype_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(PhysicsInfoMessage, aabbobject_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(PhysicsInfoMessage, sphereobject_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(PhysicsInfoMessage, mass_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(PhysicsInfoMessage, linearvelocity_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(PhysicsInfoMessage, linearforce_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(PhysicsInfoMessage, angularvelocity_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(PhysicsInfoMessage, angularforce_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(PhysicsInfoMessage, angularposition_),
   };
-  GameEngine_reflection_ =
+  PhysicsInfoMessage_reflection_ =
     new ::google::protobuf::internal::GeneratedMessageReflection(
-      GameEngine_descriptor_,
-      GameEngine::default_instance_,
-      GameEngine_offsets_,
-      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(GameEngine, _has_bits_[0]),
-      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(GameEngine, _unknown_fields_),
+      PhysicsInfoMessage_descriptor_,
+      PhysicsInfoMessage::default_instance_,
+      PhysicsInfoMessage_offsets_,
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(PhysicsInfoMessage, _has_bits_[0]),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(PhysicsInfoMessage, _unknown_fields_),
       -1,
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
-      sizeof(GameEngine));
+      sizeof(PhysicsInfoMessage));
+  PhysicsInfoMessage_PhysicsInfoMessageType_descriptor_ = PhysicsInfoMessage_descriptor_->enum_type(0);
+  UpdateObjectMessage_descriptor_ = file->message_type(7);
+  static const int UpdateObjectMessage_offsets_[2] = {
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(UpdateObjectMessage, id_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(UpdateObjectMessage, position_),
+  };
+  UpdateObjectMessage_reflection_ =
+    new ::google::protobuf::internal::GeneratedMessageReflection(
+      UpdateObjectMessage_descriptor_,
+      UpdateObjectMessage::default_instance_,
+      UpdateObjectMessage_offsets_,
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(UpdateObjectMessage, _has_bits_[0]),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(UpdateObjectMessage, _unknown_fields_),
+      -1,
+      ::google::protobuf::DescriptorPool::generated_pool(),
+      ::google::protobuf::MessageFactory::generated_factory(),
+      sizeof(UpdateObjectMessage));
+  DeleteObjectMessage_descriptor_ = file->message_type(8);
+  static const int DeleteObjectMessage_offsets_[1] = {
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(DeleteObjectMessage, id_),
+  };
+  DeleteObjectMessage_reflection_ =
+    new ::google::protobuf::internal::GeneratedMessageReflection(
+      DeleteObjectMessage_descriptor_,
+      DeleteObjectMessage::default_instance_,
+      DeleteObjectMessage_offsets_,
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(DeleteObjectMessage, _has_bits_[0]),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(DeleteObjectMessage, _unknown_fields_),
+      -1,
+      ::google::protobuf::DescriptorPool::generated_pool(),
+      ::google::protobuf::MessageFactory::generated_factory(),
+      sizeof(DeleteObjectMessage));
+  GameEngineMessage_descriptor_ = file->message_type(9);
+  static const int GameEngineMessage_offsets_[4] = {
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(GameEngineMessage, messagetype_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(GameEngineMessage, physicsinfo_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(GameEngineMessage, updateobject_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(GameEngineMessage, deleteobject_),
+  };
+  GameEngineMessage_reflection_ =
+    new ::google::protobuf::internal::GeneratedMessageReflection(
+      GameEngineMessage_descriptor_,
+      GameEngineMessage::default_instance_,
+      GameEngineMessage_offsets_,
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(GameEngineMessage, _has_bits_[0]),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(GameEngineMessage, _unknown_fields_),
+      -1,
+      ::google::protobuf::DescriptorPool::generated_pool(),
+      ::google::protobuf::MessageFactory::generated_factory(),
+      sizeof(GameEngineMessage));
+  GameEngineMessage_GameEngineMessageType_descriptor_ = GameEngineMessage_descriptor_->enum_type(0);
 }
 
 namespace {
@@ -184,38 +251,50 @@ inline void protobuf_AssignDescriptorsOnce() {
 void protobuf_RegisterTypes(const ::std::string&) {
   protobuf_AssignDescriptorsOnce();
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
-    Velocity_descriptor_, &Velocity::default_instance());
+    VelocityMessage_descriptor_, &VelocityMessage::default_instance());
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
-    Force_descriptor_, &Force::default_instance());
+    ForceMessage_descriptor_, &ForceMessage::default_instance());
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
-    Point_descriptor_, &Point::default_instance());
+    PointMessage_descriptor_, &PointMessage::default_instance());
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
-    Aabb_descriptor_, &Aabb::default_instance());
+    CollidableObjectMessage_descriptor_, &CollidableObjectMessage::default_instance());
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
-    Sphere_descriptor_, &Sphere::default_instance());
+    AabbMessage_descriptor_, &AabbMessage::default_instance());
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
-    PhysicsInfo_descriptor_, &PhysicsInfo::default_instance());
+    SphereMessage_descriptor_, &SphereMessage::default_instance());
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
-    GameEngine_descriptor_, &GameEngine::default_instance());
+    PhysicsInfoMessage_descriptor_, &PhysicsInfoMessage::default_instance());
+  ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
+    UpdateObjectMessage_descriptor_, &UpdateObjectMessage::default_instance());
+  ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
+    DeleteObjectMessage_descriptor_, &DeleteObjectMessage::default_instance());
+  ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
+    GameEngineMessage_descriptor_, &GameEngineMessage::default_instance());
 }
 
 }  // namespace
 
 void protobuf_ShutdownFile_GameEngine_2eproto() {
-  delete Velocity::default_instance_;
-  delete Velocity_reflection_;
-  delete Force::default_instance_;
-  delete Force_reflection_;
-  delete Point::default_instance_;
-  delete Point_reflection_;
-  delete Aabb::default_instance_;
-  delete Aabb_reflection_;
-  delete Sphere::default_instance_;
-  delete Sphere_reflection_;
-  delete PhysicsInfo::default_instance_;
-  delete PhysicsInfo_reflection_;
-  delete GameEngine::default_instance_;
-  delete GameEngine_reflection_;
+  delete VelocityMessage::default_instance_;
+  delete VelocityMessage_reflection_;
+  delete ForceMessage::default_instance_;
+  delete ForceMessage_reflection_;
+  delete PointMessage::default_instance_;
+  delete PointMessage_reflection_;
+  delete CollidableObjectMessage::default_instance_;
+  delete CollidableObjectMessage_reflection_;
+  delete AabbMessage::default_instance_;
+  delete AabbMessage_reflection_;
+  delete SphereMessage::default_instance_;
+  delete SphereMessage_reflection_;
+  delete PhysicsInfoMessage::default_instance_;
+  delete PhysicsInfoMessage_reflection_;
+  delete UpdateObjectMessage::default_instance_;
+  delete UpdateObjectMessage_reflection_;
+  delete DeleteObjectMessage::default_instance_;
+  delete DeleteObjectMessage_reflection_;
+  delete GameEngineMessage::default_instance_;
+  delete GameEngineMessage_reflection_;
 }
 
 void protobuf_AddDesc_GameEngine_2eproto() {
@@ -225,37 +304,62 @@ void protobuf_AddDesc_GameEngine_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-    "\n\020GameEngine.proto\022\003net\"+\n\010Velocity\022\t\n\001x"
-    "\030\001 \002(\002\022\t\n\001y\030\002 \002(\002\022\t\n\001z\030\003 \002(\002\"(\n\005Force\022\t\n"
-    "\001x\030\001 \002(\002\022\t\n\001y\030\002 \002(\002\022\t\n\001z\030\003 \002(\002\"(\n\005Point\022"
-    "\t\n\001x\030\001 \002(\002\022\t\n\001y\030\002 \002(\002\022\t\n\001z\030\003 \002(\002\"1\n\004Aabb"
-    "\022\032\n\006center\030\001 \002(\0132\n.net.Point\022\r\n\005radii\030\002 "
-    "\003(\002\"4\n\006Sphere\022\032\n\006center\030\001 \002(\0132\n.net.Poin"
-    "t\022\016\n\006radius\030\002 \002(\002\"\224\002\n\013PhysicsInfo\022\014\n\004mas"
-    "s\030\001 \002(\002\022\035\n\naabbObject\030\002 \002(\0132\t.net.Aabb\022!"
-    "\n\014sphereObject\030\003 \002(\0132\013.net.Sphere\022%\n\016lin"
-    "earVelocity\030\004 \002(\0132\r.net.Velocity\022&\n\017angu"
-    "larVelocity\030\005 \002(\0132\r.net.Velocity\022#\n\017angu"
-    "larPosition\030\006 \002(\0132\n.net.Point\022\037\n\013linearF"
-    "orce\030\007 \002(\0132\n.net.Force\022 \n\014angularForce\030\010"
-    " \002(\0132\n.net.Force\"3\n\nGameEngine\022%\n\013physic"
-    "sInfo\030\001 \003(\0132\020.net.PhysicsInfo", 589);
+    "\n\020GameEngine.proto\022\003net\"2\n\017VelocityMessa"
+    "ge\022\t\n\001x\030\001 \002(\002\022\t\n\001y\030\002 \002(\002\022\t\n\001z\030\003 \002(\002\"/\n\014F"
+    "orceMessage\022\t\n\001x\030\001 \002(\002\022\t\n\001y\030\002 \002(\002\022\t\n\001z\030\003"
+    " \002(\002\"/\n\014PointMessage\022\t\n\001x\030\001 \002(\002\022\t\n\001y\030\002 \002"
+    "(\002\022\t\n\001z\030\003 \002(\002\"Y\n\027CollidableObjectMessage"
+    "\022\n\n\002ID\030\001 \002(\005\022!\n\006center\030\002 \002(\0132\021.net.Point"
+    "Message\022\017\n\007movable\030\003 \002(\005\"x\n\013AabbMessage\022"
+    "6\n\020collidableObject\030\001 \002(\0132\034.net.Collidab"
+    "leObjectMessage\022\017\n\007radiusX\030\002 \002(\002\022\017\n\007radi"
+    "usY\030\003 \002(\002\022\017\n\007radiusZ\030\004 \002(\002\"W\n\rSphereMess"
+    "age\0226\n\020collidableObject\030\001 \002(\0132\034.net.Coll"
+    "idableObjectMessage\022\016\n\006radius\030\002 \002(\002\"\314\003\n\022"
+    "PhysicsInfoMessage\022N\n\026physicsInfoMessage"
+    "Type\030\001 \002(\0162..net.PhysicsInfoMessage.Phys"
+    "icsInfoMessageType\022$\n\naabbObject\030\002 \001(\0132\020"
+    ".net.AabbMessage\022(\n\014sphereObject\030\003 \001(\0132\022"
+    ".net.SphereMessage\022\014\n\004mass\030\004 \002(\002\022,\n\016line"
+    "arVelocity\030\005 \002(\0132\024.net.VelocityMessage\022&"
+    "\n\013linearForce\030\006 \002(\0132\021.net.ForceMessage\022-"
+    "\n\017angularVelocity\030\007 \002(\0132\024.net.VelocityMe"
+    "ssage\022\'\n\014angularForce\030\010 \002(\0132\021.net.ForceM"
+    "essage\022*\n\017angularPosition\030\t \002(\0132\021.net.Po"
+    "intMessage\".\n\026PhysicsInfoMessageType\022\010\n\004"
+    "AABB\020\000\022\n\n\006SPHERE\020\001\"F\n\023UpdateObjectMessag"
+    "e\022\n\n\002ID\030\001 \002(\005\022#\n\010position\030\002 \002(\0132\021.net.Po"
+    "intMessage\"!\n\023DeleteObjectMessage\022\n\n\002ID\030"
+    "\001 \002(\005\"\257\002\n\021GameEngineMessage\022A\n\013messageTy"
+    "pe\030\001 \002(\0162,.net.GameEngineMessage.GameEng"
+    "ineMessageType\022,\n\013physicsInfo\030\002 \003(\0132\027.ne"
+    "t.PhysicsInfoMessage\022.\n\014updateObject\030\003 \003"
+    "(\0132\030.net.UpdateObjectMessage\022.\n\014deleteOb"
+    "ject\030\004 \003(\0132\030.net.DeleteObjectMessage\"I\n\025"
+    "GameEngineMessageType\022\n\n\006CREATE\020\000\022\014\n\010RET"
+    "RIEVE\020\001\022\n\n\006UPDATE\020\003\022\n\n\006DELETE\020\002", 1351);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "GameEngine.proto", &protobuf_RegisterTypes);
-  Velocity::default_instance_ = new Velocity();
-  Force::default_instance_ = new Force();
-  Point::default_instance_ = new Point();
-  Aabb::default_instance_ = new Aabb();
-  Sphere::default_instance_ = new Sphere();
-  PhysicsInfo::default_instance_ = new PhysicsInfo();
-  GameEngine::default_instance_ = new GameEngine();
-  Velocity::default_instance_->InitAsDefaultInstance();
-  Force::default_instance_->InitAsDefaultInstance();
-  Point::default_instance_->InitAsDefaultInstance();
-  Aabb::default_instance_->InitAsDefaultInstance();
-  Sphere::default_instance_->InitAsDefaultInstance();
-  PhysicsInfo::default_instance_->InitAsDefaultInstance();
-  GameEngine::default_instance_->InitAsDefaultInstance();
+  VelocityMessage::default_instance_ = new VelocityMessage();
+  ForceMessage::default_instance_ = new ForceMessage();
+  PointMessage::default_instance_ = new PointMessage();
+  CollidableObjectMessage::default_instance_ = new CollidableObjectMessage();
+  AabbMessage::default_instance_ = new AabbMessage();
+  SphereMessage::default_instance_ = new SphereMessage();
+  PhysicsInfoMessage::default_instance_ = new PhysicsInfoMessage();
+  UpdateObjectMessage::default_instance_ = new UpdateObjectMessage();
+  DeleteObjectMessage::default_instance_ = new DeleteObjectMessage();
+  GameEngineMessage::default_instance_ = new GameEngineMessage();
+  VelocityMessage::default_instance_->InitAsDefaultInstance();
+  ForceMessage::default_instance_->InitAsDefaultInstance();
+  PointMessage::default_instance_->InitAsDefaultInstance();
+  CollidableObjectMessage::default_instance_->InitAsDefaultInstance();
+  AabbMessage::default_instance_->InitAsDefaultInstance();
+  SphereMessage::default_instance_->InitAsDefaultInstance();
+  PhysicsInfoMessage::default_instance_->InitAsDefaultInstance();
+  UpdateObjectMessage::default_instance_->InitAsDefaultInstance();
+  DeleteObjectMessage::default_instance_->InitAsDefaultInstance();
+  GameEngineMessage::default_instance_->InitAsDefaultInstance();
   ::google::protobuf::internal::OnShutdown(&protobuf_ShutdownFile_GameEngine_2eproto);
 }
 
@@ -269,26 +373,26 @@ struct StaticDescriptorInitializer_GameEngine_2eproto {
 // ===================================================================
 
 #ifndef _MSC_VER
-const int Velocity::kXFieldNumber;
-const int Velocity::kYFieldNumber;
-const int Velocity::kZFieldNumber;
+const int VelocityMessage::kXFieldNumber;
+const int VelocityMessage::kYFieldNumber;
+const int VelocityMessage::kZFieldNumber;
 #endif  // !_MSC_VER
 
-Velocity::Velocity()
+VelocityMessage::VelocityMessage()
   : ::google::protobuf::Message() {
   SharedCtor();
 }
 
-void Velocity::InitAsDefaultInstance() {
+void VelocityMessage::InitAsDefaultInstance() {
 }
 
-Velocity::Velocity(const Velocity& from)
+VelocityMessage::VelocityMessage(const VelocityMessage& from)
   : ::google::protobuf::Message() {
   SharedCtor();
   MergeFrom(from);
 }
 
-void Velocity::SharedCtor() {
+void VelocityMessage::SharedCtor() {
   _cached_size_ = 0;
   x_ = 0;
   y_ = 0;
@@ -296,37 +400,37 @@ void Velocity::SharedCtor() {
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
-Velocity::~Velocity() {
+VelocityMessage::~VelocityMessage() {
   SharedDtor();
 }
 
-void Velocity::SharedDtor() {
+void VelocityMessage::SharedDtor() {
   if (this != default_instance_) {
   }
 }
 
-void Velocity::SetCachedSize(int size) const {
+void VelocityMessage::SetCachedSize(int size) const {
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
   _cached_size_ = size;
   GOOGLE_SAFE_CONCURRENT_WRITES_END();
 }
-const ::google::protobuf::Descriptor* Velocity::descriptor() {
+const ::google::protobuf::Descriptor* VelocityMessage::descriptor() {
   protobuf_AssignDescriptorsOnce();
-  return Velocity_descriptor_;
+  return VelocityMessage_descriptor_;
 }
 
-const Velocity& Velocity::default_instance() {
+const VelocityMessage& VelocityMessage::default_instance() {
   if (default_instance_ == NULL) protobuf_AddDesc_GameEngine_2eproto();
   return *default_instance_;
 }
 
-Velocity* Velocity::default_instance_ = NULL;
+VelocityMessage* VelocityMessage::default_instance_ = NULL;
 
-Velocity* Velocity::New() const {
-  return new Velocity;
+VelocityMessage* VelocityMessage::New() const {
+  return new VelocityMessage;
 }
 
-void Velocity::Clear() {
+void VelocityMessage::Clear() {
   if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
     x_ = 0;
     y_ = 0;
@@ -336,7 +440,7 @@ void Velocity::Clear() {
   mutable_unknown_fields()->Clear();
 }
 
-bool Velocity::MergePartialFromCodedStream(
+bool VelocityMessage::MergePartialFromCodedStream(
     ::google::protobuf::io::CodedInputStream* input) {
 #define DO_(EXPRESSION) if (!(EXPRESSION)) return false
   ::google::protobuf::uint32 tag;
@@ -405,7 +509,7 @@ bool Velocity::MergePartialFromCodedStream(
 #undef DO_
 }
 
-void Velocity::SerializeWithCachedSizes(
+void VelocityMessage::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // required float x = 1;
   if (has_x()) {
@@ -428,7 +532,7 @@ void Velocity::SerializeWithCachedSizes(
   }
 }
 
-::google::protobuf::uint8* Velocity::SerializeWithCachedSizesToArray(
+::google::protobuf::uint8* VelocityMessage::SerializeWithCachedSizesToArray(
     ::google::protobuf::uint8* target) const {
   // required float x = 1;
   if (has_x()) {
@@ -452,7 +556,7 @@ void Velocity::SerializeWithCachedSizes(
   return target;
 }
 
-int Velocity::ByteSize() const {
+int VelocityMessage::ByteSize() const {
   int total_size = 0;
 
   if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
@@ -483,10 +587,10 @@ int Velocity::ByteSize() const {
   return total_size;
 }
 
-void Velocity::MergeFrom(const ::google::protobuf::Message& from) {
+void VelocityMessage::MergeFrom(const ::google::protobuf::Message& from) {
   GOOGLE_CHECK_NE(&from, this);
-  const Velocity* source =
-    ::google::protobuf::internal::dynamic_cast_if_available<const Velocity*>(
+  const VelocityMessage* source =
+    ::google::protobuf::internal::dynamic_cast_if_available<const VelocityMessage*>(
       &from);
   if (source == NULL) {
     ::google::protobuf::internal::ReflectionOps::Merge(from, this);
@@ -495,7 +599,7 @@ void Velocity::MergeFrom(const ::google::protobuf::Message& from) {
   }
 }
 
-void Velocity::MergeFrom(const Velocity& from) {
+void VelocityMessage::MergeFrom(const VelocityMessage& from) {
   GOOGLE_CHECK_NE(&from, this);
   if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
     if (from.has_x()) {
@@ -511,25 +615,25 @@ void Velocity::MergeFrom(const Velocity& from) {
   mutable_unknown_fields()->MergeFrom(from.unknown_fields());
 }
 
-void Velocity::CopyFrom(const ::google::protobuf::Message& from) {
+void VelocityMessage::CopyFrom(const ::google::protobuf::Message& from) {
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-void Velocity::CopyFrom(const Velocity& from) {
+void VelocityMessage::CopyFrom(const VelocityMessage& from) {
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-bool Velocity::IsInitialized() const {
+bool VelocityMessage::IsInitialized() const {
   if ((_has_bits_[0] & 0x00000007) != 0x00000007) return false;
 
   return true;
 }
 
-void Velocity::Swap(Velocity* other) {
+void VelocityMessage::Swap(VelocityMessage* other) {
   if (other != this) {
     std::swap(x_, other->x_);
     std::swap(y_, other->y_);
@@ -540,11 +644,11 @@ void Velocity::Swap(Velocity* other) {
   }
 }
 
-::google::protobuf::Metadata Velocity::GetMetadata() const {
+::google::protobuf::Metadata VelocityMessage::GetMetadata() const {
   protobuf_AssignDescriptorsOnce();
   ::google::protobuf::Metadata metadata;
-  metadata.descriptor = Velocity_descriptor_;
-  metadata.reflection = Velocity_reflection_;
+  metadata.descriptor = VelocityMessage_descriptor_;
+  metadata.reflection = VelocityMessage_reflection_;
   return metadata;
 }
 
@@ -552,26 +656,26 @@ void Velocity::Swap(Velocity* other) {
 // ===================================================================
 
 #ifndef _MSC_VER
-const int Force::kXFieldNumber;
-const int Force::kYFieldNumber;
-const int Force::kZFieldNumber;
+const int ForceMessage::kXFieldNumber;
+const int ForceMessage::kYFieldNumber;
+const int ForceMessage::kZFieldNumber;
 #endif  // !_MSC_VER
 
-Force::Force()
+ForceMessage::ForceMessage()
   : ::google::protobuf::Message() {
   SharedCtor();
 }
 
-void Force::InitAsDefaultInstance() {
+void ForceMessage::InitAsDefaultInstance() {
 }
 
-Force::Force(const Force& from)
+ForceMessage::ForceMessage(const ForceMessage& from)
   : ::google::protobuf::Message() {
   SharedCtor();
   MergeFrom(from);
 }
 
-void Force::SharedCtor() {
+void ForceMessage::SharedCtor() {
   _cached_size_ = 0;
   x_ = 0;
   y_ = 0;
@@ -579,37 +683,37 @@ void Force::SharedCtor() {
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
-Force::~Force() {
+ForceMessage::~ForceMessage() {
   SharedDtor();
 }
 
-void Force::SharedDtor() {
+void ForceMessage::SharedDtor() {
   if (this != default_instance_) {
   }
 }
 
-void Force::SetCachedSize(int size) const {
+void ForceMessage::SetCachedSize(int size) const {
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
   _cached_size_ = size;
   GOOGLE_SAFE_CONCURRENT_WRITES_END();
 }
-const ::google::protobuf::Descriptor* Force::descriptor() {
+const ::google::protobuf::Descriptor* ForceMessage::descriptor() {
   protobuf_AssignDescriptorsOnce();
-  return Force_descriptor_;
+  return ForceMessage_descriptor_;
 }
 
-const Force& Force::default_instance() {
+const ForceMessage& ForceMessage::default_instance() {
   if (default_instance_ == NULL) protobuf_AddDesc_GameEngine_2eproto();
   return *default_instance_;
 }
 
-Force* Force::default_instance_ = NULL;
+ForceMessage* ForceMessage::default_instance_ = NULL;
 
-Force* Force::New() const {
-  return new Force;
+ForceMessage* ForceMessage::New() const {
+  return new ForceMessage;
 }
 
-void Force::Clear() {
+void ForceMessage::Clear() {
   if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
     x_ = 0;
     y_ = 0;
@@ -619,7 +723,7 @@ void Force::Clear() {
   mutable_unknown_fields()->Clear();
 }
 
-bool Force::MergePartialFromCodedStream(
+bool ForceMessage::MergePartialFromCodedStream(
     ::google::protobuf::io::CodedInputStream* input) {
 #define DO_(EXPRESSION) if (!(EXPRESSION)) return false
   ::google::protobuf::uint32 tag;
@@ -688,7 +792,7 @@ bool Force::MergePartialFromCodedStream(
 #undef DO_
 }
 
-void Force::SerializeWithCachedSizes(
+void ForceMessage::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // required float x = 1;
   if (has_x()) {
@@ -711,7 +815,7 @@ void Force::SerializeWithCachedSizes(
   }
 }
 
-::google::protobuf::uint8* Force::SerializeWithCachedSizesToArray(
+::google::protobuf::uint8* ForceMessage::SerializeWithCachedSizesToArray(
     ::google::protobuf::uint8* target) const {
   // required float x = 1;
   if (has_x()) {
@@ -735,7 +839,7 @@ void Force::SerializeWithCachedSizes(
   return target;
 }
 
-int Force::ByteSize() const {
+int ForceMessage::ByteSize() const {
   int total_size = 0;
 
   if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
@@ -766,10 +870,10 @@ int Force::ByteSize() const {
   return total_size;
 }
 
-void Force::MergeFrom(const ::google::protobuf::Message& from) {
+void ForceMessage::MergeFrom(const ::google::protobuf::Message& from) {
   GOOGLE_CHECK_NE(&from, this);
-  const Force* source =
-    ::google::protobuf::internal::dynamic_cast_if_available<const Force*>(
+  const ForceMessage* source =
+    ::google::protobuf::internal::dynamic_cast_if_available<const ForceMessage*>(
       &from);
   if (source == NULL) {
     ::google::protobuf::internal::ReflectionOps::Merge(from, this);
@@ -778,7 +882,7 @@ void Force::MergeFrom(const ::google::protobuf::Message& from) {
   }
 }
 
-void Force::MergeFrom(const Force& from) {
+void ForceMessage::MergeFrom(const ForceMessage& from) {
   GOOGLE_CHECK_NE(&from, this);
   if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
     if (from.has_x()) {
@@ -794,25 +898,25 @@ void Force::MergeFrom(const Force& from) {
   mutable_unknown_fields()->MergeFrom(from.unknown_fields());
 }
 
-void Force::CopyFrom(const ::google::protobuf::Message& from) {
+void ForceMessage::CopyFrom(const ::google::protobuf::Message& from) {
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-void Force::CopyFrom(const Force& from) {
+void ForceMessage::CopyFrom(const ForceMessage& from) {
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-bool Force::IsInitialized() const {
+bool ForceMessage::IsInitialized() const {
   if ((_has_bits_[0] & 0x00000007) != 0x00000007) return false;
 
   return true;
 }
 
-void Force::Swap(Force* other) {
+void ForceMessage::Swap(ForceMessage* other) {
   if (other != this) {
     std::swap(x_, other->x_);
     std::swap(y_, other->y_);
@@ -823,11 +927,11 @@ void Force::Swap(Force* other) {
   }
 }
 
-::google::protobuf::Metadata Force::GetMetadata() const {
+::google::protobuf::Metadata ForceMessage::GetMetadata() const {
   protobuf_AssignDescriptorsOnce();
   ::google::protobuf::Metadata metadata;
-  metadata.descriptor = Force_descriptor_;
-  metadata.reflection = Force_reflection_;
+  metadata.descriptor = ForceMessage_descriptor_;
+  metadata.reflection = ForceMessage_reflection_;
   return metadata;
 }
 
@@ -835,26 +939,26 @@ void Force::Swap(Force* other) {
 // ===================================================================
 
 #ifndef _MSC_VER
-const int Point::kXFieldNumber;
-const int Point::kYFieldNumber;
-const int Point::kZFieldNumber;
+const int PointMessage::kXFieldNumber;
+const int PointMessage::kYFieldNumber;
+const int PointMessage::kZFieldNumber;
 #endif  // !_MSC_VER
 
-Point::Point()
+PointMessage::PointMessage()
   : ::google::protobuf::Message() {
   SharedCtor();
 }
 
-void Point::InitAsDefaultInstance() {
+void PointMessage::InitAsDefaultInstance() {
 }
 
-Point::Point(const Point& from)
+PointMessage::PointMessage(const PointMessage& from)
   : ::google::protobuf::Message() {
   SharedCtor();
   MergeFrom(from);
 }
 
-void Point::SharedCtor() {
+void PointMessage::SharedCtor() {
   _cached_size_ = 0;
   x_ = 0;
   y_ = 0;
@@ -862,37 +966,37 @@ void Point::SharedCtor() {
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
-Point::~Point() {
+PointMessage::~PointMessage() {
   SharedDtor();
 }
 
-void Point::SharedDtor() {
+void PointMessage::SharedDtor() {
   if (this != default_instance_) {
   }
 }
 
-void Point::SetCachedSize(int size) const {
+void PointMessage::SetCachedSize(int size) const {
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
   _cached_size_ = size;
   GOOGLE_SAFE_CONCURRENT_WRITES_END();
 }
-const ::google::protobuf::Descriptor* Point::descriptor() {
+const ::google::protobuf::Descriptor* PointMessage::descriptor() {
   protobuf_AssignDescriptorsOnce();
-  return Point_descriptor_;
+  return PointMessage_descriptor_;
 }
 
-const Point& Point::default_instance() {
+const PointMessage& PointMessage::default_instance() {
   if (default_instance_ == NULL) protobuf_AddDesc_GameEngine_2eproto();
   return *default_instance_;
 }
 
-Point* Point::default_instance_ = NULL;
+PointMessage* PointMessage::default_instance_ = NULL;
 
-Point* Point::New() const {
-  return new Point;
+PointMessage* PointMessage::New() const {
+  return new PointMessage;
 }
 
-void Point::Clear() {
+void PointMessage::Clear() {
   if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
     x_ = 0;
     y_ = 0;
@@ -902,7 +1006,7 @@ void Point::Clear() {
   mutable_unknown_fields()->Clear();
 }
 
-bool Point::MergePartialFromCodedStream(
+bool PointMessage::MergePartialFromCodedStream(
     ::google::protobuf::io::CodedInputStream* input) {
 #define DO_(EXPRESSION) if (!(EXPRESSION)) return false
   ::google::protobuf::uint32 tag;
@@ -971,7 +1075,7 @@ bool Point::MergePartialFromCodedStream(
 #undef DO_
 }
 
-void Point::SerializeWithCachedSizes(
+void PointMessage::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // required float x = 1;
   if (has_x()) {
@@ -994,7 +1098,7 @@ void Point::SerializeWithCachedSizes(
   }
 }
 
-::google::protobuf::uint8* Point::SerializeWithCachedSizesToArray(
+::google::protobuf::uint8* PointMessage::SerializeWithCachedSizesToArray(
     ::google::protobuf::uint8* target) const {
   // required float x = 1;
   if (has_x()) {
@@ -1018,7 +1122,7 @@ void Point::SerializeWithCachedSizes(
   return target;
 }
 
-int Point::ByteSize() const {
+int PointMessage::ByteSize() const {
   int total_size = 0;
 
   if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
@@ -1049,10 +1153,10 @@ int Point::ByteSize() const {
   return total_size;
 }
 
-void Point::MergeFrom(const ::google::protobuf::Message& from) {
+void PointMessage::MergeFrom(const ::google::protobuf::Message& from) {
   GOOGLE_CHECK_NE(&from, this);
-  const Point* source =
-    ::google::protobuf::internal::dynamic_cast_if_available<const Point*>(
+  const PointMessage* source =
+    ::google::protobuf::internal::dynamic_cast_if_available<const PointMessage*>(
       &from);
   if (source == NULL) {
     ::google::protobuf::internal::ReflectionOps::Merge(from, this);
@@ -1061,7 +1165,7 @@ void Point::MergeFrom(const ::google::protobuf::Message& from) {
   }
 }
 
-void Point::MergeFrom(const Point& from) {
+void PointMessage::MergeFrom(const PointMessage& from) {
   GOOGLE_CHECK_NE(&from, this);
   if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
     if (from.has_x()) {
@@ -1077,25 +1181,25 @@ void Point::MergeFrom(const Point& from) {
   mutable_unknown_fields()->MergeFrom(from.unknown_fields());
 }
 
-void Point::CopyFrom(const ::google::protobuf::Message& from) {
+void PointMessage::CopyFrom(const ::google::protobuf::Message& from) {
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-void Point::CopyFrom(const Point& from) {
+void PointMessage::CopyFrom(const PointMessage& from) {
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-bool Point::IsInitialized() const {
+bool PointMessage::IsInitialized() const {
   if ((_has_bits_[0] & 0x00000007) != 0x00000007) return false;
 
   return true;
 }
 
-void Point::Swap(Point* other) {
+void PointMessage::Swap(PointMessage* other) {
   if (other != this) {
     std::swap(x_, other->x_);
     std::swap(y_, other->y_);
@@ -1106,11 +1210,11 @@ void Point::Swap(Point* other) {
   }
 }
 
-::google::protobuf::Metadata Point::GetMetadata() const {
+::google::protobuf::Metadata PointMessage::GetMetadata() const {
   protobuf_AssignDescriptorsOnce();
   ::google::protobuf::Metadata metadata;
-  metadata.descriptor = Point_descriptor_;
-  metadata.reflection = Point_reflection_;
+  metadata.descriptor = PointMessage_descriptor_;
+  metadata.reflection = PointMessage_reflection_;
   return metadata;
 }
 
@@ -1118,110 +1222,124 @@ void Point::Swap(Point* other) {
 // ===================================================================
 
 #ifndef _MSC_VER
-const int Aabb::kCenterFieldNumber;
-const int Aabb::kRadiiFieldNumber;
+const int CollidableObjectMessage::kIDFieldNumber;
+const int CollidableObjectMessage::kCenterFieldNumber;
+const int CollidableObjectMessage::kMovableFieldNumber;
 #endif  // !_MSC_VER
 
-Aabb::Aabb()
+CollidableObjectMessage::CollidableObjectMessage()
   : ::google::protobuf::Message() {
   SharedCtor();
 }
 
-void Aabb::InitAsDefaultInstance() {
-  center_ = const_cast< ::net::Point*>(&::net::Point::default_instance());
+void CollidableObjectMessage::InitAsDefaultInstance() {
+  center_ = const_cast< ::net::PointMessage*>(&::net::PointMessage::default_instance());
 }
 
-Aabb::Aabb(const Aabb& from)
+CollidableObjectMessage::CollidableObjectMessage(const CollidableObjectMessage& from)
   : ::google::protobuf::Message() {
   SharedCtor();
   MergeFrom(from);
 }
 
-void Aabb::SharedCtor() {
+void CollidableObjectMessage::SharedCtor() {
   _cached_size_ = 0;
+  id_ = 0;
   center_ = NULL;
+  movable_ = 0;
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
-Aabb::~Aabb() {
+CollidableObjectMessage::~CollidableObjectMessage() {
   SharedDtor();
 }
 
-void Aabb::SharedDtor() {
+void CollidableObjectMessage::SharedDtor() {
   if (this != default_instance_) {
     delete center_;
   }
 }
 
-void Aabb::SetCachedSize(int size) const {
+void CollidableObjectMessage::SetCachedSize(int size) const {
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
   _cached_size_ = size;
   GOOGLE_SAFE_CONCURRENT_WRITES_END();
 }
-const ::google::protobuf::Descriptor* Aabb::descriptor() {
+const ::google::protobuf::Descriptor* CollidableObjectMessage::descriptor() {
   protobuf_AssignDescriptorsOnce();
-  return Aabb_descriptor_;
+  return CollidableObjectMessage_descriptor_;
 }
 
-const Aabb& Aabb::default_instance() {
+const CollidableObjectMessage& CollidableObjectMessage::default_instance() {
   if (default_instance_ == NULL) protobuf_AddDesc_GameEngine_2eproto();
   return *default_instance_;
 }
 
-Aabb* Aabb::default_instance_ = NULL;
+CollidableObjectMessage* CollidableObjectMessage::default_instance_ = NULL;
 
-Aabb* Aabb::New() const {
-  return new Aabb;
+CollidableObjectMessage* CollidableObjectMessage::New() const {
+  return new CollidableObjectMessage;
 }
 
-void Aabb::Clear() {
+void CollidableObjectMessage::Clear() {
   if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    id_ = 0;
     if (has_center()) {
-      if (center_ != NULL) center_->::net::Point::Clear();
+      if (center_ != NULL) center_->::net::PointMessage::Clear();
     }
+    movable_ = 0;
   }
-  radii_.Clear();
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
   mutable_unknown_fields()->Clear();
 }
 
-bool Aabb::MergePartialFromCodedStream(
+bool CollidableObjectMessage::MergePartialFromCodedStream(
     ::google::protobuf::io::CodedInputStream* input) {
 #define DO_(EXPRESSION) if (!(EXPRESSION)) return false
   ::google::protobuf::uint32 tag;
   while ((tag = input->ReadTag()) != 0) {
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // required .net.Point center = 1;
+      // required int32 ID = 1;
       case 1: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &id_)));
+          set_has_id();
+        } else {
+          goto handle_uninterpreted;
+        }
+        if (input->ExpectTag(18)) goto parse_center;
+        break;
+      }
+
+      // required .net.PointMessage center = 2;
+      case 2: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
+         parse_center:
           DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
                input, mutable_center()));
         } else {
           goto handle_uninterpreted;
         }
-        if (input->ExpectTag(21)) goto parse_radii;
+        if (input->ExpectTag(24)) goto parse_movable;
         break;
       }
 
-      // repeated float radii = 2;
-      case 2: {
+      // required int32 movable = 3;
+      case 3: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
-            ::google::protobuf::internal::WireFormatLite::WIRETYPE_FIXED32) {
-         parse_radii:
-          DO_((::google::protobuf::internal::WireFormatLite::ReadRepeatedPrimitive<
-                   float, ::google::protobuf::internal::WireFormatLite::TYPE_FLOAT>(
-                 1, 21, input, this->mutable_radii())));
-        } else if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag)
-                   == ::google::protobuf::internal::WireFormatLite::
-                      WIRETYPE_LENGTH_DELIMITED) {
-          DO_((::google::protobuf::internal::WireFormatLite::ReadPackedPrimitiveNoInline<
-                   float, ::google::protobuf::internal::WireFormatLite::TYPE_FLOAT>(
-                 input, this->mutable_radii())));
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
+         parse_movable:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &movable_)));
+          set_has_movable();
         } else {
           goto handle_uninterpreted;
         }
-        if (input->ExpectTag(21)) goto parse_radii;
         if (input->ExpectAtEnd()) return true;
         break;
       }
@@ -1242,18 +1360,22 @@ bool Aabb::MergePartialFromCodedStream(
 #undef DO_
 }
 
-void Aabb::SerializeWithCachedSizes(
+void CollidableObjectMessage::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // required .net.Point center = 1;
-  if (has_center()) {
-    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
-      1, this->center(), output);
+  // required int32 ID = 1;
+  if (has_id()) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(1, this->id(), output);
   }
 
-  // repeated float radii = 2;
-  for (int i = 0; i < this->radii_size(); i++) {
-    ::google::protobuf::internal::WireFormatLite::WriteFloat(
-      2, this->radii(i), output);
+  // required .net.PointMessage center = 2;
+  if (has_center()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      2, this->center(), output);
+  }
+
+  // required int32 movable = 3;
+  if (has_movable()) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(3, this->movable(), output);
   }
 
   if (!unknown_fields().empty()) {
@@ -1262,19 +1384,23 @@ void Aabb::SerializeWithCachedSizes(
   }
 }
 
-::google::protobuf::uint8* Aabb::SerializeWithCachedSizesToArray(
+::google::protobuf::uint8* CollidableObjectMessage::SerializeWithCachedSizesToArray(
     ::google::protobuf::uint8* target) const {
-  // required .net.Point center = 1;
+  // required int32 ID = 1;
+  if (has_id()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(1, this->id(), target);
+  }
+
+  // required .net.PointMessage center = 2;
   if (has_center()) {
     target = ::google::protobuf::internal::WireFormatLite::
       WriteMessageNoVirtualToArray(
-        1, this->center(), target);
+        2, this->center(), target);
   }
 
-  // repeated float radii = 2;
-  for (int i = 0; i < this->radii_size(); i++) {
-    target = ::google::protobuf::internal::WireFormatLite::
-      WriteFloatToArray(2, this->radii(i), target);
+  // required int32 movable = 3;
+  if (has_movable()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(3, this->movable(), target);
   }
 
   if (!unknown_fields().empty()) {
@@ -1284,25 +1410,32 @@ void Aabb::SerializeWithCachedSizes(
   return target;
 }
 
-int Aabb::ByteSize() const {
+int CollidableObjectMessage::ByteSize() const {
   int total_size = 0;
 
   if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
-    // required .net.Point center = 1;
+    // required int32 ID = 1;
+    if (has_id()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::Int32Size(
+          this->id());
+    }
+
+    // required .net.PointMessage center = 2;
     if (has_center()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
           this->center());
     }
 
-  }
-  // repeated float radii = 2;
-  {
-    int data_size = 0;
-    data_size = 4 * this->radii_size();
-    total_size += 1 * this->radii_size() + data_size;
-  }
+    // required int32 movable = 3;
+    if (has_movable()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::Int32Size(
+          this->movable());
+    }
 
+  }
   if (!unknown_fields().empty()) {
     total_size +=
       ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
@@ -1314,10 +1447,10 @@ int Aabb::ByteSize() const {
   return total_size;
 }
 
-void Aabb::MergeFrom(const ::google::protobuf::Message& from) {
+void CollidableObjectMessage::MergeFrom(const ::google::protobuf::Message& from) {
   GOOGLE_CHECK_NE(&from, this);
-  const Aabb* source =
-    ::google::protobuf::internal::dynamic_cast_if_available<const Aabb*>(
+  const CollidableObjectMessage* source =
+    ::google::protobuf::internal::dynamic_cast_if_available<const CollidableObjectMessage*>(
       &from);
   if (source == NULL) {
     ::google::protobuf::internal::ReflectionOps::Merge(from, this);
@@ -1326,31 +1459,36 @@ void Aabb::MergeFrom(const ::google::protobuf::Message& from) {
   }
 }
 
-void Aabb::MergeFrom(const Aabb& from) {
+void CollidableObjectMessage::MergeFrom(const CollidableObjectMessage& from) {
   GOOGLE_CHECK_NE(&from, this);
-  radii_.MergeFrom(from.radii_);
   if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    if (from.has_id()) {
+      set_id(from.id());
+    }
     if (from.has_center()) {
-      mutable_center()->::net::Point::MergeFrom(from.center());
+      mutable_center()->::net::PointMessage::MergeFrom(from.center());
+    }
+    if (from.has_movable()) {
+      set_movable(from.movable());
     }
   }
   mutable_unknown_fields()->MergeFrom(from.unknown_fields());
 }
 
-void Aabb::CopyFrom(const ::google::protobuf::Message& from) {
+void CollidableObjectMessage::CopyFrom(const ::google::protobuf::Message& from) {
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-void Aabb::CopyFrom(const Aabb& from) {
+void CollidableObjectMessage::CopyFrom(const CollidableObjectMessage& from) {
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-bool Aabb::IsInitialized() const {
-  if ((_has_bits_[0] & 0x00000001) != 0x00000001) return false;
+bool CollidableObjectMessage::IsInitialized() const {
+  if ((_has_bits_[0] & 0x00000007) != 0x00000007) return false;
 
   if (has_center()) {
     if (!this->center().IsInitialized()) return false;
@@ -1358,21 +1496,22 @@ bool Aabb::IsInitialized() const {
   return true;
 }
 
-void Aabb::Swap(Aabb* other) {
+void CollidableObjectMessage::Swap(CollidableObjectMessage* other) {
   if (other != this) {
+    std::swap(id_, other->id_);
     std::swap(center_, other->center_);
-    radii_.Swap(&other->radii_);
+    std::swap(movable_, other->movable_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
     _unknown_fields_.Swap(&other->_unknown_fields_);
     std::swap(_cached_size_, other->_cached_size_);
   }
 }
 
-::google::protobuf::Metadata Aabb::GetMetadata() const {
+::google::protobuf::Metadata CollidableObjectMessage::GetMetadata() const {
   protobuf_AssignDescriptorsOnce();
   ::google::protobuf::Metadata metadata;
-  metadata.descriptor = Aabb_descriptor_;
-  metadata.reflection = Aabb_reflection_;
+  metadata.descriptor = CollidableObjectMessage_descriptor_;
+  metadata.reflection = CollidableObjectMessage_reflection_;
   return metadata;
 }
 
@@ -1380,67 +1519,398 @@ void Aabb::Swap(Aabb* other) {
 // ===================================================================
 
 #ifndef _MSC_VER
-const int Sphere::kCenterFieldNumber;
-const int Sphere::kRadiusFieldNumber;
+const int AabbMessage::kCollidableObjectFieldNumber;
+const int AabbMessage::kRadiusXFieldNumber;
+const int AabbMessage::kRadiusYFieldNumber;
+const int AabbMessage::kRadiusZFieldNumber;
 #endif  // !_MSC_VER
 
-Sphere::Sphere()
+AabbMessage::AabbMessage()
   : ::google::protobuf::Message() {
   SharedCtor();
 }
 
-void Sphere::InitAsDefaultInstance() {
-  center_ = const_cast< ::net::Point*>(&::net::Point::default_instance());
+void AabbMessage::InitAsDefaultInstance() {
+  collidableobject_ = const_cast< ::net::CollidableObjectMessage*>(&::net::CollidableObjectMessage::default_instance());
 }
 
-Sphere::Sphere(const Sphere& from)
+AabbMessage::AabbMessage(const AabbMessage& from)
   : ::google::protobuf::Message() {
   SharedCtor();
   MergeFrom(from);
 }
 
-void Sphere::SharedCtor() {
+void AabbMessage::SharedCtor() {
   _cached_size_ = 0;
-  center_ = NULL;
-  radius_ = 0;
+  collidableobject_ = NULL;
+  radiusx_ = 0;
+  radiusy_ = 0;
+  radiusz_ = 0;
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
-Sphere::~Sphere() {
+AabbMessage::~AabbMessage() {
   SharedDtor();
 }
 
-void Sphere::SharedDtor() {
+void AabbMessage::SharedDtor() {
   if (this != default_instance_) {
-    delete center_;
+    delete collidableobject_;
   }
 }
 
-void Sphere::SetCachedSize(int size) const {
+void AabbMessage::SetCachedSize(int size) const {
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
   _cached_size_ = size;
   GOOGLE_SAFE_CONCURRENT_WRITES_END();
 }
-const ::google::protobuf::Descriptor* Sphere::descriptor() {
+const ::google::protobuf::Descriptor* AabbMessage::descriptor() {
   protobuf_AssignDescriptorsOnce();
-  return Sphere_descriptor_;
+  return AabbMessage_descriptor_;
 }
 
-const Sphere& Sphere::default_instance() {
+const AabbMessage& AabbMessage::default_instance() {
   if (default_instance_ == NULL) protobuf_AddDesc_GameEngine_2eproto();
   return *default_instance_;
 }
 
-Sphere* Sphere::default_instance_ = NULL;
+AabbMessage* AabbMessage::default_instance_ = NULL;
 
-Sphere* Sphere::New() const {
-  return new Sphere;
+AabbMessage* AabbMessage::New() const {
+  return new AabbMessage;
 }
 
-void Sphere::Clear() {
+void AabbMessage::Clear() {
   if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
-    if (has_center()) {
-      if (center_ != NULL) center_->::net::Point::Clear();
+    if (has_collidableobject()) {
+      if (collidableobject_ != NULL) collidableobject_->::net::CollidableObjectMessage::Clear();
+    }
+    radiusx_ = 0;
+    radiusy_ = 0;
+    radiusz_ = 0;
+  }
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+  mutable_unknown_fields()->Clear();
+}
+
+bool AabbMessage::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!(EXPRESSION)) return false
+  ::google::protobuf::uint32 tag;
+  while ((tag = input->ReadTag()) != 0) {
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // required .net.CollidableObjectMessage collidableObject = 1;
+      case 1: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+               input, mutable_collidableobject()));
+        } else {
+          goto handle_uninterpreted;
+        }
+        if (input->ExpectTag(21)) goto parse_radiusX;
+        break;
+      }
+
+      // required float radiusX = 2;
+      case 2: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_FIXED32) {
+         parse_radiusX:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   float, ::google::protobuf::internal::WireFormatLite::TYPE_FLOAT>(
+                 input, &radiusx_)));
+          set_has_radiusx();
+        } else {
+          goto handle_uninterpreted;
+        }
+        if (input->ExpectTag(29)) goto parse_radiusY;
+        break;
+      }
+
+      // required float radiusY = 3;
+      case 3: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_FIXED32) {
+         parse_radiusY:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   float, ::google::protobuf::internal::WireFormatLite::TYPE_FLOAT>(
+                 input, &radiusy_)));
+          set_has_radiusy();
+        } else {
+          goto handle_uninterpreted;
+        }
+        if (input->ExpectTag(37)) goto parse_radiusZ;
+        break;
+      }
+
+      // required float radiusZ = 4;
+      case 4: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_FIXED32) {
+         parse_radiusZ:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   float, ::google::protobuf::internal::WireFormatLite::TYPE_FLOAT>(
+                 input, &radiusz_)));
+          set_has_radiusz();
+        } else {
+          goto handle_uninterpreted;
+        }
+        if (input->ExpectAtEnd()) return true;
+        break;
+      }
+
+      default: {
+      handle_uninterpreted:
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          return true;
+        }
+        DO_(::google::protobuf::internal::WireFormat::SkipField(
+              input, tag, mutable_unknown_fields()));
+        break;
+      }
+    }
+  }
+  return true;
+#undef DO_
+}
+
+void AabbMessage::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // required .net.CollidableObjectMessage collidableObject = 1;
+  if (has_collidableobject()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      1, this->collidableobject(), output);
+  }
+
+  // required float radiusX = 2;
+  if (has_radiusx()) {
+    ::google::protobuf::internal::WireFormatLite::WriteFloat(2, this->radiusx(), output);
+  }
+
+  // required float radiusY = 3;
+  if (has_radiusy()) {
+    ::google::protobuf::internal::WireFormatLite::WriteFloat(3, this->radiusy(), output);
+  }
+
+  // required float radiusZ = 4;
+  if (has_radiusz()) {
+    ::google::protobuf::internal::WireFormatLite::WriteFloat(4, this->radiusz(), output);
+  }
+
+  if (!unknown_fields().empty()) {
+    ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
+        unknown_fields(), output);
+  }
+}
+
+::google::protobuf::uint8* AabbMessage::SerializeWithCachedSizesToArray(
+    ::google::protobuf::uint8* target) const {
+  // required .net.CollidableObjectMessage collidableObject = 1;
+  if (has_collidableobject()) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteMessageNoVirtualToArray(
+        1, this->collidableobject(), target);
+  }
+
+  // required float radiusX = 2;
+  if (has_radiusx()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteFloatToArray(2, this->radiusx(), target);
+  }
+
+  // required float radiusY = 3;
+  if (has_radiusy()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteFloatToArray(3, this->radiusy(), target);
+  }
+
+  // required float radiusZ = 4;
+  if (has_radiusz()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteFloatToArray(4, this->radiusz(), target);
+  }
+
+  if (!unknown_fields().empty()) {
+    target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
+        unknown_fields(), target);
+  }
+  return target;
+}
+
+int AabbMessage::ByteSize() const {
+  int total_size = 0;
+
+  if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    // required .net.CollidableObjectMessage collidableObject = 1;
+    if (has_collidableobject()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+          this->collidableobject());
+    }
+
+    // required float radiusX = 2;
+    if (has_radiusx()) {
+      total_size += 1 + 4;
+    }
+
+    // required float radiusY = 3;
+    if (has_radiusy()) {
+      total_size += 1 + 4;
+    }
+
+    // required float radiusZ = 4;
+    if (has_radiusz()) {
+      total_size += 1 + 4;
+    }
+
+  }
+  if (!unknown_fields().empty()) {
+    total_size +=
+      ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
+        unknown_fields());
+  }
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = total_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void AabbMessage::MergeFrom(const ::google::protobuf::Message& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  const AabbMessage* source =
+    ::google::protobuf::internal::dynamic_cast_if_available<const AabbMessage*>(
+      &from);
+  if (source == NULL) {
+    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
+  } else {
+    MergeFrom(*source);
+  }
+}
+
+void AabbMessage::MergeFrom(const AabbMessage& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    if (from.has_collidableobject()) {
+      mutable_collidableobject()->::net::CollidableObjectMessage::MergeFrom(from.collidableobject());
+    }
+    if (from.has_radiusx()) {
+      set_radiusx(from.radiusx());
+    }
+    if (from.has_radiusy()) {
+      set_radiusy(from.radiusy());
+    }
+    if (from.has_radiusz()) {
+      set_radiusz(from.radiusz());
+    }
+  }
+  mutable_unknown_fields()->MergeFrom(from.unknown_fields());
+}
+
+void AabbMessage::CopyFrom(const ::google::protobuf::Message& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void AabbMessage::CopyFrom(const AabbMessage& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool AabbMessage::IsInitialized() const {
+  if ((_has_bits_[0] & 0x0000000f) != 0x0000000f) return false;
+
+  if (has_collidableobject()) {
+    if (!this->collidableobject().IsInitialized()) return false;
+  }
+  return true;
+}
+
+void AabbMessage::Swap(AabbMessage* other) {
+  if (other != this) {
+    std::swap(collidableobject_, other->collidableobject_);
+    std::swap(radiusx_, other->radiusx_);
+    std::swap(radiusy_, other->radiusy_);
+    std::swap(radiusz_, other->radiusz_);
+    std::swap(_has_bits_[0], other->_has_bits_[0]);
+    _unknown_fields_.Swap(&other->_unknown_fields_);
+    std::swap(_cached_size_, other->_cached_size_);
+  }
+}
+
+::google::protobuf::Metadata AabbMessage::GetMetadata() const {
+  protobuf_AssignDescriptorsOnce();
+  ::google::protobuf::Metadata metadata;
+  metadata.descriptor = AabbMessage_descriptor_;
+  metadata.reflection = AabbMessage_reflection_;
+  return metadata;
+}
+
+
+// ===================================================================
+
+#ifndef _MSC_VER
+const int SphereMessage::kCollidableObjectFieldNumber;
+const int SphereMessage::kRadiusFieldNumber;
+#endif  // !_MSC_VER
+
+SphereMessage::SphereMessage()
+  : ::google::protobuf::Message() {
+  SharedCtor();
+}
+
+void SphereMessage::InitAsDefaultInstance() {
+  collidableobject_ = const_cast< ::net::CollidableObjectMessage*>(&::net::CollidableObjectMessage::default_instance());
+}
+
+SphereMessage::SphereMessage(const SphereMessage& from)
+  : ::google::protobuf::Message() {
+  SharedCtor();
+  MergeFrom(from);
+}
+
+void SphereMessage::SharedCtor() {
+  _cached_size_ = 0;
+  collidableobject_ = NULL;
+  radius_ = 0;
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+}
+
+SphereMessage::~SphereMessage() {
+  SharedDtor();
+}
+
+void SphereMessage::SharedDtor() {
+  if (this != default_instance_) {
+    delete collidableobject_;
+  }
+}
+
+void SphereMessage::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const ::google::protobuf::Descriptor* SphereMessage::descriptor() {
+  protobuf_AssignDescriptorsOnce();
+  return SphereMessage_descriptor_;
+}
+
+const SphereMessage& SphereMessage::default_instance() {
+  if (default_instance_ == NULL) protobuf_AddDesc_GameEngine_2eproto();
+  return *default_instance_;
+}
+
+SphereMessage* SphereMessage::default_instance_ = NULL;
+
+SphereMessage* SphereMessage::New() const {
+  return new SphereMessage;
+}
+
+void SphereMessage::Clear() {
+  if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    if (has_collidableobject()) {
+      if (collidableobject_ != NULL) collidableobject_->::net::CollidableObjectMessage::Clear();
     }
     radius_ = 0;
   }
@@ -1448,18 +1918,18 @@ void Sphere::Clear() {
   mutable_unknown_fields()->Clear();
 }
 
-bool Sphere::MergePartialFromCodedStream(
+bool SphereMessage::MergePartialFromCodedStream(
     ::google::protobuf::io::CodedInputStream* input) {
 #define DO_(EXPRESSION) if (!(EXPRESSION)) return false
   ::google::protobuf::uint32 tag;
   while ((tag = input->ReadTag()) != 0) {
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // required .net.Point center = 1;
+      // required .net.CollidableObjectMessage collidableObject = 1;
       case 1: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
           DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
-               input, mutable_center()));
+               input, mutable_collidableobject()));
         } else {
           goto handle_uninterpreted;
         }
@@ -1499,12 +1969,12 @@ bool Sphere::MergePartialFromCodedStream(
 #undef DO_
 }
 
-void Sphere::SerializeWithCachedSizes(
+void SphereMessage::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // required .net.Point center = 1;
-  if (has_center()) {
+  // required .net.CollidableObjectMessage collidableObject = 1;
+  if (has_collidableobject()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
-      1, this->center(), output);
+      1, this->collidableobject(), output);
   }
 
   // required float radius = 2;
@@ -1518,13 +1988,13 @@ void Sphere::SerializeWithCachedSizes(
   }
 }
 
-::google::protobuf::uint8* Sphere::SerializeWithCachedSizesToArray(
+::google::protobuf::uint8* SphereMessage::SerializeWithCachedSizesToArray(
     ::google::protobuf::uint8* target) const {
-  // required .net.Point center = 1;
-  if (has_center()) {
+  // required .net.CollidableObjectMessage collidableObject = 1;
+  if (has_collidableobject()) {
     target = ::google::protobuf::internal::WireFormatLite::
       WriteMessageNoVirtualToArray(
-        1, this->center(), target);
+        1, this->collidableobject(), target);
   }
 
   // required float radius = 2;
@@ -1539,15 +2009,15 @@ void Sphere::SerializeWithCachedSizes(
   return target;
 }
 
-int Sphere::ByteSize() const {
+int SphereMessage::ByteSize() const {
   int total_size = 0;
 
   if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
-    // required .net.Point center = 1;
-    if (has_center()) {
+    // required .net.CollidableObjectMessage collidableObject = 1;
+    if (has_collidableobject()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
-          this->center());
+          this->collidableobject());
     }
 
     // required float radius = 2;
@@ -1567,10 +2037,10 @@ int Sphere::ByteSize() const {
   return total_size;
 }
 
-void Sphere::MergeFrom(const ::google::protobuf::Message& from) {
+void SphereMessage::MergeFrom(const ::google::protobuf::Message& from) {
   GOOGLE_CHECK_NE(&from, this);
-  const Sphere* source =
-    ::google::protobuf::internal::dynamic_cast_if_available<const Sphere*>(
+  const SphereMessage* source =
+    ::google::protobuf::internal::dynamic_cast_if_available<const SphereMessage*>(
       &from);
   if (source == NULL) {
     ::google::protobuf::internal::ReflectionOps::Merge(from, this);
@@ -1579,11 +2049,11 @@ void Sphere::MergeFrom(const ::google::protobuf::Message& from) {
   }
 }
 
-void Sphere::MergeFrom(const Sphere& from) {
+void SphereMessage::MergeFrom(const SphereMessage& from) {
   GOOGLE_CHECK_NE(&from, this);
   if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
-    if (from.has_center()) {
-      mutable_center()->::net::Point::MergeFrom(from.center());
+    if (from.has_collidableobject()) {
+      mutable_collidableobject()->::net::CollidableObjectMessage::MergeFrom(from.collidableobject());
     }
     if (from.has_radius()) {
       set_radius(from.radius());
@@ -1592,30 +2062,30 @@ void Sphere::MergeFrom(const Sphere& from) {
   mutable_unknown_fields()->MergeFrom(from.unknown_fields());
 }
 
-void Sphere::CopyFrom(const ::google::protobuf::Message& from) {
+void SphereMessage::CopyFrom(const ::google::protobuf::Message& from) {
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-void Sphere::CopyFrom(const Sphere& from) {
+void SphereMessage::CopyFrom(const SphereMessage& from) {
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-bool Sphere::IsInitialized() const {
+bool SphereMessage::IsInitialized() const {
   if ((_has_bits_[0] & 0x00000003) != 0x00000003) return false;
 
-  if (has_center()) {
-    if (!this->center().IsInitialized()) return false;
+  if (has_collidableobject()) {
+    if (!this->collidableobject().IsInitialized()) return false;
   }
   return true;
 }
 
-void Sphere::Swap(Sphere* other) {
+void SphereMessage::Swap(SphereMessage* other) {
   if (other != this) {
-    std::swap(center_, other->center_);
+    std::swap(collidableobject_, other->collidableobject_);
     std::swap(radius_, other->radius_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
     _unknown_fields_.Swap(&other->_unknown_fields_);
@@ -1623,142 +2093,173 @@ void Sphere::Swap(Sphere* other) {
   }
 }
 
-::google::protobuf::Metadata Sphere::GetMetadata() const {
+::google::protobuf::Metadata SphereMessage::GetMetadata() const {
   protobuf_AssignDescriptorsOnce();
   ::google::protobuf::Metadata metadata;
-  metadata.descriptor = Sphere_descriptor_;
-  metadata.reflection = Sphere_reflection_;
+  metadata.descriptor = SphereMessage_descriptor_;
+  metadata.reflection = SphereMessage_reflection_;
   return metadata;
 }
 
 
 // ===================================================================
 
+const ::google::protobuf::EnumDescriptor* PhysicsInfoMessage_PhysicsInfoMessageType_descriptor() {
+  protobuf_AssignDescriptorsOnce();
+  return PhysicsInfoMessage_PhysicsInfoMessageType_descriptor_;
+}
+bool PhysicsInfoMessage_PhysicsInfoMessageType_IsValid(int value) {
+  switch(value) {
+    case 0:
+    case 1:
+      return true;
+    default:
+      return false;
+  }
+}
+
 #ifndef _MSC_VER
-const int PhysicsInfo::kMassFieldNumber;
-const int PhysicsInfo::kAabbObjectFieldNumber;
-const int PhysicsInfo::kSphereObjectFieldNumber;
-const int PhysicsInfo::kLinearVelocityFieldNumber;
-const int PhysicsInfo::kAngularVelocityFieldNumber;
-const int PhysicsInfo::kAngularPositionFieldNumber;
-const int PhysicsInfo::kLinearForceFieldNumber;
-const int PhysicsInfo::kAngularForceFieldNumber;
+const PhysicsInfoMessage_PhysicsInfoMessageType PhysicsInfoMessage::AABB;
+const PhysicsInfoMessage_PhysicsInfoMessageType PhysicsInfoMessage::SPHERE;
+const PhysicsInfoMessage_PhysicsInfoMessageType PhysicsInfoMessage::PhysicsInfoMessageType_MIN;
+const PhysicsInfoMessage_PhysicsInfoMessageType PhysicsInfoMessage::PhysicsInfoMessageType_MAX;
+const int PhysicsInfoMessage::PhysicsInfoMessageType_ARRAYSIZE;
+#endif  // _MSC_VER
+#ifndef _MSC_VER
+const int PhysicsInfoMessage::kPhysicsInfoMessageTypeFieldNumber;
+const int PhysicsInfoMessage::kAabbObjectFieldNumber;
+const int PhysicsInfoMessage::kSphereObjectFieldNumber;
+const int PhysicsInfoMessage::kMassFieldNumber;
+const int PhysicsInfoMessage::kLinearVelocityFieldNumber;
+const int PhysicsInfoMessage::kLinearForceFieldNumber;
+const int PhysicsInfoMessage::kAngularVelocityFieldNumber;
+const int PhysicsInfoMessage::kAngularForceFieldNumber;
+const int PhysicsInfoMessage::kAngularPositionFieldNumber;
 #endif  // !_MSC_VER
 
-PhysicsInfo::PhysicsInfo()
+PhysicsInfoMessage::PhysicsInfoMessage()
   : ::google::protobuf::Message() {
   SharedCtor();
 }
 
-void PhysicsInfo::InitAsDefaultInstance() {
-  aabbobject_ = const_cast< ::net::Aabb*>(&::net::Aabb::default_instance());
-  sphereobject_ = const_cast< ::net::Sphere*>(&::net::Sphere::default_instance());
-  linearvelocity_ = const_cast< ::net::Velocity*>(&::net::Velocity::default_instance());
-  angularvelocity_ = const_cast< ::net::Velocity*>(&::net::Velocity::default_instance());
-  angularposition_ = const_cast< ::net::Point*>(&::net::Point::default_instance());
-  linearforce_ = const_cast< ::net::Force*>(&::net::Force::default_instance());
-  angularforce_ = const_cast< ::net::Force*>(&::net::Force::default_instance());
+void PhysicsInfoMessage::InitAsDefaultInstance() {
+  aabbobject_ = const_cast< ::net::AabbMessage*>(&::net::AabbMessage::default_instance());
+  sphereobject_ = const_cast< ::net::SphereMessage*>(&::net::SphereMessage::default_instance());
+  linearvelocity_ = const_cast< ::net::VelocityMessage*>(&::net::VelocityMessage::default_instance());
+  linearforce_ = const_cast< ::net::ForceMessage*>(&::net::ForceMessage::default_instance());
+  angularvelocity_ = const_cast< ::net::VelocityMessage*>(&::net::VelocityMessage::default_instance());
+  angularforce_ = const_cast< ::net::ForceMessage*>(&::net::ForceMessage::default_instance());
+  angularposition_ = const_cast< ::net::PointMessage*>(&::net::PointMessage::default_instance());
 }
 
-PhysicsInfo::PhysicsInfo(const PhysicsInfo& from)
+PhysicsInfoMessage::PhysicsInfoMessage(const PhysicsInfoMessage& from)
   : ::google::protobuf::Message() {
   SharedCtor();
   MergeFrom(from);
 }
 
-void PhysicsInfo::SharedCtor() {
+void PhysicsInfoMessage::SharedCtor() {
   _cached_size_ = 0;
-  mass_ = 0;
+  physicsinfomessagetype_ = 0;
   aabbobject_ = NULL;
   sphereobject_ = NULL;
+  mass_ = 0;
   linearvelocity_ = NULL;
-  angularvelocity_ = NULL;
-  angularposition_ = NULL;
   linearforce_ = NULL;
+  angularvelocity_ = NULL;
   angularforce_ = NULL;
+  angularposition_ = NULL;
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
-PhysicsInfo::~PhysicsInfo() {
+PhysicsInfoMessage::~PhysicsInfoMessage() {
   SharedDtor();
 }
 
-void PhysicsInfo::SharedDtor() {
+void PhysicsInfoMessage::SharedDtor() {
   if (this != default_instance_) {
     delete aabbobject_;
     delete sphereobject_;
     delete linearvelocity_;
-    delete angularvelocity_;
-    delete angularposition_;
     delete linearforce_;
+    delete angularvelocity_;
     delete angularforce_;
+    delete angularposition_;
   }
 }
 
-void PhysicsInfo::SetCachedSize(int size) const {
+void PhysicsInfoMessage::SetCachedSize(int size) const {
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
   _cached_size_ = size;
   GOOGLE_SAFE_CONCURRENT_WRITES_END();
 }
-const ::google::protobuf::Descriptor* PhysicsInfo::descriptor() {
+const ::google::protobuf::Descriptor* PhysicsInfoMessage::descriptor() {
   protobuf_AssignDescriptorsOnce();
-  return PhysicsInfo_descriptor_;
+  return PhysicsInfoMessage_descriptor_;
 }
 
-const PhysicsInfo& PhysicsInfo::default_instance() {
+const PhysicsInfoMessage& PhysicsInfoMessage::default_instance() {
   if (default_instance_ == NULL) protobuf_AddDesc_GameEngine_2eproto();
   return *default_instance_;
 }
 
-PhysicsInfo* PhysicsInfo::default_instance_ = NULL;
+PhysicsInfoMessage* PhysicsInfoMessage::default_instance_ = NULL;
 
-PhysicsInfo* PhysicsInfo::New() const {
-  return new PhysicsInfo;
+PhysicsInfoMessage* PhysicsInfoMessage::New() const {
+  return new PhysicsInfoMessage;
 }
 
-void PhysicsInfo::Clear() {
+void PhysicsInfoMessage::Clear() {
   if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
-    mass_ = 0;
+    physicsinfomessagetype_ = 0;
     if (has_aabbobject()) {
-      if (aabbobject_ != NULL) aabbobject_->::net::Aabb::Clear();
+      if (aabbobject_ != NULL) aabbobject_->::net::AabbMessage::Clear();
     }
     if (has_sphereobject()) {
-      if (sphereobject_ != NULL) sphereobject_->::net::Sphere::Clear();
+      if (sphereobject_ != NULL) sphereobject_->::net::SphereMessage::Clear();
     }
+    mass_ = 0;
     if (has_linearvelocity()) {
-      if (linearvelocity_ != NULL) linearvelocity_->::net::Velocity::Clear();
-    }
-    if (has_angularvelocity()) {
-      if (angularvelocity_ != NULL) angularvelocity_->::net::Velocity::Clear();
-    }
-    if (has_angularposition()) {
-      if (angularposition_ != NULL) angularposition_->::net::Point::Clear();
+      if (linearvelocity_ != NULL) linearvelocity_->::net::VelocityMessage::Clear();
     }
     if (has_linearforce()) {
-      if (linearforce_ != NULL) linearforce_->::net::Force::Clear();
+      if (linearforce_ != NULL) linearforce_->::net::ForceMessage::Clear();
+    }
+    if (has_angularvelocity()) {
+      if (angularvelocity_ != NULL) angularvelocity_->::net::VelocityMessage::Clear();
     }
     if (has_angularforce()) {
-      if (angularforce_ != NULL) angularforce_->::net::Force::Clear();
+      if (angularforce_ != NULL) angularforce_->::net::ForceMessage::Clear();
+    }
+  }
+  if (_has_bits_[8 / 32] & (0xffu << (8 % 32))) {
+    if (has_angularposition()) {
+      if (angularposition_ != NULL) angularposition_->::net::PointMessage::Clear();
     }
   }
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
   mutable_unknown_fields()->Clear();
 }
 
-bool PhysicsInfo::MergePartialFromCodedStream(
+bool PhysicsInfoMessage::MergePartialFromCodedStream(
     ::google::protobuf::io::CodedInputStream* input) {
 #define DO_(EXPRESSION) if (!(EXPRESSION)) return false
   ::google::protobuf::uint32 tag;
   while ((tag = input->ReadTag()) != 0) {
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // required float mass = 1;
+      // required .net.PhysicsInfoMessage.PhysicsInfoMessageType physicsInfoMessageType = 1;
       case 1: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
-            ::google::protobuf::internal::WireFormatLite::WIRETYPE_FIXED32) {
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
+          int value;
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   float, ::google::protobuf::internal::WireFormatLite::TYPE_FLOAT>(
-                 input, &mass_)));
-          set_has_mass();
+                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
+                 input, &value)));
+          if (::net::PhysicsInfoMessage_PhysicsInfoMessageType_IsValid(value)) {
+            set_physicsinfomessagetype(static_cast< ::net::PhysicsInfoMessage_PhysicsInfoMessageType >(value));
+          } else {
+            mutable_unknown_fields()->AddVarint(1, value);
+          }
         } else {
           goto handle_uninterpreted;
         }
@@ -1766,7 +2267,7 @@ bool PhysicsInfo::MergePartialFromCodedStream(
         break;
       }
 
-      // required .net.Aabb aabbObject = 2;
+      // optional .net.AabbMessage aabbObject = 2;
       case 2: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
@@ -1780,7 +2281,7 @@ bool PhysicsInfo::MergePartialFromCodedStream(
         break;
       }
 
-      // required .net.Sphere sphereObject = 3;
+      // optional .net.SphereMessage sphereObject = 3;
       case 3: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
@@ -1790,12 +2291,28 @@ bool PhysicsInfo::MergePartialFromCodedStream(
         } else {
           goto handle_uninterpreted;
         }
-        if (input->ExpectTag(34)) goto parse_linearVelocity;
+        if (input->ExpectTag(37)) goto parse_mass;
         break;
       }
 
-      // required .net.Velocity linearVelocity = 4;
+      // required float mass = 4;
       case 4: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_FIXED32) {
+         parse_mass:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   float, ::google::protobuf::internal::WireFormatLite::TYPE_FLOAT>(
+                 input, &mass_)));
+          set_has_mass();
+        } else {
+          goto handle_uninterpreted;
+        }
+        if (input->ExpectTag(42)) goto parse_linearVelocity;
+        break;
+      }
+
+      // required .net.VelocityMessage linearVelocity = 5;
+      case 5: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
          parse_linearVelocity:
@@ -1804,40 +2321,12 @@ bool PhysicsInfo::MergePartialFromCodedStream(
         } else {
           goto handle_uninterpreted;
         }
-        if (input->ExpectTag(42)) goto parse_angularVelocity;
+        if (input->ExpectTag(50)) goto parse_linearForce;
         break;
       }
 
-      // required .net.Velocity angularVelocity = 5;
-      case 5: {
-        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
-            ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
-         parse_angularVelocity:
-          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
-               input, mutable_angularvelocity()));
-        } else {
-          goto handle_uninterpreted;
-        }
-        if (input->ExpectTag(50)) goto parse_angularPosition;
-        break;
-      }
-
-      // required .net.Point angularPosition = 6;
+      // required .net.ForceMessage linearForce = 6;
       case 6: {
-        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
-            ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
-         parse_angularPosition:
-          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
-               input, mutable_angularposition()));
-        } else {
-          goto handle_uninterpreted;
-        }
-        if (input->ExpectTag(58)) goto parse_linearForce;
-        break;
-      }
-
-      // required .net.Force linearForce = 7;
-      case 7: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
          parse_linearForce:
@@ -1846,17 +2335,45 @@ bool PhysicsInfo::MergePartialFromCodedStream(
         } else {
           goto handle_uninterpreted;
         }
+        if (input->ExpectTag(58)) goto parse_angularVelocity;
+        break;
+      }
+
+      // required .net.VelocityMessage angularVelocity = 7;
+      case 7: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
+         parse_angularVelocity:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+               input, mutable_angularvelocity()));
+        } else {
+          goto handle_uninterpreted;
+        }
         if (input->ExpectTag(66)) goto parse_angularForce;
         break;
       }
 
-      // required .net.Force angularForce = 8;
+      // required .net.ForceMessage angularForce = 8;
       case 8: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
          parse_angularForce:
           DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
                input, mutable_angularforce()));
+        } else {
+          goto handle_uninterpreted;
+        }
+        if (input->ExpectTag(74)) goto parse_angularPosition;
+        break;
+      }
+
+      // required .net.PointMessage angularPosition = 9;
+      case 9: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
+         parse_angularPosition:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+               input, mutable_angularposition()));
         } else {
           goto handle_uninterpreted;
         }
@@ -1880,53 +2397,59 @@ bool PhysicsInfo::MergePartialFromCodedStream(
 #undef DO_
 }
 
-void PhysicsInfo::SerializeWithCachedSizes(
+void PhysicsInfoMessage::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // required float mass = 1;
-  if (has_mass()) {
-    ::google::protobuf::internal::WireFormatLite::WriteFloat(1, this->mass(), output);
+  // required .net.PhysicsInfoMessage.PhysicsInfoMessageType physicsInfoMessageType = 1;
+  if (has_physicsinfomessagetype()) {
+    ::google::protobuf::internal::WireFormatLite::WriteEnum(
+      1, this->physicsinfomessagetype(), output);
   }
 
-  // required .net.Aabb aabbObject = 2;
+  // optional .net.AabbMessage aabbObject = 2;
   if (has_aabbobject()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
       2, this->aabbobject(), output);
   }
 
-  // required .net.Sphere sphereObject = 3;
+  // optional .net.SphereMessage sphereObject = 3;
   if (has_sphereobject()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
       3, this->sphereobject(), output);
   }
 
-  // required .net.Velocity linearVelocity = 4;
+  // required float mass = 4;
+  if (has_mass()) {
+    ::google::protobuf::internal::WireFormatLite::WriteFloat(4, this->mass(), output);
+  }
+
+  // required .net.VelocityMessage linearVelocity = 5;
   if (has_linearvelocity()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
-      4, this->linearvelocity(), output);
+      5, this->linearvelocity(), output);
   }
 
-  // required .net.Velocity angularVelocity = 5;
-  if (has_angularvelocity()) {
-    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
-      5, this->angularvelocity(), output);
-  }
-
-  // required .net.Point angularPosition = 6;
-  if (has_angularposition()) {
-    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
-      6, this->angularposition(), output);
-  }
-
-  // required .net.Force linearForce = 7;
+  // required .net.ForceMessage linearForce = 6;
   if (has_linearforce()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
-      7, this->linearforce(), output);
+      6, this->linearforce(), output);
   }
 
-  // required .net.Force angularForce = 8;
+  // required .net.VelocityMessage angularVelocity = 7;
+  if (has_angularvelocity()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      7, this->angularvelocity(), output);
+  }
+
+  // required .net.ForceMessage angularForce = 8;
   if (has_angularforce()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
       8, this->angularforce(), output);
+  }
+
+  // required .net.PointMessage angularPosition = 9;
+  if (has_angularposition()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      9, this->angularposition(), output);
   }
 
   if (!unknown_fields().empty()) {
@@ -1935,60 +2458,66 @@ void PhysicsInfo::SerializeWithCachedSizes(
   }
 }
 
-::google::protobuf::uint8* PhysicsInfo::SerializeWithCachedSizesToArray(
+::google::protobuf::uint8* PhysicsInfoMessage::SerializeWithCachedSizesToArray(
     ::google::protobuf::uint8* target) const {
-  // required float mass = 1;
-  if (has_mass()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteFloatToArray(1, this->mass(), target);
+  // required .net.PhysicsInfoMessage.PhysicsInfoMessageType physicsInfoMessageType = 1;
+  if (has_physicsinfomessagetype()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteEnumToArray(
+      1, this->physicsinfomessagetype(), target);
   }
 
-  // required .net.Aabb aabbObject = 2;
+  // optional .net.AabbMessage aabbObject = 2;
   if (has_aabbobject()) {
     target = ::google::protobuf::internal::WireFormatLite::
       WriteMessageNoVirtualToArray(
         2, this->aabbobject(), target);
   }
 
-  // required .net.Sphere sphereObject = 3;
+  // optional .net.SphereMessage sphereObject = 3;
   if (has_sphereobject()) {
     target = ::google::protobuf::internal::WireFormatLite::
       WriteMessageNoVirtualToArray(
         3, this->sphereobject(), target);
   }
 
-  // required .net.Velocity linearVelocity = 4;
+  // required float mass = 4;
+  if (has_mass()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteFloatToArray(4, this->mass(), target);
+  }
+
+  // required .net.VelocityMessage linearVelocity = 5;
   if (has_linearvelocity()) {
     target = ::google::protobuf::internal::WireFormatLite::
       WriteMessageNoVirtualToArray(
-        4, this->linearvelocity(), target);
+        5, this->linearvelocity(), target);
   }
 
-  // required .net.Velocity angularVelocity = 5;
-  if (has_angularvelocity()) {
-    target = ::google::protobuf::internal::WireFormatLite::
-      WriteMessageNoVirtualToArray(
-        5, this->angularvelocity(), target);
-  }
-
-  // required .net.Point angularPosition = 6;
-  if (has_angularposition()) {
-    target = ::google::protobuf::internal::WireFormatLite::
-      WriteMessageNoVirtualToArray(
-        6, this->angularposition(), target);
-  }
-
-  // required .net.Force linearForce = 7;
+  // required .net.ForceMessage linearForce = 6;
   if (has_linearforce()) {
     target = ::google::protobuf::internal::WireFormatLite::
       WriteMessageNoVirtualToArray(
-        7, this->linearforce(), target);
+        6, this->linearforce(), target);
   }
 
-  // required .net.Force angularForce = 8;
+  // required .net.VelocityMessage angularVelocity = 7;
+  if (has_angularvelocity()) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteMessageNoVirtualToArray(
+        7, this->angularvelocity(), target);
+  }
+
+  // required .net.ForceMessage angularForce = 8;
   if (has_angularforce()) {
     target = ::google::protobuf::internal::WireFormatLite::
       WriteMessageNoVirtualToArray(
         8, this->angularforce(), target);
+  }
+
+  // required .net.PointMessage angularPosition = 9;
+  if (has_angularposition()) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteMessageNoVirtualToArray(
+        9, this->angularposition(), target);
   }
 
   if (!unknown_fields().empty()) {
@@ -1998,62 +2527,70 @@ void PhysicsInfo::SerializeWithCachedSizes(
   return target;
 }
 
-int PhysicsInfo::ByteSize() const {
+int PhysicsInfoMessage::ByteSize() const {
   int total_size = 0;
 
   if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
-    // required float mass = 1;
-    if (has_mass()) {
-      total_size += 1 + 4;
+    // required .net.PhysicsInfoMessage.PhysicsInfoMessageType physicsInfoMessageType = 1;
+    if (has_physicsinfomessagetype()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::EnumSize(this->physicsinfomessagetype());
     }
 
-    // required .net.Aabb aabbObject = 2;
+    // optional .net.AabbMessage aabbObject = 2;
     if (has_aabbobject()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
           this->aabbobject());
     }
 
-    // required .net.Sphere sphereObject = 3;
+    // optional .net.SphereMessage sphereObject = 3;
     if (has_sphereobject()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
           this->sphereobject());
     }
 
-    // required .net.Velocity linearVelocity = 4;
+    // required float mass = 4;
+    if (has_mass()) {
+      total_size += 1 + 4;
+    }
+
+    // required .net.VelocityMessage linearVelocity = 5;
     if (has_linearvelocity()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
           this->linearvelocity());
     }
 
-    // required .net.Velocity angularVelocity = 5;
-    if (has_angularvelocity()) {
-      total_size += 1 +
-        ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
-          this->angularvelocity());
-    }
-
-    // required .net.Point angularPosition = 6;
-    if (has_angularposition()) {
-      total_size += 1 +
-        ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
-          this->angularposition());
-    }
-
-    // required .net.Force linearForce = 7;
+    // required .net.ForceMessage linearForce = 6;
     if (has_linearforce()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
           this->linearforce());
     }
 
-    // required .net.Force angularForce = 8;
+    // required .net.VelocityMessage angularVelocity = 7;
+    if (has_angularvelocity()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+          this->angularvelocity());
+    }
+
+    // required .net.ForceMessage angularForce = 8;
     if (has_angularforce()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
           this->angularforce());
+    }
+
+  }
+  if (_has_bits_[8 / 32] & (0xffu << (8 % 32))) {
+    // required .net.PointMessage angularPosition = 9;
+    if (has_angularposition()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+          this->angularposition());
     }
 
   }
@@ -2068,10 +2605,10 @@ int PhysicsInfo::ByteSize() const {
   return total_size;
 }
 
-void PhysicsInfo::MergeFrom(const ::google::protobuf::Message& from) {
+void PhysicsInfoMessage::MergeFrom(const ::google::protobuf::Message& from) {
   GOOGLE_CHECK_NE(&from, this);
-  const PhysicsInfo* source =
-    ::google::protobuf::internal::dynamic_cast_if_available<const PhysicsInfo*>(
+  const PhysicsInfoMessage* source =
+    ::google::protobuf::internal::dynamic_cast_if_available<const PhysicsInfoMessage*>(
       &from);
   if (source == NULL) {
     ::google::protobuf::internal::ReflectionOps::Merge(from, this);
@@ -2080,51 +2617,56 @@ void PhysicsInfo::MergeFrom(const ::google::protobuf::Message& from) {
   }
 }
 
-void PhysicsInfo::MergeFrom(const PhysicsInfo& from) {
+void PhysicsInfoMessage::MergeFrom(const PhysicsInfoMessage& from) {
   GOOGLE_CHECK_NE(&from, this);
   if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    if (from.has_physicsinfomessagetype()) {
+      set_physicsinfomessagetype(from.physicsinfomessagetype());
+    }
+    if (from.has_aabbobject()) {
+      mutable_aabbobject()->::net::AabbMessage::MergeFrom(from.aabbobject());
+    }
+    if (from.has_sphereobject()) {
+      mutable_sphereobject()->::net::SphereMessage::MergeFrom(from.sphereobject());
+    }
     if (from.has_mass()) {
       set_mass(from.mass());
     }
-    if (from.has_aabbobject()) {
-      mutable_aabbobject()->::net::Aabb::MergeFrom(from.aabbobject());
-    }
-    if (from.has_sphereobject()) {
-      mutable_sphereobject()->::net::Sphere::MergeFrom(from.sphereobject());
-    }
     if (from.has_linearvelocity()) {
-      mutable_linearvelocity()->::net::Velocity::MergeFrom(from.linearvelocity());
-    }
-    if (from.has_angularvelocity()) {
-      mutable_angularvelocity()->::net::Velocity::MergeFrom(from.angularvelocity());
-    }
-    if (from.has_angularposition()) {
-      mutable_angularposition()->::net::Point::MergeFrom(from.angularposition());
+      mutable_linearvelocity()->::net::VelocityMessage::MergeFrom(from.linearvelocity());
     }
     if (from.has_linearforce()) {
-      mutable_linearforce()->::net::Force::MergeFrom(from.linearforce());
+      mutable_linearforce()->::net::ForceMessage::MergeFrom(from.linearforce());
+    }
+    if (from.has_angularvelocity()) {
+      mutable_angularvelocity()->::net::VelocityMessage::MergeFrom(from.angularvelocity());
     }
     if (from.has_angularforce()) {
-      mutable_angularforce()->::net::Force::MergeFrom(from.angularforce());
+      mutable_angularforce()->::net::ForceMessage::MergeFrom(from.angularforce());
+    }
+  }
+  if (from._has_bits_[8 / 32] & (0xffu << (8 % 32))) {
+    if (from.has_angularposition()) {
+      mutable_angularposition()->::net::PointMessage::MergeFrom(from.angularposition());
     }
   }
   mutable_unknown_fields()->MergeFrom(from.unknown_fields());
 }
 
-void PhysicsInfo::CopyFrom(const ::google::protobuf::Message& from) {
+void PhysicsInfoMessage::CopyFrom(const ::google::protobuf::Message& from) {
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-void PhysicsInfo::CopyFrom(const PhysicsInfo& from) {
+void PhysicsInfoMessage::CopyFrom(const PhysicsInfoMessage& from) {
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-bool PhysicsInfo::IsInitialized() const {
-  if ((_has_bits_[0] & 0x000000ff) != 0x000000ff) return false;
+bool PhysicsInfoMessage::IsInitialized() const {
+  if ((_has_bits_[0] & 0x000001f9) != 0x000001f9) return false;
 
   if (has_aabbobject()) {
     if (!this->aabbobject().IsInitialized()) return false;
@@ -2135,42 +2677,43 @@ bool PhysicsInfo::IsInitialized() const {
   if (has_linearvelocity()) {
     if (!this->linearvelocity().IsInitialized()) return false;
   }
-  if (has_angularvelocity()) {
-    if (!this->angularvelocity().IsInitialized()) return false;
-  }
-  if (has_angularposition()) {
-    if (!this->angularposition().IsInitialized()) return false;
-  }
   if (has_linearforce()) {
     if (!this->linearforce().IsInitialized()) return false;
+  }
+  if (has_angularvelocity()) {
+    if (!this->angularvelocity().IsInitialized()) return false;
   }
   if (has_angularforce()) {
     if (!this->angularforce().IsInitialized()) return false;
   }
+  if (has_angularposition()) {
+    if (!this->angularposition().IsInitialized()) return false;
+  }
   return true;
 }
 
-void PhysicsInfo::Swap(PhysicsInfo* other) {
+void PhysicsInfoMessage::Swap(PhysicsInfoMessage* other) {
   if (other != this) {
-    std::swap(mass_, other->mass_);
+    std::swap(physicsinfomessagetype_, other->physicsinfomessagetype_);
     std::swap(aabbobject_, other->aabbobject_);
     std::swap(sphereobject_, other->sphereobject_);
+    std::swap(mass_, other->mass_);
     std::swap(linearvelocity_, other->linearvelocity_);
-    std::swap(angularvelocity_, other->angularvelocity_);
-    std::swap(angularposition_, other->angularposition_);
     std::swap(linearforce_, other->linearforce_);
+    std::swap(angularvelocity_, other->angularvelocity_);
     std::swap(angularforce_, other->angularforce_);
+    std::swap(angularposition_, other->angularposition_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
     _unknown_fields_.Swap(&other->_unknown_fields_);
     std::swap(_cached_size_, other->_cached_size_);
   }
 }
 
-::google::protobuf::Metadata PhysicsInfo::GetMetadata() const {
+::google::protobuf::Metadata PhysicsInfoMessage::GetMetadata() const {
   protobuf_AssignDescriptorsOnce();
   ::google::protobuf::Metadata metadata;
-  metadata.descriptor = PhysicsInfo_descriptor_;
-  metadata.reflection = PhysicsInfo_reflection_;
+  metadata.descriptor = PhysicsInfoMessage_descriptor_;
+  metadata.reflection = PhysicsInfoMessage_reflection_;
   return metadata;
 }
 
@@ -2178,81 +2721,105 @@ void PhysicsInfo::Swap(PhysicsInfo* other) {
 // ===================================================================
 
 #ifndef _MSC_VER
-const int GameEngine::kPhysicsInfoFieldNumber;
+const int UpdateObjectMessage::kIDFieldNumber;
+const int UpdateObjectMessage::kPositionFieldNumber;
 #endif  // !_MSC_VER
 
-GameEngine::GameEngine()
+UpdateObjectMessage::UpdateObjectMessage()
   : ::google::protobuf::Message() {
   SharedCtor();
 }
 
-void GameEngine::InitAsDefaultInstance() {
+void UpdateObjectMessage::InitAsDefaultInstance() {
+  position_ = const_cast< ::net::PointMessage*>(&::net::PointMessage::default_instance());
 }
 
-GameEngine::GameEngine(const GameEngine& from)
+UpdateObjectMessage::UpdateObjectMessage(const UpdateObjectMessage& from)
   : ::google::protobuf::Message() {
   SharedCtor();
   MergeFrom(from);
 }
 
-void GameEngine::SharedCtor() {
+void UpdateObjectMessage::SharedCtor() {
   _cached_size_ = 0;
+  id_ = 0;
+  position_ = NULL;
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
-GameEngine::~GameEngine() {
+UpdateObjectMessage::~UpdateObjectMessage() {
   SharedDtor();
 }
 
-void GameEngine::SharedDtor() {
+void UpdateObjectMessage::SharedDtor() {
   if (this != default_instance_) {
+    delete position_;
   }
 }
 
-void GameEngine::SetCachedSize(int size) const {
+void UpdateObjectMessage::SetCachedSize(int size) const {
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
   _cached_size_ = size;
   GOOGLE_SAFE_CONCURRENT_WRITES_END();
 }
-const ::google::protobuf::Descriptor* GameEngine::descriptor() {
+const ::google::protobuf::Descriptor* UpdateObjectMessage::descriptor() {
   protobuf_AssignDescriptorsOnce();
-  return GameEngine_descriptor_;
+  return UpdateObjectMessage_descriptor_;
 }
 
-const GameEngine& GameEngine::default_instance() {
+const UpdateObjectMessage& UpdateObjectMessage::default_instance() {
   if (default_instance_ == NULL) protobuf_AddDesc_GameEngine_2eproto();
   return *default_instance_;
 }
 
-GameEngine* GameEngine::default_instance_ = NULL;
+UpdateObjectMessage* UpdateObjectMessage::default_instance_ = NULL;
 
-GameEngine* GameEngine::New() const {
-  return new GameEngine;
+UpdateObjectMessage* UpdateObjectMessage::New() const {
+  return new UpdateObjectMessage;
 }
 
-void GameEngine::Clear() {
-  physicsinfo_.Clear();
+void UpdateObjectMessage::Clear() {
+  if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    id_ = 0;
+    if (has_position()) {
+      if (position_ != NULL) position_->::net::PointMessage::Clear();
+    }
+  }
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
   mutable_unknown_fields()->Clear();
 }
 
-bool GameEngine::MergePartialFromCodedStream(
+bool UpdateObjectMessage::MergePartialFromCodedStream(
     ::google::protobuf::io::CodedInputStream* input) {
 #define DO_(EXPRESSION) if (!(EXPRESSION)) return false
   ::google::protobuf::uint32 tag;
   while ((tag = input->ReadTag()) != 0) {
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // repeated .net.PhysicsInfo physicsInfo = 1;
+      // required int32 ID = 1;
       case 1: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
-            ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
-         parse_physicsInfo:
-          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
-                input, add_physicsinfo()));
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &id_)));
+          set_has_id();
         } else {
           goto handle_uninterpreted;
         }
-        if (input->ExpectTag(10)) goto parse_physicsInfo;
+        if (input->ExpectTag(18)) goto parse_position;
+        break;
+      }
+
+      // required .net.PointMessage position = 2;
+      case 2: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
+         parse_position:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+               input, mutable_position()));
+        } else {
+          goto handle_uninterpreted;
+        }
         if (input->ExpectAtEnd()) return true;
         break;
       }
@@ -2273,12 +2840,17 @@ bool GameEngine::MergePartialFromCodedStream(
 #undef DO_
 }
 
-void GameEngine::SerializeWithCachedSizes(
+void UpdateObjectMessage::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // repeated .net.PhysicsInfo physicsInfo = 1;
-  for (int i = 0; i < this->physicsinfo_size(); i++) {
+  // required int32 ID = 1;
+  if (has_id()) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(1, this->id(), output);
+  }
+
+  // required .net.PointMessage position = 2;
+  if (has_position()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
-      1, this->physicsinfo(i), output);
+      2, this->position(), output);
   }
 
   if (!unknown_fields().empty()) {
@@ -2287,13 +2859,18 @@ void GameEngine::SerializeWithCachedSizes(
   }
 }
 
-::google::protobuf::uint8* GameEngine::SerializeWithCachedSizesToArray(
+::google::protobuf::uint8* UpdateObjectMessage::SerializeWithCachedSizesToArray(
     ::google::protobuf::uint8* target) const {
-  // repeated .net.PhysicsInfo physicsInfo = 1;
-  for (int i = 0; i < this->physicsinfo_size(); i++) {
+  // required int32 ID = 1;
+  if (has_id()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(1, this->id(), target);
+  }
+
+  // required .net.PointMessage position = 2;
+  if (has_position()) {
     target = ::google::protobuf::internal::WireFormatLite::
       WriteMessageNoVirtualToArray(
-        1, this->physicsinfo(i), target);
+        2, this->position(), target);
   }
 
   if (!unknown_fields().empty()) {
@@ -2303,15 +2880,593 @@ void GameEngine::SerializeWithCachedSizes(
   return target;
 }
 
-int GameEngine::ByteSize() const {
+int UpdateObjectMessage::ByteSize() const {
   int total_size = 0;
 
-  // repeated .net.PhysicsInfo physicsInfo = 1;
+  if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    // required int32 ID = 1;
+    if (has_id()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::Int32Size(
+          this->id());
+    }
+
+    // required .net.PointMessage position = 2;
+    if (has_position()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+          this->position());
+    }
+
+  }
+  if (!unknown_fields().empty()) {
+    total_size +=
+      ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
+        unknown_fields());
+  }
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = total_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void UpdateObjectMessage::MergeFrom(const ::google::protobuf::Message& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  const UpdateObjectMessage* source =
+    ::google::protobuf::internal::dynamic_cast_if_available<const UpdateObjectMessage*>(
+      &from);
+  if (source == NULL) {
+    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
+  } else {
+    MergeFrom(*source);
+  }
+}
+
+void UpdateObjectMessage::MergeFrom(const UpdateObjectMessage& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    if (from.has_id()) {
+      set_id(from.id());
+    }
+    if (from.has_position()) {
+      mutable_position()->::net::PointMessage::MergeFrom(from.position());
+    }
+  }
+  mutable_unknown_fields()->MergeFrom(from.unknown_fields());
+}
+
+void UpdateObjectMessage::CopyFrom(const ::google::protobuf::Message& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void UpdateObjectMessage::CopyFrom(const UpdateObjectMessage& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool UpdateObjectMessage::IsInitialized() const {
+  if ((_has_bits_[0] & 0x00000003) != 0x00000003) return false;
+
+  if (has_position()) {
+    if (!this->position().IsInitialized()) return false;
+  }
+  return true;
+}
+
+void UpdateObjectMessage::Swap(UpdateObjectMessage* other) {
+  if (other != this) {
+    std::swap(id_, other->id_);
+    std::swap(position_, other->position_);
+    std::swap(_has_bits_[0], other->_has_bits_[0]);
+    _unknown_fields_.Swap(&other->_unknown_fields_);
+    std::swap(_cached_size_, other->_cached_size_);
+  }
+}
+
+::google::protobuf::Metadata UpdateObjectMessage::GetMetadata() const {
+  protobuf_AssignDescriptorsOnce();
+  ::google::protobuf::Metadata metadata;
+  metadata.descriptor = UpdateObjectMessage_descriptor_;
+  metadata.reflection = UpdateObjectMessage_reflection_;
+  return metadata;
+}
+
+
+// ===================================================================
+
+#ifndef _MSC_VER
+const int DeleteObjectMessage::kIDFieldNumber;
+#endif  // !_MSC_VER
+
+DeleteObjectMessage::DeleteObjectMessage()
+  : ::google::protobuf::Message() {
+  SharedCtor();
+}
+
+void DeleteObjectMessage::InitAsDefaultInstance() {
+}
+
+DeleteObjectMessage::DeleteObjectMessage(const DeleteObjectMessage& from)
+  : ::google::protobuf::Message() {
+  SharedCtor();
+  MergeFrom(from);
+}
+
+void DeleteObjectMessage::SharedCtor() {
+  _cached_size_ = 0;
+  id_ = 0;
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+}
+
+DeleteObjectMessage::~DeleteObjectMessage() {
+  SharedDtor();
+}
+
+void DeleteObjectMessage::SharedDtor() {
+  if (this != default_instance_) {
+  }
+}
+
+void DeleteObjectMessage::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const ::google::protobuf::Descriptor* DeleteObjectMessage::descriptor() {
+  protobuf_AssignDescriptorsOnce();
+  return DeleteObjectMessage_descriptor_;
+}
+
+const DeleteObjectMessage& DeleteObjectMessage::default_instance() {
+  if (default_instance_ == NULL) protobuf_AddDesc_GameEngine_2eproto();
+  return *default_instance_;
+}
+
+DeleteObjectMessage* DeleteObjectMessage::default_instance_ = NULL;
+
+DeleteObjectMessage* DeleteObjectMessage::New() const {
+  return new DeleteObjectMessage;
+}
+
+void DeleteObjectMessage::Clear() {
+  if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    id_ = 0;
+  }
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+  mutable_unknown_fields()->Clear();
+}
+
+bool DeleteObjectMessage::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!(EXPRESSION)) return false
+  ::google::protobuf::uint32 tag;
+  while ((tag = input->ReadTag()) != 0) {
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // required int32 ID = 1;
+      case 1: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &id_)));
+          set_has_id();
+        } else {
+          goto handle_uninterpreted;
+        }
+        if (input->ExpectAtEnd()) return true;
+        break;
+      }
+
+      default: {
+      handle_uninterpreted:
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          return true;
+        }
+        DO_(::google::protobuf::internal::WireFormat::SkipField(
+              input, tag, mutable_unknown_fields()));
+        break;
+      }
+    }
+  }
+  return true;
+#undef DO_
+}
+
+void DeleteObjectMessage::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // required int32 ID = 1;
+  if (has_id()) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(1, this->id(), output);
+  }
+
+  if (!unknown_fields().empty()) {
+    ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
+        unknown_fields(), output);
+  }
+}
+
+::google::protobuf::uint8* DeleteObjectMessage::SerializeWithCachedSizesToArray(
+    ::google::protobuf::uint8* target) const {
+  // required int32 ID = 1;
+  if (has_id()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(1, this->id(), target);
+  }
+
+  if (!unknown_fields().empty()) {
+    target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
+        unknown_fields(), target);
+  }
+  return target;
+}
+
+int DeleteObjectMessage::ByteSize() const {
+  int total_size = 0;
+
+  if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    // required int32 ID = 1;
+    if (has_id()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::Int32Size(
+          this->id());
+    }
+
+  }
+  if (!unknown_fields().empty()) {
+    total_size +=
+      ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
+        unknown_fields());
+  }
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = total_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void DeleteObjectMessage::MergeFrom(const ::google::protobuf::Message& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  const DeleteObjectMessage* source =
+    ::google::protobuf::internal::dynamic_cast_if_available<const DeleteObjectMessage*>(
+      &from);
+  if (source == NULL) {
+    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
+  } else {
+    MergeFrom(*source);
+  }
+}
+
+void DeleteObjectMessage::MergeFrom(const DeleteObjectMessage& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    if (from.has_id()) {
+      set_id(from.id());
+    }
+  }
+  mutable_unknown_fields()->MergeFrom(from.unknown_fields());
+}
+
+void DeleteObjectMessage::CopyFrom(const ::google::protobuf::Message& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void DeleteObjectMessage::CopyFrom(const DeleteObjectMessage& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool DeleteObjectMessage::IsInitialized() const {
+  if ((_has_bits_[0] & 0x00000001) != 0x00000001) return false;
+
+  return true;
+}
+
+void DeleteObjectMessage::Swap(DeleteObjectMessage* other) {
+  if (other != this) {
+    std::swap(id_, other->id_);
+    std::swap(_has_bits_[0], other->_has_bits_[0]);
+    _unknown_fields_.Swap(&other->_unknown_fields_);
+    std::swap(_cached_size_, other->_cached_size_);
+  }
+}
+
+::google::protobuf::Metadata DeleteObjectMessage::GetMetadata() const {
+  protobuf_AssignDescriptorsOnce();
+  ::google::protobuf::Metadata metadata;
+  metadata.descriptor = DeleteObjectMessage_descriptor_;
+  metadata.reflection = DeleteObjectMessage_reflection_;
+  return metadata;
+}
+
+
+// ===================================================================
+
+const ::google::protobuf::EnumDescriptor* GameEngineMessage_GameEngineMessageType_descriptor() {
+  protobuf_AssignDescriptorsOnce();
+  return GameEngineMessage_GameEngineMessageType_descriptor_;
+}
+bool GameEngineMessage_GameEngineMessageType_IsValid(int value) {
+  switch(value) {
+    case 0:
+    case 1:
+    case 2:
+    case 3:
+      return true;
+    default:
+      return false;
+  }
+}
+
+#ifndef _MSC_VER
+const GameEngineMessage_GameEngineMessageType GameEngineMessage::CREATE;
+const GameEngineMessage_GameEngineMessageType GameEngineMessage::RETRIEVE;
+const GameEngineMessage_GameEngineMessageType GameEngineMessage::UPDATE;
+const GameEngineMessage_GameEngineMessageType GameEngineMessage::DELETE;
+const GameEngineMessage_GameEngineMessageType GameEngineMessage::GameEngineMessageType_MIN;
+const GameEngineMessage_GameEngineMessageType GameEngineMessage::GameEngineMessageType_MAX;
+const int GameEngineMessage::GameEngineMessageType_ARRAYSIZE;
+#endif  // _MSC_VER
+#ifndef _MSC_VER
+const int GameEngineMessage::kMessageTypeFieldNumber;
+const int GameEngineMessage::kPhysicsInfoFieldNumber;
+const int GameEngineMessage::kUpdateObjectFieldNumber;
+const int GameEngineMessage::kDeleteObjectFieldNumber;
+#endif  // !_MSC_VER
+
+GameEngineMessage::GameEngineMessage()
+  : ::google::protobuf::Message() {
+  SharedCtor();
+}
+
+void GameEngineMessage::InitAsDefaultInstance() {
+}
+
+GameEngineMessage::GameEngineMessage(const GameEngineMessage& from)
+  : ::google::protobuf::Message() {
+  SharedCtor();
+  MergeFrom(from);
+}
+
+void GameEngineMessage::SharedCtor() {
+  _cached_size_ = 0;
+  messagetype_ = 0;
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+}
+
+GameEngineMessage::~GameEngineMessage() {
+  SharedDtor();
+}
+
+void GameEngineMessage::SharedDtor() {
+  if (this != default_instance_) {
+  }
+}
+
+void GameEngineMessage::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const ::google::protobuf::Descriptor* GameEngineMessage::descriptor() {
+  protobuf_AssignDescriptorsOnce();
+  return GameEngineMessage_descriptor_;
+}
+
+const GameEngineMessage& GameEngineMessage::default_instance() {
+  if (default_instance_ == NULL) protobuf_AddDesc_GameEngine_2eproto();
+  return *default_instance_;
+}
+
+GameEngineMessage* GameEngineMessage::default_instance_ = NULL;
+
+GameEngineMessage* GameEngineMessage::New() const {
+  return new GameEngineMessage;
+}
+
+void GameEngineMessage::Clear() {
+  if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    messagetype_ = 0;
+  }
+  physicsinfo_.Clear();
+  updateobject_.Clear();
+  deleteobject_.Clear();
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+  mutable_unknown_fields()->Clear();
+}
+
+bool GameEngineMessage::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!(EXPRESSION)) return false
+  ::google::protobuf::uint32 tag;
+  while ((tag = input->ReadTag()) != 0) {
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // required .net.GameEngineMessage.GameEngineMessageType messageType = 1;
+      case 1: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
+          int value;
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
+                 input, &value)));
+          if (::net::GameEngineMessage_GameEngineMessageType_IsValid(value)) {
+            set_messagetype(static_cast< ::net::GameEngineMessage_GameEngineMessageType >(value));
+          } else {
+            mutable_unknown_fields()->AddVarint(1, value);
+          }
+        } else {
+          goto handle_uninterpreted;
+        }
+        if (input->ExpectTag(18)) goto parse_physicsInfo;
+        break;
+      }
+
+      // repeated .net.PhysicsInfoMessage physicsInfo = 2;
+      case 2: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
+         parse_physicsInfo:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+                input, add_physicsinfo()));
+        } else {
+          goto handle_uninterpreted;
+        }
+        if (input->ExpectTag(18)) goto parse_physicsInfo;
+        if (input->ExpectTag(26)) goto parse_updateObject;
+        break;
+      }
+
+      // repeated .net.UpdateObjectMessage updateObject = 3;
+      case 3: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
+         parse_updateObject:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+                input, add_updateobject()));
+        } else {
+          goto handle_uninterpreted;
+        }
+        if (input->ExpectTag(26)) goto parse_updateObject;
+        if (input->ExpectTag(34)) goto parse_deleteObject;
+        break;
+      }
+
+      // repeated .net.DeleteObjectMessage deleteObject = 4;
+      case 4: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
+         parse_deleteObject:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+                input, add_deleteobject()));
+        } else {
+          goto handle_uninterpreted;
+        }
+        if (input->ExpectTag(34)) goto parse_deleteObject;
+        if (input->ExpectAtEnd()) return true;
+        break;
+      }
+
+      default: {
+      handle_uninterpreted:
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          return true;
+        }
+        DO_(::google::protobuf::internal::WireFormat::SkipField(
+              input, tag, mutable_unknown_fields()));
+        break;
+      }
+    }
+  }
+  return true;
+#undef DO_
+}
+
+void GameEngineMessage::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // required .net.GameEngineMessage.GameEngineMessageType messageType = 1;
+  if (has_messagetype()) {
+    ::google::protobuf::internal::WireFormatLite::WriteEnum(
+      1, this->messagetype(), output);
+  }
+
+  // repeated .net.PhysicsInfoMessage physicsInfo = 2;
+  for (int i = 0; i < this->physicsinfo_size(); i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      2, this->physicsinfo(i), output);
+  }
+
+  // repeated .net.UpdateObjectMessage updateObject = 3;
+  for (int i = 0; i < this->updateobject_size(); i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      3, this->updateobject(i), output);
+  }
+
+  // repeated .net.DeleteObjectMessage deleteObject = 4;
+  for (int i = 0; i < this->deleteobject_size(); i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      4, this->deleteobject(i), output);
+  }
+
+  if (!unknown_fields().empty()) {
+    ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
+        unknown_fields(), output);
+  }
+}
+
+::google::protobuf::uint8* GameEngineMessage::SerializeWithCachedSizesToArray(
+    ::google::protobuf::uint8* target) const {
+  // required .net.GameEngineMessage.GameEngineMessageType messageType = 1;
+  if (has_messagetype()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteEnumToArray(
+      1, this->messagetype(), target);
+  }
+
+  // repeated .net.PhysicsInfoMessage physicsInfo = 2;
+  for (int i = 0; i < this->physicsinfo_size(); i++) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteMessageNoVirtualToArray(
+        2, this->physicsinfo(i), target);
+  }
+
+  // repeated .net.UpdateObjectMessage updateObject = 3;
+  for (int i = 0; i < this->updateobject_size(); i++) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteMessageNoVirtualToArray(
+        3, this->updateobject(i), target);
+  }
+
+  // repeated .net.DeleteObjectMessage deleteObject = 4;
+  for (int i = 0; i < this->deleteobject_size(); i++) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteMessageNoVirtualToArray(
+        4, this->deleteobject(i), target);
+  }
+
+  if (!unknown_fields().empty()) {
+    target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
+        unknown_fields(), target);
+  }
+  return target;
+}
+
+int GameEngineMessage::ByteSize() const {
+  int total_size = 0;
+
+  if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    // required .net.GameEngineMessage.GameEngineMessageType messageType = 1;
+    if (has_messagetype()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::EnumSize(this->messagetype());
+    }
+
+  }
+  // repeated .net.PhysicsInfoMessage physicsInfo = 2;
   total_size += 1 * this->physicsinfo_size();
   for (int i = 0; i < this->physicsinfo_size(); i++) {
     total_size +=
       ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
         this->physicsinfo(i));
+  }
+
+  // repeated .net.UpdateObjectMessage updateObject = 3;
+  total_size += 1 * this->updateobject_size();
+  for (int i = 0; i < this->updateobject_size(); i++) {
+    total_size +=
+      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+        this->updateobject(i));
+  }
+
+  // repeated .net.DeleteObjectMessage deleteObject = 4;
+  total_size += 1 * this->deleteobject_size();
+  for (int i = 0; i < this->deleteobject_size(); i++) {
+    total_size +=
+      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+        this->deleteobject(i));
   }
 
   if (!unknown_fields().empty()) {
@@ -2325,10 +3480,10 @@ int GameEngine::ByteSize() const {
   return total_size;
 }
 
-void GameEngine::MergeFrom(const ::google::protobuf::Message& from) {
+void GameEngineMessage::MergeFrom(const ::google::protobuf::Message& from) {
   GOOGLE_CHECK_NE(&from, this);
-  const GameEngine* source =
-    ::google::protobuf::internal::dynamic_cast_if_available<const GameEngine*>(
+  const GameEngineMessage* source =
+    ::google::protobuf::internal::dynamic_cast_if_available<const GameEngineMessage*>(
       &from);
   if (source == NULL) {
     ::google::protobuf::internal::ReflectionOps::Merge(from, this);
@@ -2337,46 +3492,63 @@ void GameEngine::MergeFrom(const ::google::protobuf::Message& from) {
   }
 }
 
-void GameEngine::MergeFrom(const GameEngine& from) {
+void GameEngineMessage::MergeFrom(const GameEngineMessage& from) {
   GOOGLE_CHECK_NE(&from, this);
   physicsinfo_.MergeFrom(from.physicsinfo_);
+  updateobject_.MergeFrom(from.updateobject_);
+  deleteobject_.MergeFrom(from.deleteobject_);
+  if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    if (from.has_messagetype()) {
+      set_messagetype(from.messagetype());
+    }
+  }
   mutable_unknown_fields()->MergeFrom(from.unknown_fields());
 }
 
-void GameEngine::CopyFrom(const ::google::protobuf::Message& from) {
+void GameEngineMessage::CopyFrom(const ::google::protobuf::Message& from) {
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-void GameEngine::CopyFrom(const GameEngine& from) {
+void GameEngineMessage::CopyFrom(const GameEngineMessage& from) {
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-bool GameEngine::IsInitialized() const {
+bool GameEngineMessage::IsInitialized() const {
+  if ((_has_bits_[0] & 0x00000001) != 0x00000001) return false;
 
   for (int i = 0; i < physicsinfo_size(); i++) {
     if (!this->physicsinfo(i).IsInitialized()) return false;
   }
+  for (int i = 0; i < updateobject_size(); i++) {
+    if (!this->updateobject(i).IsInitialized()) return false;
+  }
+  for (int i = 0; i < deleteobject_size(); i++) {
+    if (!this->deleteobject(i).IsInitialized()) return false;
+  }
   return true;
 }
 
-void GameEngine::Swap(GameEngine* other) {
+void GameEngineMessage::Swap(GameEngineMessage* other) {
   if (other != this) {
+    std::swap(messagetype_, other->messagetype_);
     physicsinfo_.Swap(&other->physicsinfo_);
+    updateobject_.Swap(&other->updateobject_);
+    deleteobject_.Swap(&other->deleteobject_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
     _unknown_fields_.Swap(&other->_unknown_fields_);
     std::swap(_cached_size_, other->_cached_size_);
   }
 }
 
-::google::protobuf::Metadata GameEngine::GetMetadata() const {
+::google::protobuf::Metadata GameEngineMessage::GetMetadata() const {
   protobuf_AssignDescriptorsOnce();
   ::google::protobuf::Metadata metadata;
-  metadata.descriptor = GameEngine_descriptor_;
-  metadata.reflection = GameEngine_reflection_;
+  metadata.descriptor = GameEngineMessage_descriptor_;
+  metadata.reflection = GameEngineMessage_reflection_;
   return metadata;
 }
 

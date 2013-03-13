@@ -22,7 +22,7 @@ namespace net
 		usleep( (int) ( seconds * 1000000.0f ) );
 	}
 
-	void NetUtils::Send( net::GameEngine* input, net::Socket* socket )
+	void NetUtils::Send( GameEngineMessage* input, net::Socket* socket )
 	{
 		///////////////////////////////////////////////////////////////////
 		// Initialize payload
@@ -61,10 +61,10 @@ namespace net
 		return size;
 	}
 
-	net::GameEngine* NetUtils::ReadBody( net::Socket* socket, google::protobuf::uint32 size )
+	GameEngineMessage* NetUtils::ReadBody( net::Socket* socket, google::protobuf::uint32 size )
 	{
 		int bytecount;
-		net::GameEngine* payload =  new net::GameEngine();
+		GameEngineMessage* payload =  new GameEngineMessage();
 		char buffer [ size + 4 ];//size of the payload and hdr
 		//Read the entire buffer including the hdr
 		bytecount = socket->ReceiveWaitAll( (void *)buffer, 4 + size );
@@ -92,112 +92,201 @@ namespace net
 		return payload;
 	}
 
-	/**
-	 * Dummy function to generate fake message object.
-	 */
-	net::GameEngine* NetUtils::GetGameEnginePayload()
+	GameEngineMessage* NetUtils::GetGameEngineCreateMessage( vector<physicsInfo> physicsInfos )
 	{
-		net::GameEngine* gameEnginePayload = new net::GameEngine();
+		GameEngineMessage* gameEnginePayload = new GameEngineMessage();
+		gameEnginePayload->set_messagetype( GameEngineMessage::CREATE );
 
-		/*
-		 * Add physics object to Game Engine object.
-		 */
-		net::PhysicsInfo* physicsInfo1 = gameEnginePayload->add_physicsinfo();
-		net::PhysicsInfo* physicsInfo2 = gameEnginePayload->add_physicsinfo();
-
-		SetPhysicsInfo( physicsInfo1, 1.0f );
-		SetPhysicsInfo( physicsInfo2, 2.0f );
+		for( int i = 0; i < physicsInfos.size(); i++ )
+		{
+			physicsInfo thePhysicsInfo = physicsInfos[i];
+			PhysicsInfoMessage* physicsInfoMsg = gameEnginePayload->add_physicsinfo();
+			SetPhysicsInfoMessage( thePhysicsInfo, physicsInfoMsg );
+		}
 
 		return gameEnginePayload;
 	}
 
-	/*
-	 * Dummy function to generate fake PhysicsInfo message.
-	 */
-	void NetUtils::SetPhysicsInfo( net::PhysicsInfo* physicsInfo, float value )
+	void NetUtils::SetPhysicsInfoMessage( physicsInfo thePhysicsInfo, PhysicsInfoMessage* physicsInfoMsg )
 	{
-		physicsInfo->set_mass( value );
+		AABB* aabbObject = dynamic_cast<AABB*>( thePhysicsInfo.collidableObject );
+		if( aabbObject != 0)
+		{
+		   // aabbObject  was safely cast to AABBClass
+		   physicsInfoMsg->set_physicsinfomessagetype( PhysicsInfoMessage::AABB );
+		   physicsInfoMsg->set_allocated_aabbobject( GetAabbObjectMsg( aabbObject ) );
+		}
+		else
+		{
+			Sphere* sphereObject = dynamic_cast<Sphere*>( thePhysicsInfo.collidableObject );
+			if( sphereObject != 0 )
+			{
+				// sphereObject was safely cast to SphereClass
+				physicsInfoMsg->set_physicsinfomessagetype( PhysicsInfoMessage::SPHERE );
+				physicsInfoMsg->set_allocated_sphereobject( GetSphereObjectMsg( sphereObject ) );
+			}
+		}
+
+		physicsInfoMsg->set_mass( thePhysicsInfo.mass );
+		physicsInfoMsg->set_allocated_linearvelocity( GetVelocityMsg( thePhysicsInfo.linearVelocity ) );
+		physicsInfoMsg->set_allocated_linearforce( GetForceMsg( thePhysicsInfo.linearForce ) );
+		physicsInfoMsg->set_allocated_angularvelocity( GetVelocityMsg( thePhysicsInfo.angularVelocity ) );
+		physicsInfoMsg->set_allocated_angularforce( GetForceMsg( thePhysicsInfo.angularForce ) );
+		physicsInfoMsg->set_allocated_angularposition( GetPointMsg( thePhysicsInfo.angularPosition ) );
+	}
+
+	AabbMessage* NetUtils::GetAabbObjectMsg( AABB* aabbObject )
+	{
+		AabbMessage* aabbMsg = new AabbMessage();
+
+		aabbMsg->set_allocated_collidableobject( GetCollidableObjectMsg( aabbObject->getID(), aabbObject->getCenter(), aabbObject->isMovable() ) );
+		aabbMsg->set_radiusx( aabbObject->getXRadius() );
+		aabbMsg->set_radiusy( aabbObject->getYRadius() );
+		aabbMsg->set_radiusz( aabbObject->getZRadius() );
+
+		return aabbMsg;
+	}
+
+	SphereMessage* NetUtils::GetSphereObjectMsg( Sphere* sphereObject )
+	{
+		SphereMessage* sphereMsg = new SphereMessage();
+
+		sphereMsg->set_allocated_collidableobject( GetCollidableObjectMsg( sphereObject->getID(), sphereObject->getCenter(), sphereObject->isMovable() ) );
+		sphereMsg->set_radius( sphereObject->getRadius() );
+
+		return sphereMsg;
+	}
+
+	CollidableObjectMessage* NetUtils::GetCollidableObjectMsg( int ID, Point center, int movable )
+	{
+		CollidableObjectMessage* collidableObjectMsg = new CollidableObjectMessage();
+
+		collidableObjectMsg->set_id( ID );
+		collidableObjectMsg->set_allocated_center( GetPointMsg( center ) );
+		collidableObjectMsg->set_movable( movable );
+
+		return collidableObjectMsg;
+	}
+
+	PointMessage* NetUtils::GetPointMsg( Point point )
+	{
+		PointMessage* pointMsg = new PointMessage();
+
+		pointMsg->set_x( point.x );
+		pointMsg->set_y( point.y );
+		pointMsg->set_z( point.z );
+
+		return pointMsg;
+	}
+
+	VelocityMessage* NetUtils::GetVelocityMsg( Velocity velocity )
+	{
+		VelocityMessage* velocityMsg = new VelocityMessage();
+
+		velocityMsg->set_x( velocity.x );
+		velocityMsg->set_y( velocity.y );
+		velocityMsg->set_z( velocity.z );
+
+		return velocityMsg;
+	}
+
+	ForceMessage* NetUtils::GetForceMsg( Force force )
+	{
+		ForceMessage* forceMsg = new ForceMessage();
+
+		forceMsg->set_x( force.x );
+		forceMsg->set_y( force.y );
+		forceMsg->set_z( force.z );
+
+		return forceMsg;
+	}
+
+	/*
+	 * Dummy function to generate fake PhysicsInfo object.
+	 */
+	physicsInfo NetUtils::GetPhysicsInfo( float value )
+	{
+		physicsInfo thePhysicsInfo;
+		thePhysicsInfo.mass = value;
 
 		/*
 		 * Aaab object.
 		 */
-		net::Aabb* aabbObject = new net::Aabb();
-		aabbObject->add_radii( value );
-		aabbObject->add_radii( value );
-		aabbObject->add_radii( value );
+		Point center1;
+		center1.x = value;
+		center1.y = value;
+		center1.z = value;
 
-		net::Point* center1 = new net::Point();
-		center1->set_x( value );
-		center1->set_y( value );
-		center1->set_z( value );
+		int ID = (int) value;
+		float radii[3] = { value, value, value };
+		int movable = (int) value;
 
-		aabbObject->set_allocated_center( center1 );
+		AABB* aabbObject = new AABB( ID, center1, radii, movable );
 
-		physicsInfo->set_allocated_aabbobject( aabbObject );
-
+		thePhysicsInfo.collidableObject = aabbObject;
 		/*
 		 * Sphere object.
 		 */
-		net::Sphere* sphereObject = new net::Sphere();
-		sphereObject->set_radius( value );
+/*
+		Point center2;
+		center2.x = value;
+		center2.y = value;
+		center2.z = value;
 
-		net::Point* center2 = new net::Point();
-		center2->set_x( value );
-		center2->set_y( value );
-		center2->set_z( value );
+		int radius = (int) value;
 
-		sphereObject->set_allocated_center( center2 );
-
-		physicsInfo->set_allocated_sphereobject( sphereObject );
-
+		Sphere* sphereObject = new Sphere( ID, center2, radius, movable );
+*/
 		/*
 		 * Linear Velocity.
 		 */
-		net::Velocity* linearVelocity = new net::Velocity();
-		linearVelocity->set_x( value );
-		linearVelocity->set_y( value );
-		linearVelocity->set_z( value );
+		Velocity linearVelocity;
+		linearVelocity.x = value;
+		linearVelocity.y = value;
+		linearVelocity.z = value;
 
-		physicsInfo->set_allocated_linearvelocity( linearVelocity );
+		thePhysicsInfo.linearVelocity = linearVelocity;
 
 		/*
 		 * Angular Velocity.
 		 */
-		net::Velocity* angularVelocity = new net::Velocity();
-		angularVelocity->set_x( value );
-		angularVelocity->set_y( value );
-		angularVelocity->set_z( value );
+		Velocity angularVelocity;
+		angularVelocity.x = value;
+		angularVelocity.y = value;
+		angularVelocity.z = value;
 
-		physicsInfo->set_allocated_angularvelocity( angularVelocity );
+		thePhysicsInfo.angularVelocity = angularVelocity;
 
 		/*
 		 * Angular Position.
 		 */
-		net::Point* angularPosition = new net::Point();
-		angularPosition->set_x( value );
-		angularPosition->set_y( value );
-		angularPosition->set_z( value );
+		Point angularPosition;
+		angularPosition.x = value;
+		angularPosition.y = value;
+		angularPosition.z = value;
 
-		physicsInfo->set_allocated_angularposition( angularPosition );
+		thePhysicsInfo.angularPosition = angularPosition;
 
 		/*
 		 * Linear Force.
 		 */
-		net::Force* linearForce = new net::Force();
-		linearForce->set_x( value );
-		linearForce->set_y( value );
-		linearForce->set_z( value );
+		Force linearForce;
+		linearForce.x = value;
+		linearForce.y = value;
+		linearForce.z = value;
 
-		physicsInfo->set_allocated_linearforce( linearForce );
+		thePhysicsInfo.linearForce = linearForce;
 
 		/*
 		 * Angular Force.
 		 */
-		net::Force* angularForce = new net::Force();
-		angularForce->set_x( value );
-		angularForce->set_y( value );
-		angularForce->set_z( value );
+		Force angularForce;
+		angularForce.x = value;
+		angularForce.y = value;
+		angularForce.z = value;
 
-		physicsInfo->set_allocated_angularforce( angularForce );
+		thePhysicsInfo.angularForce = angularForce;
+
+		return thePhysicsInfo;
 	}
 }
