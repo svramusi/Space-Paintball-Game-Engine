@@ -57,6 +57,7 @@
 							<tool id="cdt.managedbuild.tool.gnu.cpp.linker.exe.debug.164737132" name="GCC C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.exe.debug">
 								<option id="gnu.cpp.link.option.paths.1400410636" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths" valueType="libPaths">
 									<listOptionValue builtIn="false" value="/usr/lib/i386-linux-gnu"/>
+									<listOptionValue builtIn="false" value="/usr/lib"/>
 									<listOptionValue builtIn="false" value="&quot;${/usr/local/lib}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${/usr/lib/compiz/}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${/usr/lib/x86_64-linux-gnu/}&quot;"/>
