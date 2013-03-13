@@ -92,6 +92,14 @@ namespace net
         return payload;
     }
 
+    GameEngineMessage* NetUtils::GetClientQuitStateMessage()
+    {
+    	GameEngineMessage* gameEnginePayload = new GameEngineMessage();
+    	gameEnginePayload->set_messagetype( GameEngineMessage::QUIT );
+
+    	return gameEnginePayload;
+    }
+
     GameEngineMessage* NetUtils::GetGameEngineCreateMessage( vector<physicsInfo> physicsInfos )
     {
         GameEngineMessage* gameEnginePayload = new GameEngineMessage();
@@ -264,6 +272,13 @@ namespace net
         thePhysicsInfo.angularForce = angForce;
 
         return thePhysicsInfo;
+    }
+
+    bool NetUtils::GetClientQuitState( GameEngineMessage* gameEngineMsg )
+    {
+    	bool quit = gameEngineMsg->messagetype() == GameEngineMessage::QUIT ? true : false;
+
+    	return quit;
     }
 
     vector<physicsInfo> NetUtils::GetGameEngineCreateObj( GameEngineMessage* gameEngineMsg )

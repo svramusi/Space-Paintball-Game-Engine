@@ -273,7 +273,7 @@ int main( int argc, char * argv[] )
     sendGraphicObjectsToServer();
 
     // Client Game Loop
-    while(!quit)
+    while( !quit )
     {
         /*
          * Poll for OS Events/Messages; this is
@@ -281,86 +281,102 @@ int main( int argc, char * argv[] )
          */
         PollForOSMessages( quit );
 
-        Uint32 actualTime = SDL_GetTicks();
-        int frames = 0;
-
-        while(actualTime >= RedrawingPeriod && frames < MaxFrameSkip)
+        if( quit )
         {
-            /*
-             * If the computer is too slow to run at
-             * the desired FPS, try to execute more than
-             * one update per redrawing frame (i.e.,
-             * skip frames).
-             */
+            ///////////////////////////////////////////////////////////////////
+            // Initialize payload
+            ///////////////////////////////////////////////////////////////////
+            net::GameEngineMessage* payload = net::NetUtils::GetClientQuitStateMessage( );
+            ///////////////////////////////////////////////////////////////////
 
-            /*
-             * If 20 ms have passed since the last time
-             * we ran a game cycle, then run another
-             * cycle.
-             */
-            time += RedrawingPeriod;
-
-            //TODO: fix this
-            //keyboard->cycle();
-            //if(!gameEngine->cycle(k))
-            //{
-            //  quit = true;
-            //}
-
-            actualTime = SDL_GetTicks();
-            needToRedraw = true;
-            frames++;
-        } // End inner while loop.
-
-        if(time < actualTime)
-        {
-            /*
-             * If after skipping the maximum number
-             * of frames, we have not yet caught up,
-             * it may be game lost focus or something;
-             * so, don't try to catch up.
-             */
-            time = actualTime;
+            ///////////////////////////////////////////////////////////////////
+            // Client socket work - send payload to server
+            ///////////////////////////////////////////////////////////////////
+            net::NetUtils::Send( payload, &clientSocket );
+            ///////////////////////////////////////////////////////////////////
         }
-
-        if(needToRedraw)
+        else
         {
-            //TODO: fix this
-            //game->draw();
-            needToRedraw = false;
+			Uint32 actualTime = SDL_GetTicks();
+			int frames = 0;
+
+			while(actualTime >= RedrawingPeriod && frames < MaxFrameSkip)
+			{
+				/*
+				 * If the computer is too slow to run at
+				 * the desired FPS, try to execute more than
+				 * one update per redrawing frame (i.e.,
+				 * skip frames).
+				 */
+
+				/*
+				 * If 20 ms have passed since the last time
+				 * we ran a game cycle, then run another
+				 * cycle.
+				 */
+				time += RedrawingPeriod;
+
+				//TODO: fix this
+				//keyboard->cycle();
+				//if(!gameEngine->cycle(k))
+				//{
+				//  quit = true;
+				//}
+
+				actualTime = SDL_GetTicks();
+				needToRedraw = true;
+				frames++;
+			} // End inner while loop.
+
+			if(time < actualTime)
+			{
+				/*
+				 * If after skipping the maximum number
+				 * of frames, we have not yet caught up,
+				 * it may be game lost focus or something;
+				 * so, don't try to catch up.
+				 */
+				time = actualTime;
+			}
+
+			if(needToRedraw)
+			{
+				//TODO: fix this
+				//game->draw();
+				needToRedraw = false;
+			}
+
+			int input = GetInput( quit );
+
+			// now you can write buf.data() to the socket
+			///////////////////////////////////////////////////////////
+
+			//SendInputToServer(input);
+
+			///////////////////////////////////////////////////////////
+			//Update Game State Copy
+			checkForUpdatesFromServer();
+
+			// Update local game state (or game state copy).
+			//gameEngine.UpdateGameState(inputFromServer);
+			///////////////////////////////////////////////////////////
+
+			/*
+			 * Get information from the game engine to update
+			 * the player score, health, etc. (since typically
+			 * the HUD is not rendered by the game engine, but
+			 * separately).
+			 */
+			//UpdateStatistics();
+
+			if(TimeForRendering())
+			{
+			}
+
+			redraw();
+
+			FPSControl();
         }
-
-        int input = GetInput( quit );
-
-        // now you can write buf.data() to the socket
-        ///////////////////////////////////////////////////////////
-
-        //SendInputToServer(input);
-
-        ///////////////////////////////////////////////////////////
-        //Update Game State Copy
-        checkForUpdatesFromServer();
-
-        // Update local game state (or game state copy).
-        //gameEngine.UpdateGameState(inputFromServer);
-        ///////////////////////////////////////////////////////////
-
-        /*
-         * Get information from the game engine to update
-         * the player score, health, etc. (since typically
-         * the HUD is not rendered by the game engine, but
-         * separately).
-         */
-        //UpdateStatistics();
-
-        if(TimeForRendering())
-        {
-        }
-
-        redraw();
-
-        FPSControl();
-
         /*
          * Play nice with the OS, and give
          * some CPU for another process.
@@ -499,7 +515,7 @@ bool TimeForRendering()
  * Event pump method; polling method for
  * OS messages.
  */
-int PollForOSMessages(bool& quit)
+int PollForOSMessages( bool& quit )
 {
 	SDL_Event event;
 

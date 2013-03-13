@@ -68,11 +68,12 @@ enum GameEngineMessage_GameEngineMessageType {
   GameEngineMessage_GameEngineMessageType_CREATE = 0,
   GameEngineMessage_GameEngineMessageType_RETRIEVE = 1,
   GameEngineMessage_GameEngineMessageType_UPDATE = 2,
-  GameEngineMessage_GameEngineMessageType_DELETE = 3
+  GameEngineMessage_GameEngineMessageType_DELETE = 3,
+  GameEngineMessage_GameEngineMessageType_QUIT = 4
 };
 bool GameEngineMessage_GameEngineMessageType_IsValid(int value);
 const GameEngineMessage_GameEngineMessageType GameEngineMessage_GameEngineMessageType_GameEngineMessageType_MIN = GameEngineMessage_GameEngineMessageType_CREATE;
-const GameEngineMessage_GameEngineMessageType GameEngineMessage_GameEngineMessageType_GameEngineMessageType_MAX = GameEngineMessage_GameEngineMessageType_DELETE;
+const GameEngineMessage_GameEngineMessageType GameEngineMessage_GameEngineMessageType_GameEngineMessageType_MAX = GameEngineMessage_GameEngineMessageType_QUIT;
 const int GameEngineMessage_GameEngineMessageType_GameEngineMessageType_ARRAYSIZE = GameEngineMessage_GameEngineMessageType_GameEngineMessageType_MAX + 1;
 
 const ::google::protobuf::EnumDescriptor* GameEngineMessage_GameEngineMessageType_descriptor();
@@ -1138,6 +1139,7 @@ class GameEngineMessage : public ::google::protobuf::Message {
   static const GameEngineMessageType RETRIEVE = GameEngineMessage_GameEngineMessageType_RETRIEVE;
   static const GameEngineMessageType UPDATE = GameEngineMessage_GameEngineMessageType_UPDATE;
   static const GameEngineMessageType DELETE = GameEngineMessage_GameEngineMessageType_DELETE;
+  static const GameEngineMessageType QUIT = GameEngineMessage_GameEngineMessageType_QUIT;
   static inline bool GameEngineMessageType_IsValid(int value) {
     return GameEngineMessage_GameEngineMessageType_IsValid(value);
   }

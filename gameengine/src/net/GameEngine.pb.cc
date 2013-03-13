@@ -330,14 +330,15 @@ void protobuf_AddDesc_GameEngine_2eproto() {
     "AABB\020\000\022\n\n\006SPHERE\020\001\"F\n\023UpdateObjectMessag"
     "e\022\n\n\002ID\030\001 \002(\005\022#\n\010position\030\002 \002(\0132\021.net.Po"
     "intMessage\"!\n\023DeleteObjectMessage\022\n\n\002ID\030"
-    "\001 \002(\005\"\257\002\n\021GameEngineMessage\022A\n\013messageTy"
+    "\001 \002(\005\"\271\002\n\021GameEngineMessage\022A\n\013messageTy"
     "pe\030\001 \002(\0162,.net.GameEngineMessage.GameEng"
     "ineMessageType\022,\n\013physicsInfo\030\002 \003(\0132\027.ne"
     "t.PhysicsInfoMessage\022.\n\014updateObject\030\003 \003"
     "(\0132\030.net.UpdateObjectMessage\022.\n\014deleteOb"
-    "ject\030\004 \003(\0132\030.net.DeleteObjectMessage\"I\n\025"
+    "ject\030\004 \003(\0132\030.net.DeleteObjectMessage\"S\n\025"
     "GameEngineMessageType\022\n\n\006CREATE\020\000\022\014\n\010RET"
-    "RIEVE\020\001\022\n\n\006UPDATE\020\002\022\n\n\006DELETE\020\003", 1351);
+    "RIEVE\020\001\022\n\n\006UPDATE\020\002\022\n\n\006DELETE\020\003\022\010\n\004QUIT\020"
+    "\004", 1361);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "GameEngine.proto", &protobuf_RegisterTypes);
   VelocityMessage::default_instance_ = new VelocityMessage();
@@ -3196,6 +3197,7 @@ bool GameEngineMessage_GameEngineMessageType_IsValid(int value) {
     case 1:
     case 2:
     case 3:
+    case 4:
       return true;
     default:
       return false;
@@ -3207,6 +3209,7 @@ const GameEngineMessage_GameEngineMessageType GameEngineMessage::CREATE;
 const GameEngineMessage_GameEngineMessageType GameEngineMessage::RETRIEVE;
 const GameEngineMessage_GameEngineMessageType GameEngineMessage::UPDATE;
 const GameEngineMessage_GameEngineMessageType GameEngineMessage::DELETE;
+const GameEngineMessage_GameEngineMessageType GameEngineMessage::QUIT;
 const GameEngineMessage_GameEngineMessageType GameEngineMessage::GameEngineMessageType_MIN;
 const GameEngineMessage_GameEngineMessageType GameEngineMessage::GameEngineMessageType_MAX;
 const int GameEngineMessage::GameEngineMessageType_ARRAYSIZE;
