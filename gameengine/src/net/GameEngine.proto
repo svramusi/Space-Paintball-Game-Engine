@@ -66,8 +66,8 @@ message GameEngineMessage {
 	enum GameEngineMessageType {
 	   CREATE = 0;
 	   RETRIEVE = 1;
-	   UPDATE = 3;
-	   DELETE = 2;
+	   UPDATE = 2;
+	   DELETE = 3;
 	}
 	
 	required GameEngineMessageType messageType = 1;

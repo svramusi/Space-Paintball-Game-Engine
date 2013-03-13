@@ -201,6 +201,25 @@ namespace net
 		return forceMsg;
 	}
 
+	UpdateObjectMessage* NetUtils::GetUpdateObjectMsg( int ID, Point position )
+	{
+		UpdateObjectMessage* updateObjectMsg = new UpdateObjectMessage();
+
+		updateObjectMsg->set_id( ID );
+		updateObjectMsg->set_allocated_position( GetPointMsg( position) );
+
+		return updateObjectMsg;
+	}
+
+	DeleteObjectMessage* NetUtils::GetUpdateObjectMsg( int ID )
+	{
+		DeleteObjectMessage* deleteObjectMsg = new DeleteObjectMessage();
+
+		deleteObjectMsg->set_id( ID );
+
+		return deleteObjectMsg;
+	}
+
 	/*
 	 * Dummy function to generate fake PhysicsInfo object.
 	 */

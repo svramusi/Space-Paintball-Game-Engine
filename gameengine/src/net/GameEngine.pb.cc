@@ -337,7 +337,7 @@ void protobuf_AddDesc_GameEngine_2eproto() {
     "(\0132\030.net.UpdateObjectMessage\022.\n\014deleteOb"
     "ject\030\004 \003(\0132\030.net.DeleteObjectMessage\"I\n\025"
     "GameEngineMessageType\022\n\n\006CREATE\020\000\022\014\n\010RET"
-    "RIEVE\020\001\022\n\n\006UPDATE\020\003\022\n\n\006DELETE\020\002", 1351);
+    "RIEVE\020\001\022\n\n\006UPDATE\020\002\022\n\n\006DELETE\020\003", 1351);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "GameEngine.proto", &protobuf_RegisterTypes);
   VelocityMessage::default_instance_ = new VelocityMessage();
