@@ -25,8 +25,8 @@
 using namespace std;
 
 int PollForOSMessages( bool* quit );
-net::GameEngine* GetInputFromClient( bool* quit, net::ServerSocket* serverSocket );
-void SendUpdateToClients( net::GameEngine* input );
+net::GameEngineMessage* GetInputFromClient( bool* quit, net::ServerSocket* serverSocket );
+void SendUpdateToClients( net::GameEngineMessage* input );
 bool TimeForRendering();
 void UpdateStatistics();
 void FPSControl();
@@ -148,9 +148,9 @@ int PollForOSMessages(bool* quit)
  * input. Also, if there are players over the network,
  * get their inputs.
  */
-net::GameEngine* GetInputFromClient( bool* quit, net::ServerSocket* serverSocket )
+net::GameEngineMessage* GetInputFromClient( bool* quit, net::ServerSocket* serverSocket )
 {
-	net::GameEngine* input;
+	net::GameEngineMessage* input;
 
 	///////////////////////////////////////////////////////////
 	// Get data
@@ -177,7 +177,7 @@ net::GameEngine* GetInputFromClient( bool* quit, net::ServerSocket* serverSocket
 	return input;
 }
 
-void SendUpdateToClients( net::GameEngine* input )
+void SendUpdateToClients( net::GameEngineMessage* input )
 {
 	for(map<net::Address, net::ServerSocket*>::iterator ii = serverConnections.begin(); ii != serverConnections.end(); ++ii)
 	{
@@ -238,7 +238,7 @@ void* SocketHandler(void* lp)
 
 		if( serverSocket->HasData() )
 		{
-			net::GameEngine* input = GetInputFromClient( &quit, serverSocket );
+			net::GameEngineMessage* input = GetInputFromClient( &quit, serverSocket );
 
 			//printf( "Input is %d\n", input );
 
