@@ -29,7 +29,7 @@ const int MaxFrameSkip = 10;
 int PollForOSMessages(bool* quit);
 int GetInput(bool* quit);
 void SendInputToServer(int input);
-net::GameEngine* GetUpdateFromServer();
+net::GameEngineMessage* GetUpdateFromServer();
 bool TimeForRendering();
 void UpdateStatistics();
 void FPSControl();
@@ -126,7 +126,7 @@ int main( int argc, char * argv[] )
 
 		///////////////////////////////////////////////////////////
 		//Update Game State Copy
-		net::GameEngine* gameEngineState = GetUpdateFromServer();
+		net::GameEngineMessage* gameEngineState = GetUpdateFromServer();
 		// Update local game state (or game state copy).
 		//gameEngine.UpdateGameState(inputFromServer);
 		///////////////////////////////////////////////////////////
@@ -163,9 +163,9 @@ int main( int argc, char * argv[] )
 	google::protobuf::ShutdownProtobufLibrary();
 }
 
-net::GameEngine* GetUpdateFromServer()
+net::GameEngineMessage* GetUpdateFromServer()
 {
-	net::GameEngine* input;
+	net::GameEngineMessage* input;
 
 	///////////////////////////////////////////////////////////
 	// Get data
@@ -197,7 +197,10 @@ void SendInputToServer( int input )
 	///////////////////////////////////////////////////////////////////
 	// Initialize payload
 	///////////////////////////////////////////////////////////////////
-	net::GameEngine* payload = net::NetUtils::GetGameEnginePayload();
+	vector<physicsInfo> physicsInfos;
+	physicsInfos.push_back( net::NetUtils::GetPhysicsInfo( 1.0f ) );
+	physicsInfos.push_back( net::NetUtils::GetPhysicsInfo( 2.0f ) );
+	net::GameEngineMessage* payload = net::NetUtils::GetGameEngineCreateMessage( physicsInfos );
 	///////////////////////////////////////////////////////////////////
 
 	///////////////////////////////////////////////////////////////////
