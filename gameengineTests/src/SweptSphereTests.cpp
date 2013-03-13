@@ -292,7 +292,7 @@ SweptSphereTest::testPassThroughCollisionAABB(void)
     penetration_t penetrationVector = cd->getPenetrationVector(aabb, capsule);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0f, penetrationVector.x, 0.01);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(7.0f, penetrationVector.y, 0.01);
-    CPPUNIT_ASSERT_EQUAL(1.0f, penetrationVector.z );
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0f, penetrationVector.z, 0.01);
 
 
     delete aabb;
